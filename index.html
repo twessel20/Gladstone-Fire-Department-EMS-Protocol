@@ -80,11 +80,11 @@ body{background:#f4f7fa}
 .pc-scroll-date{display:grid;grid-template-columns:1.25fr .9fr 1.15fr;gap:8px;margin-top:6px}.pc-scroll-select{min-height:58px;font-size:18px;font-weight:800;padding:12px 10px;background:#fff;touch-action:manipulation}@media(max-width:600px){.pc-scroll-date{gap:6px}.pc-scroll-select{min-height:62px;font-size:18px;padding:12px 6px}}
 </style></head><body><div class="offline on" style="display:block;background:#fff3cd;color:#664d03;font-weight:800">GFD BUILD IN PROGRESS — Protocol content has not yet been validated against the Gladstone Fire Department source manual. Do not use this build for patient-care decisions.</div>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
-<div class="top"><div class="headrow"><img class="logo" src="gfd-logo.svg" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div></div><div class="rolebar"><button class="homebtn" onclick="goHome()">⌂ Home</button><button id="emtBtn" class="rolebtn" onclick="setRole('EMT')">EMT / BLS</button><button id="medicBtn" class="rolebtn" onclick="setRole('PARAMEDIC')">Paramedic / ALS</button></div><div class="searchrow"><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, medications, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div></div><div id="tabs" class="tabs"></div><main class="wrap"><div id="list" class="list"></div><div id="detail" class="detail"></div><div class="footer">Quick-reference tool. Department protocol source and Medical Control remain authoritative.</div></main><script>
-let data=[],cat='Home',quickSet=null;const cats=['All','Favorites','Medical','Trauma','Procedures','Medications','Patient Meds','Guidelines','Appendix','Tools'];let fav=new Set(JSON.parse(localStorage.getItem('gfdFav')||'[]'));let role=localStorage.getItem('gfdRole')||'PARAMEDIC';
+<div class="top"><div class="headrow"><img class="logo" src="gfd-logo.svg" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div></div><div class="rolebar"><button class="homebtn" onclick="goHome()">⌂ Home</button></div><div class="searchrow"><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, medications, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div></div><div id="tabs" class="tabs"></div><main class="wrap"><div id="list" class="list"></div><div id="detail" class="detail"></div><div class="footer">Quick-reference tool. Department protocol source and Medical Control remain authoritative.</div></main><script>
+let data=[],cat='Home',quickSet=null;const cats=['All','Favorites','Medical','Trauma','Procedures','Medications','Patient Meds','Guidelines','Appendix','Tools'];let fav=new Set(JSON.parse(localStorage.getItem('gfdFav')||'[]'));const role='PARAMEDIC';
 const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function tabs(){
- let visible=role==='EMT'?cats.filter(c=>c!=='Medications'):cats;
+ let visible=cats;
  const labels={All:'📚 All',Favorites:'⭐ Favorites',Medical:'🩺 Medical',Trauma:'🩹 Trauma',Procedures:'⚕️ Procedures',Medications:'💊 Medications','Patient Meds':'🧾 Patient Meds',Guidelines:'📋 Guidelines',Appendix:'📎 Appendix',Tools:'🧮 Tools'};
  const order=['All','Favorites'];
  const first=order.filter(c=>visible.includes(c)).map(c=>`<button class="tab ${!quickSet&&c===cat?'on':''}" onclick="setCat('${c}')">${labels[c]||c}</button>`).join('');
@@ -131,12 +131,11 @@ function renderHome(){
    <div class="home-alert"><b>Field use:</b> This app is a quick-reference aid. GFD protocols, Medical Control, and clinical judgment remain authoritative. Confirm patient-specific contraindications, concentrations, routes, and maximum doses before administration.</div>
   </div>`;
 }
-function setRole(r){role=r;localStorage.setItem('gfdRole',r);document.querySelector('#emtBtn').classList.toggle('on',r==='EMT');document.querySelector('#medicBtn').classList.toggle('on',r==='PARAMEDIC');if(document.querySelector('#detail').classList.contains('on')&&location.hash)openP(location.hash.slice(1));else render()}
-function roleUI(){document.querySelector('#emtBtn').classList.toggle('on',role==='EMT');document.querySelector('#medicBtn').classList.toggle('on',role==='PARAMEDIC')}
+function roleUI(){}
 function status(){let on=navigator.onLine;document.querySelector('#net').textContent=on?'Online':'Offline';document.querySelector('#offline').classList.toggle('on',!on)}addEventListener('online',status);addEventListener('offline',status);status();
 function scopeText(x){return (x.lines||[]).join(' ').toUpperCase()}
 function isAlsOnly(x){const t=scopeText(x);return t.includes('ALS ONLY')&&!t.includes('BLS OR ALS')}
-function flags(x){let t=scopeText(x),a=[];if(t.includes('BLS OR ALS'))a.push('<span class="flag bls">'+(role==='EMT'?'BLS / BLS-ALS':'BLS OR ALS')+'</span>');if(role!=='EMT'&&t.includes('ALS ONLY'))a.push('<span class="flag als">ALS ONLY</span>');if(t.includes('MEDICAL CONTROL'))a.push('<span class="flag mc">MEDICAL CONTROL</span>');return a.join('')}
+function flags(x){let t=scopeText(x),a=[];if(t.includes('BLS OR ALS'))a.push('<span class="flag bls">BLS OR ALS</span>');if(t.includes('ALS ONLY'))a.push('<span class="flag als">ALS ONLY</span>');if(t.includes('MEDICAL CONTROL'))a.push('<span class="flag mc">MEDICAL CONTROL</span>');return a.join('')}
 function displayTitle(x){if(/^Combined\s+/i.test(x.title))return x.title.replace(/^Combined\s+/i,'');return x.title}
 const appendixMap={
   '12-lead-ecg-monitoring':['12-lead-ecg-interpretation'],
@@ -716,7 +715,7 @@ function render(){
  const bodySearchText=x=>searchText((x.lines||[]).join(' '));
  const directMatch=x=>!query||searchableTitle(x).includes(query)||directSearchText(x).includes(query)||queryTerms.every(t=>directSearchText(x).includes(t));
  const bodyMatch=x=>!query||queryTerms.every(t=>bodySearchText(x).includes(t));
- const scopeAllowed=x=>!(role==='EMT'&&(isAlsOnly(x)||x.category==='Medications'));
+ const scopeAllowed=x=>true;
  const categoryAllowed=x=>cat==='All'||(cat==='Favorites'?fav.has(x.id):x.category===cat);
  const searchRank=x=>{
    if(!query)return 0;
@@ -746,7 +745,7 @@ function render(){
      if(!a.length){const refs=data.filter(x=>x.category==='Appendix'&&scopeAllowed(x));const direct=refs.filter(directMatch);a=direct.length?direct:refs.filter(bodyMatch)}
    }else{
      const primary=['12-lead-ecg-interpretation','cincinnati-prehospital-stroke-scale','apgar-score','glasgow-coma-scale','lucas-device-appendix','pain-scale','pediatric-vital-sign-ranges-by-age','epinephrine-1-100000-push-dose-appendix','total-body-surface-area','tcd-destinations'];
-     a=primary.map(id=>data.find(x=>x.id===id)).filter(x=>x&&!(role==='EMT'&&isAlsOnly(x)));
+     a=primary.map(id=>data.find(x=>x.id===id)).filter(Boolean);
    }
  }else{
    a=searchResults();
@@ -907,7 +906,6 @@ const medicationDoseCalcs={
 'versed-midazolam':[{key:'midA',label:'Adult IM/IN',formula:'0.1 mg/kg (max 10 mg)',unit:'mg',perKg:.1,max:10},{key:'midP',label:'Pediatric IM/IN',formula:'0.1 mg/kg (max 5 mg)',unit:'mg',perKg:.1,max:5},{key:'midIN',label:'Adult/Pediatric IN',formula:'0.2 mg/kg IN (max 5 mg)',unit:'mg',perKg:.2,max:5},{key:'midIV',label:'Pediatric IV',formula:'0.1 mg/kg slow IV (max 5 mg)',unit:'mg',perKg:.1,max:5}]
 };
 function protocolDoseTools(x){
- if(role==='EMT')return '';
  const cs=protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id];if(!cs)return '';
  return '<div class="dose-tools" style="margin-top:24px"><h4>Weight-Based Dose Calculator</h4><div class="dose-note" style="margin-bottom:10px">Protocol dosing calculator — enter patient weight in lb or kg.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,maxText=c.special==='fentanylRepeat'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight"><select id="'+id+'-u"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the weight-based dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
@@ -1068,7 +1066,6 @@ function formatProtocol(x){
  }
  if(x.category==='Medications')return formatMedication(x);
  let ts=scopedTokens(x);
- if(role==='EMT')ts=ts.filter(t=>t.scope!=='als');
  let rendered=[],lastHeading='';
  for(let i=0;i<ts.length;i++){
    let t=ts[i],text=normText(t.text);
@@ -1154,10 +1151,9 @@ function toggleInlineProtocolTool(which,btn){
 }
 function openP(id){
  let x=data.find(z=>z.id===id);if(!x)return;
- if(role==='EMT'&&(isAlsOnly(x)||x.category==='Medications')){leaveDetail();cat='All';tabs();render();return}
  location.hash=id;document.querySelector('#list').classList.add('off');
- let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='combined-burn'?burnProtocolTools():'')+formatProtocol(x)+protocolDoseTools(x)),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/published/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x)),roleText=role==='EMT'?'EMT selected — showing BLS care only.':'Paramedic selected — showing the complete protocol.',modeClass=role==='EMT'?'bls':'als',modeText=role==='EMT'?'BLS PROTOCOL VIEW':'ALS PROTOCOL VIEW';
- document.querySelector('#detail').innerHTML=`<button class="back" onclick="closeP()">‹ Back</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div><div class="protocol-mode ${modeClass}"><span class="dot"></span>${modeText}</div><div class="role-note"><b>${esc(roleText)}</b></div>${relatedAppendixHtml(x)}${protocolToolLinks(x)}${src&&x.category!=='Appendix'&&role!=='EMT'?`<p><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}${x.category==='Appendix'?'':'<div class="notice">'+(role==='EMT'?'BLS-only quick-reference view. Higher-scope treatment content is hidden.':'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${role==='EMT'?'BLS-only quick-reference view. Higher-scope treatment content is hidden.':'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div></div>`;
+ let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='combined-burn'?burnProtocolTools():'')+formatProtocol(x)+protocolDoseTools(x)),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/published/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x)),roleText='Gladstone ALS field reference — showing the complete protocol.',modeClass='als',modeText='ALS PROTOCOL VIEW';
+ document.querySelector('#detail').innerHTML=`<button class="back" onclick="closeP()">‹ Back</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div><div class="protocol-mode ${modeClass}"><span class="dot"></span>${modeText}</div><div class="role-note"><b>${esc(roleText)}</b></div>${relatedAppendixHtml(x)}${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div></div>`;
  document.querySelector('#detail').classList.add('on');
  if(x.id==='combined-burn')renderBurnMap();
  if(x.id==='tcd-destinations')renderTcdOfficialPage();
