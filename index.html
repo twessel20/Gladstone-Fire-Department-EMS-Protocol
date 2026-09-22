@@ -81,7 +81,7 @@ body{background:#f4f7fa}
 </style></head><body><div class="offline on" style="display:block;background:#fff3cd;color:#664d03;font-weight:800">GFD BUILD IN PROGRESS — Protocol content has not yet been validated against the Gladstone Fire Department source manual. Do not use this build for patient-care decisions.</div>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div class="top"><div class="headrow"><img class="logo" src="https://i.ebayimg.com/images/g/LaYAAOSwH8RlzC6r/s-l1200.png" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div></div><div class="rolebar"><button class="homebtn" onclick="goHome()">⌂ Home</button><button id="emtBtn" class="rolebtn" onclick="setRole('EMT')">EMT / BLS</button><button id="medicBtn" class="rolebtn" onclick="setRole('PARAMEDIC')">Paramedic / ALS</button></div><div class="searchrow"><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, medications, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div></div><div id="tabs" class="tabs"></div><main class="wrap"><div id="list" class="list"></div><div id="detail" class="detail"></div><div class="footer">Quick-reference tool. Department protocol source and Medical Control remain authoritative.</div></main><script>
-let data=[],cat='Home',quickSet=null;const cats=['All','Favorites','Medical','Trauma','Procedures','Medications','Patient Meds','Guidelines','Appendix','Tools'];let fav=new Set(JSON.parse(localStorage.getItem('pvfdFav')||'[]'));let role=localStorage.getItem('pvfdRole')||'PARAMEDIC';
+let data=[],cat='Home',quickSet=null;const cats=['All','Favorites','Medical','Trauma','Procedures','Medications','Patient Meds','Guidelines','Appendix','Tools'];let fav=new Set(JSON.parse(localStorage.getItem('gfdFav')||'[]'));let role=localStorage.getItem('gfdRole')||'PARAMEDIC';
 const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function tabs(){
  let visible=role==='EMT'?cats.filter(c=>c!=='Medications'):cats;
@@ -131,7 +131,7 @@ function renderHome(){
    <div class="home-alert"><b>Field use:</b> This app is a quick-reference aid. GFD protocols, Medical Control, and clinical judgment remain authoritative. Confirm patient-specific contraindications, concentrations, routes, and maximum doses before administration.</div>
   </div>`;
 }
-function setRole(r){role=r;localStorage.setItem('pvfdRole',r);document.querySelector('#emtBtn').classList.toggle('on',r==='EMT');document.querySelector('#medicBtn').classList.toggle('on',r==='PARAMEDIC');if(document.querySelector('#detail').classList.contains('on')&&location.hash)openP(location.hash.slice(1));else render()}
+function setRole(r){role=r;localStorage.setItem('gfdRole',r);document.querySelector('#emtBtn').classList.toggle('on',r==='EMT');document.querySelector('#medicBtn').classList.toggle('on',r==='PARAMEDIC');if(document.querySelector('#detail').classList.contains('on')&&location.hash)openP(location.hash.slice(1));else render()}
 function roleUI(){document.querySelector('#emtBtn').classList.toggle('on',role==='EMT');document.querySelector('#medicBtn').classList.toggle('on',role==='PARAMEDIC')}
 function status(){let on=navigator.onLine;document.querySelector('#net').textContent=on?'Online':'Offline';document.querySelector('#offline').classList.toggle('on',!on)}addEventListener('online',status);addEventListener('offline',status);status();
 function scopeText(x){return (x.lines||[]).join(' ').toUpperCase()}
@@ -757,7 +757,7 @@ function render(){
  const protocolHtml=a.length?a.map(x=>`<div class="card" onclick="openP('${x.id}')"><button class="fav" aria-label="favorite" onclick="event.stopPropagation();toggleFav('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><div class="title">${esc(displayTitle(x))}</div><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:`2026 source`}</div></div>`).join(''):'';
  document.querySelector('#list').innerHTML=toolHtml+protocolHtml||'<div class="empty">'+(q?'No protocols or tools match “'+esc(q)+'”.<br><button class="back" style="margin-top:12px" onclick="clearSearch()">Clear Search</button>':'No protocols found in this section.')+'</div>'
 }
-function toggleFav(id){fav.has(id)?fav.delete(id):fav.add(id);localStorage.setItem('pvfdFav',JSON.stringify([...fav]));render()}
+function toggleFav(id){fav.has(id)?fav.delete(id):fav.add(id);localStorage.setItem('gfdFav',JSON.stringify([...fav]));render()}
 function sourceHref(x){
  const src=x.sourceFile||x.pageUrl||'';
  const m=src.match(/#page=(\d+)/i);
@@ -777,7 +777,7 @@ function isHeading(t){
 }
 function tokenize(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
-   .filter(l=>!/^PLEASANT VALLEY FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l)&&!/^PLEASANT VALLEY FIRE DEPARTMENT EMS$/i.test(l)&&!/^PROTOCOLS$/i.test(l)&&!sameTitle(l,x.title));
+   .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l)&&!/^GLADSTONE FIRE DEPARTMENT EMS$/i.test(l)&&!/^PROTOCOLS$/i.test(l)&&!sameTitle(l,x.title));
  raw=raw.filter((l,i)=>!i||normText(l).toLowerCase()!==normText(raw[i-1]).toLowerCase());
  let out=[];
  for(let i=0;i<raw.length;i++){
@@ -835,7 +835,7 @@ function scopedTokens(x){
 }
 function formatMedication(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
-   .filter(l=>!/^PLEASANT VALLEY FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
+   .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!sameTitle(l,x.title));
  const headingRx=/^(PHARMACOLOGY AND ACTIONS|PHARMACOLOGY|CLASS|ACTIONS|INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|SIDE EFFECTS|ADVERSE REACTIONS|DOSE|DOSES|DOSAGE|DOSAGE\/ADMINISTRATION|ADMINISTRATION|ROUTE|ROUTES|PROTOCOL USED IN|PROTOCOLS USED IN|PROTOCOL PAGES|SPECIAL CONSIDERATIONS|PHARMACOKINETICS)\s*:?$/i;
  const listRx=/^(INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|SIDE EFFECTS|ADVERSE REACTIONS|PROTOCOL USED IN|PROTOCOLS USED IN)$/;
@@ -945,7 +945,7 @@ function controlledSubstancePage21(){
 }
 function formatGuidelineSource(x){
  const raw=(x.lines||[]).map(normText).filter(Boolean)
-   .filter(l=>!/^PLEASANT VALLEY FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
+   .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!sameTitle(l,x.title));
  let html='';
  const headingRx=/^(GUIDELINES?|DOCUMENTATION|PROCEDURES?|INDICATIONS|CONTRAINDICATIONS|NOTES|POLICY|NO RIGHT TO REFUSE|STANDARD PRECAUTIONS|CONTACT PRECAUTIONS|DROPLET PRECAUTIONS|AIRBORNE PRECAUTIONS|SPECIAL RESPIRATORY PRECAUTIONS|EVD\/VHF PRECAUTIONS|GENERAL ROUTING|STEMI ROUTING|STROKE ROUTING|TRAUMA ROUTING|PEDIATRIC ROUTING)\s*:?\s*$/i;
@@ -969,7 +969,7 @@ function formatGuidelineSource(x){
 }
 function formatDnrProtocol(x){
  const raw=(x.lines||[]).map(normText).filter(Boolean)
-   .filter(l=>!/^PLEASANT VALLEY FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
+   .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!/^DO NOT RESUSCITATE$/i.test(l));
  let html='',section='';
  for(let i=0;i<raw.length;i++){
@@ -1038,7 +1038,7 @@ function formatAppendix(x){if(x.id==='tcd-destinations')return formatTcdQuickRef
 function formatLucasProcedure(x){
  const raw=(x.lines||[]).map(normText).filter(Boolean)
   .filter(l=>!/^P$/i.test(l)&&!/^L$/i.test(l))
-  .filter(l=>!/^PLEASANT VALLEY FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
+  .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
   .filter(l=>!sameTitle(l,x.title));
  const headingRx=/^(INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|TECHNIQUE|COMPLICATIONS)\s*:?$/i;
  let html='',i=0;
@@ -1063,7 +1063,7 @@ function formatProtocol(x){
  if(x.id==='lucas-device-procedure')return formatLucasProcedure(x);
  if(x.category==='Guidelines'&&x.id!=='controlled-substance-verification'&&x.id!=='narcotic-accountability')return formatGuidelineSource(x);
  if(x.id==='controlled-substance-verification'||x.id==='narcotic-accountability'){
-   const raw=(x.lines||[]).map(normText).filter(Boolean).filter(l=>l.toUpperCase()!=='PLEASANT VALLEY FIRE DEPARTMENT EMS PROTOCOLS').filter(l=>!/^NARCOTIC ACCOUNTABILITY$/i.test(l)).filter(l=>!/^CONTROLLED SUBSTANCE VERIFICATION$/i.test(l));
+   const raw=(x.lines||[]).map(normText).filter(Boolean).filter(l=>l.toUpperCase()!=='GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS').filter(l=>!/^NARCOTIC ACCOUNTABILITY$/i.test(l)).filter(l=>!/^CONTROLLED SUBSTANCE VERIFICATION$/i.test(l));
    return raw.map(t=>{let m=t.match(/^(\d+\.|[a-z]\.|[ivx]+\.)\s*(.*)$/i);if(m){let cls=/^\d/.test(m[1])?'bullet':/^[a-z]/i.test(m[1])?'subbullet':'subsub';return '<div class="line '+cls+'">'+esc(m[2]||t)+'</div>'}return '<div class="line para">'+esc(t)+'</div>'}).join('');
  }
  if(x.category==='Medications')return formatMedication(x);
