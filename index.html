@@ -95,8 +95,33 @@ function tabs(){
 function leaveDetail(){location.hash='';document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
 function setCat(c){quickSet=null;leaveDetail();cat=c;tabs();render();scrollTo(0,0)}
 const quickGroups={
- cardiac:['combined-post-resuscitation','adult-chest-pain-stemi','adult-bradycardia','adult-tachycardia-narrow-complex','adult-tachycardia-wide-complex','adult-cardiac-arrest-vf-pulseless-vt','adult-cardiac-arrest-asystole-pea','adult-termination-of-resuscitation','pediatric-bradycardia','pediatric-tachycardia-narrow-complex','pediatric-tachycardia-wide-complex','pediatric-cardiac-arrest-vf-pulseless-vt','pediatric-cardiac-arrest-asystole-pea','12-lead-ecg-monitoring','lucas-device-procedure','transcutaneous-cardiac-pacing'],
- respiratory:['adult-general-airway','adult-obstructed-airway','adult-asthma-copd','adult-chf-pulmonary-edema','pediatric-general-airway','pediatric-obstructed-airway','pediatric-wheezing','confirmation-of-advanced-airway-placement','cpap','end-tidal-co2-monitoring','igel','oral-endotracheal-intubation']
+ cardiac:[
+  'chest-pain-pressure',
+  'code-stemi',
+  'cardiac-dysrhythmias',
+  'narrow-complex-tachydysrhythmias',
+  'wide-complex-tachydysrhythmias',
+  'bradycardia-algorithm',
+  'asystole-pulseless-electrical-activity',
+  'ventricular-fibrillation-pulseless-ventricular-tachycardia',
+  'return-of-spontaneous-circulation-rosc',
+  'pre-hospital-termination-of-resuscitation',
+  'congestive-heart-failure',
+  'double-sequential-defibrillation',
+  'implantable-cardioverter-defibrillator-icd-de-activation'
+ ],
+ respiratory:[
+  'respiratory-distress',
+  'congestive-heart-failure',
+  'allergic-reaction-anaphylaxis',
+  'near-drowning',
+  'bipap-cpap',
+  'needle-surgical-cricothyrotomy-procedure',
+  'pleural-decompression',
+  'capnography',
+  'king-airway-lt-d',
+  'difficult-airway-algorithm'
+ ]
 };
 function quickSearch(group){leaveDetail();quickSet=group;cat='All';document.querySelector('#q').value='';tabs();render();scrollTo(0,0)}
 function quickMedical(){quickSet=null;leaveDetail();cat='Medical';document.querySelector('#q').value='';tabs();render();scrollTo(0,0)}
@@ -108,14 +133,14 @@ function renderHome(){
    <div class="home-hero">
     <h2>Gladstone Fire Department EMS Field Reference</h2>
     <p><b>Fast protocol access for the apparatus, bedside, or transport unit.</b></p>
-    <p>Choose your certification level, search the patient problem or medication, then open the matching protocol. Use the source button whenever exact department wording or layout is needed.</p>
+    <p>Search the patient problem or medication, then open the matching protocol. Use the source button whenever exact department wording or layout is needed.</p>
    </div>
    <div class="quick-grid clinical-shortcuts">
     <button class="quick-card quick-primary" onclick="quickSearch('cardiac')"><b>🫀 Cardiac</b><span>Rapid access to cardiac-related protocols.</span></button>
     <button class="quick-card quick-primary" onclick="quickMedical()"><b>🩺 Medical</b><span>Medical emergencies, pediatric and OB.</span></button>
     <button class="quick-card quick-primary" onclick="quickSearch('respiratory')"><b>🫁 Respiratory</b><span>Rapid access to respiratory-related protocols.</span></button>
     <button class="quick-card" onclick="setCat('Trauma')"><b>🩹 Trauma</b><span>Trauma protocols, burns and injury-specific care.</span></button>
-    <button class="quick-card" onclick="setCat('Medications')"><b>💊 PVFire Medications</b><span>Department medication reference, dosing and weight-based calculators.</span></button>
+    <button class="quick-card" onclick="setCat('Medications')"><b>💊 GFD Medications</b><span>Department medication reference, dosing and weight-based calculators.</span></button>
     <button class="quick-card" onclick="setCat('Patient Meds')"><b>🧾 Patient Meds</b><span>Look up a patient's home medication by brand or generic name.</span></button>
     <button class="quick-card" onclick="setCat('Procedures')"><b>⚕️ Procedures</b><span>Airway, vascular access, monitoring and field procedures.</span></button>
    </div>
