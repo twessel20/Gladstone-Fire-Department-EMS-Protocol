@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GFD Source Protocol</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f4f5;color:#18181b}
+header{background:#991b1b;color:white;padding:12px 14px;position:sticky;top:0;z-index:2}
+h1{font-size:17px;margin:0}.sub{font-size:12px;opacity:.85;margin-top:3px}
+main{max-width:1000px;margin:auto;padding:10px}.bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+button,a.btn{border:0;border-radius:9px;padding:10px 12px;font-weight:800;text-decoration:none;font-size:14px}.back{background:#27272a;color:white}.open{background:#991b1b;color:white}
+.frame{background:white;border:1px solid #ddd;border-radius:10px;overflow:hidden;height:calc(100vh - 145px);min-height:560px}
+iframe{border:0;width:100%;height:100%;display:block;background:white}
+.notice{font-size:12px;color:#52525b;margin:9px 2px;line-height:1.35}
+</style></head><body>
+<header><h1 id="title">GFD Source Protocol</h1><div class="sub" id="pageLabel"></div></header>
+<main><div class="bar"><button class="back" id="backBtn">‹ Back to Protocol</button><a id="openPdf" class="btn open" target="_blank" rel="noopener">Open PDF Page</a></div>
+<div class="frame"><iframe id="pdf" title="GFD source protocol page"></iframe></div>
+<div class="notice">Source view opens the official GFD protocol book at the exact page range assigned to this protocol. For multi-page references, the header identifies the applicable source range.</div></main>
+<script>
+const q=new URLSearchParams(location.search);
+const protocol=q.get('protocol')||'';
+document.getElementById('backBtn').addEventListener('click',()=>{location.href='./index.html'+(protocol?'#'+encodeURIComponent(protocol):'');});
+const raw=q.get('src')||'updates/published/current-protocol-book.pdf';
+const start=Math.max(1,parseInt(q.get('start')||q.get('page')||'1',10));
+const end=Math.max(start,parseInt(q.get('end')||String(start),10));
+const title=q.get('title')||'GFD Source Protocol';
+const src=new URL(raw,location.href).href.split('#')[0]+'#page='+start+'&zoom=page-width';
+document.getElementById('title').textContent=title;
+document.getElementById('pageLabel').textContent=end>start?'Official source pages '+start+'–'+end:'Official source page '+start;
+document.getElementById('pdf').src=src;
+document.getElementById('openPdf').href=src;
+</script></body></html>
