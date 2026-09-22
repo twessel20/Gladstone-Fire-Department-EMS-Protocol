@@ -7,10 +7,10 @@
   "theme_color": "#173a5e",
   "icons": [
     {
-      "src": "gfd-logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "https://i.ebayimg.com/thumbs/images/g/1skAAOSwS2Vc6dXi/s-l500.jpg",
+      "sizes": "500x397",
+      "type": "image/jpeg",
+      "purpose": "any"
     }
   ]
 }
