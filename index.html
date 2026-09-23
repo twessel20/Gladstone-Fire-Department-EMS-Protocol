@@ -314,7 +314,9 @@ function renderPatientMeds(){
     </div>
     <div class="patient-med-warning" style="margin-top:10px"><b>Reference only:</b> Use this to identify a patient's reported medication and review manufacturer/FDA labeling. Do not use this section to select or calculate EMS treatment. Follow GFD protocols and Medical Control.</div>
    </div>
-   <div id="patientMedResult" class="patient-med-result"></div>
+
+   <div id="patientMedLookupResult" class="patient-med-result"></div>
+
    <div class="patient-med-search" style="margin-top:12px">
     <h2 style="font-size:18px">Overdose / AMS Tools</h2>
     <div class="quick-grid">
@@ -322,6 +324,8 @@ function renderPatientMeds(){
      <button class="quick-card" onclick="showPatientMedPillId()"><b>💊 Pill Identifier</b><span>Identify a pill using imprint, color, and shape.</span></button>
     </div>
    </div>
+
+   <div id="patientMedToolResult" class="patient-med-result"></div>
   </div>`;
  const i=document.querySelector('#patientMedQ');if(i){i.focus();i.addEventListener('keydown',e=>{if(e.key==='Enter')lookupPatientMedication()})}
 }
@@ -388,13 +392,13 @@ function pillCountFrequencyUI(){
  return dt;
 }
 function showPatientMedPillCount(){
- const host=document.getElementById('patientMedResult');
+ const host=document.getElementById('patientMedToolResult');
  host.innerHTML='<div class="tool-card"><h3>🔢 Pill Count</h3>'+pillCountFormHtml()+'</div>';
  initPillCountDates();
  host.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function showPatientMedPillId(){
- const host=document.getElementById('patientMedResult');
+ const host=document.getElementById('patientMedToolResult');
  host.innerHTML=`
   <div class="tool-card"><h3>💊 Pill Identifier</h3>
    <div class="tool-note">Start with the exact imprint stamped on the tablet or capsule. Add color and shape to narrow the results.</div>
@@ -412,7 +416,7 @@ function patientMedTrim(v,max=1300){
  return s.length>max?s.slice(0,max).trim()+'…':s;
 }
 async function lookupPatientMedication(){
- const input=document.querySelector('#patientMedQ'),host=document.querySelector('#patientMedResult'),term=(input?.value||'').trim();
+ const input=document.querySelector('#patientMedQ'),host=document.querySelector('#patientMedLookupResult'),term=(input?.value||'').trim();
  if(!term){host.innerHTML='<div class="notice">Enter a medication name first.</div>';return}
  host.innerHTML='<div class="patient-med-card"><b>Searching medication references…</b></div>';
  try{
@@ -531,7 +535,7 @@ function renderPatientMedCard(host,name,brand,generic,plain,rxcui){
    +'</div><div class="patient-med-warning" style="margin-top:12px"><b>Field reference:</b> This section is for identifying and understanding a patient\'s home medication. It is not a treatment recommendation. Follow GFD protocols and Medical Control for EMS care.</div></div>';
 }
 async function loadPatientMedication(rxcui,fallbackName){
- const host=document.querySelector('#patientMedResult');
+ const host=document.querySelector('#patientMedLookupResult');
  host.innerHTML='<div class="patient-med-card"><b>Loading medication summary…</b></div>';
 
  let props=null,label=null,classParts=[];
