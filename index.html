@@ -802,13 +802,10 @@ function render(){
 }
 function toggleFav(id){fav.has(id)?fav.delete(id):fav.add(id);localStorage.setItem('gfdFav',JSON.stringify([...fav]));render()}
 function sourceHref(x){
- const src=x.sourceFile||x.pageUrl||'';
- const m=src.match(/#page=(\d+)/i);
- if(m){
-   const start=Number(x.page||m[1]),end=Number(x.endPage||start);
-   return 'protocol-viewer.html?src='+encodeURIComponent(src.split('#')[0])+'&start='+start+'&end='+end+'&title='+encodeURIComponent(displayTitle(x))+'&protocol='+encodeURIComponent(x.id);
- }
- return src;
+ const src=(x.sourceFile||x.pageUrl||'updates/current-protocol-book.pdf').split('#')[0];
+ const start=Math.max(1,Number(x.page)||1);
+ const end=Math.max(start,Number(x.endPage)||start);
+ return 'protocol-viewer.html?src='+encodeURIComponent(src)+'&start='+start+'&end='+end+'&title='+encodeURIComponent(displayTitle(x))+'&protocol='+encodeURIComponent(x.id);
 }
 function normText(v){return String(v||'').replace(/[\uf0b0\u00ba]/g,'°').replace(/[■▪◼◾□◆►▶]+/g,' ').replace(/^[•·‣⁃–—-]+\s*/,'').replace(/\s+/g,' ').trim()}
 function sameTitle(a,b){return normText(a).toLowerCase().replace(/[^a-z0-9]+/g,'')===normText(b).toLowerCase().replace(/[^a-z0-9]+/g,'')}
