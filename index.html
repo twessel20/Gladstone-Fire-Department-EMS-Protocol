@@ -506,7 +506,7 @@ async function loadPatientMedication(rxcui,fallbackName){
 function renderTools(){
   document.querySelector('#list').innerHTML=`
     <div class="tools-grid tool-menu">
-      <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult cardiac arrest dose calculator</small></span><span class="tool-chevron">›</span></button>
+      <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult, pediatric, and infant cardiac arrest dose calculator</small></span><span class="tool-chevron">›</span></button>
       <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
       <button class="tool-launch" onclick="openToolCard('burn')"><span class="tool-launch-icon">🔥</span><span><b>Burn Calculator — TBSA + Parkland</b><small>One tool: burn map, TBSA calculation, and Parkland fluid formula</small></span><span class="tool-chevron">›</span></button>
       <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
@@ -535,12 +535,18 @@ function openToolCard(which){
    <div class="patient-med-warning" style="margin-top:10px"><b>Do not identify by color alone.</b> Verify imprint and appearance against the identifier results and the patient's prescription bottle when available. Unknown pills may be supplements, foreign medications, illicit drugs, or counterfeit products.</div>
    <div class="tool-note" style="margin-top:10px">For a suspected poisoning/overdose, Poison Control: <a href="tel:18002221222"><b>1-800-222-1222</b></a>.</div></div>`;
  if(which==='lido')host.innerHTML=back+`
-   <div class="tool-card"><h3>Lidocaine — Adult Cardiac Arrest</h3>
-   <div class="tool-note"><b>VF/pulseless VT:</b> GFD calculator uses <b>1.0 mg/kg IV/IO</b> for the initial dose, with <b>no maximum dose cap</b>. Enter weight in pounds or kilograms.</div>
+   <div class="tool-card"><h3>Lidocaine — Cardiac Arrest</h3>
+   <div class="tool-note"><b>1. Select patient type.</b> Patient type is required before calculating. If GFD does not explicitly state the dose, this tool uses AHA guidance for adults and PALS/Broselow field fallback logic for infants and pediatric patients.</div>
+   <div class="burn-age" id="lidoPatientType">
+     <button id="lidoInfant" onclick="setLidoPatientType('infant')">Infant<br><span style="font-size:11px;font-weight:700">&lt; 1 year</span></button>
+     <button id="lidoPediatric" onclick="setLidoPatientType('pediatric')">Pediatric<br><span style="font-size:11px;font-weight:700">1 to &lt;18 years</span></button>
+     <button id="lidoAdult" onclick="setLidoPatientType('adult')">Adult<br><span style="font-size:11px;font-weight:700">18+ years</span></button>
+   </div>
+   <div class="tool-note"><b>2. Enter patient weight.</b></div>
    <input id="lidoWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
    <select id="lidoUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select>
-   <button class="tool-btn" onclick="calcLido()">Calculate Lidocaine Dose</button><div id="lidoResult" class="tool-result" style="display:none"></div>
-   <div class="tool-note" style="margin-top:10px">AHA-based cardiac arrest tool. The 2025 AHA adult cardiac arrest algorithm lists lidocaine 1–1.5 mg/kg IV/IO for the first dose; this calculator intentionally uses the department-selected 1.0 mg/kg value.</div></div>`;
+   <button class="tool-btn" onclick="calcLido()">Calculate Initial + Second Dose</button><div id="lidoResult" class="tool-result" style="display:none"></div>
+   <div class="tool-note" style="margin-top:10px"><b>Dosing hierarchy:</b> explicit GFD protocol guidance supersedes this calculator. When GFD is silent, use AHA adult guidance or PALS/Broselow pediatric fallback logic.</div></div>`;
  if(which==='dopamine')host.innerHTML=back+`
    <div class="tool-card"><h3>Dopamine Gravity-Drip Calculator</h3>
    <div class="tool-note">Gravity tubing only — no pump output. Enter the patient weight, ordered dose in <b>mcg/kg/min</b>, bag concentration, and tubing drop factor.</div>
@@ -649,14 +655,66 @@ function openPillIdentifier(){
  }
  window.open(url,'_blank','noopener');
 }
+let lidoPatientType='';
+function setLidoPatientType(type){
+  lidoPatientType=type;
+  ['infant','pediatric','adult'].forEach(t=>{
+    const id=t==='infant'?'lidoInfant':t==='pediatric'?'lidoPediatric':'lidoAdult';
+    document.getElementById(id)?.classList.toggle('on',t===type);
+  });
+  const box=document.querySelector('#lidoResult');
+  const input=document.querySelector('#lidoWeight');
+  if(box&&box.style.display!=='none'&&input?.value)calcLido();
+}
 function calcLido(){
   const input=document.querySelector('#lidoWeight'),unit=document.querySelector('#lidoUnit'),box=document.querySelector('#lidoResult');
-  let w=parseFloat(input.value);
+  if(!box)return;
+  if(!lidoPatientType){
+    box.style.display='block';
+    box.innerHTML='<b>Select Infant, Pediatric, or Adult before calculating.</b>';
+    return;
+  }
+  let w=parseFloat(input?.value);
   if(!Number.isFinite(w)||w<=0){box.style.display='block';box.innerHTML='<b>Enter a valid patient weight.</b>';return}
-  let kg=unit.value==='lb'?w/2.2046226218:w;
-  let dose=kg*1.0;
+  const kg=unit?.value==='lb'?w/2.2046226218:w;
+  if(!Number.isFinite(kg)||kg<=0){box.style.display='block';box.innerHTML='<b>Enter a valid patient weight.</b>';return}
+  const kgText=kg.toFixed(1);
   box.style.display='block';
-  box.innerHTML=`<div style="font-size:13px;color:#475569">Calculated weight</div><div style="font-size:18px;font-weight:800">${kg.toFixed(1)} kg</div><div style="margin-top:8px;font-size:13px;color:#475569">Lidocaine initial dose — 1.0 mg/kg IV/IO</div><div style="font-size:26px;font-weight:900;color:#173a5e">${dose.toFixed(1)} mg</div><div style="margin-top:6px;font-size:12px;color:#475569"><b>MAX DOSE: No maximum dose cap specified for this calculator.</b></div>`;
+
+  if(lidoPatientType==='adult'){
+    const initialLow=kg*1.0,initialHigh=kg*1.5;
+    const secondLow=kg*0.5,secondHigh=kg*0.75;
+    const totalMax=kg*3.0;
+    box.innerHTML=`
+      <div style="font-size:13px;color:#475569">Adult • Calculated weight</div>
+      <div style="font-size:18px;font-weight:800">${kgText} kg</div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid #dbe4ee">
+        <div style="font-size:13px;color:#475569"><b>INITIAL DOSE</b> — 1–1.5 mg/kg IV/IO</div>
+        <div style="font-size:26px;font-weight:900;color:#173a5e">${initialLow.toFixed(1)}–${initialHigh.toFixed(1)} mg</div>
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid #dbe4ee">
+        <div style="font-size:13px;color:#475569"><b>SECOND DOSE</b> — 0.5–0.75 mg/kg IV/IO</div>
+        <div style="font-size:26px;font-weight:900;color:#173a5e">${secondLow.toFixed(1)}–${secondHigh.toFixed(1)} mg</div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:#475569"><b>Adult cumulative limit:</b> 3 mg/kg total = ${totalMax.toFixed(1)} mg.</div>
+      <div style="margin-top:6px;font-size:12px;color:#475569">Fallback source: AHA adult cardiac arrest guidance when GFD does not explicitly state otherwise.</div>`;
+    return;
+  }
+
+  const dose=kg*1.0;
+  const patientLabel=lidoPatientType==='infant'?'Infant (<1 year)':'Pediatric (1 to <18 years)';
+  box.innerHTML=`
+    <div style="font-size:13px;color:#475569">${patientLabel} • Calculated weight</div>
+    <div style="font-size:18px;font-weight:800">${kgText} kg</div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #dbe4ee">
+      <div style="font-size:13px;color:#475569"><b>INITIAL DOSE</b> — 1 mg/kg IV/IO</div>
+      <div style="font-size:26px;font-weight:900;color:#173a5e">${dose.toFixed(1)} mg</div>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #dbe4ee">
+      <div style="font-size:13px;color:#475569"><b>SECOND / MAINTENANCE DOSE</b> — 1 mg/kg IV/IO</div>
+      <div style="font-size:26px;font-weight:900;color:#173a5e">${dose.toFixed(1)} mg</div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:#475569"><b>PALS/Broselow fallback:</b> used when GFD does not explicitly state otherwise.</div>`;
 }
 function calcDopamine(){
   const box=document.querySelector('#dopResult');
@@ -776,7 +834,7 @@ const searchableTools=[
  {id:'dopamine',title:'Dopamine Gravity Drip',icon:'IV',terms:'dopamine drip gravity gtt micrograms mcg kg min infusion',desc:'Gravity-drip gtt/min calculator'},
  {id:'pillcount',title:'Pill Count',icon:'🔢',terms:'pill count overdose altered mental status missing pills bottle tablets capsules ingestion',desc:'Estimate pills missing from a prescription bottle'},
  {id:'pillid',title:'Pill Identifier',icon:'💊',terms:'pill identifier imprint color shape unknown medication overdose altered mental status tablet capsule',desc:'Identify an unknown tablet or capsule by imprint, color, and shape'},
- {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg',desc:'Adult cardiac-arrest dose calculator'}
+ {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg infant pediatric pals broselow',desc:'Adult, pediatric, and infant cardiac-arrest dose calculator'}
 ];
 function toolSearchResults(query){
  const q=normText(query).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
