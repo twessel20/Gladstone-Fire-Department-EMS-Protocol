@@ -179,7 +179,6 @@ const appendixMap={
   'pediatric-cardiac-arrest-asystole-pea':['pediatric-vital-sign-ranges-by-age'],
   'pediatric-brue':['pediatric-vital-sign-ranges-by-age'],
   'combined-pain-control':['pain-scale'],
-  'combined-burn':['total-body-surface-area'],
   'lucas-device-procedure':['lucas-device-appendix'],
   'epinephrine-1-100000-push-dose-procedure':['epinephrine-1-100000-push-dose-appendix'],
   'combined-general-trauma':['tcd-destinations'],
@@ -927,7 +926,7 @@ const protocolDoseCalcs={
 'pediatric-cardiac-arrest-vf-pulseless-vt':[{key:'epi',label:'Epinephrine 1:10,000',formula:'0.01 mg/kg IV/IO',unit:'mg',perKg:.01},{key:'am1',label:'Amiodarone — First dose',formula:'5 mg/kg IV/IO (max 300 mg)',unit:'mg',perKg:5,max:300},{key:'am2',label:'Amiodarone — Repeat',formula:'2.5 mg/kg IV/IO (max 150 mg)',unit:'mg',perKg:2.5,max:150}],
 'pediatric-cardiac-arrest-asystole-pea':[{key:'epi',label:'Epinephrine 1:10,000',formula:'0.01 mg/kg IV/IO',unit:'mg',perKg:.01}],
 'combined-abdominal-trauma':[{key:'fluid',label:'Pediatric Fluid Bolus',formula:'20 mL/kg (max 1000 mL)',unit:'mL',perKg:20,max:1000}],
-'combined-burn':[{key:'fluid',label:'Pediatric Fluid Bolus',formula:'20 mL/kg (max 500 mL)',unit:'mL',perKg:20,max:500}],
+'burns':[{key:'fluid',label:'Initial Fluid Bolus',formula:'20 mL/kg (max 1000 mL); if needed repeat once to total 40 mL/kg (max 2000 mL)',unit:'mL',perKg:20,max:1000}],
 'combined-chest-trauma':[{key:'fluid',label:'Pediatric NS/LR',formula:'20 mL/kg (max 1000 mL)',unit:'mL',perKg:20,max:1000}],
 'combined-extremity-trauma':[{key:'fluid',label:'Pediatric Fluid Bolus',formula:'20 mL/kg (max 1000 mL)',unit:'mL',perKg:20,max:1000},{key:'bic',label:'Sodium Bicarbonate',formula:'1 mEq/kg IV/IO',unit:'mEq',perKg:1}],
 'combined-head-trauma':[{key:'fluid',label:'Pediatric Fluid Bolus',formula:'20 mL/kg (max 1000 mL)',unit:'mL',perKg:20,max:1000}],
@@ -1208,8 +1207,8 @@ function formatProtocol(x){
 }
 function burnProtocolTools(){
  return `<div class="tool-card" style="margin:14px 0">
-   <h3>Burn TBSA — Interactive Body Map</h3>
-   <div class="tool-note">Tap each burned body region on the front/back anatomy map. Tap again to remove it. The running TBSA total updates automatically.</div>
+   <h3>Burn Tools — TBSA + Fluid Estimate</h3>
+   <div class="tool-note">GFD Burns protocol directs crews to assess burn extent using the Rule of Nines. Tap each burned body region on the front/back anatomy map; tap again to remove it.</div>
    <div class="burn-age">
      <button id="burnAdult" class="on" onclick="setBurnAge('adult')">Adult</button>
      <button id="burnChild" onclick="setBurnAge('child')">Child</button>
@@ -1276,10 +1275,10 @@ function toggleInlineProtocolTool(which,btn){
 function openP(id){
  let x=data.find(z=>z.id===id);if(!x)return;
  location.hash=id;document.querySelector('#list').classList.add('off');
- let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='combined-burn'?burnProtocolTools():'')+formatProtocol(x)+protocolDoseTools(x)),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x)),roleText='Gladstone ALS field reference — showing the complete protocol.',modeClass='als',modeText='ALS PROTOCOL VIEW';
+ let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+formatProtocol(x)+protocolDoseTools(x)),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x)),roleText='Gladstone ALS field reference — showing the complete protocol.',modeClass='als',modeText='ALS PROTOCOL VIEW';
  document.querySelector('#detail').innerHTML=`<button class="back" onclick="closeP()">‹ Back</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div><div class="protocol-mode ${modeClass}"><span class="dot"></span>${modeText}</div><div class="role-note"><b>${esc(roleText)}</b></div>${relatedAppendixHtml(x)}${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div></div>`;
  document.querySelector('#detail').classList.add('on');
- if(x.id==='combined-burn')renderBurnMap();
+ if(x.id==='burns')renderBurnMap();
  if(x.id==='tcd-destinations')renderTcdOfficialPage();
  scrollTo(0,0);
 }
