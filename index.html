@@ -1032,7 +1032,7 @@ function setVanDomain(key,val){vanState[key]=val;renderVanDomains()}
 function renderVanResult(){
  const b=document.getElementById('vanBox');if(!b)return;
  if(vanState.weakness===false){
-   b.innerHTML='<div class="triage-result"><b>VAN NEGATIVE</b><span>No arm weakness.</span></div><div class="van-route"><span class="route-label">ROUTING RECOMMENDATION</span><span class="route-hospital">NKCH</span></div>';
+   b.innerHTML='<div class="triage-result"><b>VAN NEGATIVE</b><span>No arm weakness.</span></div><div class="van-route"><span class="route-label">ROUTING RECOMMENDATION</span><span class="route-hospital">NKCH</span><span style="display:block;font-size:12px;margin-top:5px">VAN-NEGATIVE STROKE ROUTE</span></div>';
    return;
  }
  if(vanState.weakness!==true){resetVan();return}
@@ -1144,16 +1144,16 @@ function toolSearchResults(query){
 }
 function openSearchTool(id){cat='Tools';quickSet=null;document.querySelector('#q').value='';tabs();renderTools();openToolCard(id);scrollTo(0,0)}
 const gfdHospitals=[
- ['North Kansas City Hospital','2800 Clay Edwards Drive, North Kansas City, MO 64116','Primary',['Medical Control','Level II Trauma','Stroke Routing']],
- ["Saint Luke's North Hospital – Barry Road",'5830 NW Barry Road, Kansas City, MO 64154','',[]],
- ['Liberty Hospital','2525 Glenn Hendren Drive, Liberty, MO 64068','',['Level II Trauma']],
+ ['North Kansas City Hospital','2800 Clay Edwards Drive, North Kansas City, MO 64116','Primary',['Medical Control','Level II Trauma — Primary','Acute STEMI — Primary','VAN Negative Stroke Route']],
+ ["Saint Luke's North Hospital – Barry Road",'5830 NW Barry Road, Kansas City, MO 64154','',['Acute STEMI']],
+ ['Liberty Hospital','2525 Glenn Hendren Drive, Liberty, MO 64068','',['Level II Trauma — Secondary','Acute STEMI']],
  ['University Health Truman Medical Center','2301 Holmes Street, Kansas City, MO 64108','',['Level I Trauma']],
- ["Children's Mercy Adele Hall Campus",'2401 Gillham Road, Kansas City, MO 64108','',['Level I Pediatric Trauma','Burn Priority','Pediatric Burns']],
+ ["Children's Mercy Adele Hall Campus",'2401 Gillham Road, Kansas City, MO 64108','',['Pediatric Trauma Route','Pediatric Burns']],
  ['Kansas City VA Medical Center','4801 Linwood Boulevard, Kansas City, MO 64128','',[]],
- ['The University of Kansas Hospital – Emergency Department','4000 Cambridge Street, Kansas City, KS 66160','',['Level I Trauma','Burn Priority']],
- ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111','',['Level I Trauma','Stroke Routing','Comprehensive Stroke Center']],
- ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132','',['Level I Trauma','Burn Priority','Stroke Routing']]
-];
+ ['The University of Kansas Hospital – Emergency Department','4000 Cambridge Street, Kansas City, KS 66160','',['Level I Trauma','Burn Center — Primary','Acute STEMI — Secondary','Acute CVA — Secondary']],
+ ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111','',['Level I Trauma','Acute STEMI — Secondary','Acute CVA — Primary','Definitive Stroke Center']],
+ ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132','',['Level I Trauma','Burn Center — Secondary','Acute CVA — Secondary']]
+]
 function renderHospitals(){
  const q=(document.querySelector('#q')?.value||'').trim().toLowerCase();
  const rows=gfdHospitals.filter(([name,address,,tags])=>!q||(name+' '+address+' '+(tags||[]).join(' ')).toLowerCase().includes(q));
@@ -1161,12 +1161,12 @@ function renderHospitals(){
    const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);
    const primary=status==='Primary'?'<span class="route-tag primary" style="margin-left:6px">PRIMARY</span>':'';
    const tagHtml=(tags||[]).map(tag=>{
-     const cls=/medical control/i.test(tag)?'medcontrol':/stroke/i.test(tag)?'stroke':/burn/i.test(tag)?'burn':/trauma/i.test(tag)?'trauma':'';
+     const cls=/medical control/i.test(tag)?'medcontrol':/(stroke|cva|van)/i.test(tag)?'stroke':/burn/i.test(tag)?'burn':/trauma/i.test(tag)?'trauma':/stemi/i.test(tag)?'primary':'';
      return '<span class="route-tag '+cls+'">'+esc(tag)+'</span>';
    }).join('');
    return '<div class="hospital-card"><h3>🏥 '+esc(name)+primary+'</h3>'+tagHtml+'<div class="hospital-address" style="'+((tags||[]).length?'margin-top:8px':'')+'">'+esc(address)+'</div><a class="hospital-gps" target="_blank" rel="noopener" href="'+maps+'">Open GPS / Maps ↗</a></div>';
  }).join('');
- document.querySelector('#list').innerHTML='<div class="hospital-note"><b>North Kansas City Hospital is GFD\'s primary destination and is listed first.</b> Remaining hospitals are ordered by approximate proximity from Gladstone. Trauma, burn, and stroke routing labels are shown for quick field reference. Confirm destination choice with current protocol and Medical Control when indicated.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div>';
+ document.querySelector('#list').innerHTML='<div class="hospital-note"><b>North Kansas City Hospital is GFD\'s primary destination and is listed first.</b> Remaining hospitals are ordered by approximate proximity from Gladstone. Routing labels mirror the GFD Patient Destination Criteria / TCD guideline. VAN-specific stroke routing is labeled separately where applicable. Confirm destination choice with the active protocol and Medical Control when indicated.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div>';
 }
 function render(){
  if(cat==='Home'){renderHome();return}
@@ -2169,14 +2169,14 @@ function pediatricVitalsCard(){
 }
 function formatTcdQuickReference(x){
  const groups=[
-  ['🚑','Trauma Centers',['Liberty Hospital','Centerpoint','Belton Regional Medical Center','KU Medical Center','Children\'s Mercy Hospital','North Kansas City Hospital','Research Medical Center','Truman Medical Center Hospital Hill']],
-  ['❤️','STEMI Centers',['Liberty Hospital','Centerpoint','KU Medical Center','North Kansas City Hospital','Research Medical Center','St Lukes Plaza','Lee\'s Summit Medical Center']],
-  ['🧠','Stroke — Primary',['Liberty Hospital','Centerpoint','Belton Regional Medical Center','Lee\'s Summit Medical Center','Research Medical Center','St Joseph Medical Center','Menorah Medical Center','St Lukes East','North Kansas City Hospital','St Lukes North','Olathe Medical Center','St Mary\'s Blue Springs','Overland Park Regional Medical Center','Providence Medical Center','Shawnee Mission Medical Center','St Lukes South']],
-  ['🧠','Stroke — Comprehensive',['KU Medical Center','Research Medical Center','St Lukes Plaza','Truman Medical Center Hospital Hill']],
-  ['🔥','Burn Centers',['KU Medical Center','Children\'s Mercy Hospital']],
-  ['🫀','LVAD Destinations',['North Kansas City Hospital','Liberty Hospital']]
+  ['🚑','Level I Trauma',['KU Medical Center','Saint Luke\'s Plaza','Research Medical Center','Truman Medical Center']],
+  ['🚑','Level II Trauma',['North Kansas City Hospital — Primary','Liberty Hospital — Secondary']],
+  ['🔥','Burn Routing',['KU Medical Center — Primary Burn Center','Research Medical Center — Secondary Burn Center','Children\'s Mercy — Pediatric Burns']],
+  ['❤️','Acute STEMI',['North Kansas City Hospital — Primary','Saint Luke\'s Plaza — Secondary','KU Medical Center — Secondary','Liberty Hospital','Saint Luke\'s Northland']],
+  ['🧠','Acute CVA',['Saint Luke\'s Plaza — Primary / definitive stroke center','KU Medical Center — Secondary','Research Medical Center — Secondary']],
+  ['🧠','VAN-Specific Stroke Routing',['VAN Negative — NKCH','VAN Positive — Saint Luke\'s Plaza preferred; KU or Research are comprehensive stroke options per stroke protocol']]
  ];
- return '<div class="reference-source"><div class="section">TCD DESTINATIONS — QUICK REFERENCE</div><div class="notice">Quick display transcribed from the official GFD TCD Destinations page.</div><div class="tcd-grid">'+groups.map(g=>'<div class="tcd-card"><h3><span>'+g[0]+'</span>'+esc(g[1])+'</h3>'+g[2].map(h=>'<div class="tcd-hospital">'+esc(h)+'</div>').join('')+'</div>').join('')+'</div><div class="section">OFFICIAL TCD PAGE 160</div><div id="tcdOfficialPage" class="tcd-official"><div class="tool-note">Loading official protocol page 160…</div></div><div class="appendix-actions"><a class="source" href="'+esc(sourceHref(x))+'">Open Official TCD Page Full Screen ↗</a></div></div>';
+ return '<div class="reference-source"><div class="section">GFD TCD DESTINATIONS — QUICK REFERENCE</div><div class="notice">This quick reference is aligned to the GFD Patient Destination Criteria / TCD guideline. VAN routing is shown separately because it is protocol-specific.</div><div class="tcd-grid">'+groups.map(g=>'<div class="tcd-card"><h3><span>'+g[0]+'</span>'+esc(g[1])+'</h3>'+g[2].map(h=>'<div class="tcd-hospital">'+esc(h)+'</div>').join('')+'</div>').join('')+'</div></div>';
 }
 function formatAppendixPage(x){
  const start=Number(x.page||1),end=Number(x.endPage||start);
@@ -2531,7 +2531,7 @@ function formatStroke(){
     <div class="flow-node action"><h4>3. Treatment</h4><ul><li>O2 as appropriate to maintain saturation &gt;94%.</li><li>Cardiac monitor and pulse oximeter.</li><li>IV TKO.</li><li>Treat blood glucose per protocol.</li></ul></div>
     <div class="flow-arrow">↓</div>
     <div class="flow-decision">VAN Positive?
-      <div class="flow-branches"><div class="flow-branch no"><b>VAN NEGATIVE</b>Transport to closest Primary Stroke Center (NKCH). Notify ED Triage: “This is a stroke alert.”</div><div class="flow-branch yes"><b>VAN POSITIVE</b>Transport to closest Comprehensive Stroke Center: St Lukes Plaza, KUMC, or Research. Notify ED Triage: “This is a stroke alert with possible large vessel occlusion.”</div></div>
+      <div class="flow-branches"><div class="flow-branch no"><b>VAN NEGATIVE</b>Transport to closest Primary Stroke Center (NKCH). Notify ED Triage: “This is a stroke alert.”</div><div class="flow-branch yes"><b>VAN POSITIVE</b>Transport to a Comprehensive Stroke Center: Saint Luke's Plaza (GFD primary/definitive CVA destination), KU Medical Center, or Research. Notify ED Triage: “This is a stroke alert with possible large vessel occlusion.”</div></div>
     </div>
     <div class="flow-node monitor"><h4>VAN Positive Definition</h4><p>Any weakness <b>plus</b> at least one of: visual disturbance, aphasia, or neglect.</p></div>
   </div>`;
@@ -2564,7 +2564,7 @@ function formatBurnsFlow(){
       <div class="flow-branches three"><div class="flow-branch no"><b>&gt;20% 2nd/3rd DEGREE</b>Cover with dry sterile burn sheet. Leave blisters intact.</div><div class="flow-branch yes"><b>1st/2nd DEGREE &lt;20%</b>Cool area with saline soaks.</div><div class="flow-branch no"><b>CHEMICAL</b>Remove contaminated clothing. Refer to MSDS, Haz Mat ERG, and Medical Control.</div></div>
     </div>
     <div class="flow-node med"><h4>4. Pain Control</h4><p>Consider Morphine 2 mg increments slow IV or IM up to 10 mg total, <b>or</b> Fentanyl 50–100 mcg slow IV, IM or IN. Contact Medical Control for further orders.</p></div>
-    <div class="flow-node monitor"><h4>5. Destination</h4><p>Contact Medical Control for routing. Source states adult burns with &gt;20% second degree or &gt;5% third degree should be transported to KU Burn Unit. Pediatric burn patients route to Childrens Mercy Hospital.</p></div>
+    <div class="flow-node monitor"><h4>5. Destination</h4><p>Contact Medical Control for routing. Adult burns meeting direct-route criteria should be transported to KU Medical Center, the GFD primary burn center; Research is the secondary burn center. Pediatric burn patients route to Children's Mercy.</p></div>
   </div>`;
 }
 
