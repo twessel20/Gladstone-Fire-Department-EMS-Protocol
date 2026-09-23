@@ -1080,6 +1080,45 @@ function formatLucasProcedure(x){
  }
  return html;
 }
+function formatChestPain(){
+ return `
+  <div class="protocol-callout info"><strong>Clinical Overview</strong>
+    Chest pain/pressure can be caused by a variety of different problems including MI, angina pectoris, pulmonary embolism, pneumonia, and musculoskeletal chest wall pain.
+  </div>
+
+  <div class="section">Initial Actions</div>
+  <div class="protocol-step">Obtain a 12/15 lead EKG on chest pain of any kind, regardless if you think it is cardiac or not.</div>
+  <div class="protocol-callout action"><strong>STEMI Priority</strong>STEMI scene times should be minimized.</div>
+  <div class="protocol-step">Secure airway.</div>
+  <div class="protocol-step">Administer appropriate O2 concentration.</div>
+  <div class="protocol-step">Obtain IV access.</div>
+
+  <div class="section">Medications</div>
+  <div class="protocol-step"><b>Aspirin:</b> Consider 324 mg chewed or swallowed if no history of asthma or sensitivity to aspirin.</div>
+  <div class="protocol-step"><b>Nitroglycerin:</b> Consider as long as systolic BP remains &gt;100 and pulse rate &gt;50 and &lt;140. Give 0.4 mg SL tablet every 5 minutes until chest pain is relieved, to a total of 3 doses, or hypotension develops.</div>
+  <div class="protocol-step"><b>Morphine:</b> Consider if chest pain is unresolved with NTG and systolic BP &gt;100. Give 4 mg initially, slow IV push, followed by 2 mg increments every 5 minutes until the pain is resolved or a total of 10 mg is given.</div>
+  <div class="protocol-step"><b>Zofran:</b> Consider 4 mg SIVP or PO for nausea secondary Morphine administration.</div>
+
+  <div class="section">Monitoring / Transport</div>
+  <div class="protocol-step">Monitor BP, SpO2, and EtCO2 if indicated.</div>
+  <div class="protocol-step">Treat arrhythmias per protocol or physician's orders.</div>
+  <div class="protocol-step">Transport while monitoring vital signs and cardiac rhythm frequently.</div>
+
+  <div class="section">Assessment</div>
+  <div class="protocol-step"><b>1.</b> Obtain brief history characterizing pain as to the nature, severity, onset, duration, location, and radiation.</div>
+  <div class="protocol-step"><b>2.</b> Initial 12/15 lead EKG should be completed within 5 minutes of patient contact.</div>
+  <div class="protocol-step"><b>3.</b> Obtain vitals. A BP should be taken on both arms. A difference of 15 mmHg, systolic or diastolic, and a history of hypertension could indicate an aortic dissection and should be reported to receiving staff.</div>
+  <div class="protocol-step"><b>4.</b> Perform a brief cardiopulmonary assessment including inspection, palpation, and auscultation of the chest. Obtain current medications, past medical history, and allergies.</div>
+
+  <div class="protocol-callout action"><strong>Confirmed STEMI</strong>Refer to Code STEMI Activation.</div>
+  <div class="protocol-callout info"><strong>Persistent Chest Pain</strong>If there is no relief of chest pain after the first dose of NTG, you may administer Morphine.</div>
+
+  <div class="protocol-callout"><strong>Warning — Inferior MI / RVI</strong>
+    Nitrate administration with signs and symptoms of inferior MI / RVI may cause hemodynamic collapse. V4R is the best lead for determining RVI, with approximately 90 percent specificity. Consider a fluid bolus and/or vasopressors.
+  </div>
+ `;
+}
+
 function formatCodeStemi(){
  return `
   <div class="section">Activation Criteria</div>
@@ -1120,6 +1159,7 @@ function formatCodeStemi(){
 }
 
 function formatProtocol(x){
+ if(x.id==='chest-pain-pressure')return formatChestPain();
  if(x.id==='code-stemi')return formatCodeStemi();
  if(x.category==='Appendix')return formatAppendix(x);
  if(x.id==='do-not-resuscitate')return formatDnrProtocol(x);
