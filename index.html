@@ -26,6 +26,7 @@
 .protocol-body,.source-med-value,.flow-node,.flow-branch,.dose-note,.notice{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .protocol-body{font-size:16px;line-height:1.5}
 .protocol-body button,.source-med-sheet button{white-space:normal;overflow-wrap:break-word}
+.lab-search-wrap{margin:10px 0 12px}.lab-search-wrap input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;font-size:16px;background:#fff}.lab-search-results{display:grid;gap:6px;margin-top:8px}.lab-search-hit{width:100%;border:1px solid #dbe4ee;background:#f8fafc;border-radius:10px;padding:9px 10px;text-align:left;display:flex;justify-content:space-between;gap:10px;align-items:center;color:#173a5e}.lab-search-hit b{display:block;font-size:14px}.lab-search-hit small{display:block;color:#64748b;font-size:11px;margin-top:2px}.lab-search-empty{font-size:12px;color:#64748b;padding:5px 2px}
 .erlabs-grid{display:grid;gap:10px;margin-top:12px}.erlab-row{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:12px 13px}.erlab-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.erlab-name{font-weight:900;color:#173a5e;font-size:16px}.erlab-range{font-weight:850;color:#334155;font-size:14px;text-align:right}.erlab-meaning{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.erlab-low,.erlab-high{border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4}.erlab-low{background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a}.erlab-high{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}.erlab-low b,.erlab-high b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}.erlab-single{margin-top:8px;border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4;background:#f8fafc;border:1px solid #dbe4ee;color:#334155}.erlab-section{font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b;margin-top:16px}@media(max-width:520px){.erlab-head{display:block}.erlab-range{text-align:left;margin-top:3px}.erlab-meaning{grid-template-columns:1fr}}
 .cbc-grid{display:grid;gap:10px;margin-top:12px}.cbc-row{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:12px 13px}.cbc-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.cbc-name{font-weight:900;color:#173a5e;font-size:16px}.cbc-range{font-weight:850;color:#334155;font-size:14px;text-align:right}.cbc-meaning{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.cbc-low,.cbc-high{border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4}.cbc-low{background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a}.cbc-high{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}.cbc-low b,.cbc-high b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}.cbc-note{font-size:12px;line-height:1.5;color:#475569;background:#f8fafc;border:1px solid #dbe4ee;border-radius:10px;padding:10px 11px;margin-top:10px}.cbc-section-title{font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b;margin-top:16px}.cbc-sex-grid{display:grid;gap:5px;margin-top:5px}.cbc-sex-grid div{font-size:13px;color:#334155}@media(max-width:520px){.cbc-head{display:block}.cbc-range{text-align:left;margin-top:3px}.cbc-meaning{grid-template-columns:1fr}}
 .guideline-sheet{display:grid;gap:10px}
@@ -644,7 +645,11 @@ function renderTools(){
 
       <div class="tool-card">
         <h3>🧪 Lab & Reference</h3>
-        <div class="tool-note">Quick interpretation guides for common laboratory values.</div>
+        <div class="tool-note">Search a specific lab value or open a full reference guide.</div>
+        <div class="lab-search-wrap">
+          <input id="labToolSearch" type="search" autocomplete="off" placeholder="Search: potassium, Hgb, troponin, INR…" oninput="searchLabTools(this.value)">
+          <div id="labToolResults" class="lab-search-results"></div>
+        </div>
         <button class="tool-launch" onclick="openToolCard('cbc')"><span class="tool-launch-icon">🩸</span><span><b>CBC Reference Guide</b><small>Typical adult CBC ranges with low/high field interpretation</small></span><span class="tool-chevron">›</span></button>
         <button class="tool-launch" onclick="openToolCard('erlabs')"><span class="tool-launch-icon">🧪</span><span><b>Common ER Labs</b><small>Electrolytes, renal, cardiac, coagulation, liver, lactate, and blood gas basics</small></span><span class="tool-chevron">›</span></button>
       </div>
@@ -663,6 +668,95 @@ function renderTools(){
       </div>
     </div>
     <div id="toolDetail"></div>`;
+}
+const labReferenceIndex=[
+ {name:'WBC',guide:'cbc',terms:'white blood cell leukocyte leukopenia leukocytosis infection'},
+ {name:'Neutrophils',guide:'cbc',terms:'anc absolute neutrophil neutropenia neutrophilia'},
+ {name:'Lymphocytes',guide:'cbc',terms:'lymphocyte lymphopenia lymphocytosis'},
+ {name:'RBC',guide:'cbc',terms:'red blood cell erythrocyte anemia polycythemia'},
+ {name:'Hemoglobin (Hgb)',guide:'cbc',terms:'hemoglobin hgb anemia blood loss oxygen carrying'},
+ {name:'Hematocrit (Hct)',guide:'cbc',terms:'hematocrit hct anemia blood loss'},
+ {name:'MCV',guide:'cbc',terms:'mean corpuscular volume microcytic macrocytic anemia'},
+ {name:'MCH',guide:'cbc',terms:'mean corpuscular hemoglobin'},
+ {name:'MCHC',guide:'cbc',terms:'mean corpuscular hemoglobin concentration hypochromic'},
+ {name:'RDW',guide:'cbc',terms:'red cell distribution width anemia'},
+ {name:'Platelets',guide:'cbc',terms:'platelet thrombocytopenia thrombocytosis bleeding'},
+ {name:'MPV',guide:'cbc',terms:'mean platelet volume platelet'},
+ {name:'Sodium (Na)',guide:'erlabs',terms:'sodium na hyponatremia hypernatremia electrolyte'},
+ {name:'Potassium (K)',guide:'erlabs',terms:'potassium k hypokalemia hyperkalemia electrolyte dysrhythmia'},
+ {name:'Chloride (Cl)',guide:'erlabs',terms:'chloride cl electrolyte'},
+ {name:'CO₂ / Bicarbonate',guide:'erlabs',terms:'co2 bicarbonate hco3 metabolic acidosis alkalosis'},
+ {name:'Glucose',guide:'erlabs',terms:'glucose blood sugar hypoglycemia hyperglycemia'},
+ {name:'Calcium',guide:'erlabs',terms:'calcium hypocalcemia hypercalcemia'},
+ {name:'BUN',guide:'erlabs',terms:'bun blood urea nitrogen renal kidney dehydration'},
+ {name:'Creatinine',guide:'erlabs',terms:'creatinine renal kidney aki'},
+ {name:'Lactate',guide:'erlabs',terms:'lactate lactic acid sepsis shock perfusion'},
+ {name:'Troponin I / T',guide:'erlabs',terms:'troponin cardiac heart attack myocardial injury mi acs'},
+ {name:'BNP',guide:'erlabs',terms:'bnp brain natriuretic peptide heart failure chf'},
+ {name:'PT',guide:'erlabs',terms:'pt prothrombin time coagulation warfarin'},
+ {name:'INR',guide:'erlabs',terms:'inr international normalized ratio coagulation warfarin'},
+ {name:'aPTT',guide:'erlabs',terms:'aptt ptt partial thromboplastin heparin coagulation'},
+ {name:'AST',guide:'erlabs',terms:'ast liver hepatic'},
+ {name:'ALT',guide:'erlabs',terms:'alt liver hepatic'},
+ {name:'Alkaline Phosphatase',guide:'erlabs',terms:'alk phos alkaline phosphatase liver biliary bone'},
+ {name:'Total Bilirubin',guide:'erlabs',terms:'bilirubin liver jaundice hemolysis'},
+ {name:'Lipase',guide:'erlabs',terms:'lipase pancreas pancreatitis'},
+ {name:'pH',guide:'erlabs',terms:'ph abg blood gas acidemia alkalemia'},
+ {name:'PaCO₂',guide:'erlabs',terms:'paco2 carbon dioxide abg respiratory acidosis alkalosis'},
+ {name:'HCO₃⁻',guide:'erlabs',terms:'hco3 bicarbonate abg metabolic acidosis alkalosis'},
+ {name:'PaO₂',guide:'erlabs',terms:'pao2 oxygen abg hypoxemia'}
+];
+let pendingLabSearch='';
+function searchLabTools(value){
+ const host=document.getElementById('labToolResults');
+ if(!host)return;
+ const q=normText(value).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+ if(!q){host.innerHTML='';return}
+ const terms=q.split(/\s+/).filter(Boolean);
+ const hits=labReferenceIndex.filter(x=>{
+   const hay=normText(x.name+' '+x.terms).toLowerCase().replace(/[^a-z0-9]+/g,' ');
+   return terms.every(t=>hay.includes(t));
+ }).slice(0,8);
+ host.innerHTML=hits.length?hits.map(x=>
+   '<button class="lab-search-hit" onclick="openLabSearch(\''+x.guide+'\',\''+esc(x.name).replace(/'/g,'&#39;')+'\')"><span><b>'+esc(x.name)+'</b><small>'+(x.guide==='cbc'?'CBC Reference':'Common ER Labs')+'</small></span><span>›</span></button>'
+ ).join(''):'<div class="lab-search-empty">No matching lab found.</div>';
+}
+function openLabSearch(guide,name){
+ pendingLabSearch=name;
+ openToolCard(guide);
+ requestAnimationFrame(()=>filterOpenLabGuide(name));
+}
+function filterOpenLabGuide(name){
+ const q=normText(name).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+ const rows=[...document.querySelectorAll('.cbc-row,.erlab-row')];
+ if(!rows.length)return;
+ rows.forEach(row=>{
+   const hay=normText(row.textContent).toLowerCase().replace(/[^a-z0-9]+/g,' ');
+   row.style.display=hay.includes(q)?'block':'none';
+ });
+ const sections=[...document.querySelectorAll('.cbc-section-title,.erlab-section')];
+ sections.forEach(sec=>{
+   let n=sec.nextElementSibling,show=false;
+   if(n){
+     for(const row of n.querySelectorAll('.cbc-row,.erlab-row'))if(row.style.display!=='none'){show=true;break}
+   }
+   sec.style.display=show?'block':'none';
+ });
+ const card=document.querySelector('#toolDetail .tool-card');
+ if(card){
+   const existing=card.querySelector('.lab-filter-banner');
+   if(existing)existing.remove();
+   const banner=document.createElement('div');
+   banner.className='notice lab-filter-banner';
+   banner.innerHTML='<b>Showing: '+esc(name)+'</b> <button class="back" style="margin:6px 0 0" onclick="clearLabGuideFilter()">Show all labs</button>';
+   const note=card.querySelector('.tool-note');
+   if(note)note.insertAdjacentElement('afterend',banner);
+ }
+}
+function clearLabGuideFilter(){
+ document.querySelectorAll('.cbc-row,.erlab-row,.cbc-section-title,.erlab-section').forEach(el=>el.style.display='');
+ const b=document.querySelector('.lab-filter-banner');if(b)b.remove();
+ pendingLabSearch='';
 }
 function toolBack(){renderTools()}
 function openToolCard(which){
