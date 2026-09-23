@@ -794,10 +794,9 @@ function sourceHref(x){
 function normText(v){return String(v||'').replace(/[\uf0b0\u00ba]/g,'°').replace(/[■▪◼◾□◆►▶]+/g,' ').replace(/^[•·‣⁃–—-]+\s*/,'').replace(/\s+/g,' ').trim()}
 function sameTitle(a,b){return normText(a).toLowerCase().replace(/[^a-z0-9]+/g,'')===normText(b).toLowerCase().replace(/[^a-z0-9]+/g,'')}
 function isHeading(t){
- let u=t.toUpperCase();
- if(/^(ASSESSMENT|INTERVENTIONS|INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|SIDE EFFECTS|DOSE|DOSES|ROUTE|ROUTES|NOTES|TECHNIQUE|COMPLICATIONS|PROTOCOL USED IN|PROTOCOLS USED IN|PHARMACOLOGY|GENERAL ROUTING|STEMI ROUTING|TRAUMA|GUIDELINES|DOCUMENTATION)\s*:?/.test(u))return true;
- if(t.endsWith(':')&&t.length<70)return true;
- return t.length<60&&/^[A-Z0-9 ()/&.,'\-]+$/.test(t)&&/[A-Z]/.test(t);
+ let u=normText(t).toUpperCase().replace(/:$/,'');
+ if(/^(ASSESSMENT|INTERVENTIONS|INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|SIDE EFFECTS|ADVERSE REACTIONS|DOSE|DOSES|DOSAGE|ADMINISTRATION|ROUTE|ROUTES|NOTES|TECHNIQUE|COMPLICATIONS|PROTOCOL USED IN|PROTOCOLS USED IN|PHARMACOLOGY|GENERAL ROUTING|STEMI ROUTING|TRAUMA|GUIDELINES|DOCUMENTATION|TREATMENT|PROCEDURE|UPPER AIRWAY OBSTRUCTION|ASTHMA|COPD|TENSION PNEUMOTHORAX|CONGESTIVE HEART FAILURE|PEDIATRIC RESPIRATORY DISTRESS WITH INSPIRATORY STRIDOR\/CROUP|SHOULDER INSERTION|EZ-IO INSERTION CONTINUED)$/.test(u))return true;
+ return t.endsWith(':')&&t.length<70;
 }
 function tokenize(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
@@ -806,6 +805,16 @@ function tokenize(x){
  let out=[];
  for(let i=0;i<raw.length;i++){
    let l=raw[i];
+   if(/^\*?WARNING\*?$/i.test(l)){
+     let parts=[],j=i+1;
+     while(j<raw.length&&parts.length<12&&!isHeading(raw[j])){
+       parts.push(normText(raw[j]));
+       if(/[.!?]$/.test(raw[j])){j++;break}
+       j++;
+     }
+     out.push({warning:true,text:parts.join(' ')||'Warning'});
+     i=j-1;continue;
+   }
    if(/^[•▪]$/.test(l)&&raw[i+1]){out.push({level:l==='▪'?2:0,text:normText(raw[++i]),sourceItem:true});continue}
    if(/^o\s+/i.test(l)){out.push({level:1,text:normText(l.replace(/^o\s+/i,'')),sourceItem:true});continue}
    if(/^[-•]\s+/.test(l)){out.push({level:0,text:normText(l.replace(/^[-•]\s+/,'')),sourceItem:true});continue}
@@ -813,6 +822,15 @@ function tokenize(x){
    let m=l.match(/^(\d+\.|[a-z]\.|[ivx]+\.)\s+(.*)$/i);
    if(m){let level=/^\d/.test(m[1])?0:/^[a-z]/i.test(m[1])?1:2;out.push({level,text:l,numbered:true,sourceItem:true});continue}
    if(isHeading(l)){out.push({heading:true,text:l.replace(/:$/,'')});continue}
+   if(/^[A-Z0-9][A-Z0-9 ()/&.,'\-]{1,55}$/.test(l)&&raw[i+1]&&!isHeading(raw[i+1])&&/^[A-Z0-9]/.test(raw[i+1])){
+     let parts=[l],j=i+1;
+     while(j<raw.length&&parts.length<8&&!isHeading(raw[j])&&/^[A-Z0-9][A-Za-z0-9 ()/&.,'\-]{0,70}$/.test(raw[j])){
+       parts.push(raw[j]);
+       if(/[.!?]$/.test(raw[j])){j++;break}
+       j++;
+     }
+     if(parts.length>1){out.push({text:normText(parts.join(' ')),plain:true});i=j-1;continue}
+   }
    out.push({text:l,plain:true});
  }
  let joined=[];
@@ -1175,6 +1193,10 @@ function formatProtocol(x){
  for(let i=0;i<ts.length;i++){
    let t=ts[i],text=normText(t.text);
    if(!text)continue;
+   if(t.warning){
+     rendered.push(`<div class="protocol-callout"><strong>Warning</strong>${esc(text)}</div>`);
+     continue;
+   }
    if(t.heading){
      lastHeading=text.toUpperCase();
      rendered.push(`<div class="section">${esc(text)}</div>`);
