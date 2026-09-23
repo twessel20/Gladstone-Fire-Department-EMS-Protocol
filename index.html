@@ -418,9 +418,10 @@ async function lookupPatientMedication(){
  try{
    const rx=await fetch('https://rxnav.nlm.nih.gov/REST/approximateTerm.json?term='+encodeURIComponent(term)+'&maxEntries=6');
    if(!rx.ok)throw new Error('RxNorm lookup unavailable');
-   const rj=await rx.json(),cands=(rj.approximateGroup?.candidate||[]).filter(x=>x.rxcui);
+   const rj=await rx.json(),rawCands=(rj.approximateGroup?.candidate||[]).filter(x=>x.rxcui);
+   const seen=new Set(),cands=rawCands.filter(x=>{const k=patientMedCleanName(x.name||term).toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).slice(0,6);
    if(!cands.length){host.innerHTML='<div class="notice"><b>No close medication match found.</b><br>Check the spelling or try the generic/brand name printed on the bottle.</div>';return}
-   host.innerHTML='<div class="patient-med-card"><h3>Possible matches</h3><div class="tool-note">Select the medication that matches the patient\'s bottle or medication list.</div><div class="patient-med-candidates">'+cands.map((x,i)=>'<button class="patient-med-choice" onclick="loadPatientMedication(\''+String(x.rxcui).replace(/'/g,'')+'\',\''+esc(String(x.name||term)).replace(/'/g,'&#39;')+'\')">'+esc(x.name||term)+(i===0?' <small>— closest match</small>':'')+'</button>').join('')+'</div></div>';
+   host.innerHTML='<div class="patient-med-card"><h3>Possible matches</h3><div class="tool-note">Select the medication that matches the patient\'s bottle or medication list. Results are normalized to the underlying drug ingredient for a consistent field summary.</div><div class="patient-med-candidates">'+cands.map((x,i)=>'<button class="patient-med-choice" onclick="loadPatientMedication(\''+String(x.rxcui).replace(/'/g,'')+'\',\''+esc(String(x.name||term)).replace(/'/g,'&#39;')+'\')">'+esc(x.name||term)+(i===0?' <small>— closest match</small>':'')+'</button>').join('')+'</div></div>';
  }catch(e){
    host.innerHTML='<div class="notice"><b>Medication lookup requires an internet connection.</b><br>The GFD protocol content can still work from its offline cache.</div>';
  }
@@ -478,6 +479,43 @@ function patientMedPlainSummary(name,classes,label){
  return {matched:false,plain:'Prescription medicine',drugClass:'Class not identified',moa:'See the detailed drug reference if you need more information about how it works.',use:'See the detailed drug reference if you need more information about why it is prescribed.'};
 }
 
+function patientMedCleanName(v){
+ return normText(v)
+   .replace(/\[[^\]]+\]/g,' ')
+   .replace(/\b\d+(?:\.\d+)?\s*(?:mg|mcg|g|ml|meq|units?|%)\b/gi,' ')
+   .replace(/\b(?:oral|tablet|capsule|solution|suspension|injection|injectable|extended release|delayed release|er|xr|sr|dr|chewable|sublingual|topical|cream|ointment|patch|spray|inhaler|inhalation)\b/gi,' ')
+   .replace(/\s+/g,' ').trim();
+}
+function patientMedUniqueNames(values){
+ const seen=new Set(),out=[];
+ (values||[]).forEach(v=>{
+   const n=patientMedCleanName(v);if(!n)return;
+   const k=n.toLowerCase();
+   if(!seen.has(k)){seen.add(k);out.push(n)}
+ });
+ return out;
+}
+async function patientMedCanonicalConcept(rxcui,fallbackName){
+ let generic=[],brand=[],display=patientMedCleanName(fallbackName)||fallbackName||'Medication';
+ try{
+   const ar=await fetch('https://rxnav.nlm.nih.gov/REST/rxcui/'+encodeURIComponent(rxcui)+'/allrelated.json');
+   if(ar.ok){
+     const aj=await ar.json();
+     const groups=aj.allRelatedGroup?.conceptGroup||[];
+     for(const g of groups){
+       const tty=String(g.tty||'').toUpperCase();
+       const names=(g.conceptProperties||[]).map(x=>x.name).filter(Boolean);
+       if(tty==='IN'||tty==='PIN'||tty==='MIN')generic.push(...names);
+       if(tty==='BN')brand.push(...names);
+     }
+   }
+ }catch(e){}
+ generic=patientMedUniqueNames(generic);
+ brand=patientMedUniqueNames(brand);
+ if(generic.length)display=generic[0];
+ else if(brand.length)display=brand[0];
+ return {display,generic,brand};
+}
 function renderPatientMedCard(host,name,brand,generic,plain,rxcui){
  const dailymed='https://dailymed.nlm.nih.gov/dailymed/search.cfm?query='+encodeURIComponent(name);
  const rxnav='https://mor.nlm.nih.gov/RxNav/search?searchBy=RXCUI&searchTerm='+encodeURIComponent(rxcui||'');
@@ -494,60 +532,75 @@ function renderPatientMedCard(host,name,brand,generic,plain,rxcui){
 }
 async function loadPatientMedication(rxcui,fallbackName){
  const host=document.querySelector('#patientMedResult');
- const firstPass=patientMedPlainSummary(fallbackName,[],null);
-
- // Common medications render immediately from the built-in firefighter reference.
- if(firstPass.matched){
-   renderPatientMedCard(host,fallbackName,'','',firstPass,rxcui);
-   return;
- }
-
  host.innerHTML='<div class="patient-med-card"><b>Loading medication summary…</b></div>';
+
  let props=null,label=null,classParts=[];
  try{
    const p=await fetch('https://rxnav.nlm.nih.gov/REST/rxcui/'+encodeURIComponent(rxcui)+'/properties.json');
    if(p.ok)props=(await p.json()).properties||null;
  }catch(e){}
- const name=props?.name||fallbackName||'Medication';
 
- // Try the built-in reference again using the normalized RxNorm name.
- const normalized=patientMedPlainSummary(name,[],null);
- if(normalized.matched){
-   renderPatientMedCard(host,name,'','',normalized,rxcui);
-   return;
- }
+ const canonical=await patientMedCanonicalConcept(rxcui,props?.name||fallbackName);
+ const normalizedName=canonical.display||patientMedCleanName(props?.name||fallbackName)||'Medication';
 
- // For less-common drugs, request only the minimum class information needed.
- try{
-   const cr=await fetch('https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui='+encodeURIComponent(rxcui)+'&relaSource=ATC');
-   if(cr.ok){
-     const cj=await cr.json();
-     classParts=(cj.rxclassDrugInfoList?.rxclassDrugInfo||[]).map(v=>v?.rxclassMinConceptItem?.className).filter(Boolean);
-   }
- }catch(e){}
- if(!classParts.length){
+ // Build the summary from the canonical ingredient/brand identity first.
+ let plain=patientMedPlainSummary(
+   [normalizedName,...canonical.generic,...canonical.brand].join(' '),
+   [],
+   null
+ );
+
+ // If the built-in reference does not know it, use RxClass.
+ if(!plain.matched){
    try{
-     const cr=await fetch('https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui='+encodeURIComponent(rxcui)+'&relaSource=MEDRT');
+     const cr=await fetch('https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui='+encodeURIComponent(rxcui)+'&relaSource=ATC');
      if(cr.ok){
        const cj=await cr.json();
        classParts=(cj.rxclassDrugInfoList?.rxclassDrugInfo||[]).map(v=>v?.rxclassMinConceptItem?.className).filter(Boolean);
      }
    }catch(e){}
+   if(!classParts.length){
+     try{
+       const cr=await fetch('https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui='+encodeURIComponent(rxcui)+'&relaSource=MEDRT');
+       if(cr.ok){
+         const cj=await cr.json();
+         classParts=(cj.rxclassDrugInfoList?.rxclassDrugInfo||[]).map(v=>v?.rxclassMinConceptItem?.className).filter(Boolean);
+       }
+     }catch(e){}
+   }
+   plain=patientMedPlainSummary(
+     [normalizedName,...canonical.generic,...canonical.brand].join(' '),
+     classParts,
+     null
+   );
  }
 
- let plain=patientMedPlainSummary(name,classParts,null);
- let brand='',generic='';
- if(!plain.matched){
+ // FDA label is the final enrichment source, not the primary identity source.
+ if(!plain.matched||!canonical.generic.length||!canonical.brand.length){
    try{
      const lr=await fetch('https://api.fda.gov/drug/label.json?search='+encodeURIComponent('openfda.rxcui:"'+rxcui+'"')+'&limit=1');
      if(lr.ok)label=(await lr.json()).results?.[0]||null;
    }catch(e){}
-   brand=(label?.openfda?.brand_name||[]).join(', ');
-   generic=(label?.openfda?.generic_name||[]).join(', ');
-   plain=patientMedPlainSummary(name,classParts,label);
+   if(!plain.matched){
+     plain=patientMedPlainSummary(
+       [normalizedName,...canonical.generic,...canonical.brand].join(' '),
+       classParts,
+       label
+     );
+   }
  }
 
- renderPatientMedCard(host,name,brand,generic,plain,rxcui);
+ const labelGeneric=(label?.openfda?.generic_name||[]).map(patientMedCleanName);
+ const labelBrand=(label?.openfda?.brand_name||[]).map(patientMedCleanName);
+ const genericNames=patientMedUniqueNames([...canonical.generic,...labelGeneric]);
+ const brandNames=patientMedUniqueNames([...canonical.brand,...labelBrand]);
+
+ // Keep result labels predictable: canonical generic first, then brand when available.
+ const generic=genericNames.join(', ');
+ const brand=brandNames.join(', ');
+ const displayName=genericNames[0]||normalizedName||brandNames[0]||'Medication';
+
+ renderPatientMedCard(host,displayName,brand,generic,plain,rxcui);
 }
 
 function renderTools(){
