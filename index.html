@@ -18,7 +18,8 @@
 .source-med-row.med-contra .source-med-value{color:#7f1d1d}
 .source-med-row.med-precaution{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid #d97706;border-radius:10px;padding:10px 12px;margin:6px 0}
 .source-med-row.med-precaution .source-med-label{color:#92400e}
-.source-med-row.med-precaution .source-med-value{color:#78350f}.source-med-spacer{height:14px}.source-med-note{font-weight:800;margin-top:10px}.source-med-calc{margin-top:14px;border-top:1px solid #d1d5db;padding-top:12px}.source-med-calc .calc-field{margin-bottom:8px}@media(max-width:620px){.source-med-title{margin-left:0;font-size:20px}.source-med-row{grid-template-columns:1fr;gap:3px}.source-med-label{font-size:13px;color:#334155;text-transform:none}.source-med-sheet{padding:15px}}.med-section:first-child{border-top:0;padding-top:0}.med-label{font-size:12px;font-weight:900;color:#7f1d1d;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}.med-item{font-size:16px;line-height:1.45;margin:7px 0;padding-left:18px;position:relative}.med-item:before{content:'•';position:absolute;left:3px;font-weight:800}.med-subhead{font-size:15px;font-weight:850;margin:10px 0 5px;color:#334155}.med-text{font-size:16px;line-height:1.45;margin:7px 0}.dose-tools{margin:16px 0 6px;padding:12px;border:1px solid #fecaca;background:#fff7f7;border-radius:12px}.dose-tools h4{margin:0 0 8px;color:#173a5e;font-size:15px}.dose-calc{border-top:1px solid #fecaca;padding-top:10px;margin-top:10px}.dose-calc:first-of-type{border-top:0;padding-top:0;margin-top:0}.dose-row{display:grid;grid-template-columns:1fr 92px;gap:7px}.dose-row input,.dose-row select{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:10px;font-size:16px;background:#fff}.dose-btn{width:100%;margin-top:7px;border:0;border-radius:9px;padding:10px;background:#2f6690;color:#fff;font-weight:850}.dose-out{margin-top:8px;font-size:15px;line-height:1.4}.dose-out strong{font-size:20px;color:#173a5e}.dose-note{font-size:11px;color:#64748b;margin-top:5px}.protocol-body{max-width:100%;overflow-wrap:break-word;word-break:normal;hyphens:none}
+.source-med-row.med-precaution .source-med-value{color:#78350f}.source-med-spacer{height:14px}.source-med-note{font-weight:800;margin-top:10px}.oral-glucose-card{background:#faf7ff;border:1px solid #ddd6fe;border-left:5px solid #7c3aed;border-radius:12px;padding:12px 13px;margin-top:4px}.oral-glucose-dose{font-size:24px;line-height:1.1;font-weight:950;color:#5b21b6}.oral-glucose-route{margin-top:4px;font-size:13px;font-weight:850;color:#6d28d9;text-transform:uppercase;letter-spacing:.04em}.oral-glucose-criteria{margin-top:9px;display:grid;gap:4px;font-size:14px;line-height:1.4;color:#334155}.oral-glucose-criteria div:before{content:'✓';font-weight:900;color:#166534;margin-right:7px}
+.source-med-calc{margin-top:14px;border-top:1px solid #d1d5db;padding-top:12px}.source-med-calc .calc-field{margin-bottom:8px}@media(max-width:620px){.source-med-title{margin-left:0;font-size:20px}.source-med-row{grid-template-columns:1fr;gap:3px}.source-med-label{font-size:13px;color:#334155;text-transform:none}.source-med-sheet{padding:15px}}.med-section:first-child{border-top:0;padding-top:0}.med-label{font-size:12px;font-weight:900;color:#7f1d1d;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}.med-item{font-size:16px;line-height:1.45;margin:7px 0;padding-left:18px;position:relative}.med-item:before{content:'•';position:absolute;left:3px;font-weight:800}.med-subhead{font-size:15px;font-weight:850;margin:10px 0 5px;color:#334155}.med-text{font-size:16px;line-height:1.45;margin:7px 0}.dose-tools{margin:16px 0 6px;padding:12px;border:1px solid #fecaca;background:#fff7f7;border-radius:12px}.dose-tools h4{margin:0 0 8px;color:#173a5e;font-size:15px}.dose-calc{border-top:1px solid #fecaca;padding-top:10px;margin-top:10px}.dose-calc:first-of-type{border-top:0;padding-top:0;margin-top:0}.dose-row{display:grid;grid-template-columns:1fr 92px;gap:7px}.dose-row input,.dose-row select{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:10px;font-size:16px;background:#fff}.dose-btn{width:100%;margin-top:7px;border:0;border-radius:9px;padding:10px;background:#2f6690;color:#fff;font-weight:850}.dose-out{margin-top:8px;font-size:15px;line-height:1.4}.dose-out strong{font-size:20px;color:#173a5e}.dose-note{font-size:11px;color:#64748b;margin-top:5px}.protocol-body{max-width:100%;overflow-wrap:break-word;word-break:normal;hyphens:none}
 /* GFD unified clinical visual system */
 .card,.protocol-body,.flowchart,.flow-node,.flow-decision,.flow-branch,.source-med-sheet,.source-med-row,.source-med-value,.dose-tools,.dose-calc,.tool-card{min-width:0}
 .card h2,.protocol-body h3,.protocol-body h4,.source-med-title,.source-med-label{overflow-wrap:break-word;word-break:normal}
@@ -1417,8 +1418,18 @@ function formatDextrose(){
     </div>
 
     <div class="source-med-row">
-      <div class="source-med-label">Oral Dose:</div>
-      <div class="source-med-value"><b>15 g oral glucose</b> may be considered for awake, cooperative patients with a patent airway and the ability to swallow.</div>
+      <div class="source-med-label">Oral Glucose:</div>
+      <div class="source-med-value">
+        <div class="oral-glucose-card">
+          <div class="oral-glucose-dose">15 g</div>
+          <div class="oral-glucose-route">Oral glucose</div>
+          <div class="oral-glucose-criteria">
+            <div>Awake and cooperative</div>
+            <div>Patent airway</div>
+            <div>Able to swallow</div>
+          </div>
+        </div>
+      </div>
     </div>
     ${medicationCrossProtocolHtml({id:'dextrose'})}
   </div>
