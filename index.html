@@ -1103,7 +1103,10 @@ const medicationCrossProtocolDoses={
  'glucagon':[
   {source:'Glucagon medication protocol',text:'Pediatric >25 kg: 1 mg IM; <25 kg: 0.5 mg IM.',calcKey:'glucP'}
  ],
- 'albuterol-and-atrovent-duoneb':[
+ 'amiodarone':[
+ {key:'amioPeds',label:'Amiodarone — Pediatric Cardiac Arrest',formula:'5 mg/kg IV/IO bolus. Max 300 mg initial; may repeat up to 3 doses with max 150 mg subsequent doses.',unit:'mg',perKg:5,max:300,special:'amioPeds',repeatMax:150,note:'External pediatric reference: AHA PALS 2025. This dose is not printed in the GFD V3 manual.'}
+],
+'albuterol-and-atrovent-duoneb':[
   {source:'Duoneb medication protocol',text:'Infants under 1 year: 0.03 mL/kg nebulized, max 1 mL.',calcKey:'albInfant'}
  ],
  'zofran-ondansetron':[
@@ -1113,9 +1116,6 @@ const medicationCrossProtocolDoses={
 
 function medicationCrossProtocolHtml(x){
  const rows=medicationCrossProtocolDoses[x.id]||[];
- if(x.id==='amiodarone'){
-   return '<div class="source-med-row med-precaution"><div class="source-med-label">Pediatric / Weight-Based:</div><div class="source-med-value"><div><b>No pediatric or weight-based Amiodarone dose is provided anywhere in the approved GFD 2026 V3 manual.</b></div><div class="dose-note">GFD uses fixed Amiodarone doses in the cardiac protocols. No calculator is shown because the source does not provide a weight-based dose.</div></div></div>';
- }
  if(!rows.length)return '';
  const items=rows.map(r=>'<div class="source-med-calc"><div><b>'+esc(r.source)+'</b></div><div class="dose-note">'+esc(r.text)+'</div></div>').join('');
  return '<div class="source-med-row"><div class="source-med-label">Dose References Elsewhere in GFD:</div><div class="source-med-value">'+items+'</div></div>';
@@ -1124,6 +1124,7 @@ function medicationCrossProtocolHtml(x){
 function pediatricMedicationInfo(x){
  const info={
   'albuterol-proventil-ventolin':{text:'Pediatric: 1.25–2.5 mg in 3 mL sterile NS by inhalation over 5–15 minutes; may be repeated ×2.'},
+  'amiodarone':{text:'Pediatric cardiac arrest reference: 5 mg/kg IV/IO bolus, max 300 mg initial; may repeat up to 3 doses with max 150 mg subsequent doses. This is an external AHA PALS pediatric reference, not a dose printed in GFD V3.',calc:true},
   'albuterol-and-atrovent-duoneb':{text:'Adults and children over 1 year: 2.5 mg mixed in 3 mL saline. Infants under 1 year: 0.03 mL/kg, max 1 mL.',calc:true},
   'atropine':{text:'Pediatric Dose: Refer to Broselow Tape.'},
   'benadryl-diphenhydramine':{text:'Pediatric Dose: 1–2 mg/kg.',calc:true},
@@ -1419,6 +1420,19 @@ function calcProtocolDose(pid,key){
  if(c.ageRequired&&(!Number.isFinite(age)||age<0)){out.innerHTML='<b>Enter a valid patient age.</b>';return}
  const kg=u==='lb'?w/2.2046226218:w,raw=kg*c.perKg;let dose=raw;if(Number.isFinite(c.max))dose=Math.min(dose,c.max);if(Number.isFinite(c.min))dose=Math.max(dose,c.min);
  if(c.special==='fentanylRepeat'){const first=kg*c.perKg,maxTotal=first*2,fmt=n=>n.toFixed(n<10?2:1);out.innerHTML=kg.toFixed(1)+' kg × '+c.perKg+' '+c.unit+'/kg<br><strong>FIRST DOSE: '+fmt(first)+' '+c.unit+'</strong><div class="dose-note" style="margin-top:10px"><strong>⚠ MAX DOSE: '+fmt(maxTotal)+' '+c.unit+' TOTAL</strong><br>May repeat the first dose ×1.</div>';return}
+ if(c.special==='amioPeds'){
+   const raw=kg*c.perKg;
+   const initial=Math.min(raw,c.max);
+   const repeat=Math.min(raw,c.repeatMax);
+   const fmt=n=>Number.isInteger(n)?String(n):n.toFixed(n<10?2:1);
+   out.innerHTML=kg.toFixed(1)+' kg × 5 mg/kg<br>'+
+     '<strong>INITIAL DOSE: '+fmt(initial)+' mg IV/IO</strong>'+
+     '<div class="dose-note">Initial max 300 mg.</div>'+
+     '<div style="margin-top:10px"><strong>SUBSEQUENT DOSE: '+fmt(repeat)+' mg IV/IO</strong></div>'+
+     '<div class="dose-note">May repeat up to 3 total doses • subsequent-dose max 150 mg.</div>'+
+     '<div class="dose-note"><b>External pediatric reference:</b> AHA PALS 2025. Not printed in GFD V3.</div>';
+   return
+ }
  if(c.special==='diltiazem'){
    const older=age>c.ageThreshold;
    const adjust=older?c.ageAdjustment:0;
