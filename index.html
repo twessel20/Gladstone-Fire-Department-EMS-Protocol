@@ -1545,7 +1545,7 @@ function protocolDoseTools(x){
  const cs=protocolDoseCalcs[x.id]||[];if(!cs.length)return '';
  return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Medication Dose Helper</h4><div class="dose-note" style="margin-bottom:10px">Enter patient factors only when the GFD protocol actually uses them. Fixed-dose medications are shown without unnecessary inputs.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,isFixed=c.special==='fixedAmioWide'||c.special==='fixedAmioArrest'||c.special==='zofranPeds',maxText=isFixed||c.special==='fentanylRepeat'||c.special==='lidocaineSequence'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)&&c.special!=='lidocaineSequence'?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';if(isFixed){
  if(c.special==='zofranPeds'){
-   return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div><div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age"></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Check pediatric dose</button><div id="'+id+'-o" class="dose-out"></div></div>';
+   return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div><div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under4">Less than 4 years old</option><option value="4plus">4 years old or older</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Show dose</button><div id="'+id+'-o" class="dose-out"></div></div>';
  }
  const detail=c.special==='fixedAmioArrest'?'<div class="dose-out"><strong>INITIAL: 300 mg IV/IO</strong><div class="dose-note">If needed: one additional 150 mg dose once.</div><div class="dose-note"><b>Protocol sequence total if both doses are given: 450 mg</b></div></div>':'<div class="dose-out"><strong>WIDE-COMPLEX VT / UNCERTAIN RHYTHM: 150 mg IV over 10 min</strong><div class="dose-note">For unstable PVCs, GFD also lists 150 mg IV over 10 min and allows repeat dosing every 10 minutes up to 2.2 g total.</div></div>';
  return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+detail+'</div>';
@@ -1565,7 +1565,7 @@ if(c.special==='infantAlbuterol'){
    '<button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Show dose</button>'+
    '<div id="'+id+'-o" class="dose-out"></div></div>';
 }
-return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="exact8">Exactly 8 years old</option><option value="over8">Older than 8 years old</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="70orless">70 years old or younger</option><option value="over70">Older than 70 years old</option></select></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 
 function toggleInfantAlbuterolWeight(pid,key){
@@ -1583,7 +1583,9 @@ function calcProtocolDose(pid,key){
  if(!c||!out)return;
  const ageEl=document.getElementById(id+'-a'),age=ageEl?parseFloat(ageEl.value):null;
  if(c.special==='zofranPeds'){
-   if(age<4){out.innerHTML='<b>Contraindicated by the GFD medication page for age &lt;4 years.</b>';return}
+   const group=document.getElementById(id+'-agegroup')?.value||'';
+   if(!group){out.innerHTML='<b>Select whether the patient is less than 4 years old or 4 years old and older.</b>';return}
+   if(group==='under4'){out.innerHTML='<b>Contraindicated by the GFD medication page for age &lt;4 years.</b>';return}
    out.innerHTML='<strong>PEDIATRIC ZOFRAN DOSE: 2 mg</strong><div class="dose-note">IM or ODT, or slow IVP over 2–5 minutes. Contact Medical Control for additional doses.</div>';return
  }
  if(c.special==='infantAlbuterol'){
@@ -1602,7 +1604,7 @@ function calcProtocolDose(pid,key){
  }
  const wEl=document.getElementById(id+'-w'),uEl=document.getElementById(id+'-u'),w=parseFloat(wEl?.value),u=uEl?.value||'kg';
  if(!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
- if(c.ageRequired&&(!Number.isFinite(age)||age<0)){out.innerHTML='<b>Enter a valid patient age.</b>';return}
+ if(c.ageRequired&&!['d10Age','diltiazem','zofranPeds'].includes(c.special)&&(!Number.isFinite(age)||age<0)){out.innerHTML='<b>Enter a valid patient age.</b>';return}
  const kg=u==='lb'?w/2.2046226218:w,raw=kg*c.perKg;let dose=raw;if(Number.isFinite(c.max))dose=Math.min(dose,c.max);if(Number.isFinite(c.min))dose=Math.max(dose,c.min);
  if(c.special==='fentanylRepeat'){const first=kg*c.perKg,maxTotal=first*2,fmt=n=>n.toFixed(n<10?2:1);out.innerHTML=kg.toFixed(1)+' kg × '+c.perKg+' '+c.unit+'/kg<br><strong>FIRST DOSE: '+fmt(first)+' '+c.unit+'</strong><div class="dose-note" style="margin-top:10px"><strong>⚠ MAX DOSE: '+fmt(maxTotal)+' '+c.unit+' TOTAL</strong><br>May repeat the first dose ×1.</div>';return}
  if(c.special==='amioPeds'){
@@ -1619,12 +1621,14 @@ function calcProtocolDose(pid,key){
    return
  }
  if(c.special==='diltiazem'){
-   const older=age>c.ageThreshold;
+   const group=document.getElementById(id+'-agegroup')?.value||'';
+   if(!group){out.innerHTML='<b>Select whether the patient is 70 years old or younger, or older than 70.</b>';return}
+   const older=group==='over70';
    const adjust=older?c.ageAdjustment:0;
    const initialBase=Math.min(kg*c.perKg,c.max),secondBase=Math.min(kg*c.secondPerKg,c.secondMax);
    const initial=Math.max(0,initialBase+adjust),second=Math.max(0,secondBase+adjust);
    const fmt=n=>n.toFixed(n<10?2:1);
-   out.innerHTML='<div><b>AGE: '+age+' years</b>'+(older?' • <b>GFD AGE ADJUSTMENT APPLIED: -5 mg</b>':' • No age reduction')+'</div>'+
+   out.innerHTML='<div><b>'+(older?'AGE GROUP: Older than 70':'AGE GROUP: 70 or younger')+'</b>'+(older?' • <b>GFD AGE ADJUSTMENT APPLIED: -5 mg</b>':' • No age reduction')+'</div>'+
      '<div style="margin-top:10px"><strong>INITIAL DOSE: '+fmt(initial)+' mg</strong></div>'+
      '<div class="dose-note">0.25 mg/kg • MAX 20 mg'+(older?' • then reduce 5 mg for age >70':'')+'</div>'+
      '<div style="margin-top:10px"><strong>IF NO RESPONSE AFTER 10 MIN: '+fmt(second)+' mg</strong></div>'+
@@ -1632,14 +1636,16 @@ function calcProtocolDose(pid,key){
    return
  }
  if(c.special==='d10Age'){
-   if(age===8){out.innerHTML='<b>GFD source specifies &lt;8 years = 1 mL/kg and &gt;8 years = 2 mL/kg, but does not specify exactly age 8. Verify the source / Medical Control rather than guessing.</b>';return}
-   const pk=age<8?1:2,vol=kg*pk,grams=vol*0.1,gramsPerKg=pk*0.1;
-   out.innerHTML='<b>AGE: '+age+' years</b><br>'+
+   const group=document.getElementById(id+'-agegroup')?.value||'';
+   if(!group){out.innerHTML='<b>Select whether the patient is less than 8, exactly 8, or older than 8 years.</b>';return}
+   if(group==='exact8'){out.innerHTML='<b>GFD source specifies &lt;8 years = 1 mL/kg and &gt;8 years = 2 mL/kg, but does not specify exactly age 8. Verify the source / Medical Control rather than guessing.</b>';return}
+   const pk=group==='under8'?1:2,vol=kg*pk,grams=vol*0.1,gramsPerKg=pk*0.1;
+   out.innerHTML='<b>'+(group==='under8'?'AGE GROUP: Less than 8 years':'AGE GROUP: Older than 8 years')+'</b><br>'+
      kg.toFixed(1)+' kg × '+pk+' mL/kg<br>'+
      '<strong>D10 VOLUME: '+vol.toFixed(vol<10?2:1)+' mL IV</strong><br>'+
      '<strong>DEXTROSE DELIVERED: '+grams.toFixed(grams<10?2:1)+' g</strong>'+
      '<div class="dose-note">D10 = 25 g / 250 mL = 0.1 g/mL • '+gramsPerKg.toFixed(1)+' g/kg</div>'+
-     '<div class="dose-note">'+(age<8?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
+     '<div class="dose-note">'+(group==='under8'?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
    return
  }
  if(c.special==='lidocaineSequence'){
@@ -1664,11 +1670,6 @@ function calcProtocolDose(pid,key){
    if(Math.abs(kg-25)<0.0001){out.innerHTML='<b>GFD specifies &gt;25 kg = 1 mg and &lt;25 kg = 0.5 mg, but does not specify exactly 25 kg. Verify the source / Medical Control rather than guessing.</b>';return}
    const d=kg>25?1:.5;
    out.innerHTML='<strong>PEDIATRIC GLUCAGON DOSE: '+d+' mg IM</strong><div class="dose-note">'+(kg>25?'Patient weight is greater than 25 kg.':'Patient weight is less than 25 kg.')+'</div>';
-   return
- }
- if(c.special==='zofranPeds'){
-   if(age<4){out.innerHTML='<b>Contraindicated by the GFD medication page for age &lt;4 years.</b>';return}
-   out.innerHTML='<strong>PEDIATRIC ZOFRAN DOSE: 2 mg</strong><div class="dose-note">IM or ODT, or slow IVP over 2–5 minutes. Contact Medical Control for additional doses.</div>';
    return
  }
  if(c.special==='exactRange'){
