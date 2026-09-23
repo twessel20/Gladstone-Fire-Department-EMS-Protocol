@@ -1,34 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 310" role="img" aria-label="Gladstone Fire EMS patch">
-  <defs>
-    <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-opacity=".35"/>
-    </filter>
-  </defs>
-  <path d="M200 8C111 8 44 41 18 91 8 110 8 135 20 155l87 139h186l87-139c12-20 12-45 2-64C356 41 289 8 200 8z" fill="#050505" stroke="#f20d16" stroke-width="9"/>
-  <path d="M22 157h45l12-33 18 61 19-54 16 26h52" fill="none" stroke="#9b9b9b" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M216 157h53l12-32 18 59 19-53 15 26h45" fill="none" stroke="#9b9b9b" stroke-width="4" stroke-linejoin="round"/>
-
-  <g filter="url(#s)">
-    <g transform="translate(200 160)">
-      <path d="M-35-70h70l-10 35 35-10v70l-35-10 10 35h-70l10-35-35 10v-70l35 10z" fill="#e21b23" stroke="#fff" stroke-width="5"/>
-      <path d="M0-63l20 34h39l-20 34 20 34H20L0 73-20 39h-39l20-34-20-34h39z" fill="#164b9b" stroke="#fff" stroke-width="4"/>
-      <rect x="-12" y="-52" width="24" height="104" rx="3" fill="#234a8b" stroke="#f3d45b" stroke-width="3"/>
-      <path d="M0-45c15 5 15 20 0 27-14 7-13 21 0 27 14 6 14 20 0 27" fill="none" stroke="#f2d46d" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="0" cy="-47" r="7" fill="none" stroke="#f2d46d" stroke-width="4"/>
-    </g>
-
-    <g transform="translate(91 105) rotate(-38)">
-      <rect x="-8" y="-2" width="16" height="92" rx="4" fill="#a66b00"/>
-      <path d="M-30-2h60l-10-16H-20z" fill="#ed151e" stroke="#fff" stroke-width="2"/>
-      <path d="M-31-3l13 16h36L31-3" fill="#ed151e"/>
-    </g>
-    <g transform="translate(309 105) rotate(38)">
-      <rect x="-8" y="-2" width="16" height="92" rx="4" fill="#a66b00"/>
-      <path d="M-30-2h60l-10-16H-20z" fill="#ed151e" stroke="#fff" stroke-width="2"/>
-      <path d="M-31-3l13 16h36L31-3" fill="#ed151e"/>
-    </g>
-  </g>
-
-  <text x="200" y="62" text-anchor="middle" fill="#fff" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="37" letter-spacing="2">GLADSTONE</text>
-  <text x="200" y="273" text-anchor="middle" fill="#fff" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" letter-spacing="1.5">FIRE/EMS</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Gladstone Fire EMS patch">
+  <image href="data:image/png;base64,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" x="0" y="0" width="128" height="128" preserveAspectRatio="xMidYMid meet"/>
 </svg>
