@@ -1,4 +1,5 @@
-const C='gfd-ems-shell-v110';
+const C='gfd-ems-shell-v111';
+const UPDATE_SUMMARY='Added brief update descriptions so crews can see what changed before refreshing.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
@@ -82,4 +83,11 @@ self.addEventListener('fetch',e=>{
      return r;
    }))
  );
+});
+
+self.addEventListener('message',e=>{
+ const msg=e.data||{};
+ if(msg.type==='GET_UPDATE_SUMMARY'){
+   try{e.source?.postMessage({type:'UPDATE_SUMMARY',summary:UPDATE_SUMMARY})}catch(err){}
+ }
 });
