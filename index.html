@@ -601,6 +601,11 @@ function openToolCard(which){
        <span class="contact-copy"><span class="contact-name">Language Line</span><span class="contact-number">1-800-523-1786</span><span class="contact-meta"><span class="contact-client-id">Client ID: 657430</span></span></span>
        <span class="contact-call">Call</span>
      </a>
+     <a class="contact-card" href="tel:18164363550">
+       <span class="contact-icon">📞</span>
+       <span class="contact-copy"><span class="contact-name">Gladstone Dispatch — Non-Emergency</span><span class="contact-number">816-436-3550</span><span class="contact-meta"><span class="contact-client-id">Option 2</span></span><span class="contact-meta">For non-emergency / public education use.</span></span>
+       <span class="contact-call">Call</span>
+     </a>
    </div>
    </div>`;
  if(which==='pillcount'){host.innerHTML=back+'<div class="tool-card"><h3>🔢 Pill Count</h3>'+pillCountFormHtml()+'</div>';initPillCountDates()}
@@ -964,7 +969,7 @@ const searchableTools=[
  {id:'pillid',title:'Pill Identifier',icon:'💊',terms:'pill identifier imprint color shape unknown medication overdose altered mental status tablet capsule',desc:'Identify an unknown tablet or capsule by imprint, color, and shape'},
  {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg infant pediatric pals broselow',desc:'Adult, pediatric, and infant cardiac-arrest dose calculator'},
  {id:'diltiazem',title:'Diltiazem Dose',icon:'💉',terms:'diltiazem cardizem dose afib atrial fibrillation flutter rvr age dob weight',desc:'DOB or typed age with initial and second weight-based dose'},
- {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430',desc:'Poison Control, Language Line translator, and critical contacts'}
+ {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, and critical contacts'}
 ];
 function toolSearchResults(query){
  const q=normText(query).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
