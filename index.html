@@ -1565,7 +1565,7 @@ if(c.special==='infantAlbuterol'){
    '<button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Show dose</button>'+
    '<div id="'+id+'-o" class="dose-out"></div></div>';
 }
-return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="exact8">Exactly 8 years old</option><option value="over8">Older than 8 years old</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="70orless">70 years old or younger</option><option value="over70">Older than 70 years old</option></select></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="exact8">Exactly 8 years old</option><option value="over8">Older than 8 years old</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-dob">Patient date of birth</label><input id="'+id+'-dob" class="tool-input" type="date" max="'+new Date().toISOString().slice(0,10)+'"></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 
 function toggleInfantAlbuterolWeight(pid,key){
@@ -1621,14 +1621,20 @@ function calcProtocolDose(pid,key){
    return
  }
  if(c.special==='diltiazem'){
-   const group=document.getElementById(id+'-agegroup')?.value||'';
-   if(!group){out.innerHTML='<b>Select whether the patient is 70 years old or younger, or older than 70.</b>';return}
-   const older=group==='over70';
+   const dobValue=document.getElementById(id+'-dob')?.value||'';
+   if(!dobValue){out.innerHTML='<b>Enter the patient date of birth.</b>';return}
+   const dob=new Date(dobValue+'T00:00:00');
+   const now=new Date();
+   if(Number.isNaN(dob.getTime())||dob>now){out.innerHTML='<b>Enter a valid date of birth.</b>';return}
+   let patientAge=now.getFullYear()-dob.getFullYear();
+   const monthDelta=now.getMonth()-dob.getMonth();
+   if(monthDelta<0||(monthDelta===0&&now.getDate()<dob.getDate()))patientAge--;
+   const older=patientAge>c.ageThreshold;
    const adjust=older?c.ageAdjustment:0;
    const initialBase=Math.min(kg*c.perKg,c.max),secondBase=Math.min(kg*c.secondPerKg,c.secondMax);
    const initial=Math.max(0,initialBase+adjust),second=Math.max(0,secondBase+adjust);
    const fmt=n=>n.toFixed(n<10?2:1);
-   out.innerHTML='<div><b>'+(older?'AGE GROUP: Older than 70':'AGE GROUP: 70 or younger')+'</b>'+(older?' • <b>GFD AGE ADJUSTMENT APPLIED: -5 mg</b>':' • No age reduction')+'</div>'+
+   out.innerHTML='<div><b>AGE: '+patientAge+' years</b>'+(older?' • <b>GFD AGE ADJUSTMENT APPLIED: -5 mg</b>':' • No age reduction')+'</div>'+
      '<div style="margin-top:10px"><strong>INITIAL DOSE: '+fmt(initial)+' mg</strong></div>'+
      '<div class="dose-note">0.25 mg/kg • MAX 20 mg'+(older?' • then reduce 5 mg for age >70':'')+'</div>'+
      '<div style="margin-top:10px"><strong>IF NO RESPONSE AFTER 10 MIN: '+fmt(second)+' mg</strong></div>'+
