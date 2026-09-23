@@ -1211,8 +1211,8 @@ function render(){
      a=ids.map(id=>data.find(x=>x.id===id)).filter(Boolean);
      if(!a.length){const refs=data.filter(x=>x.category==='Appendix'&&scopeAllowed(x));const direct=refs.filter(directMatch);a=direct.length?direct:refs.filter(bodyMatch)}
    }else{
-     const primary=['12-lead-ecg-interpretation','cincinnati-prehospital-stroke-scale','apgar-score','glasgow-coma-scale','lucas-device-appendix','pain-scale','pediatric-vital-sign-ranges-by-age','epinephrine-1-100000-push-dose-appendix','total-body-surface-area','tcd-destinations'];
-     a=primary.map(id=>data.find(x=>x.id===id)).filter(Boolean);
+     a=data.filter(x=>x.category==='Appendix'&&scopeAllowed(x))
+       .sort((a,b)=>(Number(a.page)||9999)-(Number(b.page)||9999)||displayTitle(a).localeCompare(displayTitle(b)));
    }
  }else{
    a=searchResults();
