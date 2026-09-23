@@ -114,6 +114,20 @@ body{background:#f4f7fa}
 .back{color:#173a5e}
 
 .tool-menu{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.contact-list{display:flex;flex-direction:column;gap:9px}
+.contact-card{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:10px;text-decoration:none;background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:11px 12px;color:#173a5e}
+.contact-icon{width:38px;height:38px;border-radius:10px;background:#eef6ff;display:flex;align-items:center;justify-content:center;font-size:20px}
+.contact-copy{min-width:0}
+.contact-name{font-weight:850;font-size:14px;line-height:1.15}
+.contact-number{font-weight:750;font-size:14px;line-height:1.25;color:#173a5e;margin-top:2px}
+.contact-meta{font-size:12px;line-height:1.25;color:#475569;margin-top:2px;white-space:normal}
+.contact-call{font-size:12px;font-weight:850;background:#173a5e;color:#fff;border-radius:999px;padding:7px 10px;white-space:nowrap}
+@media(max-width:480px){
+ .contact-card{grid-template-columns:38px minmax(0,1fr);padding:10px}
+ .contact-call{grid-column:2;justify-self:start;margin-top:2px}
+ .contact-number{font-size:13.5px}
+ .contact-meta{font-size:11.5px}
+}
 .tool-launch{width:100%;display:grid;grid-template-columns:46px 1fr 20px;align-items:center;gap:10px;text-align:left;background:#fff;border:1px solid #d8e3ec;border-radius:14px;padding:15px;color:#1f2937;box-shadow:0 1px 3px #0000000d;cursor:pointer}
 .tool-launch-icon{width:42px;height:42px;border-radius:10px;background:#eef4f8;color:#173a5e;display:grid;place-items:center;font-size:20px;font-weight:900}
 .tool-launch b{display:block;color:#173a5e;font-size:16px}.tool-launch small{display:block;color:#64748b;font-size:12px;line-height:1.35;margin-top:3px}.tool-chevron{font-size:28px;color:#64748b}.tool-back{margin:0 0 10px}
@@ -573,8 +587,16 @@ function openToolCard(which){
    <div class="tool-card"><h3>☎️ Important Phone Numbers</h3>
    <div class="tool-note">Tap a number to call directly. Additional department, hospital, Medical Control, burn, or pediatric contacts can be added here as needed.</div>
    <div class="contact-list">
-     <a class="tool-launch" href="tel:18002221222"><span class="tool-launch-icon">☠️</span><span><b>Poison Control</b><small>1-800-222-1222</small></span><span class="tool-chevron">Call</span></a>
-     <a class="tool-launch" href="tel:18005231786"><span class="tool-launch-icon">🌐</span><span><b>Language Line</b><small>1-800-523-1786 • Client ID: 657430</small></span><span class="tool-chevron">Call</span></a>
+     <a class="contact-card" href="tel:18002221222">
+       <span class="contact-icon">☠️</span>
+       <span class="contact-copy"><span class="contact-name">Poison Control</span><span class="contact-number">1-800-222-1222</span></span>
+       <span class="contact-call">Call</span>
+     </a>
+     <a class="contact-card" href="tel:18005231786">
+       <span class="contact-icon">🌐</span>
+       <span class="contact-copy"><span class="contact-name">Language Line</span><span class="contact-number">1-800-523-1786</span><span class="contact-meta"><b>Client ID:</b> 657430</span></span>
+       <span class="contact-call">Call</span>
+     </a>
    </div>
    </div>`;
  if(which==='pillcount'){host.innerHTML=back+'<div class="tool-card"><h3>🔢 Pill Count</h3>'+pillCountFormHtml()+'</div>';initPillCountDates()}
