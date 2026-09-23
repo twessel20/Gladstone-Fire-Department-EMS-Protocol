@@ -1056,6 +1056,35 @@ function formatBenadryl(){
  `;
 }
 
+function pediatricMedicationInfo(x){
+ const info={
+  'albuterol-proventil-ventolin':{text:'Pediatric: 1.25–2.5 mg in 3 mL sterile NS by inhalation over 5–15 minutes; may be repeated ×2.'},
+  'albuterol-and-atrovent-duoneb':{text:'Adults and children over 1 year: 2.5 mg mixed in 3 mL saline. Infants under 1 year: 0.03 mL/kg, max 1 mL.',calc:true},
+  'atropine':{text:'Pediatric Dose: Refer to Broselow Tape.'},
+  'benadryl-diphenhydramine':{text:'Pediatric Dose: 1–2 mg/kg.',calc:true},
+  'dextrose':{text:'Children >8 years: 2 mL/kg D10 IV. Children <8 years: 1 mL/kg D10 IV. Refer to Broselow Tape for weight estimation as needed.',calc:true},
+  'epinephrine-1-1-000':{text:'Pediatric Dose: Refer to Broselow Tape.'},
+  'epinephrine-1-10-000':{text:'Pediatric/Neonatal: Anaphylaxis 0.01 mg/kg IM; Cardiac 0.01 mg/kg IV/IO/ET. Refer to Broselow Tape.',calc:true},
+  'fentanyl':{text:'Pediatric Dose: 1–2 mcg/kg IV or IN.',calc:true},
+  'glucagon':{text:'Pediatric: >25 kg = 1 mg IM; <25 kg = 0.5 mg IM.',calc:true},
+  'ketamine':{text:'Pediatric use not approved at the time.',warning:true},
+  'lidocaine':{text:'Pediatric Dose: Refer to Broselow Tape.'},
+  'morphine-sulfate':{text:'Pediatric Dose: 0.05 mg/kg slow IV/IN, maximum 2 mg.',calc:true},
+  'narcan-naloxone':{text:'Pediatric: Refer to Broselow Tape. Neonatal resuscitation: 0.1 mg/kg.',calc:true},
+  'terbutaline-sulfate':{text:'Pediatric: 0.01 mg/kg SQ, maximum 0.25 mg.',calc:true},
+  'versed-midazolam':{text:'Pediatric seizures: 0.2 mg/kg IN, max 10 mg. Pediatric sedation: 0.05 mg/kg slow IV; maximum initial dose 2–4 mg. IN: 0.2 mg/kg, max 10 mg.',calc:true},
+  'xopenex':{text:'Pediatric Dose: 1.25 mg mixed in 3 mL NS nebulized.'},
+  'zofran-ondansetron':{text:'Pediatric administration: age 4 years and older — 2 mg IM or ODT, or 2 mg slow IVP over 2–5 minutes. Contact Medical Control for additional doses.',calc:true}
+ };
+ return info[x.id]||null;
+}
+function pediatricMedicationHtml(x){
+ const p=pediatricMedicationInfo(x);if(!p)return '';
+ const calc=p.calc?protocolDoseTools(x):'';
+ const cls=p.warning?' med-precaution':'';
+ return '<div class="source-med-row'+cls+'"><div class="source-med-label">Pediatric / Neonatal:</div><div class="source-med-value"><div>'+esc(p.text)+'</div>'+(calc?'<div class="source-med-calc">'+calc+'</div>':'')+'</div></div>';
+}
+
 function formatMedication(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
@@ -1126,7 +1155,8 @@ function formatMedication(x){
    getSection(current?.label||'Notes').items.push({text:t});
  }
 
- const calcHtml=(protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id])?protocolDoseTools(x):'';
+ const pedInfo=pediatricMedicationInfo(x);
+ const calcHtml=(protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id])&&!pedInfo?.calc?protocolDoseTools(x):'';
  let lastDose=-1;
  sections.forEach((s,i)=>{if(/dose|administration/i.test(s.label))lastDose=i});
  let rows='';
@@ -1143,7 +1173,7 @@ function formatMedication(x){
    rows+='<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value">'+calcHtml+'</div></div>';
  }
  const icon=/dextrose|glucose/i.test(x.title)?'drop':(/epi|fentanyl|morphine|ketamine|versed|midazolam|diltiazem|amiodarone|adenosine|atropine|lidocaine|dopamine|calcium|magnesium|narcan|naloxone|terbutaline|methylprednisolone/i.test(x.title)?'syringe':'pill');
- return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+'</div>';
+ return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+pediatricMedicationHtml(x)+'</div>';
 }
 const protocolDoseCalcs={
 'narrow-complex-tachydysrhythmias':[
@@ -1251,11 +1281,14 @@ const protocolDoseCalcs={
  {key:'epiCard',label:'Epinephrine — Pediatric Cardiac',formula:'0.01 mg/kg IV/IO/ET',unit:'mg',perKg:.01}
 ],
 'fentanyl':[
- {key:'fent',label:'Fentanyl — Weight-Based Dose',formula:'1–2 mcg/kg IV/IN',unit:'mcg',perKg:1,maxPerKg:2,special:'range'}
+ {key:'fent',label:'Fentanyl — Pediatric',formula:'1–2 mcg/kg IV/IN',unit:'mcg',perKg:1,minPerKg:1,maxPerKg:2,special:'exactRange'}
+],
+'glucagon':[
+ {key:'glucP',label:'Glucagon — Pediatric',formula:'>25 kg: 1 mg IM • <25 kg: 0.5 mg IM',unit:'mg',perKg:0,special:'glucagonPeds'}
 ],
 'ketamine':[
  {key:'ketAdj',label:'Ketamine — Adjunct / Sedating Substances',formula:'2 mg/kg',unit:'mg',perKg:2,note:'GFD medication page states a lower dose is needed when used as an adjunct or with sedating substances.'},
- {key:'ketDiss',label:'Ketamine — Dissociation',formula:'3–5 mg/kg IM',unit:'mg',perKg:3,maxPerKg:5,special:'range'}
+ {key:'ketDiss',label:'Ketamine — Dissociation',formula:'3–5 mg/kg IM',unit:'mg',perKg:3,minPerKg:3,maxPerKg:5,special:'exactRange'}
 ],
 'lidocaine':[
  {key:'lido',label:'Lidocaine — VF / Pulseless VT',formula:'Initial 1–1.5 mg/kg; repeat 0.5–0.75 mg/kg. Max 3 doses or 3 mg/kg total.',unit:'mg',perKg:1,minPerKg:1,maxPerKg:1.5,special:'lidocaineSequence',repeatMinPerKg:.5,repeatMaxPerKg:.75,totalMaxPerKg:3,note:'If given down the ET tube, GFD states to double the dose.'}
@@ -1271,6 +1304,9 @@ const protocolDoseCalcs={
 ],
 'terbutaline-sulfate':[
  {key:'terb',label:'Terbutaline — Pediatric',formula:'0.01 mg/kg, max 0.25 mg',unit:'mg',perKg:.01,max:.25}
+],
+'zofran-ondansetron':[
+ {key:'zofP',label:'Zofran — Pediatric',formula:'Age 4 years and older: 2 mg IM/ODT or 2 mg slow IVP over 2–5 min',unit:'mg',perKg:0,special:'zofranPeds',ageRequired:true}
 ],
 'versed-midazolam':[
  {key:'seiz',label:'Versed — Pediatric Seizures',formula:'0.2 mg/kg IN, max 10 mg',unit:'mg',perKg:.2,max:10},
@@ -1296,13 +1332,25 @@ function syncDoseContext(pid,key,sourceField){
 
 function protocolDoseTools(x){
  const cs=protocolDoseCalcs[x.id]||[];if(!cs.length)return '';
- return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Medication Dose Helper</h4><div class="dose-note" style="margin-bottom:10px">Enter patient factors only when the GFD protocol actually uses them. Fixed-dose medications are shown without unnecessary inputs.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,isFixed=c.special==='fixedAmioWide'||c.special==='fixedAmioArrest',maxText=isFixed||c.special==='fentanylRepeat'||c.special==='lidocaineSequence'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)&&c.special!=='lidocaineSequence'?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';if(isFixed){const detail=c.special==='fixedAmioArrest'?'<div class="dose-out"><strong>INITIAL: 300 mg IV/IO</strong><div class="dose-note">If needed: one additional 150 mg dose once.</div><div class="dose-note"><b>Protocol sequence total if both doses are given: 450 mg</b></div></div>':'<div class="dose-out"><strong>WIDE-COMPLEX VT / UNCERTAIN RHYTHM: 150 mg IV over 10 min</strong><div class="dose-note">For unstable PVCs, GFD also lists 150 mg IV over 10 min and allows repeat dosing every 10 minutes up to 2.2 g total.</div></div>';return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+detail+'</div>';}return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+ return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Medication Dose Helper</h4><div class="dose-note" style="margin-bottom:10px">Enter patient factors only when the GFD protocol actually uses them. Fixed-dose medications are shown without unnecessary inputs.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,isFixed=c.special==='fixedAmioWide'||c.special==='fixedAmioArrest'||c.special==='zofranPeds',maxText=isFixed||c.special==='fentanylRepeat'||c.special==='lidocaineSequence'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)&&c.special!=='lidocaineSequence'?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';if(isFixed){
+ if(c.special==='zofranPeds'){
+   return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div><div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age"></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Check pediatric dose</button><div id="'+id+'-o" class="dose-out"></div></div>';
+ }
+ const detail=c.special==='fixedAmioArrest'?'<div class="dose-out"><strong>INITIAL: 300 mg IV/IO</strong><div class="dose-note">If needed: one additional 150 mg dose once.</div><div class="dose-note"><b>Protocol sequence total if both doses are given: 450 mg</b></div></div>':'<div class="dose-out"><strong>WIDE-COMPLEX VT / UNCERTAIN RHYTHM: 150 mg IV over 10 min</strong><div class="dose-note">For unstable PVCs, GFD also lists 150 mg IV over 10 min and allows repeat dosing every 10 minutes up to 2.2 g total.</div></div>';
+ return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+detail+'</div>';
+}return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 
 function calcProtocolDose(pid,key){
- const c=((protocolDoseCalcs[pid]||medicationDoseCalcs[pid])||[]).find(v=>v.key===key),id='dc-'+pid+'-'+key,out=document.getElementById(id+'-o'),w=parseFloat(document.getElementById(id+'-w').value),u=document.getElementById(id+'-u').value;
- if(!c||!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
+ const c=((protocolDoseCalcs[pid]||medicationDoseCalcs[pid])||[]).find(v=>v.key===key),id='dc-'+pid+'-'+key,out=document.getElementById(id+'-o');
+ if(!c||!out)return;
  const ageEl=document.getElementById(id+'-a'),age=ageEl?parseFloat(ageEl.value):null;
+ if(c.special==='zofranPeds'){
+   if(age<4){out.innerHTML='<b>Contraindicated by the GFD medication page for age &lt;4 years.</b>';return}
+   out.innerHTML='<strong>PEDIATRIC ZOFRAN DOSE: 2 mg</strong><div class="dose-note">IM or ODT, or slow IVP over 2–5 minutes. Contact Medical Control for additional doses.</div>';return
+ }
+ const wEl=document.getElementById(id+'-w'),uEl=document.getElementById(id+'-u'),w=parseFloat(wEl?.value),u=uEl?.value||'kg';
+ if(!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
  if(c.ageRequired&&(!Number.isFinite(age)||age<0)){out.innerHTML='<b>Enter a valid patient age.</b>';return}
  const kg=u==='lb'?w/2.2046226218:w,raw=kg*c.perKg;let dose=raw;if(Number.isFinite(c.max))dose=Math.min(dose,c.max);if(Number.isFinite(c.min))dose=Math.max(dose,c.min);
  if(c.special==='fentanylRepeat'){const first=kg*c.perKg,maxTotal=first*2,fmt=n=>n.toFixed(n<10?2:1);out.innerHTML=kg.toFixed(1)+' kg × '+c.perKg+' '+c.unit+'/kg<br><strong>FIRST DOSE: '+fmt(first)+' '+c.unit+'</strong><div class="dose-note" style="margin-top:10px"><strong>⚠ MAX DOSE: '+fmt(maxTotal)+' '+c.unit+' TOTAL</strong><br>May repeat the first dose ×1.</div>';return}
@@ -1352,6 +1400,17 @@ function calcProtocolDose(pid,key){
      '<div style="margin-top:10px"><strong>TOTAL TREATMENT MAX: '+fmt(totalMax)+' mg</strong></div>'+
      '<div class="dose-note">Maximum 3 doses or 3 mg/kg total.</div>'+
      (c.note?'<div class="dose-note">'+esc(c.note)+'</div>':'');
+   return
+ }
+ if(c.special==='glucagonPeds'){
+   if(Math.abs(kg-25)<0.0001){out.innerHTML='<b>GFD specifies &gt;25 kg = 1 mg and &lt;25 kg = 0.5 mg, but does not specify exactly 25 kg. Verify the source / Medical Control rather than guessing.</b>';return}
+   const d=kg>25?1:.5;
+   out.innerHTML='<strong>PEDIATRIC GLUCAGON DOSE: '+d+' mg IM</strong><div class="dose-note">'+(kg>25?'Patient weight is greater than 25 kg.':'Patient weight is less than 25 kg.')+'</div>';
+   return
+ }
+ if(c.special==='zofranPeds'){
+   if(age<4){out.innerHTML='<b>Contraindicated by the GFD medication page for age &lt;4 years.</b>';return}
+   out.innerHTML='<strong>PEDIATRIC ZOFRAN DOSE: 2 mg</strong><div class="dose-note">IM or ODT, or slow IVP over 2–5 minutes. Contact Medical Control for additional doses.</div>';
    return
  }
  if(c.special==='exactRange'){
