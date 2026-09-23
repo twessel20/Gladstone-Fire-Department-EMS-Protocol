@@ -146,7 +146,7 @@ function renderHome(){
    </div>
    <div class="guide-steps">
     <h3>Quick use guide</h3>
-    <div class="guide-step"><div class="guide-num">1</div><div class="guide-copy"><b>Select EMT / BLS or Paramedic / ALS.</b> The app keeps that selection while you move between protocols.</div></div>
+    <div class="guide-step"><div class="guide-num">1</div><div class="guide-copy"><b>All GFD protocol content is shown in ALS view.</b> No certification-level selection is required.</div></div>
     <div class="guide-step"><div class="guide-num">2</div><div class="guide-copy"><b>Search by complaint, protocol, medication, brand name, or generic name.</b> Examples: chest pain, seizure, Benadryl, diphenhydramine.</div></div>
     <div class="guide-step"><div class="guide-num">3</div><div class="guide-copy"><b>Tap any top category at any time.</b> It immediately exits the current protocol and opens that section—no need to back out first.</div></div>
     <div class="guide-step"><div class="guide-num">4</div><div class="guide-copy"><b>Use calculators where they appear in the applicable protocol.</b> Weight-based dosing tools are embedded with the protocol or medication they support; the burn protocol includes TBSA and Parkland tools.</div></div>
@@ -207,7 +207,7 @@ function renderPatientMeds(){
      <input id="patientMedQ" class="tool-input" type="search" autocomplete="off" placeholder="Example: Eliquis, apixaban, metoprolol">
      <button class="tool-btn" onclick="lookupPatientMedication()">Look Up</button>
     </div>
-    <div class="patient-med-warning" style="margin-top:10px"><b>Reference only:</b> Use this to identify a patient's reported medication and review manufacturer/FDA labeling. Do not use this section to select or calculate EMS treatment. Follow PVFire protocols and Medical Control.</div>
+    <div class="patient-med-warning" style="margin-top:10px"><b>Reference only:</b> Use this to identify a patient's reported medication and review manufacturer/FDA labeling. Do not use this section to select or calculate EMS treatment. Follow GFD protocols and Medical Control.</div>
    </div>
    <div class="patient-med-search">
     <h2 style="font-size:18px">Overdose / AMS Tools</h2>
@@ -317,7 +317,7 @@ async function lookupPatientMedication(){
    if(!cands.length){host.innerHTML='<div class="notice"><b>No close medication match found.</b><br>Check the spelling or try the generic/brand name printed on the bottle.</div>';return}
    host.innerHTML='<div class="patient-med-card"><h3>Possible matches</h3><div class="tool-note">Select the medication that matches the patient\'s bottle or medication list.</div><div class="patient-med-candidates">'+cands.map((x,i)=>'<button class="patient-med-choice" onclick="loadPatientMedication(\''+String(x.rxcui).replace(/'/g,'')+'\',\''+esc(String(x.name||term)).replace(/'/g,'&#39;')+'\')">'+esc(x.name||term)+(i===0?' <small>— closest match</small>':'')+'</button>').join('')+'</div></div>';
  }catch(e){
-   host.innerHTML='<div class="notice"><b>Medication lookup requires an internet connection.</b><br>The PVFire protocol content can still work from its offline cache.</div>';
+   host.innerHTML='<div class="notice"><b>Medication lookup requires an internet connection.</b><br>The GFD protocol content can still work from its offline cache.</div>';
  }
 }
 function patientMedPlainSummary(name,classes,label){
@@ -385,7 +385,7 @@ function renderPatientMedCard(host,name,brand,generic,plain,rxcui){
    +'<div class="patient-med-label">Why would a patient take it?</div><div class="patient-med-copy">'+esc(plain.use)+'</div>'
    +'<div class="patient-med-links"><a class="patient-med-link" target="_blank" rel="noopener" href="'+dailymed+'">Detailed FDA / DailyMed Info ↗</a>'
    +(rxcui?'<a class="patient-med-link" target="_blank" rel="noopener" href="'+rxnav+'">RxNorm Drug Record ↗</a>':'')
-   +'</div><div class="patient-med-warning" style="margin-top:12px"><b>Field reference:</b> This section is for identifying and understanding a patient\'s home medication. It is not a treatment recommendation. Follow PVFire protocols and Medical Control for EMS care.</div></div>';
+   +'</div><div class="patient-med-warning" style="margin-top:12px"><b>Field reference:</b> This section is for identifying and understanding a patient\'s home medication. It is not a treatment recommendation. Follow GFD protocols and Medical Control for EMS care.</div></div>';
 }
 async function loadPatientMedication(rxcui,fallbackName){
  const host=document.querySelector('#patientMedResult');
