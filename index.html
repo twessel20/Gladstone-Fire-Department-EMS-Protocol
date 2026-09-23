@@ -25,6 +25,16 @@
 .protocol-body,.source-med-value,.flow-node,.flow-branch,.dose-note,.notice{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .protocol-body{font-size:16px;line-height:1.5}
 .protocol-body button,.source-med-sheet button{white-space:normal;overflow-wrap:break-word}
+.guideline-sheet{display:grid;gap:10px}
+.guideline-card{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:13px 14px;box-shadow:0 1px 3px #0000000d}
+.guideline-card .section{margin:0 0 9px;padding:8px 10px;border-radius:9px;background:#eef6ff;border-left:4px solid #2f6690;color:#173a5e;font-size:13px;font-weight:900;letter-spacing:.02em;text-transform:uppercase}
+.guideline-card .line{line-height:1.5}
+.guideline-card .para{margin:8px 0}
+.guideline-card .bullet{margin:8px 0;padding-left:25px}
+.guideline-card .subbullet{margin:6px 0;padding-left:42px}
+.guideline-card .subsub{margin:5px 0;padding-left:58px}
+.guideline-card .guideline-contact{background:#f8fafc;border:1px solid #dbe4ee;border-radius:9px;padding:9px 10px;margin:7px 0;font-weight:750;color:#173a5e}
+@media(max-width:520px){.guideline-card{padding:11px 12px}.guideline-card .subbullet{padding-left:34px}.guideline-card .subsub{padding-left:46px}}
 .workflow-sheet{display:grid;gap:0;margin:8px 0 18px}
 .workflow-node{background:#fff;border:1px solid #cbd5e1;border-left:5px solid #2f6690;border-radius:12px;padding:13px 14px;min-width:0}
 .workflow-node h4{margin:0 0 7px;color:#173a5e;font-size:15px;line-height:1.25}
@@ -1856,12 +1866,29 @@ function controlledSubstancePage21(){
  ];
  return '<div class="section">NARCOTIC ACCOUNTABILITY — PAGE 21</div>'+rows.map(r=>'<div class="line '+(r[0]==='b'?'bullet':r[0]==='s'?'subbullet':r[0]==='ss'?'subsub':'para')+'">'+esc(r[1])+'</div>').join('');
 }
+function guidelineDisplayText(v){
+ return normText(v)
+   .replace(/\bwhould\b/gi,'would')
+   .replace(/\bcurrenty\b/gi,'current')
+   .replace(/\bBrain Bledsoe\b/g,'Bryan Bledsoe')
+   .replace(/Non[\uFFFE\uFFFD-]?professionals/gi,'Non-professionals')
+   .replace(/\b08\/17\s+\/2026\b/g,'08/17/2026')
+   .replace(/\bFire \/ EMS\b/g,'Fire/EMS')
+   .replace(/\boff going\b/gi,'off-going')
+   .replace(/\bon coming\b/gi,'on-coming')
+   .replace(/\b20 minutes\b/g,'20 minutes')
+   .replace(/\b10\.The\b/g,'10. The')
+   .replace(/\b11\.Attending\b/g,'11. Attending')
+   .replace(/\s+([,.;:])/g,'$1')
+   .replace(/\s{2,}/g,' ')
+   .trim();
+}
 function formatGuidelineSource(x){
- const raw=(x.lines||[]).map(normText).filter(Boolean)
+ const raw=(x.lines||[]).map(guidelineDisplayText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!sameTitle(l,x.title));
  let html='';
- const headingRx=/^(GUIDELINES?|DOCUMENTATION|PROCEDURES?|INDICATIONS|CONTRAINDICATIONS|NOTES|POLICY|NO RIGHT TO REFUSE|STANDARD PRECAUTIONS|CONTACT PRECAUTIONS|DROPLET PRECAUTIONS|AIRBORNE PRECAUTIONS|SPECIAL RESPIRATORY PRECAUTIONS|EVD\/VHF PRECAUTIONS|GENERAL ROUTING|STEMI ROUTING|STROKE ROUTING|TRAUMA ROUTING|PEDIATRIC ROUTING)\s*:?\s*$/i;
+ const headingRx=/^(GUIDELINES?|DOCUMENTATION|PROCEDURES?|PURPOSE|INDICATIONS|CONTRAINDICATIONS|NOTES|POLICY|NO RIGHT TO REFUSE|STANDARD PRECAUTIONS|CONTACT PRECAUTIONS|DROPLET PRECAUTIONS|AIRBORNE PRECAUTIONS|SPECIAL RESPIRATORY PRECAUTIONS|EVD\/VHF PRECAUTIONS|GENERAL ROUTING|STEMI ROUTING|STROKE ROUTING|TRAUMA ROUTING|PEDIATRIC ROUTING|DUTY TO REPORT|ASSESSMENT\/TREATMENT|NOTIFICATION|INCLUSION CRITERIA|EXCLUSION CRITERIA|TRAUMA RELATED|MEDICAL RELATED|NON-EMERGENCY RESPONSE|EMERGENCY RESPONSES?|MEDICAL DIRECTORS? STATEMENT OF APPROVAL AND COMPLIANCE|BI-ANNUAL CERTIFICATION|MINIMUM PERFORMANCE REQUIREMENTS(?: \(MPR'?S\))?|TRANSPORTABLE PHYSICIAN ORDERS FOR PATIENT PREFERENCES \(TPOPP\)|ADVANCED DIRECTIVES|DO-NOT-RESUSCITATE \(DNR\)|PROCEDURE FOR DOCUMENTATION)\s*:?\s*$/i;
  const itemRx=/^(\d+\.|[a-z]\.|[ivx]+\.)(?:\s+|$)/i;
  for(let i=0;i<raw.length;i++){
    let t=raw[i];
@@ -1870,15 +1897,19 @@ function formatGuidelineSource(x){
    if(m){
      let depth=/^\d/.test(m[1])?0:/^[a-z]/i.test(m[1])?1:2,parts=[t];
      while(i+1<raw.length&&!headingRx.test(raw[i+1])&&!itemRx.test(raw[i+1])&&!/^[•▪]$/.test(raw[i+1]))parts.push(raw[++i]);
-     html+='<div class="line '+(depth===0?'bullet':depth===1?'subbullet':'subsub')+'">'+esc(normText(parts.join(' ')))+'</div>';
+     html+='<div class="line '+(depth===0?'bullet':depth===1?'subbullet':'subsub')+'">'+esc(guidelineDisplayText(parts.join(' ')))+'</div>';
      continue;
    }
-   if(/^[•▪]$/.test(t)&&raw[i+1]){html+='<div class="line '+(t==='▪'?'subsub':'bullet')+'">'+esc(raw[++i])+'</div>';continue}
+   if(/^[•▪]$/.test(t)&&raw[i+1]){html+='<div class="line '+(t==='▪'?'subsub':'bullet')+'">'+esc(guidelineDisplayText(raw[++i]))+'</div>';continue}
+   // Make hotline / contact lines easier to spot.
+   if(/(?:HOTLINE|POISON CONTROL|LANGUAGE LINE|\b\d{3}[- )]\d{3}[- ]\d{4}\b)/i.test(t)){
+     html+='<div class="guideline-contact">'+esc(t)+'</div>';continue;
+   }
    let parts=[t];
    while(i+1<raw.length&&!headingRx.test(raw[i+1])&&!itemRx.test(raw[i+1])&&!/^[•▪]$/.test(raw[i+1]))parts.push(raw[++i]);
-   html+='<div class="line para">'+esc(normText(parts.join(' ')))+'</div>';
+   html+='<div class="line para">'+esc(guidelineDisplayText(parts.join(' ')))+'</div>';
  }
- return '<div class="workflow-sheet"><div class="workflow-node">'+html+'</div></div>';
+ return '<div class="guideline-sheet"><div class="guideline-card">'+html+'</div></div>';
 }
 function formatDnrProtocol(x){
  const raw=(x.lines||[]).map(normText).filter(Boolean)
