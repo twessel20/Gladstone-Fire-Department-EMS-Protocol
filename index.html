@@ -209,13 +209,20 @@ function renderHome(){
     <p>Search the patient problem or medication, then open the matching protocol. Use the source button whenever exact department wording or layout is needed.</p>
    </div>
    <div class="quick-grid clinical-shortcuts">
-    <button class="quick-card quick-primary" onclick="setCat('Tools')"><b>🧮 Field Tools</b><span>Open calculators, scoring tools, triage aids, and medication helpers.</span></button>
+    <button class="quick-card quick-primary" onclick="quickSearch('cardiac')"><b>🫀 Cardiac</b><span>Rapid access to cardiac-related protocols.</span></button>
+    <button class="quick-card quick-primary" onclick="quickMedical()"><b>🩺 Medical</b><span>Medical emergencies, pediatric and OB.</span></button>
+    <button class="quick-card quick-primary" onclick="quickSearch('respiratory')"><b>🫁 Respiratory</b><span>Rapid access to respiratory-related protocols.</span></button>
+    <button class="quick-card" onclick="setCat('Trauma')"><b>🩹 Trauma</b><span>Trauma protocols, burns and injury-specific care.</span></button>
+    <button class="quick-card" onclick="setCat('Medications')"><b>💊 GFD Medications</b><span>Department medication reference, dosing and weight-based calculators.</span></button>
+    <button class="quick-card" onclick="setCat('Tools')"><b>🧮 Field Tools</b><span>Calculators, scoring tools, triage aids, and medication helpers.</span></button>
+    <button class="quick-card" onclick="setCat('Patient Meds')"><b>🧾 Patient Meds</b><span>Look up a patient's home medication by brand or generic name.</span></button>
+    <button class="quick-card" onclick="setCat('Procedures')"><b>⚕️ Procedures</b><span>Airway, vascular access, monitoring and field procedures.</span></button>
    </div>
    <div class="guide-steps">
     <h3>Quick use guide</h3>
     <div class="guide-step"><div class="guide-num">1</div><div class="guide-copy"><b>All GFD protocol content is shown in ALS view.</b> No certification-level selection is required.</div></div>
     <div class="guide-step"><div class="guide-num">2</div><div class="guide-copy"><b>Search by complaint, protocol, medication, brand name, or generic name.</b> Examples: chest pain, seizure, Benadryl, diphenhydramine.</div></div>
-    <div class="guide-step"><div class="guide-num">3</div><div class="guide-copy"><b>Use the top banner for one-touch navigation.</b> Medications, Tools, Procedures, Trauma, and the other sections open directly without backing out first.</div></div>
+    <div class="guide-step"><div class="guide-num">3</div><div class="guide-copy"><b>Tap any top category at any time.</b> It immediately exits the current protocol and opens that section—no need to back out first.</div></div>
     <div class="guide-step"><div class="guide-num">4</div><div class="guide-copy"><b>Use calculators where they appear in the applicable protocol.</b> Weight-based dosing tools are embedded with the protocol or medication they support; the burn protocol includes TBSA and Parkland tools.</div></div>
     <div class="guide-step"><div class="guide-num">5</div><div class="guide-copy"><b>Use View Source Protocol PDF for exact wording.</b> Source view is limited to the page or pages belonging to that protocol.</div></div>
     <div class="guide-step"><div class="guide-num">6</div><div class="guide-copy"><b>Star frequently used protocols.</b> They stay available under Favorites for rapid access.</div></div>
