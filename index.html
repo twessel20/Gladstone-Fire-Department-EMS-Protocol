@@ -314,14 +314,14 @@ function renderPatientMeds(){
     </div>
     <div class="patient-med-warning" style="margin-top:10px"><b>Reference only:</b> Use this to identify a patient's reported medication and review manufacturer/FDA labeling. Do not use this section to select or calculate EMS treatment. Follow GFD protocols and Medical Control.</div>
    </div>
-   <div class="patient-med-search">
+   <div id="patientMedResult" class="patient-med-result"></div>
+   <div class="patient-med-search" style="margin-top:12px">
     <h2 style="font-size:18px">Overdose / AMS Tools</h2>
     <div class="quick-grid">
      <button class="quick-card" onclick="showPatientMedPillCount()"><b>🔢 Pill Count</b><span>Estimate pills missing from a prescription bottle.</span></button>
      <button class="quick-card" onclick="showPatientMedPillId()"><b>💊 Pill Identifier</b><span>Identify a pill using imprint, color, and shape.</span></button>
     </div>
    </div>
-   <div id="patientMedResult" class="patient-med-result"></div>
   </div>`;
  const i=document.querySelector('#patientMedQ');if(i){i.focus();i.addEventListener('keydown',e=>{if(e.key==='Enter')lookupPatientMedication()})}
 }
