@@ -1188,6 +1188,23 @@ function renderHospitals(){
  }).join('');
  document.querySelector('#list').innerHTML='<div class="hospital-note"><b>North Kansas City Hospital remains listed first as GFD\'s primary medical-control destination.</b> Remaining hospitals are ordered by approximate proximity from Gladstone.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div><div style="margin-top:14px">'+patientDestinationCriteriaHtml()+'</div>';
 }
+const symptomSearchAliases={
+ 'allergic-reaction-anaphylaxis':['hives','urticaria','rash','itching','facial swelling','lip swelling','tongue swelling','throat swelling','allergic reaction','anaphylaxis','wheezing after exposure'],
+ 'chest-pain-pressure':['chest pain','chest pressure','chest tightness','pressure in chest','cardiac chest pain'],
+ 'respiratory-distress':['shortness of breath','difficulty breathing','trouble breathing','dyspnea','wheezing','asthma attack','copd exacerbation'],
+ 'cva-strokes':['stroke symptoms','facial droop','arm weakness','slurred speech','aphasia','sudden weakness','sudden numbness'],
+ 'seizures':['seizure','convulsions','shaking','postictal'],
+ 'syncope':['fainting','passed out','near syncope','dizziness with fainting'],
+ 'diabetic-emergencies':['low blood sugar','hypoglycemia','high blood sugar','hyperglycemia','diabetic emergency'],
+ 'coma-or-confusion-of-unknown-origin':['altered mental status','confusion','unresponsive','ams','decreased level of consciousness'],
+ 'nausea-vomiting':['nausea','vomiting','throwing up'],
+ 'abdominal-pain':['abdominal pain','stomach pain','belly pain'],
+ 'poisoning':['overdose','ingestion','poisoning','toxic exposure'],
+ 'behavioral-psychiatric-disorders':['behavioral emergency','psychiatric emergency','suicidal','agitated patient'],
+ 'congestive-heart-failure':['pulmonary edema','orthopnea','fluid overload','pink frothy sputum'],
+ 'burns':['burn','thermal burn','chemical burn','electrical burn'],
+ 'near-drowning':['drowning','submersion','near drowning']
+};
 function render(){
  if(cat==='Home'){renderHome();return}
  if(cat==='Patient Meds'){renderPatientMeds();return}
@@ -1198,7 +1215,8 @@ function render(){
  const searchableTitle=x=>searchText(displayTitle(x)).replace(/^(adult|pediatric|combined)\s+/,'');
  const query=searchText(q);
  const queryTerms=query.split(/\s+/).filter(Boolean);
- const directSearchText=x=>searchText([searchableTitle(x),(x.aliases||[]).join(' '),x.search||''].join(' '));
+ const symptomAliases=x=>symptomSearchAliases[x.id]||[];
+ const directSearchText=x=>searchText([searchableTitle(x),(x.aliases||[]).join(' '),symptomAliases(x).join(' '),x.search||''].join(' '));
  const bodySearchText=x=>searchText((x.lines||[]).join(' '));
  const directMatch=x=>!query||searchableTitle(x).includes(query)||directSearchText(x).includes(query)||queryTerms.every(t=>directSearchText(x).includes(t));
  const bodyMatch=x=>!query||queryTerms.every(t=>bodySearchText(x).includes(t));
@@ -1206,10 +1224,12 @@ function render(){
  const categoryAllowed=x=>cat==='All'||(cat==='Favorites'?fav.has(x.id):x.category===cat);
  const searchRank=x=>{
    if(!query)return 0;
-   const title=searchableTitle(x),aliases=searchText((x.aliases||[]).join(' '));
+   const title=searchableTitle(x),aliases=searchText((x.aliases||[]).join(' ')),symptoms=searchText(symptomAliases(x).join(' '));
    if(title===query)return 100;
    if(title.startsWith(query))return 95;
    if(title.includes(query))return 90;
+   if(symptoms.split(' ').includes(query)||symptomAliases(x).some(v=>searchText(v)===query))return 88;
+   if(symptoms.includes(query))return 86;
    if(aliases===query)return 85;
    if(aliases.includes(query))return 80;
    if(queryTerms.every(t=>title.includes(t)))return 75;
