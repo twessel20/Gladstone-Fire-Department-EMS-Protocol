@@ -1103,9 +1103,6 @@ const medicationCrossProtocolDoses={
  'glucagon':[
   {source:'Glucagon medication protocol',text:'Pediatric >25 kg: 1 mg IM; <25 kg: 0.5 mg IM.',calcKey:'glucP'}
  ],
- 'amiodarone':[
- {key:'amioPeds',label:'PALS Pediatric Amiodarone — Cardiac Arrest',formula:'5 mg/kg IV/IO bolus. Max 300 mg initial; may repeat up to 3 total doses with max 150 mg on subsequent doses.',unit:'mg',perKg:5,max:300,special:'amioPeds',repeatMax:150,note:'PALS OVERRIDE — AMIODARONE ONLY. Based on the 2025 AHA PALS Pediatric Cardiac Arrest Algorithm.'}
-],
 'albuterol-and-atrovent-duoneb':[
   {source:'Duoneb medication protocol',text:'Infants under 1 year: 0.03 mL/kg nebulized, max 1 mL.',calcKey:'albInfant'}
  ],
@@ -1242,6 +1239,9 @@ function formatMedication(x){
  return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+pediatricMedicationHtml(x)+medicationCrossProtocolHtml(x)+'</div>';
 }
 const protocolDoseCalcs={
+'amiodarone':[
+ {key:'amioPeds',label:'PALS Pediatric Amiodarone — Cardiac Arrest',formula:'5 mg/kg IV/IO bolus. Max 300 mg initial; may repeat up to 3 total doses with max 150 mg on subsequent doses.',unit:'mg',perKg:5,max:300,special:'amioPeds',repeatMax:150,note:'PALS OVERRIDE — AMIODARONE ONLY. Based on the 2025 AHA PALS Pediatric Cardiac Arrest Algorithm.'}
+],
 'narrow-complex-tachydysrhythmias':[
  {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,ageRequired:true,ageThreshold:70,ageAdjustment:-5,note:'For patients over age 70, GFD protocol says decrease each Diltiazem dose by 5 mg.'}
 ],
