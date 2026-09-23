@@ -1303,8 +1303,8 @@ function calcProtocolDose(pid,key){
  if(c.special==='exactRange'){
    const de=document.getElementById(id+'-d'),pk=Number(de?.value);
    if(!Number.isFinite(pk)||pk<c.minPerKg||pk>c.maxPerKg){out.innerHTML='<b>Enter an exact dose from '+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg.</b>';return}
-   const rawDose=kg*pk,dose=Number.isFinite(c.max)?Math.min(rawDose,c.max):rawDose;
-   out.innerHTML=kg.toFixed(1)+' kg × '+pk+' '+c.unit+'/kg<br><strong>DOSE TO GIVE: '+dose.toFixed(dose<10?2:1)+' '+c.unit+'</strong>'+
+   const rawDose=kg*pk,capped=Number.isFinite(c.max)?Math.min(rawDose,c.max):rawDose,dose=Math.round(capped);
+   out.innerHTML=kg.toFixed(1)+' kg × '+pk+' '+c.unit+'/kg<br><strong>DOSE TO GIVE: '+dose+' '+c.unit+'</strong>'+
      (Number.isFinite(c.max)?'<div class="dose-note"><b>TREATMENT MAX: '+c.max+' '+c.unit+'</b>'+(rawDose>c.max?' • Maximum applied.':'')+'</div>':'')+
      (c.note?'<div class="dose-note">'+esc(c.note)+'</div>':'');
    return
