@@ -521,6 +521,7 @@ function renderTools(){
         <h3>💉 Medication & Infusion</h3>
         <div class="tool-note">Dose, infusion, and medication-support calculators.</div>
         <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult, pediatric, and infant initial + repeat dose calculator</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('diltiazem')"><span class="tool-launch-icon">💉</span><span><b>Diltiazem Dose</b><small>DOB or typed age with initial + second weight-based dose</small></span><span class="tool-chevron">›</span></button>
         <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
         <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
       </div>
@@ -577,6 +578,15 @@ function openToolCard(which){
    <select id="lidoUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select>
    <button class="tool-btn" onclick="calcLido()">Calculate Initial + Second Dose</button><div id="lidoResult" class="tool-result" style="display:none"></div>
    <div class="tool-note" style="margin-top:10px"><b>Dosing hierarchy:</b> explicit GFD protocol guidance supersedes this calculator. When GFD is silent, use AHA adult guidance or PALS/Broselow pediatric fallback logic.</div></div>`;
+ if(which==='diltiazem')host.innerHTML=back+`
+   <div class="tool-card"><h3>Diltiazem Dose Calculator</h3>
+   <div class="tool-note"><b>GFD dosing:</b> Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Maximum 20 mg for each calculated dose. For patients <b>older than 70 years</b>, decrease each dose by 5 mg.</div>
+   <div class="calc-field"><label for="toolDiltDob">Patient date of birth</label><input id="toolDiltDob" class="tool-input" type="date" max="${new Date().toISOString().slice(0,10)}"><small>Enter DOB if known, or enter the patient's age below.</small></div>
+   <div class="calc-field"><label for="toolDiltAge">Patient age (years)</label><input id="toolDiltAge" class="tool-input" inputmode="numeric" type="number" min="0" step="1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>
+   <div class="calc-field"><label for="toolDiltWeight">Patient weight</label><div class="calc-pair"><input id="toolDiltWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="toolDiltUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
+   <button class="tool-btn" onclick="calcToolDiltiazem()">Calculate Initial + Second Dose</button>
+   <div id="toolDiltResult" class="tool-result" style="display:none"></div>
+   <div class="tool-note" style="margin-top:10px">This standalone tool uses the same age-adjustment and weight-based logic as the Diltiazem calculator embedded in the protocol.</div></div>`;
  if(which==='dopamine')host.innerHTML=back+`
    <div class="tool-card"><h3>Dopamine Gravity-Drip Calculator</h3>
    <div class="tool-note">Gravity tubing only — no pump output. Enter the patient weight, ordered dose in <b>mcg/kg/min</b>, bag concentration, and tubing drop factor.</div>
@@ -746,6 +756,46 @@ function calcLido(){
     </div>
     <div style="margin-top:10px;font-size:12px;color:#475569"><b>PALS/Broselow fallback:</b> used when GFD does not explicitly state otherwise.</div>`;
 }
+function calcToolDiltiazem(){
+  const out=document.getElementById('toolDiltResult');
+  if(!out)return;
+  const dobValue=document.getElementById('toolDiltDob')?.value||'';
+  const ageValue=document.getElementById('toolDiltAge')?.value||'';
+  const w=Number(document.getElementById('toolDiltWeight')?.value);
+  const unit=document.getElementById('toolDiltUnit')?.value||'kg';
+  out.style.display='block';
+  if(!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
+  const now=new Date();
+  let patientAge=null,ageSource='';
+  if(dobValue){
+    const dob=new Date(dobValue+'T00:00:00');
+    if(Number.isNaN(dob.getTime())||dob>now){out.innerHTML='<b>Enter a valid date of birth.</b>';return}
+    patientAge=now.getFullYear()-dob.getFullYear();
+    const monthDelta=now.getMonth()-dob.getMonth();
+    if(monthDelta<0||(monthDelta===0&&now.getDate()<dob.getDate()))patientAge--;
+    ageSource='DOB';
+  }else if(ageValue!==''){
+    const typedAge=Number(ageValue);
+    if(!Number.isFinite(typedAge)||typedAge<0||!Number.isInteger(typedAge)){out.innerHTML='<b>Enter a valid patient age in whole years.</b>';return}
+    patientAge=typedAge;
+    ageSource='typed age';
+  }else{
+    out.innerHTML='<b>Enter either the patient date of birth or the known patient age.</b>';return
+  }
+  const kg=unit==='lb'?w/2.2046226218:w;
+  const older=patientAge>70;
+  const initialBase=Math.min(kg*.25,20);
+  const secondBase=Math.min(kg*.35,20);
+  const initial=Math.max(0,initialBase+(older?-5:0));
+  const second=Math.max(0,secondBase+(older?-5:0));
+  const fmt=n=>n.toFixed(n<10?2:1);
+  out.innerHTML=
+    '<div><b>AGE: '+patientAge+' years</b> <span class="dose-note">('+ageSource+')</span>'+(older?' • <b>GFD AGE ADJUSTMENT APPLIED: -5 mg</b>':' • No age reduction')+'</div>'+
+    '<div style="margin-top:8px"><b>WEIGHT:</b> '+kg.toFixed(1)+' kg</div>'+
+    '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #dbe4ee"><div class="dose-note"><b>INITIAL — 0.25 mg/kg</b> • max 20 mg'+(older?' • then reduce 5 mg':'')+'</div><strong>INITIAL DOSE: '+fmt(initial)+' mg</strong></div>'+
+    '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #dbe4ee"><div class="dose-note"><b>IF NO RESPONSE AFTER 10 MIN — 0.35 mg/kg</b> • max 20 mg'+(older?' • then reduce 5 mg':'')+'</div><strong>SECOND DOSE: '+fmt(second)+' mg</strong></div>';
+}
+
 function calcDopamine(){
   const box=document.querySelector('#dopResult');
   const w=parseFloat(document.querySelector('#dopWeight').value);
