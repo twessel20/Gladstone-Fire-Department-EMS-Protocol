@@ -914,7 +914,7 @@ function formatDextrose(){
 
     <div class="source-med-row">
       <div class="source-med-label">Dose:</div>
-      <div class="source-med-value">For adults, give <b>D10 (250 mL) 25 g</b> or equivalent IV.</div>
+      <div class="source-med-value">For adults, give <b>D10 (250 mL) = 25 g dextrose</b> or equivalent IV.<div class="dose-note">D10 concentration: <b>0.1 g/mL (100 mg/mL)</b>.</div></div>
     </div>
 
     <div class="source-med-row">
@@ -926,7 +926,7 @@ function formatDextrose(){
 
         <div class="source-med-calc">
           <div><b>Inline Pediatric D10 Calculator</b></div>
-          <div class="dose-note">Uses the GFD age-based D10 dose above.</div>
+          <div class="dose-note">Uses the GFD age-based D10 dose above and a D10 concentration of <b>25 g in 250 mL = 0.1 g/mL</b>.</div>
           <div class="calc-field">
             <label for="dc-dextrose-d10Age-a">Patient age (years)</label>
             <input id="dc-dextrose-d10Age-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age">
@@ -1153,8 +1153,13 @@ function calcProtocolDose(pid,key){
  }
  if(c.special==='d10Age'){
    if(age===8){out.innerHTML='<b>GFD source specifies &lt;8 years = 1 mL/kg and &gt;8 years = 2 mL/kg, but does not specify exactly age 8. Verify the source / Medical Control rather than guessing.</b>';return}
-   const pk=age<8?1:2,d=kg*pk;
-   out.innerHTML='<b>AGE: '+age+' years</b><br>'+kg.toFixed(1)+' kg × '+pk+' mL/kg<br><strong>D10 DOSE: '+d.toFixed(d<10?2:1)+' mL IV</strong><div class="dose-note">'+(age<8?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
+   const pk=age<8?1:2,vol=kg*pk,grams=vol*0.1,gramsPerKg=pk*0.1;
+   out.innerHTML='<b>AGE: '+age+' years</b><br>'+
+     kg.toFixed(1)+' kg × '+pk+' mL/kg<br>'+
+     '<strong>D10 VOLUME: '+vol.toFixed(vol<10?2:1)+' mL IV</strong><br>'+
+     '<strong>DEXTROSE DELIVERED: '+grams.toFixed(grams<10?2:1)+' g</strong>'+
+     '<div class="dose-note">D10 = 25 g / 250 mL = 0.1 g/mL • '+gramsPerKg.toFixed(1)+' g/kg</div>'+
+     '<div class="dose-note">'+(age<8?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
    return
  }
  if(c.special==='infantAlbuterol'){
