@@ -952,6 +952,78 @@ function formatDextrose(){
  `;
 }
 
+function formatBenadryl(){
+ return `
+  <div class="source-med-sheet">
+    <div class="source-med-title">Benadryl (Diphenhydramine)</div>
+
+    <div class="source-med-row">
+      <div class="source-med-label">Indications:</div>
+      <div class="source-med-value">
+        <div>Allergic Reactions</div>
+        <div>Anaphylaxis with respiratory distress</div>
+        <div>Anaphylactic shock</div>
+        <div>Extrapyramidal Symptoms (EPS)</div>
+        <div>Dystonic Reactions</div>
+      </div>
+    </div>
+
+    <div class="source-med-row">
+      <div class="source-med-label">Precautions:</div>
+      <div class="source-med-value">
+        <div>Patient with asthma</div>
+        <div>Pregnancy</div>
+        <div>Lactating females</div>
+      </div>
+    </div>
+
+    <div class="source-med-row">
+      <div class="source-med-label">Side Effects:</div>
+      <div class="source-med-value">
+        <div>Drowsiness</div>
+        <div>Headache</div>
+        <div>Palpitations</div>
+        <div>Dizziness</div>
+        <div>Dilated pupils</div>
+        <div>Thickening of bronchial secretions</div>
+      </div>
+    </div>
+
+    <div class="source-med-row">
+      <div class="source-med-label">Dose:</div>
+      <div class="source-med-value"><b>25–50 mg</b></div>
+    </div>
+
+    <div class="source-med-row">
+      <div class="source-med-label">Pediatric Dose:</div>
+      <div class="source-med-value">
+        <div><b>1–2 mg/kg</b></div>
+        <div class="source-med-calc">
+          <div><b>Inline Pediatric Benadryl Calculator</b></div>
+          <div class="dose-note">Choose the exact dose within the GFD 1–2 mg/kg range.</div>
+          <div class="calc-field">
+            <label for="dc-benadryl-diphenhydramine-benP-d">Dose (1–2 mg/kg)</label>
+            <input id="dc-benadryl-diphenhydramine-benP-d" inputmode="decimal" type="number" min="1" max="2" step="0.1" placeholder="Enter exact mg/kg">
+          </div>
+          <div class="dose-row">
+            <input id="dc-benadryl-diphenhydramine-benP-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
+            <select id="dc-benadryl-diphenhydramine-benP-u"><option value="lb">lb</option><option value="kg">kg</option></select>
+          </div>
+          <button class="dose-btn" onclick="calcProtocolDose('benadryl-diphenhydramine','benP')">Calculate Benadryl dose</button>
+          <div id="dc-benadryl-diphenhydramine-benP-o" class="dose-out"></div>
+          <div class="dose-note"><b>GFD treatment maximum: 50 mg</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-med-row">
+      <div class="source-med-label">Routes:</div>
+      <div class="source-med-value">IV, IO or IM</div>
+    </div>
+  </div>
+ `;
+}
+
 function formatMedication(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
@@ -1129,7 +1201,7 @@ const protocolDoseCalcs={
  {key:'albInfant',label:'Albuterol — Infant <1 year',formula:'0.03 mL/kg nebulized, max 1 mL',unit:'mL',perKg:.03,max:1,special:'infantAlbuterol',ageRequired:true,note:'GFD medication page lists this weight-based dose for infants under 1 year.'}
 ],
 'benadryl-diphenhydramine':[
- {key:'benP',label:'Benadryl — Pediatric',formula:'1–2 mg/kg',unit:'mg',perKg:1,maxPerKg:2,special:'range'}
+ {key:'benP',label:'Benadryl — Pediatric',formula:'1–2 mg/kg',unit:'mg',perKg:1,minPerKg:1,maxPerKg:2,max:50,special:'exactRange',note:'GFD medication page lists 1–2 mg/kg. GFD anaphylaxis treatment protocol uses a maximum single dose of 50 mg.'}
 ],
 'diltiazem-hcl-cardizem':[
  {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,ageRequired:true,ageThreshold:70,ageAdjustment:-5,note:'For patients over age 70, GFD protocol says decrease each Diltiazem dose by 5 mg.'}
@@ -1226,6 +1298,15 @@ function calcProtocolDose(pid,key){
    if(age>=1){out.innerHTML='<b>This weight-based dose is listed by GFD only for infants under 1 year.</b><div class="dose-note">For adults and children over 1 year, refer to the fixed nebulizer dose printed in the medication protocol. The source does not define the exact 1-year boundary.</div>';return}
    const d=Math.min(kg*c.perKg,c.max);
    out.innerHTML='<b>AGE: '+age+' years</b><br>'+kg.toFixed(1)+' kg × 0.03 mL/kg<br><strong>NEBULIZER VOLUME: '+d.toFixed(2)+' mL</strong><div class="dose-note"><b>MAX: 1 mL</b></div>';
+   return
+ }
+ if(c.special==='exactRange'){
+   const de=document.getElementById(id+'-d'),pk=Number(de?.value);
+   if(!Number.isFinite(pk)||pk<c.minPerKg||pk>c.maxPerKg){out.innerHTML='<b>Enter an exact dose from '+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg.</b>';return}
+   const rawDose=kg*pk,dose=Number.isFinite(c.max)?Math.min(rawDose,c.max):rawDose;
+   out.innerHTML=kg.toFixed(1)+' kg × '+pk+' '+c.unit+'/kg<br><strong>DOSE TO GIVE: '+dose.toFixed(dose<10?2:1)+' '+c.unit+'</strong>'+
+     (Number.isFinite(c.max)?'<div class="dose-note"><b>TREATMENT MAX: '+c.max+' '+c.unit+'</b>'+(rawDose>c.max?' • Maximum applied.':'')+'</div>':'')+
+     (c.note?'<div class="dose-note">'+esc(c.note)+'</div>':'');
    return
  }
  if(c.special==='range'||c.special==='rateRange'){
@@ -1738,6 +1819,7 @@ function formatProtocol(x){
    return raw.map(t=>{let m=t.match(/^(\d+\.|[a-z]\.|[ivx]+\.)\s*(.*)$/i);if(m){let cls=/^\d/.test(m[1])?'bullet':/^[a-z]/i.test(m[1])?'subbullet':'subsub';return '<div class="line '+cls+'">'+esc(m[2]||t)+'</div>'}return '<div class="line para">'+esc(t)+'</div>'}).join('');
  }
  if(x.id==='dextrose')return formatDextrose();
+ if(x.id==='benadryl-diphenhydramine')return formatBenadryl();
  if(x.category==='Medications')return formatMedication(x);
  let ts=scopedTokens(x);
  let rendered=[],lastHeading='';
