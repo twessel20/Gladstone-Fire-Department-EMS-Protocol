@@ -976,6 +976,7 @@ function formatDextrose(){
       <div class="source-med-label">Oral Dose:</div>
       <div class="source-med-value"><b>15 g oral glucose</b> may be considered for awake, cooperative patients with a patent airway and the ability to swallow.</div>
     </div>
+    ${medicationCrossProtocolHtml({id:'dextrose'})}
   </div>
  `;
 }
@@ -1052,8 +1053,69 @@ function formatBenadryl(){
       <div class="source-med-label">Routes:</div>
       <div class="source-med-value">IV, IO or IM</div>
     </div>
+    ${medicationCrossProtocolHtml({id:'benadryl-diphenhydramine'})}
   </div>
  `;
+}
+
+const medicationCrossProtocolDoses={
+ 'benadryl-diphenhydramine':[
+  {source:'Allergic Reaction/Anaphylaxis',text:'Pediatric Benadryl 1 mg/kg IV, max single dose 50 mg.',calcKey:'benP'}
+ ],
+ 'diltiazem-hcl-cardizem':[
+  {source:'Narrow Complex Tachydysrhythmias',text:'0.25 mg/kg initial; if no response after 10 minutes, 0.35 mg/kg. Max 20 mg each dose; reduce by 5 mg for patients over age 70.',calcKey:'dilt'}
+ ],
+ 'epinephrine-1-10-000':[
+  {source:'Allergic Reaction/Anaphylaxis',text:'Pediatric Epinephrine 1:10,000: 0.01 mg/kg IM.',calcKey:'epiAna'},
+  {source:'Pediatric / Neonatal cardiac use',text:'Cardiac: 0.01 mg/kg IV/IO/ET.',calcKey:'epiCard'}
+ ],
+ 'fentanyl':[
+  {source:'Analgesic Medication Administration',text:'Pediatric Fentanyl 1–2 mcg/kg slow IV, IM or IN.',calcKey:'fent'}
+ ],
+ 'ketamine':[
+  {source:'Hyper-Agitated Delirium Syndrome',text:'Ketamine 3–5 mg/kg IM, max 500 mg. Pediatric use is not approved on the Ketamine medication page.',calcKey:'ketDiss'}
+ ],
+ 'methylprednisolone-medrol-solu-medrol':[
+  {source:'Respiratory Distress / Anaphylaxis',text:'Pediatric Solu-Medrol 2 mg/kg.',calcKey:'solu'}
+ ],
+ 'morphine-sulfate':[
+  {source:'Analgesic Medication Administration',text:'Pediatric Morphine 0.05 mg/kg, max 2 mg.',calcKey:'morph'}
+ ],
+ 'narcan-naloxone':[
+  {source:'Neonatal Resuscitation',text:'Narcan 0.1 mg/kg.',calcKey:'narcan'}
+ ],
+ 'terbutaline-sulfate':[
+  {source:'Terbutaline medication protocol',text:'Pediatric 0.01 mg/kg, max 0.25 mg.',calcKey:'terb'}
+ ],
+ 'versed-midazolam':[
+  {source:'Seizures / Intranasal Administration',text:'Pediatric seizures: 0.2 mg/kg IN, max 10 mg.',calcKey:'seiz'},
+  {source:'Medication protocol',text:'Pediatric sedation: 0.05 mg/kg slow IV; maximum initial dose 2–4 mg.',calcKey:'sed'}
+ ],
+ 'lidocaine':[
+  {source:'VF / Pulseless VT',text:'Weight-based adult dose: initial 1–1.5 mg/kg; repeat 0.5–0.75 mg/kg; max 3 doses or 3 mg/kg total.',calcKey:'lido'}
+ ],
+ 'dextrose':[
+  {source:'Multiple medical protocols',text:'Pediatric D10: age >8 years 2 mL/kg IV; age <8 years 1 mL/kg IV.',calcKey:'d10Age'}
+ ],
+ 'glucagon':[
+  {source:'Glucagon medication protocol',text:'Pediatric >25 kg: 1 mg IM; <25 kg: 0.5 mg IM.',calcKey:'glucP'}
+ ],
+ 'albuterol-and-atrovent-duoneb':[
+  {source:'Duoneb medication protocol',text:'Infants under 1 year: 0.03 mL/kg nebulized, max 1 mL.',calcKey:'albInfant'}
+ ],
+ 'zofran-ondansetron':[
+  {source:'Zofran medication protocol',text:'Age 4 years and older: 2 mg IM/ODT or 2 mg slow IVP over 2–5 min.',calcKey:'zofP'}
+ ]
+};
+
+function medicationCrossProtocolHtml(x){
+ const rows=medicationCrossProtocolDoses[x.id]||[];
+ if(x.id==='amiodarone'){
+   return '<div class="source-med-row med-precaution"><div class="source-med-label">Pediatric / Weight-Based:</div><div class="source-med-value"><div><b>No pediatric or weight-based Amiodarone dose is provided anywhere in the approved GFD 2026 V3 manual.</b></div><div class="dose-note">GFD uses fixed Amiodarone doses in the cardiac protocols. No calculator is shown because the source does not provide a weight-based dose.</div></div></div>';
+ }
+ if(!rows.length)return '';
+ const items=rows.map(r=>'<div class="source-med-calc"><div><b>'+esc(r.source)+'</b></div><div class="dose-note">'+esc(r.text)+'</div></div>').join('');
+ return '<div class="source-med-row"><div class="source-med-label">Dose References Elsewhere in GFD:</div><div class="source-med-value">'+items+'</div></div>';
 }
 
 function pediatricMedicationInfo(x){
@@ -1173,7 +1235,7 @@ function formatMedication(x){
    rows+='<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value">'+calcHtml+'</div></div>';
  }
  const icon=/dextrose|glucose/i.test(x.title)?'drop':(/epi|fentanyl|morphine|ketamine|versed|midazolam|diltiazem|amiodarone|adenosine|atropine|lidocaine|dopamine|calcium|magnesium|narcan|naloxone|terbutaline|methylprednisolone/i.test(x.title)?'syringe':'pill');
- return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+pediatricMedicationHtml(x)+'</div>';
+ return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+pediatricMedicationHtml(x)+medicationCrossProtocolHtml(x)+'</div>';
 }
 const protocolDoseCalcs={
 'narrow-complex-tachydysrhythmias':[
