@@ -236,26 +236,12 @@ function isAlsOnly(x){const t=scopeText(x);return t.includes('ALS ONLY')&&!t.inc
 function flags(x){let t=scopeText(x),a=[];if(t.includes('BLS OR ALS'))a.push('<span class="flag bls">BLS OR ALS</span>');if(t.includes('ALS ONLY'))a.push('<span class="flag als">ALS ONLY</span>');if(t.includes('MEDICAL CONTROL'))a.push('<span class="flag mc">MEDICAL CONTROL</span>');return a.join('')}
 function displayTitle(x){if(/^Combined\s+/i.test(x.title))return x.title.replace(/^Combined\s+/i,'');return x.title}
 const appendixMap={
-  '12-lead-ecg-monitoring':['12-lead-ecg-interpretation'],
-  'adult-chest-pain-stemi':['12-lead-ecg-interpretation'],
-  'adult-stroke':['cincinnati-prehospital-stroke-scale'],
-  'childbirth':['apgar-score'],
-  'complicated-childbirth':['apgar-score'],
-  'neonatal-resuscitation':['apgar-score','pediatric-vital-sign-ranges-by-age'],
-  'pediatric-general-airway':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-obstructed-airway':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-wheezing':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-bradycardia':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-tachycardia-narrow-complex':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-tachycardia-wide-complex':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-cardiac-arrest-vf-pulseless-vt':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-cardiac-arrest-asystole-pea':['pediatric-vital-sign-ranges-by-age'],
-  'pediatric-brue':['pediatric-vital-sign-ranges-by-age'],
-  'combined-pain-control':['pain-scale'],
-  'lucas-device-procedure':['lucas-device-appendix'],
-  'epinephrine-1-100000-push-dose-procedure':['epinephrine-1-100000-push-dose-appendix'],
-  'combined-general-trauma':['tcd-destinations'],
-  'patient-destination-criteria':['tcd-destinations']
+  'poisoning':['tricyclic-antidepressant-list-common'],
+  'cva-strokes':['nih-stroke-scale'],
+  'do-not-resuscitate-advanced-directives-emergency-order-sets':['missouri-approved-dnr-order','missouri-approved-dnr-faq','tpopp-form'],
+  'behavioral-psychiatric-disorders':['restraint-checklist'],
+  'hyper-agitated-delirium-syndrome':['restraint-checklist'],
+  'difficult-airway-algorithm':['apneic-oxygenation']
 };
 function relatedAppendices(x){
   let ids=[...(appendixMap[x.id]||[])];
@@ -1435,6 +1421,9 @@ const protocolDoseCalcs={
 ],
 'narcan-naloxone':[
  {key:'narcan',label:'Narcan — Neonatal Resuscitation',formula:'0.1 mg/kg',unit:'mg',perKg:.1}
+],
+'sodium-bicarbonate':[
+ {key:'bicarb',label:'Sodium Bicarbonate',formula:'1 mEq/kg',unit:'mEq',perKg:1}
 ],
 'terbutaline-sulfate':[
  {key:'terb',label:'Terbutaline — Pediatric',formula:'0.01 mg/kg, max 0.25 mg',unit:'mg',perKg:.01,max:.25}
