@@ -550,6 +550,12 @@ function renderTools(){
       </div>
 
       <div class="tool-card">
+        <h3>☎️ Important Phone Numbers</h3>
+        <div class="tool-note">Tap a number to call directly from a mobile device.</div>
+        <button class="tool-launch" onclick="openToolCard('phones')"><span class="tool-launch-icon">☎️</span><span><b>Important Phone Numbers</b><small>Poison Control and other critical contacts</small></span><span class="tool-chevron">›</span></button>
+      </div>
+
+      <div class="tool-card">
         <h3>💊 Medication Identification</h3>
         <div class="tool-note">Tools for evaluating home or unknown medications.</div>
         <button class="tool-launch" onclick="openToolCard('pillcount')"><span class="tool-launch-icon">🔢</span><span><b>Pill Count</b><small>Estimate pills missing from a prescription bottle</small></span><span class="tool-chevron">›</span></button>
@@ -563,6 +569,13 @@ function openToolCard(which){
  const host=document.querySelector('#toolDetail');
  document.querySelector('.tool-menu').style.display='none';
  const back='<button class="back tool-back" onclick="toolBack()">‹ Back to Tools</button>';
+ if(which==='phones')host.innerHTML=back+`
+   <div class="tool-card"><h3>☎️ Important Phone Numbers</h3>
+   <div class="tool-note">Tap a number to call directly. Additional department, hospital, Medical Control, burn, or pediatric contacts can be added here as needed.</div>
+   <div class="contact-list">
+     <a class="tool-launch" href="tel:18002221222"><span class="tool-launch-icon">☠️</span><span><b>Poison Control</b><small>1-800-222-1222</small></span><span class="tool-chevron">Call</span></a>
+   </div>
+   </div>`;
  if(which==='pillcount'){host.innerHTML=back+'<div class="tool-card"><h3>🔢 Pill Count</h3>'+pillCountFormHtml()+'</div>';initPillCountDates()}
   if(which==='pillid')host.innerHTML=back+`
    <div class="tool-card"><h3>Pill Identifier</h3>
