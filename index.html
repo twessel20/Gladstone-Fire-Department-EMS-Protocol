@@ -908,8 +908,7 @@ function formatMedication(x){
 }
 const protocolDoseCalcs={
 'narrow-complex-tachydysrhythmias':[
- {key:'dilt1',label:'Diltiazem — Initial',formula:'0.25 mg/kg max 20 mg SIVP over 2 minutes',unit:'mg',perKg:.25,max:20,note:'For patients over age 70, GFD protocol says decrease dose by 5 mg.'},
- {key:'dilt2',label:'Diltiazem — Second dose',formula:'0.35 mg/kg max 20 mg SIVP over 2 minutes; consider after 10 minutes if no response',unit:'mg',perKg:.35,max:20,note:'For patients over age 70, GFD protocol says decrease dose by 5 mg.'}
+ {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,note:'For patients over age 70, GFD protocol says decrease dose by 5 mg.'}
 ],
 'bradycardia-algorithm':[
  {key:'atrTotal',label:'Atropine — Weight-Based Total Reference',formula:'0.04 mg/kg',unit:'mg',perKg:.04,note:'GFD protocol also states Atropine 0.5 mg IV every 3–5 min, repeat to a total dose of 3 mg or 0.04 mg/kg.'}
@@ -1005,8 +1004,7 @@ const protocolDoseCalcs={
  {key:'benP',label:'Benadryl — Pediatric',formula:'1–2 mg/kg',unit:'mg',perKg:1,maxPerKg:2,special:'range'}
 ],
 'diltiazem-hcl-cardizem':[
- {key:'dilt1',label:'Diltiazem — Initial',formula:'0.25 mg/kg max 20 mg SIVP over 2 minutes',unit:'mg',perKg:.25,max:20,note:'For patients over age 70, decrease dose by 5 mg.'},
- {key:'dilt2',label:'Diltiazem — Second dose',formula:'0.35 mg/kg max 20 mg SIVP over 2 minutes',unit:'mg',perKg:.35,max:20,note:'If no response after 10 minutes. For patients over age 70, decrease dose by 5 mg.'}
+ {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,note:'For patients over age 70, GFD protocol says decrease dose by 5 mg.'}
 ],
 'dextrose':[
  {key:'d10gt8',label:'D10 — Children >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
@@ -1071,6 +1069,13 @@ function calcProtocolDose(pid,key){
  if(!c||!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
  const kg=u==='lb'?w/2.2046226218:w,raw=kg*c.perKg;let dose=raw;if(Number.isFinite(c.max))dose=Math.min(dose,c.max);if(Number.isFinite(c.min))dose=Math.max(dose,c.min);
  if(c.special==='fentanylRepeat'){const first=kg*c.perKg,maxTotal=first*2,fmt=n=>n.toFixed(n<10?2:1);out.innerHTML=kg.toFixed(1)+' kg × '+c.perKg+' '+c.unit+'/kg<br><strong>FIRST DOSE: '+fmt(first)+' '+c.unit+'</strong><div class="dose-note" style="margin-top:10px"><strong>⚠ MAX DOSE: '+fmt(maxTotal)+' '+c.unit+' TOTAL</strong><br>May repeat the first dose ×1.</div>';return}
+ if(c.special==='diltiazem'){
+   const initialRaw=kg*c.perKg,secondRaw=kg*c.secondPerKg;
+   const initial=Math.min(initialRaw,c.max),second=Math.min(secondRaw,c.secondMax);
+   const fmt=n=>n.toFixed(n<10?2:1);
+   out.innerHTML=kg.toFixed(1)+' kg<br><strong>INITIAL DOSE: '+fmt(initial)+' mg</strong><div class="dose-note">0.25 mg/kg • MAX 20 mg</div><div style="margin-top:10px"><strong>IF NO RESPONSE AFTER 10 MIN: '+fmt(second)+' mg</strong></div><div class="dose-note">0.35 mg/kg • MAX 20 mg</div>'+(c.note?'<div class="dose-note" style="margin-top:10px">'+esc(c.note)+'</div>':'');
+   return
+ }
  if(c.special==='range'||c.special==='rateRange'){
    const lowRaw=kg*c.perKg,highRaw=kg*c.maxPerKg;
    const low=Number.isFinite(c.max)?Math.min(lowRaw,c.max):lowRaw;
