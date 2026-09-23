@@ -99,13 +99,36 @@ async function loadPdf(){
    if(!window.pdfjsLib)throw new Error('PDF renderer unavailable');
    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
    const src=new URL(raw,location.href).href.split('#')[0];
-   pdfDoc=await pdfjsLib.getDocument(src).promise;
+
+   status.hidden=false;
+   status.textContent='Loading source protocol…';
+
+   let response;
+   try{
+     response=await fetch(src,{cache:'no-store'});
+     if(!response.ok)throw new Error('HTTP '+response.status);
+   }catch(networkError){
+     const cached=await caches.match(src);
+     if(!cached)throw networkError;
+     response=cached;
+   }
+
+   const bytes=new Uint8Array(await response.arrayBuffer());
+   if(bytes.byteLength<1000000)throw new Error('Protocol PDF download was incomplete.');
+
+   pdfDoc=await pdfjsLib.getDocument({
+     data:bytes,
+     disableRange:true,
+     disableStream:true,
+     disableAutoFetch:true
+   }).promise;
+
    if(start>pdfDoc.numPages)throw new Error('Assigned source page is outside the PDF');
    await renderPages();
  }catch(e){
    status.hidden=false;
    viewer.hidden=true;
-   status.innerHTML='<b>Unable to render the assigned source page range.</b><br>'+String(e&&e.message?e.message:e);
+   status.innerHTML='<b>Unable to render the assigned source page range.</b><br>'+String(e&&e.message?e.message:e)+'<br><span style="display:block;margin-top:8px">Return to the protocol and try the source view again. App reset should not be required.</span>';
  }
 }
 let resizeTimer=null;
