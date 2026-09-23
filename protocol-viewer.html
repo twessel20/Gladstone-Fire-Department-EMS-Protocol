@@ -14,9 +14,21 @@ iframe{border:0;width:100%;height:100%;display:block;background:white}
 <header><h1 id="title">GFD Source Protocol</h1><div class="sub" id="pageLabel"></div></header>
 <main><div class="bar"><button class="back" id="backBtn">‹ Back to Protocol</button><a id="openPdf" class="btn open" target="_blank" rel="noopener">Open PDF Page</a></div>
 <div class="frame"><iframe id="pdf" title="GFD source protocol page"></iframe></div>
-<div class="notice">Source view opens the official GFD protocol book at the exact page range assigned to this protocol. For multi-page references, the header identifies the applicable source range.</div></main>
+<div class="notice">Source view opens the configured GFD source document at the exact page range assigned to this protocol. Reference entries and protocol source links use this same viewer.</div></main>
 <script>
 const q=new URLSearchParams(location.search);
+const embed=q.get('embed')==='1';
+if(embed){
+  document.querySelector('header').style.display='none';
+  document.querySelector('.bar').style.display='none';
+  document.querySelector('.notice').style.display='none';
+  document.querySelector('main').style.maxWidth='none';
+  document.querySelector('main').style.padding='0';
+  document.querySelector('.frame').style.height='100vh';
+  document.querySelector('.frame').style.minHeight='0';
+  document.querySelector('.frame').style.border='0';
+  document.querySelector('.frame').style.borderRadius='0';
+}
 const protocol=q.get('protocol')||'';
 document.getElementById('backBtn').addEventListener('click',()=>{location.href='./index.html'+(protocol?'#'+encodeURIComponent(protocol):'');});
 const raw=q.get('src')||'updates/published/current-protocol-book.pdf';
