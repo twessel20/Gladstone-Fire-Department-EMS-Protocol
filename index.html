@@ -349,14 +349,7 @@ function pillCountFormHtml(){
     <small>Tap Month, Day, or Year and scroll to the date.</small>
    </div>
 
-   <div class="calc-field">
-    <label>Count date</label>
-    <div class="pc-scroll-date">
-     <select id="pcAsOfM" class="tool-input pc-scroll-select" aria-label="Count month"></select>
-     <select id="pcAsOfD" class="tool-input pc-scroll-select" aria-label="Count day"></select>
-     <select id="pcAsOfY" class="tool-input pc-scroll-select" aria-label="Count year"></select>
-    </div>
-   </div>
+   <div class="tool-note" id="pcCountDateNote"><b>Count date:</b> Today (automatic)</div>
 
    <button class="tool-btn" onclick="calcPillCount()">Calculate expected count</button>
    <div id="pcResult" class="tool-result" style="display:none"></div>
@@ -368,16 +361,12 @@ function initPillCountDates(){
  const monthOpts=months.map((m,i)=>'<option value="'+(i||'')+'">'+m+'</option>').join('');
  const dayOpts='<option value="">Day</option>'+Array.from({length:31},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'</option>').join('');
  const yearOpts='<option value="">Year</option>'+Array.from({length:16},(_,i)=>year+1-i).map(y=>'<option value="'+y+'">'+y+'</option>').join('');
- for(const p of ['pcStart','pcAsOf']){
-   const m=document.getElementById(p+'M'),d=document.getElementById(p+'D'),y=document.getElementById(p+'Y');
-   if(m&&!m.options.length)m.innerHTML=monthOpts;
-   if(d&&!d.options.length)d.innerHTML=dayOpts;
-   if(y&&!y.options.length)y.innerHTML=yearOpts;
- }
- const am=document.getElementById('pcAsOfM'),ad=document.getElementById('pcAsOfD'),ay=document.getElementById('pcAsOfY');
- if(am)am.value=String(now.getMonth()+1);
- if(ad)ad.value=String(now.getDate());
- if(ay)ay.value=String(year);
+ const m=document.getElementById('pcStartM'),d=document.getElementById('pcStartD'),y=document.getElementById('pcStartY');
+ if(m&&!m.options.length)m.innerHTML=monthOpts;
+ if(d&&!d.options.length)d.innerHTML=dayOpts;
+ if(y&&!y.options.length)y.innerHTML=yearOpts;
+ const note=document.getElementById('pcCountDateNote');
+ if(note)note.innerHTML='<b>Count date:</b> '+(now.getMonth()+1)+'/'+now.getDate()+'/'+now.getFullYear()+' (today — automatic)';
 }
 function pillCountFrequencyUI(){
  const mode=document.getElementById('pcFreqType')?.value;
@@ -387,9 +376,14 @@ function pillCountFrequencyUI(){
 }function pillCountReadDate(prefix){
  const m=Number(document.getElementById(prefix+'M')?.value),d=Number(document.getElementById(prefix+'D')?.value),y=Number(document.getElementById(prefix+'Y')?.value);
  if(!Number.isInteger(m)||m<1||m>12||!Number.isInteger(d)||d<1||d>31||!Number.isInteger(y)||y<2000||y>2100)return null;
- const dt=new Date(y,m-1,d,12,0,0,0);
- if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)return null;
- return dt;
+ const utc=Date.UTC(y,m-1,d);
+ const check=new Date(utc);
+ if(check.getUTCFullYear()!==y||check.getUTCMonth()!==m-1||check.getUTCDate()!==d)return null;
+ return utc;
+}
+function pillCountTodayDate(){
+ const now=new Date();
+ return Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
 }
 function showPatientMedPillCount(){
  const host=document.getElementById('patientMedToolResult');
@@ -768,11 +762,11 @@ function calcPillCount(){
  const perDay=Number(document.getElementById('pcPerDay')?.value);
  const everyHours=Number(document.getElementById('pcHours')?.value);
  const start=pillCountReadDate('pcStart');
- const asOf=pillCountReadDate('pcAsOf');
+ const asOf=pillCountTodayDate();
  if(!Number.isFinite(qty)||qty<0||!Number.isFinite(remain)||remain<0||!Number.isFinite(perDose)||perDose<=0){
   out.style.display='block';out.innerHTML='<b>Enter valid quantity, remaining count, and pills per dose.</b>';return;
  }
- if(!start||!asOf){out.style.display='block';out.innerHTML='<b>Enter valid dates as MM / DD / YYYY.</b>';return}
+ if(start===null){out.style.display='block';out.innerHTML='<b>Enter a valid prescription start date.</b>';return}
  if(asOf<start){out.style.display='block';out.innerHTML='<b>The count date must be on or after the prescription start date.</b>';return}
  let intervalHours;
  if(mode==='hours'){
