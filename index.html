@@ -956,31 +956,88 @@ function formatMedication(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!sameTitle(l,x.title));
- const headingRx=/^(PHARMACOLOGY AND ACTIONS|PHARMACOLOGY|CLASS|ACTIONS|INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|SIDE EFFECTS|ADVERSE REACTIONS|DOSE|DOSES|DOSAGE|DOSAGE\/ADMINISTRATION|ADMINISTRATION|ROUTE|ROUTES|PROTOCOL USED IN|PROTOCOLS USED IN|PROTOCOL PAGES|SPECIAL CONSIDERATIONS|PHARMACOKINETICS)\s*:?$/i;
- const listRx=/^(INDICATIONS|CONTRAINDICATIONS|PRECAUTIONS|SIDE EFFECTS|ADVERSE REACTIONS|PROTOCOL USED IN|PROTOCOLS USED IN)$/;
- const doseRx=/^(DOSE|DOSES|DOSAGE|DOSAGE\/ADMINISTRATION|ADMINISTRATION)$/;
- const routeRx=/^(ROUTE|ROUTES)$/;
- const doseLeadRx=/^(VF\/PULSELESS VT|WIDE COMPLEX TACH|ADULTS?|PEDS|PEDIATRICS?|CONTACT MEDICAL CONTROL)\s*:?/i;
- let html='',section='';
+
+ const headMap=[
+  ['PHARMACOLOGY & ACTIONS','Pharmacology & Actions'],
+  ['PHARMACOLOGY AND ACTIONS','Pharmacology & Actions'],
+  ['PHARMACOLOGY','Pharmacology'],
+  ['CLASS OF DRUG','Class of Drug'],
+  ['CLASS','Class'],
+  ['THERAPEUTIC EFFECTS','Therapeutic Effects'],
+  ['INDICATIONS','Indications'],
+  ['CONTRAINDICATIONS','Contraindications'],
+  ['PRECAUTIONS','Precautions'],
+  ['DRUG INTERACTION','Drug Interaction'],
+  ['DRUG INTERACTIONS','Drug Interactions'],
+  ['SIDE EFFECTS & SPECIAL NOTES','Side Effects & Special Notes'],
+  ['SIDE EFFECTS AND SPECIAL NOTES','Side Effects & Special Notes'],
+  ['SIDE EFFECTS','Side Effects'],
+  ['ADVERSE REACTIONS','Adverse Reactions'],
+  ['ADMINISTRATION','Administration'],
+  ['DOSAGE/ADMINISTRATION','Dosage / Administration'],
+  ['DOSAGE','Dose'],
+  ['DOSES','Dose'],
+  ['DOSE','Dose'],
+  ['PEDIATRIC DOSE','Pediatric Dose'],
+  ['PEDIATRIC/NEONATAL DOSE','Pediatric / Neonatal Dose'],
+  ['ROUTES','Route'],
+  ['ROUTE','Route'],
+  ['SPECIAL CONSIDERATIONS','Special Considerations'],
+  ['SPECIAL NOTES','Special Notes'],
+  ['PHARMACOKINETICS','Pharmacokinetics'],
+  ['PROTOCOL USED IN','Protocol Used In'],
+  ['PROTOCOLS USED IN','Protocols Used In'],
+  ['PROTOCOL PAGES','Protocol Pages']
+ ];
+ const canon=s=>normText(s||'').replace(/:$/,'').trim().toUpperCase();
+ const lookup=new Map(headMap.map(v=>[canon(v[0]),v[1]]));
+ const sections=[];
+ let current=null;
+ function getSection(label){
+   const key=label||'Notes';
+   if(current&&current.label===key)return current;
+   current={label:key,items:[]};
+   sections.push(current);
+   return current;
+ }
+
  for(let i=0;i<raw.length;i++){
    let t=raw[i];
-   if(headingRx.test(t)){section=t.replace(/:$/,'').toUpperCase();html+='<div class="med-label">'+esc(t.replace(/:$/,''))+'</div>';continue}
-   while(i+1<raw.length&&!headingRx.test(raw[i+1])){
-     const n=raw[i+1];
-     // Only repair unmistakable PDF line wraps. Never merge separate list entries.
-     if(doseRx.test(section)&&/^(minutes?|mg|mcg|mL|mEq|IV|IO|IM|IN)\b/i.test(n)){t=normText(t+' '+n);i++;continue}
-     if(!listRx.test(section)&&!doseRx.test(section)&&!routeRx.test(section)&&!/[.!?;:]$/.test(t)&&/^[a-z(]/.test(n)){t=normText(t+' '+n);i++;continue}
-     break;
+   const colon=t.indexOf(':');
+   if(colon>0){
+     const prefix=canon(t.slice(0,colon));
+     const label=lookup.get(prefix);
+     if(label){
+       const s=getSection(label),rest=normText(t.slice(colon+1));
+       if(rest)s.items.push(rest);
+       continue;
+     }
    }
-   if(/^(ADULTS?|PEDS|PEDIATRICS?)\s*:?$/i.test(t)){html+='<div class="med-subhead">'+esc(t.replace(/:$/,''))+'</div>';continue}
-   if(/^[•▪]$/.test(t)&&raw[i+1]){html+='<div class="med-item">'+esc(raw[++i])+'</div>';continue}
-   let cls='med-text';
-   if(listRx.test(section))cls='med-item';
-   else if(doseRx.test(section))cls=doseLeadRx.test(t)?'med-dose':'med-dose';
-   else if(routeRx.test(section))cls='med-text';
-   html+='<div class="'+cls+'">'+esc(t)+'</div>';
+   const label=lookup.get(canon(t));
+   if(label){getSection(label);continue}
+   if(/^(ADULTS?|PEDS|PEDIATRICS?|NEONATAL)\s*:?$/i.test(t)){
+     getSection(current?.label||'Dose').items.push({html:'<b>'+esc(t.replace(/:$/,''))+'</b>'});
+     continue;
+   }
+   getSection(current?.label||'Notes').items.push({text:t});
  }
- return '<div class="med-section">'+html+'</div>';
+
+ const calcHtml=(protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id])?protocolDoseTools(x):'';
+ let lastDose=-1;
+ sections.forEach((s,i)=>{if(/dose|administration/i.test(s.label))lastDose=i});
+ let rows='';
+ sections.forEach((s,i)=>{
+   if(!s.items.length)return;
+   const vals=s.items.map(v=>v&&v.html?'<div>'+v.html+'</div>':'<div>'+esc(v&&v.text!==undefined?v.text:v)+'</div>').join('');
+   rows+='<div class="source-med-row"><div class="source-med-label">'+esc(s.label)+':</div><div class="source-med-value">'+vals+'</div></div>';
+   if(calcHtml&&i===lastDose){
+     rows+='<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value">'+calcHtml+'</div></div>';
+   }
+ });
+ if(calcHtml&&lastDose<0){
+   rows+='<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value">'+calcHtml+'</div></div>';
+ }
+ return '<div class="source-med-sheet"><div class="source-med-title">'+esc(x.title)+'</div>'+rows+'</div>';
 }
 const protocolDoseCalcs={
 'narrow-complex-tachydysrhythmias':[
@@ -1773,7 +1830,7 @@ function toggleInlineProtocolTool(which,btn){
 function openP(id){
  let x=data.find(z=>z.id===id);if(!x)return;
  location.hash=id;document.querySelector('#list').classList.add('off');
- let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+formatProtocol(x)+(x.id==='dextrose'?'':protocolDoseTools(x))),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x)),roleText='Gladstone ALS field reference — showing the complete protocol.',modeClass='als',modeText='ALS PROTOCOL VIEW';
+ let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+formatProtocol(x)+(x.category==='Medications'||x.id==='dextrose'?'':protocolDoseTools(x))),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x)),roleText='Gladstone ALS field reference — showing the complete protocol.',modeClass='als',modeText='ALS PROTOCOL VIEW';
  document.querySelector('#detail').innerHTML=`<button class="back" onclick="closeP()">‹ Back</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div><div class="protocol-mode ${modeClass}"><span class="dot"></span>${modeText}</div><div class="role-note"><b>${esc(roleText)}</b></div>${relatedAppendixHtml(x)}${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div></div>`;
  document.querySelector('#detail').classList.add('on');
  if(x.id==='burns')renderBurnMap();
