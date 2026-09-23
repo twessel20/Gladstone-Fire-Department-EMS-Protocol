@@ -26,6 +26,7 @@
 .protocol-body,.source-med-value,.flow-node,.flow-branch,.dose-note,.notice{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .protocol-body{font-size:16px;line-height:1.5}
 .protocol-body button,.source-med-sheet button{white-space:normal;overflow-wrap:break-word}
+.cbc-grid{display:grid;gap:10px;margin-top:12px}.cbc-row{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:12px 13px}.cbc-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.cbc-name{font-weight:900;color:#173a5e;font-size:16px}.cbc-range{font-weight:850;color:#334155;font-size:14px;text-align:right}.cbc-meaning{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.cbc-low,.cbc-high{border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4}.cbc-low{background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a}.cbc-high{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}.cbc-low b,.cbc-high b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}.cbc-note{font-size:12px;line-height:1.5;color:#475569;background:#f8fafc;border:1px solid #dbe4ee;border-radius:10px;padding:10px 11px;margin-top:10px}.cbc-section-title{font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b;margin-top:16px}.cbc-sex-grid{display:grid;gap:5px;margin-top:5px}.cbc-sex-grid div{font-size:13px;color:#334155}@media(max-width:520px){.cbc-head{display:block}.cbc-range{text-align:left;margin-top:3px}.cbc-meaning{grid-template-columns:1fr}}
 .guideline-sheet{display:grid;gap:10px}
 .guideline-card{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:13px 14px;box-shadow:0 1px 3px #0000000d}
 .guideline-card .section{margin:0 0 9px;padding:8px 10px;border-radius:9px;background:#eef6ff;border-left:4px solid #2f6690;color:#173a5e;font-size:13px;font-weight:900;letter-spacing:.02em;text-transform:uppercase}
@@ -641,6 +642,12 @@ function renderTools(){
       </div>
 
       <div class="tool-card">
+        <h3>🧪 Lab & Reference</h3>
+        <div class="tool-note">Quick interpretation guides for common laboratory values.</div>
+        <button class="tool-launch" onclick="openToolCard('cbc')"><span class="tool-launch-icon">🩸</span><span><b>CBC Reference Guide</b><small>Typical adult CBC ranges with low/high field interpretation</small></span><span class="tool-chevron">›</span></button>
+      </div>
+
+      <div class="tool-card">
         <h3>☎️ Important Phone Numbers</h3>
         <div class="tool-note">Tap a number to call directly from a mobile device.</div>
         <button class="tool-launch" onclick="openToolCard('phones')"><span class="tool-launch-icon">☎️</span><span><b>Important Phone Numbers</b><small>Poison Control and other critical contacts</small></span><span class="tool-chevron">›</span></button>
@@ -660,6 +667,41 @@ function openToolCard(which){
  const host=document.querySelector('#toolDetail');
  document.querySelector('.tool-menu').style.display='none';
  const back='<button class="back tool-back sticky-back" onclick="toolBack()">‹ Back to Tools</button>';
+ if(which==='cbc')host.innerHTML=back+`
+   <div class="tool-card">
+    <h3>🩸 CBC Reference Guide</h3>
+    <div class="tool-note"><b>Typical adult reference ranges.</b> Use the reference interval printed by the reporting laboratory when available. Ranges vary by lab, age, sex/hormonal status, pregnancy, and methodology.</div>
+
+    <div class="cbc-section-title">White Blood Cells</div>
+    <div class="cbc-grid">
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">WBC</div><div class="cbc-range">4.0–10.0 K/µL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Leukopenia — may occur with marrow suppression, some infections, autoimmune disease, or medications.</div><div class="cbc-high"><b>High</b>Leukocytosis — commonly seen with infection, inflammation, physiologic stress, steroids, or hematologic disease.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">Neutrophils — absolute</div><div class="cbc-range">2.5–7.0 K/µL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Neutropenia — reduced bacterial defense; severity depends on the absolute neutrophil count.</div><div class="cbc-high"><b>High</b>Neutrophilia — often associated with bacterial infection, inflammation, stress, or corticosteroid effect.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">Lymphocytes — absolute</div><div class="cbc-range">1.0–4.8 K/µL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Lymphopenia — can occur with acute illness, steroids, immune disorders, or some infections.</div><div class="cbc-high"><b>High</b>Lymphocytosis — often seen with viral illness and some lymphoproliferative disorders.</div></div></div>
+    </div>
+
+    <div class="cbc-section-title">Red Blood Cells / Oxygen-Carrying Capacity</div>
+    <div class="cbc-grid">
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">RBC</div><div class="cbc-range">Female/estrogen: 4.0–5.4 M/µL<br>Male/testosterone: 4.5–6.1 M/µL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>May support anemia, blood loss, nutritional deficiency, kidney disease, or marrow disorder.</div><div class="cbc-high"><b>High</b>May reflect dehydration, chronic hypoxemia, or erythrocytosis/polycythemia.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">Hemoglobin (Hgb)</div><div class="cbc-range">Female/estrogen: 11.5–15.5 g/dL<br>Male/testosterone: 13–17 g/dL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Anemia / reduced oxygen-carrying capacity; consider blood loss in the appropriate clinical setting.</div><div class="cbc-high"><b>High</b>May reflect hemoconcentration/dehydration or increased red-cell mass.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">Hematocrit (Hct)</div><div class="cbc-range">Female/estrogen: 36–48%<br>Male/testosterone: 40–55%</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Often tracks with anemia or hemodilution.</div><div class="cbc-high"><b>High</b>May reflect dehydration or increased red-cell mass.</div></div></div>
+    </div>
+
+    <div class="cbc-section-title">Red Cell Indices</div>
+    <div class="cbc-grid">
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">MCV</div><div class="cbc-range">80–100 fL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Microcytic pattern — commonly associated with iron deficiency or thalassemia.</div><div class="cbc-high"><b>High</b>Macrocytic pattern — may occur with B12/folate deficiency, alcohol use, liver disease, or certain medications.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">MCH</div><div class="cbc-range">27–31 pg</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Lower hemoglobin content per red cell; often accompanies microcytosis.</div><div class="cbc-high"><b>High</b>Often accompanies larger red cells; interpret with MCV/MCHC.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">MCHC</div><div class="cbc-range">32–36 g/dL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Hypochromic pattern — commonly seen with iron deficiency.</div><div class="cbc-high"><b>High</b>Less common; may occur with spherocytosis, hemolysis, or analytic artifact.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">RDW</div><div class="cbc-range">12–15%</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Usually not clinically significant by itself.</div><div class="cbc-high"><b>High</b>Greater variation in RBC size; can support mixed or evolving anemia patterns.</div></div></div>
+    </div>
+
+    <div class="cbc-section-title">Platelets</div>
+    <div class="cbc-grid">
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">Platelets</div><div class="cbc-range">150–400 K/µL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Thrombocytopenia — increased bleeding risk as the count falls; correlate with clinical bleeding and the lab's thresholds.</div><div class="cbc-high"><b>High</b>Thrombocytosis — may be reactive to infection/inflammation or related to a hematologic disorder.</div></div></div>
+      <div class="cbc-row"><div class="cbc-head"><div class="cbc-name">MPV</div><div class="cbc-range">7–9 fL</div></div><div class="cbc-meaning"><div class="cbc-low"><b>Low</b>Smaller average platelet size; nonspecific alone.</div><div class="cbc-high"><b>High</b>Larger/younger platelets may reflect increased platelet turnover.</div></div></div>
+    </div>
+
+    <div class="cbc-note"><b>Field reference only:</b> A CBC does not diagnose a condition by itself. Interpret the trend, patient presentation, bleeding/infection risk, and the reporting lab's own reference range. Pediatric ranges are age-dependent and are not represented by these adult values.</div>
+   </div>`;
  if(which==='phones')host.innerHTML=back+`
    <div class="tool-card"><h3>☎️ Important Phone Numbers</h3>
    <div class="tool-note">Tap a number to call directly. Additional department, hospital, Medical Control, burn, or pediatric contacts can be added here as needed.</div>
@@ -1140,6 +1182,7 @@ const searchableTools=[
  {id:'pillid',title:'Pill Identifier',icon:'💊',terms:'pill identifier imprint color shape unknown medication overdose altered mental status tablet capsule',desc:'Identify an unknown tablet or capsule by imprint, color, and shape'},
  {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg infant pediatric pals broselow',desc:'Adult, pediatric, and infant cardiac-arrest dose calculator'},
  {id:'diltiazem',title:'Diltiazem Dose',icon:'💉',terms:'diltiazem cardizem dose afib atrial fibrillation flutter rvr age dob weight',desc:'DOB or typed age with initial and second weight-based dose'},
+ {id:'cbc',title:'CBC Reference Guide',icon:'🩸',terms:'cbc complete blood count lab laboratory values reference wbc white blood cells leukocytes leukopenia leukocytosis rbc red blood cells hemoglobin hgb hematocrit hct anemia platelets thrombocytopenia thrombocytosis mcv mch mchc rdw mpv neutrophils lymphocytes low high normal range',desc:'Typical adult CBC reference ranges with low/high interpretation'},
  {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, and critical contacts'}
 ];
 function toolSearchResults(query){
