@@ -908,7 +908,7 @@ function formatMedication(x){
 }
 const protocolDoseCalcs={
 'narrow-complex-tachydysrhythmias':[
- {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,note:'For patients over age 70, GFD protocol says decrease dose by 5 mg.'}
+ {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,ageRequired:true,ageThreshold:70,ageAdjustment:-5,note:'For patients over age 70, GFD protocol says decrease each Diltiazem dose by 5 mg.'}
 ],
 'bradycardia-algorithm':[
  {key:'atrTotal',label:'Atropine — Weight-Based Total Reference',formula:'0.04 mg/kg',unit:'mg',perKg:.04,note:'GFD protocol also states Atropine 0.5 mg IV every 3–5 min, repeat to a total dose of 3 mg or 0.04 mg/kg.'}
@@ -935,20 +935,17 @@ const protocolDoseCalcs={
  {key:'fluid',label:'Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'For hypotension if lung sounds are clear.'}
 ],
 'behavioral-psychiatric-disorders':[
- {key:'d10gt8',label:'D10 — Pediatric >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
- {key:'d10lt8',label:'D10 — Pediatric <8 years',formula:'1 mL/kg IV',unit:'mL',perKg:1}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
 ],
 'coma-or-confusion-of-unknown-origin':[
- {key:'d10gt8',label:'D10 — Pediatric >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
- {key:'d10lt8',label:'D10 — Pediatric <8 years',formula:'1 mL/kg IV',unit:'mL',perKg:1}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
 ],
 'dehydration':[
  {key:'fluid',label:'Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'GFD: if lung sounds are clear. Pediatric protocol also states consider 20 mL/kg bolus.'}
 ],
 'diabetic-emergencies':[
  {key:'fluid',label:'NS Bolus — Hyperglycemia',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'For blood glucose over 400 mg/dL; use caution in CHF patients.'},
- {key:'d10gt8',label:'D10 — >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
- {key:'d10lt8',label:'D10 — <8 years',formula:'1 mL/kg IV',unit:'mL',perKg:1}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
 ],
 'hyper-agitated-delirium-syndrome':[
  {key:'ket',label:'Ketamine IM',formula:'3–5 mg/kg IM, max 500 mg',unit:'mg',perKg:3,maxPerKg:5,max:500,special:'range',note:'Contact Medical Control for further doses.'},
@@ -961,12 +958,10 @@ const protocolDoseCalcs={
  {key:'fluid',label:'NS Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'If lung sounds are clear; use caution if cardiac origin is suspected.'}
 ],
 'hyperthermia':[
- {key:'d10gt8',label:'D10 — >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
- {key:'d10lt8',label:'D10 — <8 years',formula:'1 mL/kg IV',unit:'mL',perKg:1}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
 ],
 'hypothermia':[
- {key:'d10gt8',label:'D10 — >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
- {key:'d10lt8',label:'D10 — <8 years',formula:'1 mL/kg IV',unit:'mL',perKg:1}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
 ],
 'nausea-vomiting':[
  {key:'fluid',label:'Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'GFD: for BP <90 mmHg and lung sounds must be clear.'}
@@ -998,17 +993,16 @@ const protocolDoseCalcs={
  {key:'fentP',label:'Fentanyl — Pediatric',formula:'1–2 mcg/kg',unit:'mcg',perKg:1,maxPerKg:2,special:'range'}
 ],
 'albuterol-and-atrovent-duoneb':[
- {key:'albInfant',label:'Albuterol — Infant <1 year',formula:'0.03 mL/kg nebulized, max 1 mL',unit:'mL',perKg:.03,max:1}
+ {key:'albInfant',label:'Albuterol — Infant <1 year',formula:'0.03 mL/kg nebulized, max 1 mL',unit:'mL',perKg:.03,max:1,special:'infantAlbuterol',ageRequired:true,note:'GFD medication page lists this weight-based dose for infants under 1 year.'}
 ],
 'benadryl-diphenhydramine':[
  {key:'benP',label:'Benadryl — Pediatric',formula:'1–2 mg/kg',unit:'mg',perKg:1,maxPerKg:2,special:'range'}
 ],
 'diltiazem-hcl-cardizem':[
- {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,note:'For patients over age 70, GFD protocol says decrease dose by 5 mg.'}
+ {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,ageRequired:true,ageThreshold:70,ageAdjustment:-5,note:'For patients over age 70, GFD protocol says decrease each Diltiazem dose by 5 mg.'}
 ],
 'dextrose':[
- {key:'d10gt8',label:'D10 — Children >8 years',formula:'2 mL/kg IV',unit:'mL',perKg:2},
- {key:'d10lt8',label:'D10 — Children <8 years',formula:'1 mL/kg IV',unit:'mL',perKg:1}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
 ],
 'dopamine':[
  {key:'dop',label:'Dopamine Infusion Dose',formula:'2–10 mcg/kg/min',unit:'mcg/min',perKg:2,maxPerKg:10,special:'rateRange',note:'GFD: Type II second-degree / third-degree AV block or hypotension of cardiac origin; titrate hypotension to BP 100.'}
@@ -1062,18 +1056,38 @@ const medicationDoseCalcs={
 };
 function protocolDoseTools(x){
  const cs=protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id];if(!cs)return '';
- return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Weight-Based Dose Calculator</h4><div class="dose-note" style="margin-bottom:10px">Protocol dosing calculator — enter patient weight in lb or kg.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,maxText=c.special==='fentanylRepeat'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight"><select id="'+id+'-u"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the weight-based dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+ return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Weight-Based Dose Calculator</h4><div class="dose-note" style="margin-bottom:10px">Protocol dosing calculator — enter patient weight in lb or kg.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,maxText=c.special==='fentanylRepeat'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight"><select id="'+id+'-u"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the weight-based dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 function calcProtocolDose(pid,key){
  const c=((protocolDoseCalcs[pid]||medicationDoseCalcs[pid])||[]).find(v=>v.key===key),id='dc-'+pid+'-'+key,out=document.getElementById(id+'-o'),w=parseFloat(document.getElementById(id+'-w').value),u=document.getElementById(id+'-u').value;
  if(!c||!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
+ const ageEl=document.getElementById(id+'-a'),age=ageEl?parseFloat(ageEl.value):null;
+ if(c.ageRequired&&(!Number.isFinite(age)||age<0)){out.innerHTML='<b>Enter a valid patient age.</b>';return}
  const kg=u==='lb'?w/2.2046226218:w,raw=kg*c.perKg;let dose=raw;if(Number.isFinite(c.max))dose=Math.min(dose,c.max);if(Number.isFinite(c.min))dose=Math.max(dose,c.min);
  if(c.special==='fentanylRepeat'){const first=kg*c.perKg,maxTotal=first*2,fmt=n=>n.toFixed(n<10?2:1);out.innerHTML=kg.toFixed(1)+' kg × '+c.perKg+' '+c.unit+'/kg<br><strong>FIRST DOSE: '+fmt(first)+' '+c.unit+'</strong><div class="dose-note" style="margin-top:10px"><strong>⚠ MAX DOSE: '+fmt(maxTotal)+' '+c.unit+' TOTAL</strong><br>May repeat the first dose ×1.</div>';return}
  if(c.special==='diltiazem'){
-   const initialRaw=kg*c.perKg,secondRaw=kg*c.secondPerKg;
-   const initial=Math.min(initialRaw,c.max),second=Math.min(secondRaw,c.secondMax);
+   const older=age>c.ageThreshold;
+   const adjust=older?c.ageAdjustment:0;
+   const initialBase=Math.min(kg*c.perKg,c.max),secondBase=Math.min(kg*c.secondPerKg,c.secondMax);
+   const initial=Math.max(0,initialBase+adjust),second=Math.max(0,secondBase+adjust);
    const fmt=n=>n.toFixed(n<10?2:1);
-   out.innerHTML=kg.toFixed(1)+' kg<br><strong>INITIAL DOSE: '+fmt(initial)+' mg</strong><div class="dose-note">0.25 mg/kg • MAX 20 mg</div><div style="margin-top:10px"><strong>IF NO RESPONSE AFTER 10 MIN: '+fmt(second)+' mg</strong></div><div class="dose-note">0.35 mg/kg • MAX 20 mg</div>'+(c.note?'<div class="dose-note" style="margin-top:10px">'+esc(c.note)+'</div>':'');
+   out.innerHTML='<div><b>AGE: '+age+' years</b>'+(older?' • <b>GFD AGE ADJUSTMENT APPLIED: -5 mg</b>':' • No age reduction')+'</div>'+
+     '<div style="margin-top:10px"><strong>INITIAL DOSE: '+fmt(initial)+' mg</strong></div>'+
+     '<div class="dose-note">0.25 mg/kg • MAX 20 mg'+(older?' • then reduce 5 mg for age >70':'')+'</div>'+
+     '<div style="margin-top:10px"><strong>IF NO RESPONSE AFTER 10 MIN: '+fmt(second)+' mg</strong></div>'+
+     '<div class="dose-note">0.35 mg/kg • MAX 20 mg'+(older?' • then reduce 5 mg for age >70':'')+'</div>';
+   return
+ }
+ if(c.special==='d10Age'){
+   if(age===8){out.innerHTML='<b>GFD source specifies &lt;8 years = 1 mL/kg and &gt;8 years = 2 mL/kg, but does not specify exactly age 8. Verify the source / Medical Control rather than guessing.</b>';return}
+   const pk=age<8?1:2,d=kg*pk;
+   out.innerHTML='<b>AGE: '+age+' years</b><br>'+kg.toFixed(1)+' kg × '+pk+' mL/kg<br><strong>D10 DOSE: '+d.toFixed(d<10?2:1)+' mL IV</strong><div class="dose-note">'+(age<8?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
+   return
+ }
+ if(c.special==='infantAlbuterol'){
+   if(age>=1){out.innerHTML='<b>This weight-based dose is listed by GFD only for infants under 1 year.</b><div class="dose-note">For adults and children over 1 year, refer to the fixed nebulizer dose printed in the medication protocol. The source does not define the exact 1-year boundary.</div>';return}
+   const d=Math.min(kg*c.perKg,c.max);
+   out.innerHTML='<b>AGE: '+age+' years</b><br>'+kg.toFixed(1)+' kg × 0.03 mL/kg<br><strong>NEBULIZER VOLUME: '+d.toFixed(2)+' mL</strong><div class="dose-note"><b>MAX: 1 mL</b></div>';
    return
  }
  if(c.special==='range'||c.special==='rateRange'){
