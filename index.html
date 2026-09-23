@@ -28,12 +28,12 @@
 .guideline-sheet{display:grid;gap:10px}
 .guideline-card{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:13px 14px;box-shadow:0 1px 3px #0000000d}
 .guideline-card .section{margin:0 0 9px;padding:8px 10px;border-radius:9px;background:#eef6ff;border-left:4px solid #2f6690;color:#173a5e;font-size:13px;font-weight:900;letter-spacing:.02em;text-transform:uppercase}
-.guideline-card .line{line-height:1.5}
+.guideline-card .line{line-height:1.5;white-space:normal;overflow-wrap:break-word;word-break:normal;min-width:0}
 .guideline-card .para{margin:8px 0}
 .guideline-card .bullet{margin:8px 0;padding-left:25px}
 .guideline-card .subbullet{margin:6px 0;padding-left:42px}
 .guideline-card .subsub{margin:5px 0;padding-left:58px}
-.guideline-card .guideline-contact{background:#f8fafc;border:1px solid #dbe4ee;border-radius:9px;padding:9px 10px;margin:7px 0;font-weight:750;color:#173a5e}
+.guideline-card .guideline-contact{background:#f8fafc;border:1px solid #dbe4ee;border-radius:9px;padding:9px 10px;margin:7px 0;font-weight:750;color:#173a5e;white-space:normal;overflow-wrap:break-word;word-break:normal}
 @media(max-width:520px){.guideline-card{padding:11px 12px}.guideline-card .subbullet{padding-left:34px}.guideline-card .subsub{padding-left:46px}}
 .workflow-sheet{display:grid;gap:0;margin:8px 0 18px}
 .workflow-node{background:#fff;border:1px solid #cbd5e1;border-left:5px solid #2f6690;border-radius:12px;padding:13px 14px;min-width:0}
@@ -2054,17 +2054,43 @@ function controlledSubstancePage21(){
 }
 function guidelineDisplayText(v){
  return normText(v)
+   .replace(/[￾�]/g,'-')
    .replace(/\bwhould\b/gi,'would')
    .replace(/\bcurrenty\b/gi,'current')
    .replace(/\bBrain Bledsoe\b/g,'Bryan Bledsoe')
-   .replace(/Non[\uFFFE\uFFFD-]?professionals/gi,'Non-professionals')
+   .replace(/Non-?professionals/gi,'Non-professionals')
+   .replace(/\bre-?secured\b/gi,'re-secured')
+   .replace(/\bsupercede\b/gi,'supersede')
    .replace(/\b08\/17\s+\/2026\b/g,'08/17/2026')
    .replace(/\bFire \/ EMS\b/g,'Fire/EMS')
+   .replace(/\bknowledge \/ skills\b/gi,'knowledge/skills')
    .replace(/\boff going\b/gi,'off-going')
    .replace(/\bon coming\b/gi,'on-coming')
-   .replace(/\b20 minutes\b/g,'20 minutes')
+   .replace(/\bon duty\b/gi,'on-duty')
+   .replace(/\boff duty\b/gi,'off-duty')
+   .replace(/\brestocked \/ resealed\b/gi,'restocked/resealed')
+   .replace(/\bphotocopy \/ fax\b/gi,'photocopy/fax')
+   .replace(/\bparent \/ caregiver\b/gi,'parent/caregiver')
    .replace(/\b10\.The\b/g,'10. The')
    .replace(/\b11\.Attending\b/g,'11. Attending')
+   .replace(/\bas well requests\b/gi,'as well as requests')
+   .replace(/shall include but not necessarily limited to/gi,'shall include, but not necessarily be limited to')
+   .replace(/shall include but not limited to/gi,'shall include, but not be limited to')
+   .replace(/,?\s+or etc\.,?/gi,', etc.')
+   .replace(/\bshift\.\(CC\b/g,'shift. (CC')
+   .replace(/\bPhysician giving order\b/g,'Physician giving the order')
+   .replace(/\bResp rate\b/g,'Respiratory rate')
+   .replace(/\bSt\. Lukes\b/g,"St. Luke's")
+   .replace(/\bw\/o\b/gi,'without')
+   .replace(/\bpt\b/g,'patient')
+   .replace(/\bminimum criterion required\b/gi,'minimum criteria required')
+   .replace(/\ball criteria is\b/gi,'all criteria are')
+   .replace(/\bneglect of abuse\b/gi,'neglect or abuse')
+   .replace(/\battending paramedics report\b/gi,"attending paramedic's report")
+   .replace(/\bFAQ’s\b/g,'FAQs')
+   .replace(/\bMPR’s\b/g,'MPRs')
+   .replace(/\bIV’s\b/g,'IVs')
+   .replace(/\s+-\s+/g,' — ')
    .replace(/\s+([,.;:])/g,'$1')
    .replace(/\s{2,}/g,' ')
    .trim();
@@ -2072,9 +2098,10 @@ function guidelineDisplayText(v){
 function formatGuidelineSource(x){
  const raw=(x.lines||[]).map(guidelineDisplayText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
-   .filter(l=>!sameTitle(l,x.title));
+   .filter(l=>!sameTitle(l,x.title))
+   .filter((l,i,a)=>!(x.id==='do-not-resuscitate-advanced-directives-emergency-order-sets'&&i<2&&(/Emergency Order$/i.test(l)||/^Sets$/i.test(l))));
  let html='';
- const headingRx=/^(GUIDELINES?|DOCUMENTATION|PROCEDURES?|PURPOSE|INDICATIONS|CONTRAINDICATIONS|NOTES|POLICY|NO RIGHT TO REFUSE|STANDARD PRECAUTIONS|CONTACT PRECAUTIONS|DROPLET PRECAUTIONS|AIRBORNE PRECAUTIONS|SPECIAL RESPIRATORY PRECAUTIONS|EVD\/VHF PRECAUTIONS|GENERAL ROUTING|STEMI ROUTING|STROKE ROUTING|TRAUMA ROUTING|PEDIATRIC ROUTING|DUTY TO REPORT|ASSESSMENT\/TREATMENT|NOTIFICATION|INCLUSION CRITERIA|EXCLUSION CRITERIA|TRAUMA RELATED|MEDICAL RELATED|NON-EMERGENCY RESPONSE|EMERGENCY RESPONSES?|MEDICAL DIRECTORS? STATEMENT OF APPROVAL AND COMPLIANCE|BI-ANNUAL CERTIFICATION|MINIMUM PERFORMANCE REQUIREMENTS(?: \(MPR'?S\))?|TRANSPORTABLE PHYSICIAN ORDERS FOR PATIENT PREFERENCES \(TPOPP\)|ADVANCED DIRECTIVES|DO-NOT-RESUSCITATE \(DNR\)|PROCEDURE FOR DOCUMENTATION)\s*:?\s*$/i;
+ const headingRx=/^(GUIDELINES?|DOCUMENTATION|PROCEDURES?|PURPOSE|INDICATIONS|CONTRAINDICATIONS|NOTES?|POLICY|NO RIGHT TO REFUSE|STANDARD PRECAUTIONS|CONTACT PRECAUTIONS|DROPLET PRECAUTIONS|AIRBORNE PRECAUTIONS|SPECIAL RESPIRATORY PRECAUTIONS|EVD\/VHF PRECAUTIONS|GENERAL ROUTING|STEMI ROUTING|STROKE ROUTING|TRAUMA ROUTING|PEDIATRIC ROUTING|DUTY TO REPORT|ASSESSMENT\/TREATMENT|NOTIFICATION|INCLUSION CRITERIA|EXCLUSION CRITERIA|TRAUMA RELATED|MEDICAL RELATED|NON-EMERGENCY RESPONSE|EMERGENCY RESPONSES?|MEDICAL DIRECTORS? STATEMENT OF APPROVAL AND COMPLIANCE|BI-ANNUAL CERTIFICATION|MINIMUM PERFORMANCE REQUIREMENTS(?: \(MPR'?S\))?|MINIMUM PERFORMANCE STANDARDS(?: \(MPS\))?|TRANSPORTABLE PHYSICIAN ORDERS FOR PATIENT PREFERENCES \(TPOPP\)|ADVANCED DIRECTIVES|DO-NOT-RESUSCITATE \(DNR\)|PROCEDURE FOR DOCUMENTATION|BROKEN SEAL PROCEDURE|EXPIRED MEDICATION PROCEDURE|TRAUMA ACTIVATION|TRAUMA ALERT|HOSPITAL TCD \(TIME CRITICAL DIAGNOSIS\) DESIGNATION|LEVEL 1 TRAUMA CENTERS|LEVEL 2 TRAUMA CENTERS|ACUTE STEMI|ACUTE CVA|EMERGENCY ORDER SETS|PEDIATRIC EMERGENCY FORM|QUALITY IMPROVEMENT PROCEDURE|ADVANCED AIRWAY MANAGEMENT|IV ACCESS|CARDIOVASCULAR SKILLS|CONTINUOUS INFUSION MEDICATIONS|BI-ANNUAL WRITTEN PROTOCOL EXAMINATION)\s*:?\s*$/i;
  const itemRx=/^(\d+\.|[a-z]\.|[ivx]+\.)(?:\s+|$)/i;
  for(let i=0;i<raw.length;i++){
    let t=raw[i];
