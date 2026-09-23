@@ -1104,7 +1104,7 @@ const medicationCrossProtocolDoses={
   {source:'Glucagon medication protocol',text:'Pediatric >25 kg: 1 mg IM; <25 kg: 0.5 mg IM.',calcKey:'glucP'}
  ],
  'amiodarone':[
- {key:'amioPeds',label:'Amiodarone — Pediatric Cardiac Arrest',formula:'5 mg/kg IV/IO bolus. Max 300 mg initial; may repeat up to 3 doses with max 150 mg subsequent doses.',unit:'mg',perKg:5,max:300,special:'amioPeds',repeatMax:150,note:'External pediatric reference: AHA PALS 2025. This dose is not printed in the GFD V3 manual.'}
+ {key:'amioPeds',label:'PALS Pediatric Amiodarone — Cardiac Arrest',formula:'5 mg/kg IV/IO bolus. Max 300 mg initial; may repeat up to 3 total doses with max 150 mg on subsequent doses.',unit:'mg',perKg:5,max:300,special:'amioPeds',repeatMax:150,note:'PALS OVERRIDE — AMIODARONE ONLY. Based on the 2025 AHA PALS Pediatric Cardiac Arrest Algorithm.'}
 ],
 'albuterol-and-atrovent-duoneb':[
   {source:'Duoneb medication protocol',text:'Infants under 1 year: 0.03 mL/kg nebulized, max 1 mL.',calcKey:'albInfant'}
@@ -1124,7 +1124,7 @@ function medicationCrossProtocolHtml(x){
 function pediatricMedicationInfo(x){
  const info={
   'albuterol-proventil-ventolin':{text:'Pediatric: 1.25–2.5 mg in 3 mL sterile NS by inhalation over 5–15 minutes; may be repeated ×2.'},
-  'amiodarone':{text:'Pediatric cardiac arrest reference: 5 mg/kg IV/IO bolus, max 300 mg initial; may repeat up to 3 doses with max 150 mg subsequent doses. This is an external AHA PALS pediatric reference, not a dose printed in GFD V3.',calc:true},
+  'amiodarone':{text:'PALS pediatric cardiac arrest dose: 5 mg/kg IV/IO bolus, max 300 mg initial; may repeat up to 3 total doses with max 150 mg on subsequent doses. This is an Amiodarone-only override using the 2025 AHA PALS algorithm.',calc:true},
   'albuterol-and-atrovent-duoneb':{text:'Adults and children over 1 year: 2.5 mg mixed in 3 mL saline. Infants under 1 year: 0.03 mL/kg, max 1 mL.',calc:true},
   'atropine':{text:'Pediatric Dose: Refer to Broselow Tape.'},
   'benadryl-diphenhydramine':{text:'Pediatric Dose: 1–2 mg/kg.',calc:true},
@@ -1430,7 +1430,7 @@ function calcProtocolDose(pid,key){
      '<div class="dose-note">Initial max 300 mg.</div>'+
      '<div style="margin-top:10px"><strong>SUBSEQUENT DOSE: '+fmt(repeat)+' mg IV/IO</strong></div>'+
      '<div class="dose-note">May repeat up to 3 total doses • subsequent-dose max 150 mg.</div>'+
-     '<div class="dose-note"><b>External pediatric reference:</b> AHA PALS 2025. Not printed in GFD V3.</div>';
+     '<div class="dose-note"><b>PALS OVERRIDE — AMIODARONE ONLY:</b> 2025 AHA PALS Pediatric Cardiac Arrest Algorithm.</div>';
    return
  }
  if(c.special==='diltiazem'){
