@@ -791,7 +791,7 @@ function sourceHref(x){
  }
  return src;
 }
-function normText(v){return String(v||'').replace(/[■▪◼◾□◆►▶]+/g,' ').replace(/^[•·‣⁃–—-]+\s*/,'').replace(/\s+/g,' ').trim()}
+function normText(v){return String(v||'').replace(/[\uf0b0\u00ba]/g,'°').replace(/[■▪◼◾□◆►▶]+/g,' ').replace(/^[•·‣⁃–—-]+\s*/,'').replace(/\s+/g,' ').trim()}
 function sameTitle(a,b){return normText(a).toLowerCase().replace(/[^a-z0-9]+/g,'')===normText(b).toLowerCase().replace(/[^a-z0-9]+/g,'')}
 function isHeading(t){
  let u=t.toUpperCase();
