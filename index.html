@@ -1396,16 +1396,20 @@ function formatDextrose(){
     <div class="source-med-row">
       <div class="source-med-label">Pediatric Dose:</div>
       <div class="source-med-value">
-        <div>Children <b>greater than 8 years</b> of age should receive <b>2 mL/kg of D10 IV</b></div>
-        <div>Children <b>less than 8 years</b> of age should receive <b>1 mL/kg of D10 IV</b></div>
+        <div>Children <b>8 years and older</b>: <b>2 mL/kg D10 IV</b></div>
+        <div>Children <b>less than 8 years</b>: <b>1 mL/kg D10 IV</b></div>
         <div class="source-med-note">Refer to the Broselow tape for weight estimation as needed.</div>
 
         <div class="source-med-calc">
           <div><b>Inline Pediatric D10 Calculator</b></div>
           <div class="dose-note">Uses the GFD age-based D10 dose above and a D10 concentration of <b>25 g in 250 mL = 0.1 g/mL</b>.</div>
           <div class="calc-field">
-            <label for="dc-dextrose-d10Age-a">Patient age (years)</label>
-            <input id="dc-dextrose-d10Age-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age">
+            <label for="dc-dextrose-d10Age-agegroup">Patient age group</label>
+            <select id="dc-dextrose-d10Age-agegroup" class="tool-input">
+              <option value="">Select age group</option>
+              <option value="under8">Less than 8 years old</option>
+              <option value="8plus">8 years old or older</option>
+            </select>
           </div>
           <div class="dose-row">
             <input id="dc-dextrose-d10Age-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
@@ -1743,17 +1747,17 @@ const protocolDoseCalcs={
  {key:'fluid',label:'Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'For hypotension if lung sounds are clear.'}
 ],
 'behavioral-psychiatric-disorders':[
- {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age ≥8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'Calculator workflow: age <8 years = 1 mL/kg; age ≥8 years = 2 mL/kg.'}
 ],
 'coma-or-confusion-of-unknown-origin':[
- {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age ≥8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'Calculator workflow: age <8 years = 1 mL/kg; age ≥8 years = 2 mL/kg.'}
 ],
 'dehydration':[
  {key:'fluid',label:'Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'GFD: if lung sounds are clear. Pediatric protocol also states consider 20 mL/kg bolus.'}
 ],
 'diabetic-emergencies':[
  {key:'fluid',label:'NS Bolus — Hyperglycemia',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'For blood glucose over 400 mg/dL; use caution in CHF patients.'},
- {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age ≥8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'Calculator workflow: age <8 years = 1 mL/kg; age ≥8 years = 2 mL/kg.'}
 ],
 'hyper-agitated-delirium-syndrome':[
  {key:'ket',label:'Ketamine IM',formula:'3–5 mg/kg IM, max 500 mg',unit:'mg',perKg:3,maxPerKg:5,max:500,special:'range',note:'Contact Medical Control for further doses.'},
@@ -1766,10 +1770,10 @@ const protocolDoseCalcs={
  {key:'fluid',label:'NS Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'If lung sounds are clear; use caution if cardiac origin is suspected.'}
 ],
 'hyperthermia':[
- {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age ≥8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'Calculator workflow: age <8 years = 1 mL/kg; age ≥8 years = 2 mL/kg.'}
 ],
 'hypothermia':[
- {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age ≥8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'Calculator workflow: age <8 years = 1 mL/kg; age ≥8 years = 2 mL/kg.'}
 ],
 'nausea-vomiting':[
  {key:'fluid',label:'Fluid Bolus',formula:'20 mL/kg, max 1000 mL',unit:'mL',perKg:20,max:1000,note:'GFD: for BP <90 mmHg and lung sounds must be clear.'}
@@ -1810,7 +1814,7 @@ const protocolDoseCalcs={
  {key:'dilt',label:'Diltiazem',formula:'Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Max 20 mg each dose.',unit:'mg',perKg:.25,max:20,special:'diltiazem',secondPerKg:.35,secondMax:20,ageRequired:true,ageThreshold:70,ageAdjustment:-5,note:'For patients over age 70, GFD protocol says decrease each Diltiazem dose by 5 mg.'}
 ],
 'dextrose':[
- {key:'d10Age',label:'D10 — Pediatric',formula:'Age >8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'GFD source does not specify which branch to use at exactly 8 years old.'}
+ {key:'d10Age',label:'D10 — Pediatric',formula:'Age ≥8 years: 2 mL/kg IV • Age <8 years: 1 mL/kg IV',unit:'mL',perKg:1,special:'d10Age',ageRequired:true,note:'Calculator workflow: age <8 years = 1 mL/kg; age ≥8 years = 2 mL/kg.'}
 ],
 'dopamine':[
  {key:'dop',label:'Dopamine Infusion Dose',formula:'2–10 mcg/kg/min',unit:'mcg/min',perKg:2,maxPerKg:10,special:'rateRange',note:'GFD: Type II second-degree / third-degree AV block or hypotension of cardiac origin; titrate hypotension to BP 100.'}
@@ -1896,7 +1900,7 @@ if(c.special==='infantAlbuterol'){
    '<button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Show dose</button>'+
    '<div id="'+id+'-o" class="dose-out"></div></div>';
 }
-return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="exact8">Exactly 8 years old</option><option value="over8">Older than 8 years old</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-dob">Patient date of birth</label><input id="'+id+'-dob" class="tool-input" type="date" max="'+new Date().toISOString().slice(0,10)+'"><small>Enter DOB if known, or use patient age below.</small></div><div class="calc-field"><label for="'+id+'-age">Patient age (years)</label><input id="'+id+'-age" class="tool-input" inputmode="numeric" type="number" min="0" step="1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="8plus">8 years old or older</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-dob">Patient date of birth</label><input id="'+id+'-dob" class="tool-input" type="date" max="'+new Date().toISOString().slice(0,10)+'"><small>Enter DOB if known, or use patient age below.</small></div><div class="calc-field"><label for="'+id+'-age">Patient age (years)</label><input id="'+id+'-age" class="tool-input" inputmode="numeric" type="number" min="0" step="1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 
 function toggleInfantAlbuterolWeight(pid,key){
@@ -1985,15 +1989,13 @@ function calcProtocolDose(pid,key){
  }
  if(c.special==='d10Age'){
    const group=document.getElementById(id+'-agegroup')?.value||'';
-   if(!group){out.innerHTML='<b>Select whether the patient is less than 8, exactly 8, or older than 8 years.</b>';return}
-   if(group==='exact8'){out.innerHTML='<b>GFD source specifies &lt;8 years = 1 mL/kg and &gt;8 years = 2 mL/kg, but does not specify exactly age 8. Verify the source / Medical Control rather than guessing.</b>';return}
+   if(!group){out.innerHTML='<b>Select whether the patient is less than 8 years old or 8 years old and older.</b>';return}
    const pk=group==='under8'?1:2,vol=kg*pk,grams=vol*0.1,gramsPerKg=pk*0.1;
-   out.innerHTML='<b>'+(group==='under8'?'AGE GROUP: Less than 8 years':'AGE GROUP: Older than 8 years')+'</b><br>'+
+   out.innerHTML='<b>'+(group==='under8'?'AGE GROUP: Less than 8 years':'AGE GROUP: 8 years or older')+'</b><br>'+
      kg.toFixed(1)+' kg × '+pk+' mL/kg<br>'+
      '<strong>D10 VOLUME: '+vol.toFixed(vol<10?2:1)+' mL IV</strong><br>'+
      '<strong>DEXTROSE DELIVERED: '+grams.toFixed(grams<10?2:1)+' g</strong>'+
-     '<div class="dose-note">D10 = 25 g / 250 mL = 0.1 g/mL • '+gramsPerKg.toFixed(1)+' g/kg</div>'+
-     '<div class="dose-note">'+(group==='under8'?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
+     '<div class="dose-note">D10 = 25 g / 250 mL = 0.1 g/mL • '+gramsPerKg.toFixed(1)+' g/kg</div>';
    return
  }
  if(c.special==='lidocaineSequence'){
