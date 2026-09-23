@@ -2,42 +2,113 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GFD Source Protocol</title>
 <style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f4f5;color:#18181b}
-header{background:#173a5e;color:white;padding:12px 14px;position:sticky;top:0;z-index:2}
-h1{font-size:17px;margin:0}.sub{font-size:12px;opacity:.85;margin-top:3px}
-main{max-width:1000px;margin:auto;padding:10px}.bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-button,a.btn{border:0;border-radius:9px;padding:10px 12px;font-weight:800;text-decoration:none;font-size:14px}.back{background:#173a5e;color:white}.open{background:#2f6690;color:white}
-.frame{background:white;border:1px solid #ddd;border-radius:10px;overflow:hidden;height:calc(100vh - 145px);min-height:560px}
-iframe{border:0;width:100%;height:100%;display:block;background:white}
-.notice{font-size:12px;color:#52525b;margin:9px 2px;line-height:1.35}
+:root{--navy:#173a5e;--blue:#2f6690;--paper:#fff;--bg:#eef3f7;--line:#cbd5e1;--muted:#52606d}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:#17202a}
+header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:12px 14px;position:sticky;top:0;z-index:5}
+h1{font-size:17px;margin:0}.sub{font-size:12px;opacity:.88;margin-top:3px}
+main{max-width:1080px;margin:auto;padding:10px}
+.bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+button{border:0;border-radius:9px;padding:10px 12px;font-weight:800;font-size:14px;min-height:42px}
+.back{background:var(--navy);color:#fff}.zoom{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.range-badge{margin-left:auto;background:#dbeafe;color:#173a5e;border:1px solid #bfdbfe;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800}
+.viewer{display:flex;flex-direction:column;gap:14px;align-items:center}
+.page-shell{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px;overflow:auto}
+.page-label{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 7px 2px}
+canvas{display:block;margin:auto;background:#fff;max-width:none}
+.status{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;line-height:1.4;color:var(--muted)}
+.notice{font-size:12px;color:var(--muted);margin:10px 2px;line-height:1.35}
+@media(max-width:620px){main{padding:7px}.range-badge{width:100%;margin-left:0;text-align:center}.page-shell{padding:5px}}
 </style></head><body>
 <header><h1 id="title">GFD Source Protocol</h1><div class="sub" id="pageLabel"></div></header>
-<main><div class="bar"><button class="back" id="backBtn">‹ Back to Protocol</button><a id="openPdf" class="btn open" target="_blank" rel="noopener">Open PDF Page</a></div>
-<div class="frame"><iframe id="pdf" title="GFD source protocol page"></iframe></div>
-<div class="notice">Source view opens the configured GFD source document at the exact page range assigned to this protocol. Reference entries and protocol source links use this same viewer.</div></main>
+<main>
+<div class="bar">
+ <button class="back" id="backBtn">‹ Back to Protocol</button>
+ <button class="zoom" id="zoomOut" type="button">− Zoom</button>
+ <button class="zoom" id="fitBtn" type="button">Fit Width</button>
+ <button class="zoom" id="zoomIn" type="button">+ Zoom</button>
+ <div class="range-badge" id="rangeBadge"></div>
+</div>
+<div id="status" class="status">Loading source protocol…</div>
+<div id="viewer" class="viewer" hidden></div>
+<div class="notice">Only the source page(s) assigned to this protocol are rendered. Pages outside this protocol range are not shown.</div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 const q=new URLSearchParams(location.search);
-const embed=q.get('embed')==='1';
-if(embed){
-  document.querySelector('header').style.display='none';
-  document.querySelector('.bar').style.display='none';
-  document.querySelector('.notice').style.display='none';
-  document.querySelector('main').style.maxWidth='none';
-  document.querySelector('main').style.padding='0';
-  document.querySelector('.frame').style.height='100vh';
-  document.querySelector('.frame').style.minHeight='0';
-  document.querySelector('.frame').style.border='0';
-  document.querySelector('.frame').style.borderRadius='0';
-}
 const protocol=q.get('protocol')||'';
-document.getElementById('backBtn').addEventListener('click',()=>{location.href='./index.html'+(protocol?'#'+encodeURIComponent(protocol):'');});
 const raw=q.get('src')||'updates/current-protocol-book.pdf';
 const start=Math.max(1,parseInt(q.get('start')||q.get('page')||'1',10));
-const end=Math.max(start,parseInt(q.get('end')||String(start),10));
+const requestedEnd=Math.max(start,parseInt(q.get('end')||String(start),10));
 const title=q.get('title')||'GFD Source Protocol';
-const src=new URL(raw,location.href).href.split('#')[0]+'#page='+start+'&zoom=page-width';
+const viewer=document.getElementById('viewer');
+const status=document.getElementById('status');
+const pageLabel=document.getElementById('pageLabel');
+const rangeBadge=document.getElementById('rangeBadge');
+let pdfDoc=null;
+let zoom=1;
+let fitWidth=true;
+let renderToken=0;
+
 document.getElementById('title').textContent=title;
-document.getElementById('pageLabel').textContent=end>start?'Official source pages '+start+'–'+end:'Official source page '+start;
-document.getElementById('pdf').src=src;
-document.getElementById('openPdf').href=src;
+pageLabel.textContent=requestedEnd>start?'Official source pages '+start+'–'+requestedEnd:'Official source page '+start;
+rangeBadge.textContent=requestedEnd>start?'Pages '+start+'–'+requestedEnd:'Page '+start+' only';
+document.getElementById('backBtn').addEventListener('click',()=>{location.href='./index.html'+(protocol?'#'+encodeURIComponent(protocol):'')});
+document.getElementById('zoomIn').addEventListener('click',()=>{fitWidth=false;zoom=Math.min(2.5,zoom+.15);renderPages()});
+document.getElementById('zoomOut').addEventListener('click',()=>{fitWidth=false;zoom=Math.max(.5,zoom-.15);renderPages()});
+document.getElementById('fitBtn').addEventListener('click',()=>{fitWidth=true;zoom=1;renderPages()});
+
+async function renderPages(){
+ if(!pdfDoc)return;
+ const token=++renderToken;
+ const end=Math.min(requestedEnd,pdfDoc.numPages);
+ viewer.hidden=true;
+ viewer.innerHTML='';
+ status.hidden=false;
+ status.textContent='Rendering source '+(end>start?'pages '+start+'–'+end:'page '+start)+'…';
+ for(let n=start;n<=end;n++){
+   if(token!==renderToken)return;
+   const page=await pdfDoc.getPage(n);
+   const base=page.getViewport({scale:1});
+   const shell=document.createElement('section');
+   shell.className='page-shell';
+   const label=document.createElement('div');
+   label.className='page-label';
+   label.textContent=end>start?'Source page '+n+' of '+start+'–'+end:'Source page '+n;
+   const canvas=document.createElement('canvas');
+   shell.append(label,canvas);
+   viewer.appendChild(shell);
+   const available=Math.max(280,Math.min(1040,shell.clientWidth-18));
+   const cssScale=fitWidth?available/base.width:zoom;
+   const dpr=Math.min(window.devicePixelRatio||1,2);
+   const viewport=page.getViewport({scale:cssScale*dpr});
+   canvas.width=Math.floor(viewport.width);
+   canvas.height=Math.floor(viewport.height);
+   canvas.style.width=Math.floor(base.width*cssScale)+'px';
+   canvas.style.height=Math.floor(base.height*cssScale)+'px';
+   const ctx=canvas.getContext('2d',{alpha:false});
+   await page.render({canvasContext:ctx,viewport}).promise;
+ }
+ if(token!==renderToken)return;
+ status.hidden=true;
+ viewer.hidden=false;
+}
+
+async function loadPdf(){
+ try{
+   if(!window.pdfjsLib)throw new Error('PDF renderer unavailable');
+   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+   const src=new URL(raw,location.href).href.split('#')[0];
+   pdfDoc=await pdfjsLib.getDocument(src).promise;
+   if(start>pdfDoc.numPages)throw new Error('Assigned source page is outside the PDF');
+   await renderPages();
+ }catch(e){
+   status.hidden=false;
+   viewer.hidden=true;
+   status.innerHTML='<b>Unable to render the assigned source page range.</b><br>'+String(e&&e.message?e.message:e);
+ }
+}
+let resizeTimer=null;
+window.addEventListener('resize',()=>{if(!fitWidth||!pdfDoc)return;clearTimeout(resizeTimer);resizeTimer=setTimeout(renderPages,180)});
+loadPdf();
 </script></body></html>
