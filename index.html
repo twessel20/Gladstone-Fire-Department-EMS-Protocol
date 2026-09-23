@@ -1063,19 +1063,16 @@ function formatTcdQuickReference(x){
  return '<div class="reference-source"><div class="section">TCD DESTINATIONS — QUICK REFERENCE</div><div class="notice">Quick display transcribed from the official GFD TCD Destinations page.</div><div class="tcd-grid">'+groups.map(g=>'<div class="tcd-card"><h3><span>'+g[0]+'</span>'+esc(g[1])+'</h3>'+g[2].map(h=>'<div class="tcd-hospital">'+esc(h)+'</div>').join('')+'</div>').join('')+'</div><div class="section">OFFICIAL TCD PAGE 160</div><div id="tcdOfficialPage" class="tcd-official"><div class="tool-note">Loading official protocol page 160…</div></div><div class="appendix-actions"><a class="source" href="'+esc(sourceHref(x))+'">Open Official TCD Page Full Screen ↗</a></div></div>';
 }
 function formatAppendixPage(x){
- const src=x.sourceFile||x.pageUrl||'updates/published/current-protocol-book.pdf';
- const pdf=src.split('#')[0],start=Number(x.page||((src.match(/#page=(\d+)/i)||[])[1])||1),end=Number(x.endPage||start);
+ const start=Number(x.page||1),end=Number(x.endPage||start);
  const range=end>start?'Pages '+start+'–'+end:'Page '+start;
  const viewer=sourceHref(x);
- const pageSrc=pdf+'#page='+start+'&zoom=page-width&toolbar=0&navpanes=0';
  return '<div class="reference-source">'+
-   '<div class="appendix-head"><div><b>Official GFD Appendix</b><span>'+range+'</span></div><a href="'+esc(viewer)+'">Full-screen ↗</a></div>'+
-   '<div class="appendix-frame"><iframe src="'+esc(pageSrc)+'" title="'+esc(x.title)+' official appendix page" loading="eager"></iframe></div>'+
+   '<div class="appendix-head"><div><b>Original Source Layout</b><span>'+range+'</span></div><a href="'+esc(viewer)+'">Full-screen ↗</a></div>'+
+   '<div class="appendix-frame"><iframe src="'+esc(viewer)+'&embed=1" title="'+esc(x.title)+' source pages" loading="eager"></iframe></div>'+
    '<div class="appendix-actions"><a class="source" href="'+esc(viewer)+'">Open '+esc(x.title)+' Full Screen ↗</a></div>'+
-   '<div class="notice">Displayed directly from the official GFD protocol book so the original table, diagram, scoring grid, and formatting are preserved.</div>'+
  '</div>';
 }
-function formatAppendix(x){if(x.id==='tcd-destinations')return formatTcdQuickReference(x);if(x.id==='pediatric-vital-sign-ranges-by-age')return pediatricVitalsCard()+formatAppendixPage(x);return formatAppendixPage(x)}
+function formatAppendix(x){return formatAppendixPage(x)}
 function formatLucasProcedure(x){
  const raw=(x.lines||[]).map(normText).filter(Boolean)
   .filter(l=>!/^P$/i.test(l)&&!/^L$/i.test(l))
