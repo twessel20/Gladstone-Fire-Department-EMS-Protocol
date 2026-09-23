@@ -1002,8 +1002,12 @@ function formatBenadryl(){
           <div><b>Inline Pediatric Benadryl Calculator</b></div>
           <div class="dose-note">Choose the exact dose within the GFD 1–2 mg/kg range.</div>
           <div class="calc-field">
-            <label for="dc-benadryl-diphenhydramine-benP-d">Dose (1–2 mg/kg)</label>
-            <input id="dc-benadryl-diphenhydramine-benP-d" inputmode="decimal" type="number" min="1" max="2" step="0.1" placeholder="Enter exact mg/kg">
+            <label for="dc-benadryl-diphenhydramine-benP-d">Dose</label>
+            <select id="dc-benadryl-diphenhydramine-benP-d" class="tool-input">
+              <option value="">Select dose</option>
+              <option value="1">1 mg/kg</option>
+              <option value="2">2 mg/kg</option>
+            </select>
           </div>
           <div class="dose-row">
             <input id="dc-benadryl-diphenhydramine-benP-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
@@ -1303,8 +1307,9 @@ function calcProtocolDose(pid,key){
  if(c.special==='exactRange'){
    const de=document.getElementById(id+'-d'),pk=Number(de?.value);
    if(!Number.isFinite(pk)||pk<c.minPerKg||pk>c.maxPerKg){out.innerHTML='<b>Enter an exact dose from '+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg.</b>';return}
-   const rawDose=kg*pk,capped=Number.isFinite(c.max)?Math.min(rawDose,c.max):rawDose,dose=Math.round(capped);
-   out.innerHTML=kg.toFixed(1)+' kg × '+pk+' '+c.unit+'/kg<br><strong>DOSE TO GIVE: '+dose+' '+c.unit+'</strong>'+
+   const rawDose=kg*pk,dose=Number.isFinite(c.max)?Math.min(rawDose,c.max):rawDose;
+   const shown=Number.isInteger(dose)?String(dose):dose.toFixed(dose<10?2:1);
+   out.innerHTML=kg.toFixed(1)+' kg × '+pk+' '+c.unit+'/kg<br><strong>DOSE TO GIVE: '+shown+' '+c.unit+'</strong>'+
      (Number.isFinite(c.max)?'<div class="dose-note"><b>TREATMENT MAX: '+c.max+' '+c.unit+'</b>'+(rawDose>c.max?' • Maximum applied.':'')+'</div>':'')+
      (c.note?'<div class="dose-note">'+esc(c.note)+'</div>':'');
    return
