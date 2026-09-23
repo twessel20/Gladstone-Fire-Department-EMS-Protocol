@@ -18,7 +18,54 @@
 .source-med-row.med-contra .source-med-value{color:#7f1d1d}
 .source-med-row.med-precaution{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid #d97706;border-radius:10px;padding:10px 12px;margin:6px 0}
 .source-med-row.med-precaution .source-med-label{color:#92400e}
-.source-med-row.med-precaution .source-med-value{color:#78350f}.source-med-spacer{height:14px}.source-med-note{font-weight:800;margin-top:10px}.source-med-calc{margin-top:14px;border-top:1px solid #d1d5db;padding-top:12px}.source-med-calc .calc-field{margin-bottom:8px}@media(max-width:620px){.source-med-title{margin-left:0;font-size:20px}.source-med-row{grid-template-columns:1fr;gap:3px}.source-med-label{font-size:13px;color:#334155;text-transform:none}.source-med-sheet{padding:15px}}.med-section:first-child{border-top:0;padding-top:0}.med-label{font-size:12px;font-weight:900;color:#7f1d1d;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}.med-item{font-size:16px;line-height:1.45;margin:7px 0;padding-left:18px;position:relative}.med-item:before{content:'•';position:absolute;left:3px;font-weight:800}.med-subhead{font-size:15px;font-weight:850;margin:10px 0 5px;color:#334155}.med-text{font-size:16px;line-height:1.45;margin:7px 0}.dose-tools{margin:16px 0 6px;padding:12px;border:1px solid #fecaca;background:#fff7f7;border-radius:12px}.dose-tools h4{margin:0 0 8px;color:#991b1b;font-size:15px}.dose-calc{border-top:1px solid #fecaca;padding-top:10px;margin-top:10px}.dose-calc:first-of-type{border-top:0;padding-top:0;margin-top:0}.dose-row{display:grid;grid-template-columns:1fr 92px;gap:7px}.dose-row input,.dose-row select{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:10px;font-size:16px;background:#fff}.dose-btn{width:100%;margin-top:7px;border:0;border-radius:9px;padding:10px;background:#991b1b;color:#fff;font-weight:850}.dose-out{margin-top:8px;font-size:15px;line-height:1.4}.dose-out strong{font-size:20px;color:#991b1b}.dose-note{font-size:11px;color:#64748b;margin-top:5px}.protocol-body{max-width:100%;overflow-wrap:break-word;word-break:normal;hyphens:none}.protocol-body .line{white-space:normal}.line{font-size:16px;line-height:1.48;margin:8px 0}.protocol-callout{margin:12px 0;padding:12px 13px;border-radius:11px;border:1px solid #fecaca;background:#fff7f7;line-height:1.45}.protocol-callout strong{display:block;color:#991b1b;font-size:13px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px}.protocol-callout.info{background:#eff6ff;border-color:#bfdbfe}.protocol-callout.info strong{color:#1d4ed8}.protocol-callout.action{background:#f0fdf4;border-color:#bbf7d0}.protocol-callout.action strong{color:#166534}
+.source-med-row.med-precaution .source-med-value{color:#78350f}.source-med-spacer{height:14px}.source-med-note{font-weight:800;margin-top:10px}.source-med-calc{margin-top:14px;border-top:1px solid #d1d5db;padding-top:12px}.source-med-calc .calc-field{margin-bottom:8px}@media(max-width:620px){.source-med-title{margin-left:0;font-size:20px}.source-med-row{grid-template-columns:1fr;gap:3px}.source-med-label{font-size:13px;color:#334155;text-transform:none}.source-med-sheet{padding:15px}}.med-section:first-child{border-top:0;padding-top:0}.med-label{font-size:12px;font-weight:900;color:#7f1d1d;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}.med-item{font-size:16px;line-height:1.45;margin:7px 0;padding-left:18px;position:relative}.med-item:before{content:'•';position:absolute;left:3px;font-weight:800}.med-subhead{font-size:15px;font-weight:850;margin:10px 0 5px;color:#334155}.med-text{font-size:16px;line-height:1.45;margin:7px 0}.dose-tools{margin:16px 0 6px;padding:12px;border:1px solid #fecaca;background:#fff7f7;border-radius:12px}.dose-tools h4{margin:0 0 8px;color:#991b1b;font-size:15px}.dose-calc{border-top:1px solid #fecaca;padding-top:10px;margin-top:10px}.dose-calc:first-of-type{border-top:0;padding-top:0;margin-top:0}.dose-row{display:grid;grid-template-columns:1fr 92px;gap:7px}.dose-row input,.dose-row select{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:10px;font-size:16px;background:#fff}.dose-btn{width:100%;margin-top:7px;border:0;border-radius:9px;padding:10px;background:#2f6690;color:#fff;font-weight:850}.dose-out{margin-top:8px;font-size:15px;line-height:1.4}.dose-out strong{font-size:20px;color:#173a5e}.dose-note{font-size:11px;color:#64748b;margin-top:5px}.protocol-body{max-width:100%;overflow-wrap:break-word;word-break:normal;hyphens:none}
+/* GFD unified clinical visual system */
+.card,.protocol-body,.flowchart,.flow-node,.flow-decision,.flow-branch,.source-med-sheet,.source-med-row,.source-med-value,.dose-tools,.dose-calc,.tool-card{min-width:0}
+.card h2,.protocol-body h3,.protocol-body h4,.source-med-title,.source-med-label{overflow-wrap:break-word;word-break:normal}
+.protocol-body,.source-med-value,.flow-node,.flow-branch,.dose-note,.notice{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.protocol-body{font-size:16px;line-height:1.5}
+.protocol-body button,.source-med-sheet button{white-space:normal;overflow-wrap:break-word}
+.workflow-sheet{display:grid;gap:0;margin:8px 0 18px}
+.workflow-node{background:#fff;border:1px solid #cbd5e1;border-left:5px solid #2f6690;border-radius:12px;padding:13px 14px;min-width:0}
+.workflow-node h4{margin:0 0 7px;color:#173a5e;font-size:15px;line-height:1.25}
+.workflow-node.action{border-left-color:#166534;background:#f0fdf4}
+.workflow-node.monitor{border-left-color:#475569;background:#f8fafc}
+.workflow-node.caution{border-left-color:#d97706;background:#fffbeb;border-color:#fde68a}
+.workflow-node.caution h4{color:#92400e}
+.workflow-node.danger{border-left-color:#dc2626;background:#fff1f2;border-color:#fecaca}
+.workflow-node.danger h4{color:#991b1b}
+.workflow-line{font-size:15.5px;line-height:1.5;margin:7px 0;overflow-wrap:break-word}
+.workflow-line.item{position:relative;padding-left:19px}
+.workflow-line.item:before{content:'•';position:absolute;left:3px;color:#2f6690;font-weight:900}
+.workflow-line.sub{position:relative;padding-left:31px;color:#334155}
+.workflow-line.sub:before{content:'–';position:absolute;left:15px;color:#64748b;font-weight:900}
+.workflow-arrow{text-align:center;color:#2f6690;font-size:23px;font-weight:900;line-height:1;padding:4px 0}
+.source-med-sheet{font-size:15.5px;line-height:1.48}
+.source-med-label{color:#173a5e;font-size:14px;line-height:1.35}
+.source-med-value{font-size:15.5px;line-height:1.48}
+.source-med-value>div+div{margin-top:5px}
+.source-med-row{border-bottom:1px solid #eef2f7}
+.source-med-row:last-child{border-bottom:0}
+.source-med-row.med-contra,.source-med-row.med-precaution{border-bottom-width:1px}
+.source-med-calc .dose-tools{margin:10px 0 0}
+.dose-tools{border-color:#bfdbfe;background:#f8fbff}
+.dose-tools h4{color:#173a5e}
+.dose-calc{border-top-color:#dbeafe}
+.dose-btn{background:#2f6690}
+.dose-out strong{color:#173a5e}
+.section{color:#173a5e}
+.bullet:before,.protocol-step:before{color:#2f6690}
+.related-link{color:#2f6690}
+@media(max-width:640px){
+ .source-med-sheet{padding:14px 15px}
+ .source-med-row{grid-template-columns:1fr;gap:4px;padding:10px 0}
+ .source-med-label{font-size:13px;text-transform:uppercase;letter-spacing:.03em}
+ .source-med-row.med-contra,.source-med-row.med-precaution{padding:11px 12px}
+ .flow-node,.workflow-node{padding:12px}
+ .flow-branches{grid-template-columns:1fr}
+ .dose-row{grid-template-columns:minmax(0,1fr) 82px}
+ .card{padding-left:12px;padding-right:12px}
+}.protocol-body .line{white-space:normal}.line{font-size:16px;line-height:1.48;margin:8px 0}.protocol-callout{margin:12px 0;padding:12px 13px;border-radius:11px;border:1px solid #fecaca;background:#fff7f7;line-height:1.45}.protocol-callout strong{display:block;color:#991b1b;font-size:13px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px}.protocol-callout.info{background:#eff6ff;border-color:#bfdbfe}.protocol-callout.info strong{color:#1d4ed8}.protocol-callout.action{background:#f0fdf4;border-color:#bbf7d0}.protocol-callout.action strong{color:#166534}
 .flowchart{display:grid;gap:0;margin:8px 0 18px}.flow-node{position:relative;background:#fff;border:1px solid #cbd5e1;border-left:5px solid #2f6690;border-radius:12px;padding:12px 14px;margin:0}.flow-node h4{margin:0 0 6px;color:#173a5e;font-size:15px}.flow-node p{margin:5px 0;line-height:1.45}.flow-node ul{margin:6px 0 0 18px;padding:0}.flow-node li{margin:5px 0;line-height:1.4}.flow-node.med{border-left-color:#7c3aed;background:#faf7ff}.flow-node.action{border-left-color:#166534;background:#f0fdf4}.flow-node.monitor{border-left-color:#475569;background:#f8fafc}.flow-arrow{text-align:center;color:#2f6690;font-size:24px;font-weight:900;line-height:1;padding:4px 0}.flow-decision{margin:0 auto;max-width:430px;background:#fff7ed;border:2px solid #d97706;border-radius:14px;padding:12px 14px;text-align:center;font-weight:850;color:#7c2d12}.flow-branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.flow-branches.three{grid-template-columns:repeat(3,1fr)}.flow-kicker{font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#64748b;margin-bottom:4px}.flow-dose{font-weight:850;color:#4c1d95}.flow-small{font-size:12px;color:#475569}@media(max-width:560px){.flow-branches.three{grid-template-columns:1fr}}.flow-branch{border-radius:10px;padding:9px 10px;font-size:13px;line-height:1.35}.flow-branch.yes{background:#ecfdf5;border:1px solid #86efac}.flow-branch.no{background:#eff6ff;border:1px solid #93c5fd}.flow-branch b{display:block;margin-bottom:3px}
 .protocol-jump{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:10px;padding:11px 13px;border:0;border-radius:10px;background:#2f6690;color:#fff;font-weight:850;font-size:14px;line-height:1.2;cursor:pointer;text-align:center;min-height:44px}
 .protocol-jump:active{transform:translateY(1px)}
@@ -26,7 +73,7 @@
 .protocol-jump .jump-arrow{font-size:18px;line-height:1}
 .protocol-jump-wrap{margin:8px 0 4px}
 .flow-warning{background:#fff1f2;border:2px solid #fb7185;border-radius:12px;padding:12px 14px;margin-top:10px}.flow-warning h4{margin:0 0 5px;color:#9f1239;font-size:14px}.flow-warning p{margin:4px 0;line-height:1.45}
-.protocol-steps{margin:8px 0 14px}.protocol-step{position:relative;padding-left:28px;margin:10px 0;line-height:1.48}.protocol-step:before{content:'•';position:absolute;left:8px;color:#991b1b;font-weight:900}.para{margin:12px 0}.bullet,.subbullet,.subsub{position:relative}.bullet{padding-left:25px;margin:12px 0}.bullet:before{content:'•';position:absolute;left:7px;top:0;font-weight:900;color:#991b1b}.subbullet{padding-left:43px;margin:7px 0}.subbullet:before{content:'–';position:absolute;left:24px;top:0;font-weight:900;color:#64748b}.subsub{padding-left:59px;margin:6px 0;color:#334155}.subsub:before{content:'›';position:absolute;left:42px;top:0;font-weight:900;color:#64748b}.role-note{font-size:12px;background:#eef6ff;border:1px solid #bfdbfe;padding:10px;border-radius:10px;margin:10px 0 14px}.protocol-mode{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:900;padding:10px 12px;border-radius:10px;margin:10px 0 12px}.protocol-mode.bls{background:#e0f2fe;color:#075985;border:1px solid #7dd3fc}.protocol-mode.als{background:#dcfce7;color:#166534;border:1px solid #86efac}.protocol-mode .dot{width:10px;height:10px;border-radius:50%;background:currentColor}.related-box{margin:14px 0;background:#f8fafc;border:1px solid #dbe4ee;border-radius:12px;padding:12px}.related-title{font-size:12px;font-weight:900;color:#475569;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}.related-link{display:block;border:0;width:100%;text-align:left;background:white;border:1px solid #dbe4ee;border-radius:9px;padding:10px 11px;margin:6px 0;font-weight:750;color:#991b1b}.notice{font-size:12px;background:#fff7ed;border:1px solid #fed7aa;padding:10px;border-radius:10px;margin-bottom:12px}.fav{float:right;border:0;background:none;font-size:22px}.empty{text-align:center;color:#666;padding:30px}.home-guide{display:grid;gap:12px}.home-hero{background:linear-gradient(180deg,#fff,#fffaf0);border-top:4px solid #d4a017;border-radius:14px;padding:16px;box-shadow:0 1px 4px #0001}.home-hero h2{margin:0 0 6px;color:#991b1b;font-size:22px}.home-hero p{margin:6px 0;line-height:1.45}.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick-card{border:1px solid #e5e7eb;background:#fff;border-radius:12px;padding:12px;text-align:left}.quick-card b{display:block;color:#991b1b;margin-bottom:4px}.quick-card span{font-size:13px;color:#475569;line-height:1.35}.guide-steps{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px #0001}.guide-steps h3{margin:0 0 8px}.guide-step{display:flex;gap:10px;margin:10px 0;align-items:flex-start}.guide-num{flex:0 0 28px;height:28px;border-radius:50%;background:#991b1b;color:#fff;display:grid;place-items:center;font-weight:900}.guide-copy{font-size:14px;line-height:1.4;color:#334155}.guide-copy b{color:#171717}.home-alert{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px;font-size:13px;line-height:1.4}.tools-grid{display:grid;gap:12px}.tool-card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px #0001}.tool-card h3{margin:0 0 6px;font-size:18px}.tool-note{font-size:13px;color:#475569;line-height:1.45}.tool-disabled{margin-top:10px;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;border-radius:10px;padding:10px;font-size:13px;font-weight:700}.tool-input{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;margin-top:8px}.tool-btn{width:100%;border:0;border-radius:10px;background:#991b1b;color:#fff;padding:11px 12px;font-weight:800;margin-top:10px}.tool-result{margin-top:10px;background:#f8fafc;border:1px solid #dbe4ee;border-radius:10px;padding:10px}.burn-age{display:flex;gap:6px;margin:10px 0}.burn-age button{flex:1;border:1px solid #d1d5db;background:#fff;border-radius:9px;padding:9px;font-weight:800}.burn-age button.on{background:#991b1b;color:#fff;border-color:#991b1b}.burn-map{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.body-map{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:8px}.body-map h4{text-align:center;margin:2px 0 6px;font-size:13px}.body-svg{width:100%;height:auto;display:block}.body-part{fill:#e2e8f0;stroke:#334155;stroke-width:3;cursor:pointer;transition:.12s;touch-action:manipulation}.body-svg{min-height:360px}.body-map{min-width:0}.body-label{paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}.body-part.on{fill:#fca5a5;stroke:#991b1b;stroke-width:3}.body-label{font-size:11px;font-weight:850;fill:#334155;pointer-events:none;text-anchor:middle}.body-pct{font-size:10px;fill:#64748b;pointer-events:none;text-anchor:middle}.tbsa-sticky{position:sticky;bottom:8px;z-index:2;background:#991b1b;color:#fff;border-radius:12px;padding:10px 12px;margin-top:10px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0002}.tbsa-sticky b{font-size:25px}.burn-side{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fafafa}.burn-side h4{text-align:center;margin:0 0 8px}.burn-region{width:100%;border:1px solid #d1d5db;background:#fff;border-radius:9px;padding:9px 8px;margin:4px 0;text-align:left;font-size:13px}.burn-region.on{background:#fee2e2;border-color:#ef4444;color:#991b1b;font-weight:850}.burn-total{font-size:28px;font-weight:950;color:#991b1b}.burn-mini{font-size:12px;color:#64748b;margin-top:6px}.parkland-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.parkland-stat{background:#fff;border:1px solid #dbe4ee;border-radius:10px;padding:10px}.parkland-stat b{display:block;font-size:20px;color:#991b1b;margin-top:3px}.flag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:3px 7px;margin:2px 4px 2px 0}.bls{background:#e5e7eb}.als{background:#dcfce7;color:#166534}.mc{background:#fee2e2;color:#991b1b}.footer{color:#777;font-size:11px;text-align:center;padding:24px 12px 90px}.offline{display:none;background:#fff3cd;color:#664d03;padding:7px 12px;text-align:center;font-size:12px}.offline.on{display:block}.appendix-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 10px}.appendix-head div{display:flex;flex-direction:column}.appendix-head b{color:#991b1b;font-size:15px}.appendix-head span{font-size:12px;color:#64748b;margin-top:2px}.appendix-head a{font-size:13px;font-weight:800;color:#991b1b;text-decoration:none}.appendix-frame{width:100%;height:72vh;min-height:620px;background:white;border:1px solid #d1d5db;border-radius:12px;overflow:hidden}.appendix-frame iframe{display:block;width:100%;height:100%;border:0;background:white}.appendix-actions .source{width:100%;text-align:center;margin:10px 0}.reference-source>.notice{margin-top:0}@media(max-width:600px){.appendix-frame{height:68vh;min-height:520px;border-radius:8px}.appendix-head{margin-top:0}.appendix-head b{font-size:14px}.protocol-body .line{font-size:16px;line-height:1.5}.protocol-body .bullet{padding-left:24px;margin:13px 0}.protocol-body .subbullet{padding-left:38px;margin:8px 0}.protocol-body .subsub{padding-left:50px;margin:7px 0}.protocol-body .subbullet:before{left:20px}.protocol-body .subsub:before{left:34px}.section{margin:20px 0 10px;padding:10px 12px;background:#f3f4f6;border-left:4px solid #991b1b;border-radius:6px}.top{padding:calc(8px + env(safe-area-inset-top)) 12px 9px}.headrow{gap:8px}.logo{width:60px;height:75px;flex-basis:60px}.brand{font-size:18px;line-height:1.05}.sub{font-size:11px}.status{font-size:10px;padding:5px 7px}.rolebar{margin-top:7px;gap:6px}.rolebtn,.homebtn{padding:7px 8px;font-size:12px}.searchrow{margin-top:7px}.search{padding:10px 11px}.clearsearch{padding:0 10px;font-size:12px}.tabs{padding:7px 9px;gap:5px}.tab{padding:7px 10px;font-size:12px}.wrap{padding:8px}.detail .card{padding:15px 14px;box-shadow:none;border:1px solid #e5e7eb}.detail h2{font-size:22px;line-height:1.15;margin:4px 34px 5px 0}.detail .meta{font-size:11px}.protocol-mode{padding:8px 10px;margin:8px 0;font-size:12px}.role-note{padding:8px 9px;margin:8px 0 10px;line-height:1.35}.related-box{margin:10px 0;padding:9px}.source{width:100%;text-align:center;margin:6px 0 10px}.notice{padding:8px 9px;margin-bottom:14px;line-height:1.35}.protocol-body{font-size:15px;line-height:1.5}.protocol-body .section{font-size:13px;line-height:1.2;margin:22px 0 8px;padding:8px 10px;background:#f3f4f6;border-left:4px solid #991b1b;border-radius:4px}.protocol-body .line{font-size:15px;line-height:1.5;margin:10px 0}.protocol-body .para{margin:13px 0}.protocol-body .bullet{padding-left:22px;margin:9px 0}.protocol-body .subbullet{padding-left:35px;margin:8px 0}.protocol-body .subsub{padding-left:47px;margin:7px 0}.med-label{font-size:12px;margin-bottom:9px;background:#f3f4f6;border-left:4px solid #991b1b;padding:8px 9px;border-radius:4px}.med-item{font-size:15px;line-height:1.5;margin:9px 0}.med-subhead{font-size:15px;line-height:1.35;margin:13px 0 6px}.med-text{font-size:15px;line-height:1.5;margin:9px 0}}
+.protocol-steps{margin:8px 0 14px}.protocol-step{position:relative;padding-left:28px;margin:10px 0;line-height:1.48}.protocol-step:before{content:'•';position:absolute;left:8px;color:#991b1b;font-weight:900}.para{margin:12px 0}.bullet,.subbullet,.subsub{position:relative}.bullet{padding-left:25px;margin:12px 0}.bullet:before{content:'•';position:absolute;left:7px;top:0;font-weight:900;color:#991b1b}.subbullet{padding-left:43px;margin:7px 0}.subbullet:before{content:'–';position:absolute;left:24px;top:0;font-weight:900;color:#64748b}.subsub{padding-left:59px;margin:6px 0;color:#334155}.subsub:before{content:'›';position:absolute;left:42px;top:0;font-weight:900;color:#64748b}.role-note{font-size:12px;background:#eef6ff;border:1px solid #bfdbfe;padding:10px;border-radius:10px;margin:10px 0 14px}.protocol-mode{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:900;padding:10px 12px;border-radius:10px;margin:10px 0 12px}.protocol-mode.bls{background:#e0f2fe;color:#075985;border:1px solid #7dd3fc}.protocol-mode.als{background:#dcfce7;color:#166534;border:1px solid #86efac}.protocol-mode .dot{width:10px;height:10px;border-radius:50%;background:currentColor}.related-box{margin:14px 0;background:#f8fafc;border:1px solid #dbe4ee;border-radius:12px;padding:12px}.related-title{font-size:12px;font-weight:900;color:#475569;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}.related-link{display:block;border:0;width:100%;text-align:left;background:white;border:1px solid #dbe4ee;border-radius:9px;padding:10px 11px;margin:6px 0;font-weight:750;color:#2f6690}.notice{font-size:12px;background:#fff7ed;border:1px solid #fed7aa;padding:10px;border-radius:10px;margin-bottom:12px}.fav{float:right;border:0;background:none;font-size:22px}.empty{text-align:center;color:#666;padding:30px}.home-guide{display:grid;gap:12px}.home-hero{background:linear-gradient(180deg,#fff,#fffaf0);border-top:4px solid #d4a017;border-radius:14px;padding:16px;box-shadow:0 1px 4px #0001}.home-hero h2{margin:0 0 6px;color:#991b1b;font-size:22px}.home-hero p{margin:6px 0;line-height:1.45}.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick-card{border:1px solid #e5e7eb;background:#fff;border-radius:12px;padding:12px;text-align:left}.quick-card b{display:block;color:#991b1b;margin-bottom:4px}.quick-card span{font-size:13px;color:#475569;line-height:1.35}.guide-steps{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px #0001}.guide-steps h3{margin:0 0 8px}.guide-step{display:flex;gap:10px;margin:10px 0;align-items:flex-start}.guide-num{flex:0 0 28px;height:28px;border-radius:50%;background:#991b1b;color:#fff;display:grid;place-items:center;font-weight:900}.guide-copy{font-size:14px;line-height:1.4;color:#334155}.guide-copy b{color:#171717}.home-alert{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px;font-size:13px;line-height:1.4}.tools-grid{display:grid;gap:12px}.tool-card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px #0001}.tool-card h3{margin:0 0 6px;font-size:18px}.tool-note{font-size:13px;color:#475569;line-height:1.45}.tool-disabled{margin-top:10px;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;border-radius:10px;padding:10px;font-size:13px;font-weight:700}.tool-input{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;margin-top:8px}.tool-btn{width:100%;border:0;border-radius:10px;background:#991b1b;color:#fff;padding:11px 12px;font-weight:800;margin-top:10px}.tool-result{margin-top:10px;background:#f8fafc;border:1px solid #dbe4ee;border-radius:10px;padding:10px}.burn-age{display:flex;gap:6px;margin:10px 0}.burn-age button{flex:1;border:1px solid #d1d5db;background:#fff;border-radius:9px;padding:9px;font-weight:800}.burn-age button.on{background:#991b1b;color:#fff;border-color:#991b1b}.burn-map{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.body-map{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:8px}.body-map h4{text-align:center;margin:2px 0 6px;font-size:13px}.body-svg{width:100%;height:auto;display:block}.body-part{fill:#e2e8f0;stroke:#334155;stroke-width:3;cursor:pointer;transition:.12s;touch-action:manipulation}.body-svg{min-height:360px}.body-map{min-width:0}.body-label{paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}.body-part.on{fill:#fca5a5;stroke:#991b1b;stroke-width:3}.body-label{font-size:11px;font-weight:850;fill:#334155;pointer-events:none;text-anchor:middle}.body-pct{font-size:10px;fill:#64748b;pointer-events:none;text-anchor:middle}.tbsa-sticky{position:sticky;bottom:8px;z-index:2;background:#991b1b;color:#fff;border-radius:12px;padding:10px 12px;margin-top:10px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0002}.tbsa-sticky b{font-size:25px}.burn-side{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fafafa}.burn-side h4{text-align:center;margin:0 0 8px}.burn-region{width:100%;border:1px solid #d1d5db;background:#fff;border-radius:9px;padding:9px 8px;margin:4px 0;text-align:left;font-size:13px}.burn-region.on{background:#fee2e2;border-color:#ef4444;color:#991b1b;font-weight:850}.burn-total{font-size:28px;font-weight:950;color:#991b1b}.burn-mini{font-size:12px;color:#64748b;margin-top:6px}.parkland-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.parkland-stat{background:#fff;border:1px solid #dbe4ee;border-radius:10px;padding:10px}.parkland-stat b{display:block;font-size:20px;color:#991b1b;margin-top:3px}.flag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:3px 7px;margin:2px 4px 2px 0}.bls{background:#e5e7eb}.als{background:#dcfce7;color:#166534}.mc{background:#fee2e2;color:#991b1b}.footer{color:#777;font-size:11px;text-align:center;padding:24px 12px 90px}.offline{display:none;background:#fff3cd;color:#664d03;padding:7px 12px;text-align:center;font-size:12px}.offline.on{display:block}.appendix-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 10px}.appendix-head div{display:flex;flex-direction:column}.appendix-head b{color:#991b1b;font-size:15px}.appendix-head span{font-size:12px;color:#64748b;margin-top:2px}.appendix-head a{font-size:13px;font-weight:800;color:#991b1b;text-decoration:none}.appendix-frame{width:100%;height:72vh;min-height:620px;background:white;border:1px solid #d1d5db;border-radius:12px;overflow:hidden}.appendix-frame iframe{display:block;width:100%;height:100%;border:0;background:white}.appendix-actions .source{width:100%;text-align:center;margin:10px 0}.reference-source>.notice{margin-top:0}@media(max-width:600px){.appendix-frame{height:68vh;min-height:520px;border-radius:8px}.appendix-head{margin-top:0}.appendix-head b{font-size:14px}.protocol-body .line{font-size:16px;line-height:1.5}.protocol-body .bullet{padding-left:24px;margin:13px 0}.protocol-body .subbullet{padding-left:38px;margin:8px 0}.protocol-body .subsub{padding-left:50px;margin:7px 0}.protocol-body .subbullet:before{left:20px}.protocol-body .subsub:before{left:34px}.section{margin:20px 0 10px;padding:10px 12px;background:#f3f4f6;border-left:4px solid #991b1b;border-radius:6px}.top{padding:calc(8px + env(safe-area-inset-top)) 12px 9px}.headrow{gap:8px}.logo{width:60px;height:75px;flex-basis:60px}.brand{font-size:18px;line-height:1.05}.sub{font-size:11px}.status{font-size:10px;padding:5px 7px}.rolebar{margin-top:7px;gap:6px}.rolebtn,.homebtn{padding:7px 8px;font-size:12px}.searchrow{margin-top:7px}.search{padding:10px 11px}.clearsearch{padding:0 10px;font-size:12px}.tabs{padding:7px 9px;gap:5px}.tab{padding:7px 10px;font-size:12px}.wrap{padding:8px}.detail .card{padding:15px 14px;box-shadow:none;border:1px solid #e5e7eb}.detail h2{font-size:22px;line-height:1.15;margin:4px 34px 5px 0}.detail .meta{font-size:11px}.protocol-mode{padding:8px 10px;margin:8px 0;font-size:12px}.role-note{padding:8px 9px;margin:8px 0 10px;line-height:1.35}.related-box{margin:10px 0;padding:9px}.source{width:100%;text-align:center;margin:6px 0 10px}.notice{padding:8px 9px;margin-bottom:14px;line-height:1.35}.protocol-body{font-size:15px;line-height:1.5}.protocol-body .section{font-size:13px;line-height:1.2;margin:22px 0 8px;padding:8px 10px;background:#f3f4f6;border-left:4px solid #991b1b;border-radius:4px}.protocol-body .line{font-size:15px;line-height:1.5;margin:10px 0}.protocol-body .para{margin:13px 0}.protocol-body .bullet{padding-left:22px;margin:9px 0}.protocol-body .subbullet{padding-left:35px;margin:8px 0}.protocol-body .subsub{padding-left:47px;margin:7px 0}.med-label{font-size:12px;margin-bottom:9px;background:#f3f4f6;border-left:4px solid #991b1b;padding:8px 9px;border-radius:4px}.med-item{font-size:15px;line-height:1.5;margin:9px 0}.med-subhead{font-size:15px;line-height:1.35;margin:13px 0 6px}.med-text{font-size:15px;line-height:1.5;margin:9px 0}}
 /* v42 blue presentation layer: no protocol/search/category rules */
 body{background:#f4f7fa}
 .top{background:#173a5e;border-bottom:3px solid #2f6690}
@@ -813,7 +860,7 @@ function sourceHref(x){
  const end=Math.max(start,Number(x.endPage)||start);
  return 'protocol-viewer.html?src='+encodeURIComponent(src)+'&start='+start+'&end='+end+'&title='+encodeURIComponent(displayTitle(x))+'&protocol='+encodeURIComponent(x.id);
 }
-function normText(v){return String(v||'').replace(/[\uf0b0\u00ba]/g,'°').replace(/[■▪◼◾□◆►▶]+/g,' ').replace(/^[•·‣⁃–—-]+\s*/,'').replace(/\s+/g,' ').trim()}
+function normText(v){return String(v||'').replace(/[\uf0b0\u00ba]/g,'°').replace(/[■▪◼◾□◆►▶]+/g,' ').replace(/^[•·‣⁃–—-]+\s*/,'').replace(/\s+/g,' ').replace(/\bALGORHYTHM\b/gi,'ALGORITHM').replace(/\bXopenex\b/g,'Xopenex').trim()}
 function sameTitle(a,b){return normText(a).toLowerCase().replace(/[^a-z0-9]+/g,'')===normText(b).toLowerCase().replace(/[^a-z0-9]+/g,'')}
 function isHeading(t){
  let u=normText(t).toUpperCase().replace(/:$/,'');
@@ -1088,8 +1135,8 @@ const medicationCrossProtocolDoses={
   {source:'Neonatal Resuscitation',text:'Narcan 0.1 mg/kg.',calcKey:'narcan'}
  ],
  'sodium-bicarbonate':[
- {key:'bicarb',label:'Sodium Bicarbonate',formula:'1 mEq/kg',unit:'mEq',perKg:1}
-],
+  {source:'VF / Pulseless VT and Sodium Bicarbonate medication protocol',text:'Sodium Bicarbonate 1 mEq/kg.',calcKey:'bicarb'}
+ ],
 'terbutaline-sulfate':[
   {source:'Terbutaline medication protocol',text:'Pediatric 0.01 mg/kg, max 0.25 mg.',calcKey:'terb'}
  ],
@@ -1160,12 +1207,18 @@ function formatMedication(x){
   ['PHARMACOLOGY & ACTIONS','Pharmacology & Actions'],
   ['PHARMACOLOGY AND ACTIONS','Pharmacology & Actions'],
   ['PHARMACOLOGY','Pharmacology'],
+  ['ACTIONS/PHARMACOLOGY','Actions / Pharmacology'],
+  ['ACTIONS / PHARMACOLOGY','Actions / Pharmacology'],
+  ['CLASSIFICATION','Classification'],
   ['CLASS OF DRUG','Class of Drug'],
   ['CLASS','Class'],
   ['THERAPEUTIC EFFECTS','Therapeutic Effects'],
   ['INDICATIONS','Indications'],
   ['CONTRAINDICATIONS','Contraindications'],
+  ['RELATIVE CONTRAINDICATIONS','Contraindications'],
   ['PRECAUTIONS','Precautions'],
+  ['WARNINGS','Warnings'],
+  ['WARNING','Warnings'],
   ['DRUG INTERACTION','Drug Interaction'],
   ['DRUG INTERACTIONS','Drug Interactions'],
   ['SIDE EFFECTS & SPECIAL NOTES','Side Effects & Special Notes'],
@@ -1173,6 +1226,8 @@ function formatMedication(x){
   ['SIDE EFFECTS','Side Effects'],
   ['ADVERSE REACTIONS','Adverse Reactions'],
   ['ADMINISTRATION','Administration'],
+  ['ADULT ADMINISTRATION','Adult Administration'],
+  ['PEDIATRIC ADMINISTRATION','Pediatric Administration'],
   ['DOSAGE/ADMINISTRATION','Dosage / Administration'],
   ['DOSAGE','Dose'],
   ['DOSES','Dose'],
@@ -1183,6 +1238,7 @@ function formatMedication(x){
   ['ROUTE','Route'],
   ['SPECIAL CONSIDERATIONS','Special Considerations'],
   ['SPECIAL NOTES','Special Notes'],
+  ['SPECIAL NOTES / RESTRICTIONS','Special Notes / Restrictions'],
   ['PHARMACOKINETICS','Pharmacokinetics'],
   ['PROTOCOL USED IN','Protocol Used In'],
   ['PROTOCOLS USED IN','Protocols Used In'],
@@ -1223,13 +1279,18 @@ function formatMedication(x){
 
  const pedInfo=pediatricMedicationInfo(x);
  const calcHtml=(protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id])&&!pedInfo?.calc?protocolDoseTools(x):'';
- let lastDose=-1;
+ let lastDose=-1,pedRendered=false;
  sections.forEach((s,i)=>{if(/dose|administration/i.test(s.label))lastDose=i});
  let rows='';
  sections.forEach((s,i)=>{
    if(!s.items.length)return;
-   const vals=s.items.map(v=>v&&v.html?'<div>'+v.html+'</div>':'<div>'+esc(v&&v.text!==undefined?v.text:v)+'</div>').join('');
-   const rowClass=s.label==='Contraindications'?' med-contra':(s.label==='Precautions'?' med-precaution':'');
+   let vals=s.items.map(v=>v&&v.html?'<div>'+v.html+'</div>':'<div>'+esc(v&&v.text!==undefined?v.text:v)+'</div>').join('');
+   const isPed=/pediatric|neonatal/i.test(s.label);
+   if(isPed&&pedInfo?.calc){
+     vals+='<div class="source-med-calc">'+protocolDoseTools(x)+'</div>';
+     pedRendered=true;
+   }
+   const rowClass=s.label==='Contraindications'?' med-contra':(s.label==='Precautions'?' med-precaution':(s.label==='Warnings'?' med-contra':''));
    rows+='<div class="source-med-row'+rowClass+'"><div class="source-med-label">'+esc(s.label)+':</div><div class="source-med-value">'+vals+'</div></div>';
    if(calcHtml&&i===lastDose){
      rows+='<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value">'+calcHtml+'</div></div>';
@@ -1238,8 +1299,12 @@ function formatMedication(x){
  if(calcHtml&&lastDose<0){
    rows+='<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value">'+calcHtml+'</div></div>';
  }
+ if(pedInfo&&!pedRendered&&!sections.some(s=>/pediatric|neonatal/i.test(s.label))){
+   rows+=pediatricMedicationHtml(x);
+   pedRendered=true;
+ }
  const icon=/dextrose|glucose/i.test(x.title)?'drop':(/epi|fentanyl|morphine|ketamine|versed|midazolam|diltiazem|amiodarone|adenosine|atropine|lidocaine|dopamine|calcium|magnesium|narcan|naloxone|terbutaline|methylprednisolone/i.test(x.title)?'syringe':'pill');
- return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+pediatricMedicationHtml(x)+medicationCrossProtocolHtml(x)+'</div>';
+ return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+medicationCrossProtocolHtml(x)+'</div>';
 }
 const protocolDoseCalcs={
 'amiodarone':[
@@ -1579,7 +1644,7 @@ function formatGuidelineSource(x){
    while(i+1<raw.length&&!headingRx.test(raw[i+1])&&!itemRx.test(raw[i+1])&&!/^[•▪]$/.test(raw[i+1]))parts.push(raw[++i]);
    html+='<div class="line para">'+esc(normText(parts.join(' ')))+'</div>';
  }
- return html;
+ return '<div class="workflow-sheet"><div class="workflow-node">'+html+'</div></div>';
 }
 function formatDnrProtocol(x){
  const raw=(x.lines||[]).map(normText).filter(Boolean)
@@ -2000,11 +2065,11 @@ function formatSeizures(){
     <div class="flow-node"><h4>1. Assessment</h4><ul><li>Check vital signs.</li><li>Obtain exact description from observers; medication use, alcohol/substance use, recent illness or trauma.</li><li>Brief cardiopulmonary and neurological assessment; note seizure activity observed.</li></ul></div>
     <div class="flow-arrow">↓</div>
     <div class="flow-decision">Clinical pattern
-      <div class="flow-branches three"><div class="flow-branch yes"><b>SINGLE SEIZURE + TYPICAL POSTICTAL</b>Airway, O2, suction as needed, consider IV, transport with vital-sign monitoring.</div><div class="flow-branch no"><b>REPETITIVE SEIZURES</b>Secure airway, O2, cardiac monitor, IV TKO, glucose check, consider Versed.</div><div class="flow-branch no"><b>PRO ECLAMPSIA</b>Airway, O2, cardiac monitor, IV TKO, consider Versed and Magnesium.</div></div>
+      <div class="flow-branches three"><div class="flow-branch yes"><b>SINGLE SEIZURE + TYPICAL POSTICTAL</b>Airway, O2, suction as needed, consider IV, transport with vital-sign monitoring.</div><div class="flow-branch no"><b>REPETITIVE SEIZURES</b>Secure airway, O2, cardiac monitor, IV TKO, glucose check, consider Versed.</div><div class="flow-branch no"><b>PRE-ECLAMPSIA / ECLAMPSIA</b>Airway, O2, cardiac monitor, IV TKO, consider Versed and Magnesium.</div></div>
     </div>
     <div class="flow-node med"><h4>Repetitive Seizures — Versed</h4><p><b>Children:</b> 0.2 mg/kg, not to exceed 10 mg; give half the dose in each nostril.</p><p><b>Adults:</b> 5–10 mg SIVP over 1 minute; IN 5 mg in each nare.</p><p>Additional doses may be given every 3–5 minutes until seizure activity stops.</p></div>
     <div class="flow-warning"><h4>Watch for respiratory depression</h4><p>Consider Dextrose if indicated per hypoglycemia protocol.</p></div>
-    <div class="flow-node med"><h4>Pro Eclampsia</h4><p>Consider Versed 5–10 mg slow IV; source also specifies adults 5 mg slow IV over 1 minute. Additional doses every 3–5 minutes until seizure activity stops.</p><p>Administer Magnesium Sulfate 2–4 g SIVP over 2–4 minutes.</p></div>
+    <div class="flow-node med"><h4>Pre-Eclampsia / Eclampsia</h4><p>Consider Versed 5–10 mg slow IV; source also specifies adults 5 mg slow IV over 1 minute. Additional doses every 3–5 minutes until seizure activity stops.</p><p>Administer Magnesium Sulfate 2–4 g SIVP over 2–4 minutes.</p></div>
   </div>`;
 }
 
@@ -2025,6 +2090,50 @@ function formatBurnsFlow(){
   </div>`;
 }
 
+function workflowSectionClass(label){
+ const u=normText(label).toUpperCase();
+ if(/CONTRAINDICATION|WARNING|DANGER|DO NOT/.test(u))return 'danger';
+ if(/PRECAUTION|CAUTION|CONSIDERATION/.test(u))return 'caution';
+ if(/INTERVENTION|TREATMENT|PROCEDURE|ADMINISTRATION|MANAGEMENT|THERAPY/.test(u))return 'action';
+ if(/MONITOR|TRANSPORT|DESTINATION|REASSESS|DISPOSITION/.test(u))return 'monitor';
+ return '';
+}
+function formatWorkflowProtocol(x){
+ const ts=scopedTokens(x).filter(t=>normText(t.text)&&!sameTitle(t.text,x.title));
+ const groups=[];
+ let cur={label:'Protocol Workflow',items:[],kind:''};
+ groups.push(cur);
+ for(const t of ts){
+   const text=normText(t.text);if(!text)continue;
+   if(t.warning){
+     groups.push({label:'Warning',items:[{text,level:0}],kind:'danger',warning:true});
+     cur={label:'Continue Protocol',items:[],kind:''};groups.push(cur);
+     continue;
+   }
+   if(t.heading){
+     cur={label:text.replace(/:$/,''),items:[],kind:workflowSectionClass(text)};
+     groups.push(cur);continue;
+   }
+   cur.items.push({text,level:Number.isFinite(t.level)?t.level:(t.plain?null:0)});
+ }
+ const clean=groups.filter(g=>g.items.length);
+ if(!clean.length)return '';
+ let step=0,out='<div class="workflow-sheet">';
+ clean.forEach((g,i)=>{
+   const numbered=!g.warning&&!/warning|contraindication|precaution/i.test(g.label);
+   const title=numbered?(++step)+'. '+g.label:g.label;
+   const cls=g.kind||workflowSectionClass(g.label);
+   out+='<div class="workflow-node '+cls+'"><h4>'+esc(title)+'</h4>';
+   g.items.forEach(it=>{
+     const lc=it.level===1?' sub':it.level===2?' sub':' item';
+     out+='<div class="workflow-line'+lc+'">'+esc(it.text)+'</div>'+linkedProtocolButtons(x.id,it.text);
+   });
+   out+='</div>';
+   if(i<clean.length-1&&!g.warning)out+='<div class="workflow-arrow">↓</div>';
+ });
+ return out+'</div>';
+}
+
 function formatProtocol(x){
  if(x.id==='chest-pain-pressure')return formatChestPain();
  if(x.id==='code-stemi')return formatCodeStemi();
@@ -2039,6 +2148,7 @@ function formatProtocol(x){
  if(x.id==='cva-strokes')return formatStroke();
  if(x.id==='seizures')return formatSeizures();
  if(x.id==='burns')return formatBurnsFlow();
+ if(['Medical','Trauma','Procedures'].includes(x.category))return formatWorkflowProtocol(x);
  if(x.category==='Appendix')return formatAppendix(x);
  if(x.id==='do-not-resuscitate')return formatDnrProtocol(x);
  if(x.id==='lucas-device-procedure')return formatLucasProcedure(x);
@@ -2104,10 +2214,10 @@ function burnProtocolTools(){
 function protocolToolLinks(x){
  const tools=[];
  if(['childbirth','neonatal-resuscitation'].includes(x.id))tools.push(['👶','APGAR Score','apgar']);
- if(role!=='EMT'&&['combined-hypotension-shock','combined-post-resuscitation','adult-bradycardia','epinephrine-1-100000-push-dose-procedure','epinephrine-1-100-000'].includes(x.id))tools.push(['💉','Push-Dose Epinephrine','pushdose']);
- if(['combined-general-medical','combined-general-trauma','patient-destination-criteria','combined-head-injury'].includes(x.id))tools.push(['🧠','Glasgow Coma Scale','gcs']);
- if(['combined-general-medical','combined-general-trauma'].includes(x.id))tools.push(['🚑','START Triage','start']);
- if(x.id==='adult-stroke')tools.push(['🧠','Cincinnati Prehospital Stroke Scale','cincinnati']);
+ if(['hypotension','return-of-spontaneous-circulation-rosc','bradycardia-algorithm','push-dose-epi-1-100-000'].includes(x.id))tools.push(['💉','Push-Dose Epinephrine','pushdose']);
+ if(['general-trauma-protocol','head-trauma','patient-destination-criteria'].includes(x.id))tools.push(['🧠','Glasgow Coma Scale','gcs']);
+ if(['mci-triage-start-jump-start','general-trauma-protocol'].includes(x.id))tools.push(['🚑','START Triage','start']);
+ if(x.id==='cva-strokes')tools.push(['🧠','Cincinnati Prehospital Stroke Scale','cincinnati']);
  if(!tools.length)return '';
  return '<div class="protocol-tools"><div class="related-title">Field Tools — Use Here</div>'+tools.map(t=>'<button class="protocol-tool-btn" onclick="toggleInlineProtocolTool(\''+t[2]+'\',this)"><span>'+t[0]+'</span><b>'+t[1]+'</b><span class="tool-chevron">›</span></button><div class="inline-tool-slot" data-tool="'+t[2]+'"></div>').join('')+'</div>';
 }
