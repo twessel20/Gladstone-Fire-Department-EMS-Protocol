@@ -1382,7 +1382,7 @@ const protocolDoseCalcs={
  {key:'fentP',label:'Fentanyl — Pediatric',formula:'1–2 mcg/kg',unit:'mcg',perKg:1,maxPerKg:2,special:'range'}
 ],
 'albuterol-and-atrovent-duoneb':[
- {key:'albInfant',label:'Albuterol — Infant <1 year',formula:'0.03 mL/kg nebulized, max 1 mL',unit:'mL',perKg:.03,max:1,special:'infantAlbuterol',ageRequired:true,note:'GFD medication page lists this weight-based dose for infants under 1 year.'}
+ {key:'albInfant',label:'Albuterol — Pediatric Age Check',formula:'Under 1 year: 0.03 mL/kg nebulized, max 1 mL • Over 1 year: 2.5 mg mixed in 3 mL saline',unit:'mL',perKg:.03,max:1,special:'infantAlbuterol',note:'GFD medication page uses the weight-based dose only for infants under 1 year.'}
 ],
 'benadryl-diphenhydramine':[
  {key:'benP',label:'Benadryl — Pediatric',formula:'1–2 mg/kg',unit:'mg',perKg:1,minPerKg:1,maxPerKg:2,max:50,special:'exactRange',note:'GFD medication page lists 1–2 mg/kg. GFD anaphylaxis treatment protocol uses a maximum single dose of 50 mg.'}
@@ -1461,9 +1461,35 @@ function protocolDoseTools(x){
  }
  const detail=c.special==='fixedAmioArrest'?'<div class="dose-out"><strong>INITIAL: 300 mg IV/IO</strong><div class="dose-note">If needed: one additional 150 mg dose once.</div><div class="dose-note"><b>Protocol sequence total if both doses are given: 450 mg</b></div></div>':'<div class="dose-out"><strong>WIDE-COMPLEX VT / UNCERTAIN RHYTHM: 150 mg IV over 10 min</strong><div class="dose-note">For unstable PVCs, GFD also lists 150 mg IV over 10 min and allows repeat dosing every 10 minutes up to 2.2 g total.</div></div>';
  return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+detail+'</div>';
-}return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+}
+if(c.special==='infantAlbuterol'){
+ return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div>'+
+   '<div class="dose-note">'+esc(c.formula)+'</div>'+
+   '<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label>'+
+   '<select id="'+id+'-agegroup" class="tool-input" onchange="toggleInfantAlbuterolWeight(\''+x.id+'\',\''+c.key+'\')">'+
+   '<option value="">Select age group</option>'+
+   '<option value="under">Less than 1 year old</option>'+
+   '<option value="over">Older than 1 year old</option>'+
+   '</select></div>'+
+   '<div id="'+id+'-weightwrap" style="display:none"><div class="dose-row">'+
+   '<input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">'+
+   '<select id="'+id+'-u"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>'+
+   '<button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Show dose</button>'+
+   '<div id="'+id+'-o" class="dose-out"></div></div>';
+}
+return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 
+function toggleInfantAlbuterolWeight(pid,key){
+ const id='dc-'+pid+'-'+key;
+ const group=document.getElementById(id+'-agegroup')?.value||'';
+ const wrap=document.getElementById(id+'-weightwrap');
+ const out=document.getElementById(id+'-o');
+ if(wrap)wrap.style.display=group==='under'?'block':'none';
+ if(out)out.innerHTML=group==='over'
+   ?'<strong>DOSE: 2.5 mg nebulized</strong><div class="dose-note">Mix in 3 mL saline per the GFD medication protocol.</div>'
+   :'';
+}
 function calcProtocolDose(pid,key){
  const c=((protocolDoseCalcs[pid]||medicationDoseCalcs[pid])||[]).find(v=>v.key===key),id='dc-'+pid+'-'+key,out=document.getElementById(id+'-o');
  if(!c||!out)return;
@@ -1471,6 +1497,20 @@ function calcProtocolDose(pid,key){
  if(c.special==='zofranPeds'){
    if(age<4){out.innerHTML='<b>Contraindicated by the GFD medication page for age &lt;4 years.</b>';return}
    out.innerHTML='<strong>PEDIATRIC ZOFRAN DOSE: 2 mg</strong><div class="dose-note">IM or ODT, or slow IVP over 2–5 minutes. Contact Medical Control for additional doses.</div>';return
+ }
+ if(c.special==='infantAlbuterol'){
+   const group=document.getElementById(id+'-agegroup')?.value||'';
+   if(!group){out.innerHTML='<b>Select whether the patient is less than or older than 1 year.</b>';return}
+   if(group==='over'){
+     out.innerHTML='<strong>DOSE: 2.5 mg nebulized</strong><div class="dose-note">Mix in 3 mL saline per the GFD medication protocol.</div>';
+     return
+   }
+   const wEl=document.getElementById(id+'-w'),uEl=document.getElementById(id+'-u'),w=parseFloat(wEl?.value),u=uEl?.value||'kg';
+   if(!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
+   const kg=u==='lb'?w/2.2046226218:w;
+   const d=Math.min(kg*c.perKg,c.max);
+   out.innerHTML=kg.toFixed(1)+' kg × 0.03 mL/kg<br><strong>NEBULIZER VOLUME: '+d.toFixed(2)+' mL</strong><div class="dose-note"><b>MAX: 1 mL</b></div>';
+   return
  }
  const wEl=document.getElementById(id+'-w'),uEl=document.getElementById(id+'-u'),w=parseFloat(wEl?.value),u=uEl?.value||'kg';
  if(!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
@@ -1512,12 +1552,6 @@ function calcProtocolDose(pid,key){
      '<strong>DEXTROSE DELIVERED: '+grams.toFixed(grams<10?2:1)+' g</strong>'+
      '<div class="dose-note">D10 = 25 g / 250 mL = 0.1 g/mL • '+gramsPerKg.toFixed(1)+' g/kg</div>'+
      '<div class="dose-note">'+(age<8?'GFD branch: younger than 8 years.':'GFD branch: greater than 8 years.')+'</div>';
-   return
- }
- if(c.special==='infantAlbuterol'){
-   if(age>=1){out.innerHTML='<b>This weight-based dose is listed by GFD only for infants under 1 year.</b><div class="dose-note">For adults and children over 1 year, refer to the fixed nebulizer dose printed in the medication protocol. The source does not define the exact 1-year boundary.</div>';return}
-   const d=Math.min(kg*c.perKg,c.max);
-   out.innerHTML='<b>AGE: '+age+' years</b><br>'+kg.toFixed(1)+' kg × 0.03 mL/kg<br><strong>NEBULIZER VOLUME: '+d.toFixed(2)+' mL</strong><div class="dose-note"><b>MAX: 1 mL</b></div>';
    return
  }
  if(c.special==='lidocaineSequence'){
