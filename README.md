@@ -3,7 +3,7 @@
 Mobile-first, offline-ready quick-reference application for Gladstone Fire Department EMS protocols.
 
 ## Current status
-This repository is being initialized from the PVFire application framework. The protocol dataset is intentionally empty until the Gladstone source manual is indexed and clinically reviewed.
+This repository contains the Gladstone Fire Department EMS field-reference application. The protocol dataset is indexed from the approved 2026 GFD EMS Protocol V3 source manual.
 
 **Do not use the current build for patient-care decisions until the GFD protocol dataset has been loaded and validated.**
 
