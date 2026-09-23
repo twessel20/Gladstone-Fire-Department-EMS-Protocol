@@ -876,6 +876,40 @@ function scopedTokens(x){
  }
  return result;
 }
+function formatDextrose(){
+ return `
+  <div class="med-section">
+    <div class="med-label">Indications</div>
+    <div class="med-item">Hypoglycemia (<b>&lt; 60 mg/dL</b>) and Altered Mental Status (<b>GCS &lt; 14</b>)</div>
+
+    <div class="med-label">Contraindications</div>
+    <div class="med-item">Hyperglycemia</div>
+    <div class="med-item">Delirium tremens</div>
+    <div class="med-item">Cranial/spinal hemorrhage</div>
+    <div class="med-item">CHF</div>
+
+    <div class="med-label">Precautions</div>
+    <div class="med-item">May cause necrosis if infiltrated into tissue</div>
+
+    <div class="med-label">Side Effects</div>
+    <div class="med-item">Local venous irritation</div>
+    <div class="med-item">Pulmonary edema</div>
+    <div class="med-item">Hyperglycemia</div>
+
+    <div class="med-label">Dose</div>
+    <div class="med-dose">For adults, give <b>D10 (250 mL) 25 g</b> or equivalent IV.</div>
+
+    <div class="med-label">Pediatric Dose</div>
+    <div class="med-dose">Children <b>greater than 8 years</b>: <b>2 mL/kg D10 IV</b></div>
+    <div class="med-dose">Children <b>less than 8 years</b>: <b>1 mL/kg D10 IV</b></div>
+    <div class="protocol-callout info"><strong>Weight Estimation</strong>Refer to the Broselow tape for weight estimation as needed.</div>
+
+    <div class="med-label">Oral Dose</div>
+    <div class="med-dose"><b>15 g oral glucose</b> may be considered for awake, cooperative patients with a patent airway and the ability to swallow.</div>
+  </div>
+ `;
+}
+
 function formatMedication(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
@@ -1599,6 +1633,7 @@ function formatProtocol(x){
    const raw=(x.lines||[]).map(normText).filter(Boolean).filter(l=>l.toUpperCase()!=='GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS').filter(l=>!/^NARCOTIC ACCOUNTABILITY$/i.test(l)).filter(l=>!/^CONTROLLED SUBSTANCE VERIFICATION$/i.test(l));
    return raw.map(t=>{let m=t.match(/^(\d+\.|[a-z]\.|[ivx]+\.)\s*(.*)$/i);if(m){let cls=/^\d/.test(m[1])?'bullet':/^[a-z]/i.test(m[1])?'subbullet':'subsub';return '<div class="line '+cls+'">'+esc(m[2]||t)+'</div>'}return '<div class="line para">'+esc(t)+'</div>'}).join('');
  }
+ if(x.id==='dextrose')return formatDextrose();
  if(x.category==='Medications')return formatMedication(x);
  let ts=scopedTokens(x);
  let rendered=[],lastHeading='';
