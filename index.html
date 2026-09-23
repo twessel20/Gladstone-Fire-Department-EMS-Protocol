@@ -1041,24 +1041,25 @@ function toolSearchResults(query){
 }
 function openSearchTool(id){cat='Tools';quickSet=null;document.querySelector('#q').value='';tabs();renderTools();openToolCard(id);scrollTo(0,0)}
 const gfdHospitals=[
- ['Liberty Hospital','2525 Glenn Hendren Drive, Liberty, MO 64068'],
- ["Saint Luke's North Hospital – Barry Road",'5830 NW Barry Road, Kansas City, MO 64154'],
- ['North Kansas City Hospital','2800 Clay Edwards Drive, North Kansas City, MO 64116'],
- ['The University of Kansas Hospital – Emergency Department','4000 Cambridge Street, Kansas City, KS 66160'],
- ['University Health Truman Medical Center','2301 Holmes Street, Kansas City, MO 64108'],
- ["Children's Mercy Adele Hall Campus",'2401 Gillham Road, Kansas City, MO 64108'],
- ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132'],
- ['Kansas City VA Medical Center','4801 Linwood Boulevard, Kansas City, MO 64128'],
- ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111']
-];
+ ['North Kansas City Hospital','2800 Clay Edwards Drive, North Kansas City, MO 64116','Primary'],
+ ["Saint Luke's North Hospital – Barry Road",'5830 NW Barry Road, Kansas City, MO 64154',''],
+ ['Liberty Hospital','2525 Glenn Hendren Drive, Liberty, MO 64068',''],
+ ['University Health Truman Medical Center','2301 Holmes Street, Kansas City, MO 64108',''],
+ ["Children's Mercy Adele Hall Campus",'2401 Gillham Road, Kansas City, MO 64108',''],
+ ['Kansas City VA Medical Center','4801 Linwood Boulevard, Kansas City, MO 64128',''],
+ ['The University of Kansas Hospital – Emergency Department','4000 Cambridge Street, Kansas City, KS 66160',''],
+ ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111',''],
+ ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132','']
+]
 function renderHospitals(){
  const q=(document.querySelector('#q')?.value||'').trim().toLowerCase();
  const rows=gfdHospitals.filter(([name,address])=>!q||(name+' '+address).toLowerCase().includes(q));
- const cards=rows.map(([name,address])=>{
+ const cards=rows.map(([name,address,status])=>{
    const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);
-   return '<div class="hospital-card"><h3>🏥 '+esc(name)+'</h3><div class="hospital-address">'+esc(address)+'</div><a class="hospital-gps" target="_blank" rel="noopener" href="'+maps+'">Open GPS / Maps ↗</a></div>';
+   const badge=status==='Primary'?'<span style="display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#dcfce7;color:#166534;font-size:11px;font-weight:900;vertical-align:middle">PRIMARY</span>':'';
+   return '<div class="hospital-card"><h3>🏥 '+esc(name)+badge+'</h3><div class="hospital-address">'+esc(address)+'</div><a class="hospital-gps" target="_blank" rel="noopener" href="'+maps+'">Open GPS / Maps ↗</a></div>';
  }).join('');
- document.querySelector('#list').innerHTML='<div class="hospital-note">Common GFD transport destinations. Confirm destination choice with current protocol and Medical Control when indicated.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div>';
+ document.querySelector('#list').innerHTML='<div class="hospital-note"><b>North Kansas City Hospital is GFD\'s primary destination and is listed first.</b> Remaining hospitals are ordered by approximate proximity from Gladstone. Confirm destination choice with current protocol and Medical Control when indicated.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div>';
 }
 function render(){
  if(cat==='Home'){renderHome();return}
