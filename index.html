@@ -1041,25 +1041,30 @@ function toolSearchResults(query){
 }
 function openSearchTool(id){cat='Tools';quickSet=null;document.querySelector('#q').value='';tabs();renderTools();openToolCard(id);scrollTo(0,0)}
 const gfdHospitals=[
- ['North Kansas City Hospital','2800 Clay Edwards Drive, North Kansas City, MO 64116','Primary'],
- ["Saint Luke's North Hospital – Barry Road",'5830 NW Barry Road, Kansas City, MO 64154',''],
- ['Liberty Hospital','2525 Glenn Hendren Drive, Liberty, MO 64068',''],
- ['University Health Truman Medical Center','2301 Holmes Street, Kansas City, MO 64108',''],
- ["Children's Mercy Adele Hall Campus",'2401 Gillham Road, Kansas City, MO 64108',''],
- ['Kansas City VA Medical Center','4801 Linwood Boulevard, Kansas City, MO 64128',''],
- ['The University of Kansas Hospital – Emergency Department','4000 Cambridge Street, Kansas City, KS 66160',''],
- ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111',''],
- ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132','']
-]
+ ['North Kansas City Hospital','2800 Clay Edwards Drive, North Kansas City, MO 64116','Primary',['Level II Trauma','Stroke Routing']],
+ ["Saint Luke's North Hospital – Barry Road",'5830 NW Barry Road, Kansas City, MO 64154','',[]],
+ ['Liberty Hospital','2525 Glenn Hendren Drive, Liberty, MO 64068','',['Level II Trauma']],
+ ['University Health Truman Medical Center','2301 Holmes Street, Kansas City, MO 64108','',['Level I Trauma']],
+ ["Children's Mercy Adele Hall Campus",'2401 Gillham Road, Kansas City, MO 64108','',['Level I Pediatric Trauma','Burn Priority','Pediatric Burns']],
+ ['Kansas City VA Medical Center','4801 Linwood Boulevard, Kansas City, MO 64128','',[]],
+ ['The University of Kansas Hospital – Emergency Department','4000 Cambridge Street, Kansas City, KS 66160','',['Level I Trauma','Burn Priority']],
+ ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111','',['Level I Trauma','Stroke Routing','Comprehensive Stroke Center']],
+ ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132','',['Level I Trauma','Burn Priority','Stroke Routing']]
+];
 function renderHospitals(){
  const q=(document.querySelector('#q')?.value||'').trim().toLowerCase();
- const rows=gfdHospitals.filter(([name,address])=>!q||(name+' '+address).toLowerCase().includes(q));
- const cards=rows.map(([name,address,status])=>{
+ const rows=gfdHospitals.filter(([name,address,,tags])=>!q||(name+' '+address+' '+(tags||[]).join(' ')).toLowerCase().includes(q));
+ const cards=rows.map(([name,address,status,tags])=>{
    const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);
-   const badge=status==='Primary'?'<span style="display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#dcfce7;color:#166534;font-size:11px;font-weight:900;vertical-align:middle">PRIMARY</span>':'';
-   return '<div class="hospital-card"><h3>🏥 '+esc(name)+badge+'</h3><div class="hospital-address">'+esc(address)+'</div><a class="hospital-gps" target="_blank" rel="noopener" href="'+maps+'">Open GPS / Maps ↗</a></div>';
+   const primary=status==='Primary'?'<span style="display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#dcfce7;color:#166534;font-size:11px;font-weight:900;vertical-align:middle">PRIMARY</span>':'';
+   const tagHtml=(tags||[]).map(tag=>{
+     const isStroke=/stroke/i.test(tag),isBurn=/burn/i.test(tag),isTrauma=/trauma/i.test(tag);
+     const style=isStroke?'background:#dbeafe;color:#1d4ed8':isBurn?'background:#ffedd5;color:#9a3412':isTrauma?'background:#fee2e2;color:#991b1b':'background:#eef2f7;color:#334155';
+     return '<span style="display:inline-block;margin:6px 6px 0 0;padding:3px 8px;border-radius:999px;'+style+';font-size:11px;font-weight:900">'+esc(tag)+'</span>';
+   }).join('');
+   return '<div class="hospital-card"><h3>🏥 '+esc(name)+primary+'</h3>'+tagHtml+'<div class="hospital-address" style="'+((tags||[]).length?'margin-top:8px':'')+'">'+esc(address)+'</div><a class="hospital-gps" target="_blank" rel="noopener" href="'+maps+'">Open GPS / Maps ↗</a></div>';
  }).join('');
- document.querySelector('#list').innerHTML='<div class="hospital-note"><b>North Kansas City Hospital is GFD\'s primary destination and is listed first.</b> Remaining hospitals are ordered by approximate proximity from Gladstone. Confirm destination choice with current protocol and Medical Control when indicated.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div>';
+ document.querySelector('#list').innerHTML='<div class="hospital-note"><b>North Kansas City Hospital is GFD\'s primary destination and is listed first.</b> Remaining hospitals are ordered by approximate proximity from Gladstone. Trauma, burn, and stroke routing labels are shown for quick field reference. Confirm destination choice with current protocol and Medical Control when indicated.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div>';
 }
 function render(){
  if(cat==='Home'){renderHome();return}
@@ -1112,9 +1117,14 @@ function render(){
  }
  if(quickSet&&quickGroups[quickSet]){const allowed=new Set(quickGroups[quickSet]);a=a.filter(x=>allowed.has(x.id));}
  const toolHits=q&&cat==='All'?toolSearchResults(q):[];
+ const hospitalHits=q&&cat==='All'?gfdHospitals.filter(([name,address,,tags])=>{
+   const h=searchText([name,address,(tags||[]).join(' ')].join(' '));
+   return h.includes(query)||queryTerms.every(t=>h.includes(t));
+ }):[];
  const toolHtml=toolHits.length?'<div class="search-tool-group"><div class="related-title">Matching Field Tools</div>'+toolHits.map(t=>'<button class="tool-launch search-tool" onclick="openSearchTool(\''+t.id+'\')"><span class="tool-launch-icon">'+t.icon+'</span><span><b>'+esc(t.title)+'</b><small>'+esc(t.desc)+'</small></span><span class="tool-chevron">›</span></button>').join('')+'</div>':'';
+ const hospitalHtml=hospitalHits.length?'<div class="search-tool-group"><div class="related-title">Matching Hospitals</div>'+hospitalHits.map(([name,address,status,tags])=>'<button class="tool-launch search-tool" onclick="setCat(\'Hospitals\')"><span class="tool-launch-icon">🏥</span><span><b>'+esc(name)+'</b><small>'+esc([status==='Primary'?'Primary':'',...(tags||[]),address].filter(Boolean).join(' • '))+'</small></span><span class="tool-chevron">›</span></button>').join('')+'</div>':'';
  const protocolHtml=a.length?a.map(x=>`<div class="card" onclick="openP('${x.id}')"><button class="fav" aria-label="favorite" onclick="event.stopPropagation();toggleFav('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><div class="title">${esc(displayTitle(x))}</div><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:`2026 source`}</div></div>`).join(''):'';
- document.querySelector('#list').innerHTML=toolHtml+protocolHtml||'<div class="empty">'+(q?'No protocols or tools match “'+esc(q)+'”.<br><button class="back" style="margin-top:12px" onclick="clearSearch()">Clear Search</button>':'No protocols found in this section.')+'</div>'
+ document.querySelector('#list').innerHTML=toolHtml+hospitalHtml+protocolHtml||'<div class="empty">'+(q?'No protocols, tools, or hospitals match “'+esc(q)+'”.<br><button class="back" style="margin-top:12px" onclick="clearSearch()">Clear Search</button>':'No protocols found in this section.')+'</div>'
 }
 function toggleFav(id){fav.has(id)?fav.delete(id):fav.add(id);localStorage.setItem('gfdFav',JSON.stringify([...fav]));render()}
 function sourceHref(x){
