@@ -31,7 +31,7 @@ if(embed){
 }
 const protocol=q.get('protocol')||'';
 document.getElementById('backBtn').addEventListener('click',()=>{location.href='./index.html'+(protocol?'#'+encodeURIComponent(protocol):'');});
-const raw=q.get('src')||'updates/published/current-protocol-book.pdf';
+const raw=q.get('src')||'updates/current-protocol-book.pdf';
 const start=Math.max(1,parseInt(q.get('start')||q.get('page')||'1',10));
 const end=Math.max(start,parseInt(q.get('end')||String(start),10));
 const title=q.get('title')||'GFD Source Protocol';
