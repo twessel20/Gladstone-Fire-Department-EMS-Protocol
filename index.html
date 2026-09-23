@@ -521,16 +521,35 @@ async function loadPatientMedication(rxcui,fallbackName){
 function renderTools(){
   document.querySelector('#list').innerHTML=`
     <div class="tools-grid tool-menu">
-      <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult, pediatric, and infant cardiac arrest dose calculator</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('burn')"><span class="tool-launch-icon">🔥</span><span><b>Burn Calculator — TBSA + Parkland</b><small>One tool: burn map, TBSA calculation, and Parkland fluid formula</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('apgar')"><span class="tool-launch-icon">👶</span><span><b>APGAR Score</b><small>Appearance, pulse, grimace, activity, respiration</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('gcs')"><span class="tool-launch-icon">🧠</span><span><b>Glasgow Coma Scale</b><small>Eye, verbal, and motor scoring</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('cincinnati')"><span class="tool-launch-icon">🧠</span><span><b>Cincinnati Prehospital Stroke Scale</b><small>Facial droop, arm drift, and speech screen</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('start')"><span class="tool-launch-icon">🚑</span><span><b>START Triage</b><small>Step-by-step adult mass-casualty triage aid</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('pillcount')"><span class="tool-launch-icon">🔢</span><span><b>Pill Count</b><small>Estimate pills missing from a prescription bottle</small></span><span class="tool-chevron">›</span></button>
-      <button class="tool-launch" onclick="openToolCard('pillid')"><span class="tool-launch-icon">💊</span><span><b>Pill Identifier</b><small>Use imprint, color, and shape to identify an unknown tablet/capsule</small></span><span class="tool-chevron">›</span></button>
+      <div class="tool-card">
+        <h3>💉 Medication & Infusion</h3>
+        <div class="tool-note">Dose, infusion, and medication-support calculators.</div>
+        <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult, pediatric, and infant initial + repeat dose calculator</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
+      </div>
+
+      <div class="tool-card">
+        <h3>🔥 Trauma & Burns</h3>
+        <div class="tool-note">Burn assessment, fluid estimation, and triage tools.</div>
+        <button class="tool-launch" onclick="openToolCard('burn')"><span class="tool-launch-icon">🔥</span><span><b>Burn Calculator — TBSA + Parkland</b><small>Burn map, TBSA calculation, and Parkland fluid formula</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('start')"><span class="tool-launch-icon">🚑</span><span><b>START Triage</b><small>Step-by-step adult mass-casualty triage aid</small></span><span class="tool-chevron">›</span></button>
+      </div>
+
+      <div class="tool-card">
+        <h3>🧠 Assessment & Scoring</h3>
+        <div class="tool-note">Rapid neurologic and clinical scoring references.</div>
+        <button class="tool-launch" onclick="openToolCard('gcs')"><span class="tool-launch-icon">🧠</span><span><b>Glasgow Coma Scale</b><small>Eye, verbal, and motor scoring</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('cincinnati')"><span class="tool-launch-icon">🧠</span><span><b>Cincinnati Prehospital Stroke Scale</b><small>Facial droop, arm drift, and speech screen</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('apgar')"><span class="tool-launch-icon">👶</span><span><b>APGAR Score</b><small>Appearance, pulse, grimace, activity, respiration</small></span><span class="tool-chevron">›</span></button>
+      </div>
+
+      <div class="tool-card">
+        <h3>💊 Medication Identification</h3>
+        <div class="tool-note">Tools for evaluating home or unknown medications.</div>
+        <button class="tool-launch" onclick="openToolCard('pillcount')"><span class="tool-launch-icon">🔢</span><span><b>Pill Count</b><small>Estimate pills missing from a prescription bottle</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('pillid')"><span class="tool-launch-icon">💊</span><span><b>Pill Identifier</b><small>Identify an unknown tablet or capsule by imprint and appearance</small></span><span class="tool-chevron">›</span></button>
+      </div>
     </div>
     <div id="toolDetail"></div>`;
 }
