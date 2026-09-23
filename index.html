@@ -1153,8 +1153,7 @@ const protocolDoseCalcs={
  {key:'atrTotal',label:'Atropine — Weight-Based Total Reference',formula:'0.04 mg/kg',unit:'mg',perKg:.04,note:'GFD protocol also states Atropine 0.5 mg IV every 3–5 min, repeat to a total dose of 3 mg or 0.04 mg/kg.'}
 ],
 'ventricular-fibrillation-pulseless-ventricular-tachycardia':[
- {key:'lidoInitial',label:'Lidocaine — Initial',formula:'1–1.5 mg/kg initial dose',unit:'mg',perKg:1,maxPerKg:1.5,special:'range',totalMaxPerKg:3,note:'GFD: max 3 doses or 3 mg/kg total. If given down ET tube, double the dose.'},
- {key:'lidoRepeat',label:'Lidocaine — Repeat',formula:'0.5–0.75 mg/kg repeat dose',unit:'mg',perKg:.5,maxPerKg:.75,special:'range',totalMaxPerKg:3,note:'GFD: max 3 doses or 3 mg/kg total. If given down ET tube, double the dose.'},
+ {key:'lido',label:'Lidocaine — VF / Pulseless VT',formula:'Initial 1–1.5 mg/kg; repeat 0.5–0.75 mg/kg. Max 3 doses or 3 mg/kg total.',unit:'mg',perKg:1,minPerKg:1,maxPerKg:1.5,special:'lidocaineSequence',repeatMinPerKg:.5,repeatMaxPerKg:.75,totalMaxPerKg:3,note:'If given down the ET tube, GFD states to double the dose.'},
  {key:'bicarb',label:'Sodium Bicarbonate — Prolonged Down Time',formula:'1 mEq/kg',unit:'mEq',perKg:1}
 ],
 'return-of-spontaneous-circulation-rosc':[
@@ -1258,8 +1257,7 @@ const protocolDoseCalcs={
  {key:'ketDiss',label:'Ketamine — Dissociation',formula:'3–5 mg/kg IM',unit:'mg',perKg:3,maxPerKg:5,special:'range'}
 ],
 'lidocaine':[
- {key:'lidoInitial',label:'Lidocaine — Initial VF/pVT',formula:'1–1.5 mg/kg',unit:'mg',perKg:1,maxPerKg:1.5,special:'range',totalMaxPerKg:3,note:'GFD: repeat 0.5–0.75 mg/kg; max 3 doses or 3 mg/kg. ET dose is doubled.'},
- {key:'lidoRepeat',label:'Lidocaine — Repeat VF/pVT',formula:'0.5–0.75 mg/kg',unit:'mg',perKg:.5,maxPerKg:.75,special:'range',totalMaxPerKg:3,note:'GFD: max 3 doses or 3 mg/kg. ET dose is doubled.'}
+ {key:'lido',label:'Lidocaine — VF / Pulseless VT',formula:'Initial 1–1.5 mg/kg; repeat 0.5–0.75 mg/kg. Max 3 doses or 3 mg/kg total.',unit:'mg',perKg:1,minPerKg:1,maxPerKg:1.5,special:'lidocaineSequence',repeatMinPerKg:.5,repeatMaxPerKg:.75,totalMaxPerKg:3,note:'If given down the ET tube, GFD states to double the dose.'}
 ],
 'methylprednisolone-medrol-solu-medrol':[
  {key:'solu',label:'Methylprednisolone',formula:'2 mg/kg IV, max 62.5 mg',unit:'mg',perKg:2,max:62.5}
@@ -1278,25 +1276,28 @@ const protocolDoseCalcs={
  {key:'sed',label:'Versed — Pediatric Sedation',formula:'0.05 mg/kg slow IV',unit:'mg',perKg:.05,note:'GFD medication page states maximum initial dose 2–4 mg.'}
 ]
 };
-const medicationDoseCalcs={
-'adenocard-adenosine':[{key:'ad1',label:'Pediatric — First dose',formula:'0.1 mg/kg IV/IO (max 6 mg)',unit:'mg',perKg:.1,max:6},{key:'ad2',label:'Pediatric — Second dose',formula:'0.2 mg/kg IV/IO (max 12 mg)',unit:'mg',perKg:.2,max:12}],
-'amiodarone':[{key:'am1',label:'Pediatric — Initial',formula:'5 mg/kg IV/IO (max 300 mg)',unit:'mg',perKg:5,max:300},{key:'am2',label:'Pediatric — Repeat',formula:'2.5 mg/kg IV/IO (max 150 mg)',unit:'mg',perKg:2.5,max:150}],
-'atropine':[{key:'atr',label:'Pediatric',formula:'0.02 mg/kg IV/IO (minimum 0.1 mg; max 1 mg)',unit:'mg',perKg:.02,min:.1,max:1}],
-'benadryl-diphenhydramine':[{key:'ben',label:'Adult/Pediatric',formula:'1 mg/kg (max 50 mg)',unit:'mg',perKg:1,max:50}],
-'calcium-chloride':[{key:'ca',label:'Adult/Pediatric',formula:'0.2 mL/kg IV (max 10 mL)',unit:'mL',perKg:.2,max:10}],
-'d10':[{key:'d10',label:'Pediatric',formula:'5 mL/kg IV/IO (max 125 mL)',unit:'mL',perKg:5,max:125}],
-'epinephrine-1-1000':[{key:'epiIM',label:'Pediatric IM',formula:'0.01 mg/kg IM (max 0.3 mg)',unit:'mg',perKg:.01,max:.3},{key:'epiIV',label:'Pediatric IV/IO — as printed',formula:'0.02 mg/kg IV/IO (minimum 0.1 mg; max 1 mg)',unit:'mg',perKg:.02,min:.1,max:1}],
-'epinephrine-1-10-000':[{key:'epi',label:'Pediatric',formula:'0.01 mg/kg IV/IO every 3–5 min',unit:'mg',perKg:.01}],
-'fentanyl':[{key:'fen',label:'Pediatric',formula:'1 mcg/kg slow IV/IN; may repeat ×1',unit:'mcg',perKg:1,special:'fentanylRepeat'}],
-'ketorolac-toradol':[{key:'ket',label:'Pediatric >10 years',formula:'0.5 mg/kg; max 15 mg IV / 30 mg IM/IN',unit:'mg',perKg:.5,special:'ketSingle'}],
-'narcan-naloxone':[{key:'nal',label:'Pediatric IV',formula:'0.1 mg/kg IV (max 2 mg)',unit:'mg',perKg:.1,max:2}],
-'sodium-bicarbonate':[{key:'bic',label:'Adult/Pediatric',formula:'1 mEq/kg (max total 50 mEq)',unit:'mEq',perKg:1,max:50}],
-'versed-midazolam':[{key:'midA',label:'Adult IM/IN',formula:'0.1 mg/kg (max 10 mg)',unit:'mg',perKg:.1,max:10},{key:'midP',label:'Pediatric IM/IN',formula:'0.1 mg/kg (max 5 mg)',unit:'mg',perKg:.1,max:5},{key:'midIN',label:'Adult/Pediatric IN',formula:'0.2 mg/kg IN (max 5 mg)',unit:'mg',perKg:.2,max:5},{key:'midIV',label:'Pediatric IV',formula:'0.1 mg/kg slow IV (max 5 mg)',unit:'mg',perKg:.1,max:5}]
-};
-function protocolDoseTools(x){
- const cs=protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id];if(!cs)return '';
- return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Weight-Based Dose Calculator</h4><div class="dose-note" style="margin-bottom:10px">Protocol dosing calculator — enter patient weight in lb or kg.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,maxText=c.special==='fentanylRepeat'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight"><select id="'+id+'-u"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the weight-based dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+const medicationDoseCalcs={};
+function syncDoseContext(pid,key,sourceField){
+ const sourceId='dc-'+pid+'-'+key;
+ const w=document.getElementById(sourceId+'-w');
+ const u=document.getElementById(sourceId+'-u');
+ const a=document.getElementById(sourceId+'-a');
+ const cs=protocolDoseCalcs[pid]||[];
+ cs.forEach(c=>{
+   if(c.key===key)return;
+   const id='dc-'+pid+'-'+c.key;
+   const tw=document.getElementById(id+'-w'),tu=document.getElementById(id+'-u'),ta=document.getElementById(id+'-a');
+   if(w&&tw&&sourceField!=='age')tw.value=w.value;
+   if(u&&tu&&sourceField!=='age')tu.value=u.value;
+   if(a&&ta&&sourceField==='age')ta.value=a.value;
+ });
 }
+
+function protocolDoseTools(x){
+ const cs=protocolDoseCalcs[x.id]||[];if(!cs.length)return '';
+ return '<div class="dose-tools" style="margin-top:24px"><h4>Inline Weight-Based Dose Calculator</h4><div class="dose-note" style="margin-bottom:10px">Enter patient factors once. Weight, units, and age automatically carry to other calculators on this same page.</div>'+cs.map(c=>{const id='dc-'+x.id+'-'+c.key,maxText=c.special==='fentanylRepeat'||c.special==='lidocaineSequence'?'':c.special==='ketRange'||c.special==='ketSingle'?'MAX: 15 mg IV • 30 mg IM/IN':Number.isFinite(c.max)?'MAX DOSE: '+c.max+' '+c.unit:'MAX DOSE: Not specified in GFD protocol',rangeInput=Number.isFinite(c.minPerKg)&&Number.isFinite(c.maxPerKg)&&c.special!=='lidocaineSequence'?'<div class="calc-field"><label for="'+id+'-d">Dose ('+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg)</label><input id="'+id+'-d" inputmode="decimal" type="number" min="'+c.minPerKg+'" max="'+c.maxPerKg+'" step="0.1" placeholder="Enter exact dose"></div>':'';return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':'')+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the weight-based dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+}
+
 function calcProtocolDose(pid,key){
  const c=((protocolDoseCalcs[pid]||medicationDoseCalcs[pid])||[]).find(v=>v.key===key),id='dc-'+pid+'-'+key,out=document.getElementById(id+'-o'),w=parseFloat(document.getElementById(id+'-w').value),u=document.getElementById(id+'-u').value;
  if(!c||!Number.isFinite(w)||w<=0){out.innerHTML='<b>Enter a valid patient weight.</b>';return}
@@ -1334,6 +1335,24 @@ function calcProtocolDose(pid,key){
    out.innerHTML='<b>AGE: '+age+' years</b><br>'+kg.toFixed(1)+' kg × 0.03 mL/kg<br><strong>NEBULIZER VOLUME: '+d.toFixed(2)+' mL</strong><div class="dose-note"><b>MAX: 1 mL</b></div>';
    return
  }
+ if(c.special==='lidocaineSequence'){
+   const initialSelect=document.getElementById(id+'-initialPk');
+   const repeatSelect=document.getElementById(id+'-repeatPk');
+   const initialPk=initialSelect?Number(initialSelect.value):1;
+   const repeatPk=repeatSelect?Number(repeatSelect.value):.5;
+   const initialLow=kg*c.minPerKg,initialHigh=kg*c.maxPerKg;
+   const repeatLow=kg*c.repeatMinPerKg,repeatHigh=kg*c.repeatMaxPerKg;
+   const totalMax=kg*c.totalMaxPerKg;
+   const fmt=n=>Number.isInteger(n)?String(n):n.toFixed(n<10?2:1);
+   out.innerHTML='<strong>INITIAL DOSE RANGE: '+fmt(initialLow)+'–'+fmt(initialHigh)+' mg</strong>'+
+     '<div class="dose-note">1–1.5 mg/kg</div>'+
+     '<div style="margin-top:10px"><strong>REPEAT DOSE RANGE: '+fmt(repeatLow)+'–'+fmt(repeatHigh)+' mg</strong></div>'+
+     '<div class="dose-note">0.5–0.75 mg/kg per repeat</div>'+
+     '<div style="margin-top:10px"><strong>TOTAL TREATMENT MAX: '+fmt(totalMax)+' mg</strong></div>'+
+     '<div class="dose-note">Maximum 3 doses or 3 mg/kg total.</div>'+
+     (c.note?'<div class="dose-note">'+esc(c.note)+'</div>':'');
+   return
+ }
  if(c.special==='exactRange'){
    const de=document.getElementById(id+'-d'),pk=Number(de?.value);
    if(!Number.isFinite(pk)||pk<c.minPerKg||pk>c.maxPerKg){out.innerHTML='<b>Enter an exact dose from '+c.minPerKg+'–'+c.maxPerKg+' '+c.unit+'/kg.</b>';return}
@@ -1361,6 +1380,18 @@ function calcProtocolDose(pid,key){
  let note=Number.isFinite(c.max)?'<b>MAX DOSE: '+c.max+' '+c.unit+'</b>':'<b>MAX DOSE: Not specified in GFD protocol</b>';if(Number.isFinite(c.max)&&raw>c.max)note+=' • Maximum applied.';if(Number.isFinite(c.min)&&raw<c.min)note+=' • Minimum dose applied.';
  out.innerHTML=kg.toFixed(1)+' kg × '+c.perKg+' '+c.unit+'/kg<br><strong>'+dose.toFixed(dose<10?2:1)+' '+c.unit+'</strong><div class="dose-note">'+note+'</div>'+(c.note?'<div class="dose-note">'+esc(c.note)+'</div>':'');
 }
+
+document.addEventListener('input',e=>{
+ const m=e.target.id&&e.target.id.match(/^dc-(.+)-([^-]+)-([wau])$/);
+ if(!m)return;
+ const pid=m[1],key=m[2],field=m[3]==='a'?'age':'weight';
+ syncDoseContext(pid,key,field);
+});
+document.addEventListener('change',e=>{
+ const m=e.target.id&&e.target.id.match(/^dc-(.+)-([^-]+)-u$/);
+ if(!m)return;
+ syncDoseContext(m[1],m[2],'weight');
+});
 
 function controlledSubstancePage21(){
  const rows=[
