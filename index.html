@@ -249,6 +249,7 @@ function renderHome(){
     <button class="quick-card" onclick="setCat('Procedures')"><b>⚕️ Procedures</b><span>Airway, vascular access, monitoring and field procedures.</span></button>
     <button class="quick-card" onclick="setCat('Medications')"><b>💊 GFD Medications</b><span>Department medication reference, dosing and weight-based calculators.</span></button>
     <button class="quick-card" onclick="setCat('Tools')"><b>🧮 Field Tools</b><span>Calculators, scoring tools, triage aids, and medication helpers.</span></button>
+    <button class="quick-card" onclick="openSearchTool('phones')"><b>☎️ Important Phone Numbers</b><span>Poison Control, Language Line, and other critical contacts.</span></button>
     <button class="quick-card" onclick="setCat('Patient Meds')"><b>🧾 Patient Meds</b><span>Look up a patient's home medication by brand or generic name.</span></button>
     <button class="quick-card" onclick="setCat('Guidelines')"><b>📋 Guidelines</b><span>Operational and clinical guideline references.</span></button>
     <button class="quick-card" onclick="setCat('Appendix')"><b>📎 Appendix</b><span>Reference forms, scales, lists, and supporting material.</span></button>
@@ -960,13 +961,15 @@ const searchableTools=[
  {id:'dopamine',title:'Dopamine Gravity Drip',icon:'IV',terms:'dopamine drip gravity gtt micrograms mcg kg min infusion',desc:'Gravity-drip gtt/min calculator'},
  {id:'pillcount',title:'Pill Count',icon:'🔢',terms:'pill count overdose altered mental status missing pills bottle tablets capsules ingestion',desc:'Estimate pills missing from a prescription bottle'},
  {id:'pillid',title:'Pill Identifier',icon:'💊',terms:'pill identifier imprint color shape unknown medication overdose altered mental status tablet capsule',desc:'Identify an unknown tablet or capsule by imprint, color, and shape'},
- {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg infant pediatric pals broselow',desc:'Adult, pediatric, and infant cardiac-arrest dose calculator'}
+ {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg infant pediatric pals broselow',desc:'Adult, pediatric, and infant cardiac-arrest dose calculator'},
+ {id:'diltiazem',title:'Diltiazem Dose',icon:'💉',terms:'diltiazem cardizem dose afib atrial fibrillation flutter rvr age dob weight',desc:'DOB or typed age with initial and second weight-based dose'},
+ {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430',desc:'Poison Control, Language Line translator, and critical contacts'}
 ];
 function toolSearchResults(query){
  const q=normText(query).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
  if(!q)return [];
  const terms=q.split(/\s+/).filter(Boolean);
- return searchableTools.filter(t=>terms.every(k=>(t.title+' '+t.terms+' '+t.desc).toLowerCase().includes(k)));
+ return searchableTools.filter(t=>{const hay=normText(t.title+' '+t.terms+' '+t.desc).toLowerCase().replace(/[^a-z0-9]+/g,' ');return terms.every(k=>hay.includes(k))});
 }
 function openSearchTool(id){cat='Tools';quickSet=null;document.querySelector('#q').value='';tabs();renderTools();openToolCard(id);scrollTo(0,0)}
 function render(){
