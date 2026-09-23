@@ -1,3 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 397" role="img" aria-label="Gladstone Fire EMS patch">
-  <image href="https://i.ebayimg.com/thumbs/images/g/1skAAOSwS2Vc6dXi/s-l500.jpg" x="0" y="0" width="500" height="397" preserveAspectRatio="xMidYMid meet"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 310" role="img" aria-label="Gladstone Fire EMS patch">
+  <defs>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <path d="M200 8C111 8 44 41 18 91 8 110 8 135 20 155l87 139h186l87-139c12-20 12-45 2-64C356 41 289 8 200 8z" fill="#050505" stroke="#f20d16" stroke-width="9"/>
+  <path d="M22 157h45l12-33 18 61 19-54 16 26h52" fill="none" stroke="#9b9b9b" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M216 157h53l12-32 18 59 19-53 15 26h45" fill="none" stroke="#9b9b9b" stroke-width="4" stroke-linejoin="round"/>
+
+  <g filter="url(#s)">
+    <g transform="translate(200 160)">
+      <path d="M-35-70h70l-10 35 35-10v70l-35-10 10 35h-70l10-35-35 10v-70l35 10z" fill="#e21b23" stroke="#fff" stroke-width="5"/>
+      <path d="M0-63l20 34h39l-20 34 20 34H20L0 73-20 39h-39l20-34-20-34h39z" fill="#164b9b" stroke="#fff" stroke-width="4"/>
+      <rect x="-12" y="-52" width="24" height="104" rx="3" fill="#234a8b" stroke="#f3d45b" stroke-width="3"/>
+      <path d="M0-45c15 5 15 20 0 27-14 7-13 21 0 27 14 6 14 20 0 27" fill="none" stroke="#f2d46d" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="0" cy="-47" r="7" fill="none" stroke="#f2d46d" stroke-width="4"/>
+    </g>
+
+    <g transform="translate(91 105) rotate(-38)">
+      <rect x="-8" y="-2" width="16" height="92" rx="4" fill="#a66b00"/>
+      <path d="M-30-2h60l-10-16H-20z" fill="#ed151e" stroke="#fff" stroke-width="2"/>
+      <path d="M-31-3l13 16h36L31-3" fill="#ed151e"/>
+    </g>
+    <g transform="translate(309 105) rotate(38)">
+      <rect x="-8" y="-2" width="16" height="92" rx="4" fill="#a66b00"/>
+      <path d="M-30-2h60l-10-16H-20z" fill="#ed151e" stroke="#fff" stroke-width="2"/>
+      <path d="M-31-3l13 16h36L31-3" fill="#ed151e"/>
+    </g>
+  </g>
+
+  <text x="200" y="62" text-anchor="middle" fill="#fff" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="37" letter-spacing="2">GLADSTONE</text>
+  <text x="200" y="273" text-anchor="middle" fill="#fff" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" letter-spacing="1.5">FIRE/EMS</text>
 </svg>
