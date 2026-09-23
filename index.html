@@ -26,6 +26,7 @@
 .protocol-body,.source-med-value,.flow-node,.flow-branch,.dose-note,.notice{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .protocol-body{font-size:16px;line-height:1.5}
 .protocol-body button,.source-med-sheet button{white-space:normal;overflow-wrap:break-word}
+.erlabs-grid{display:grid;gap:10px;margin-top:12px}.erlab-row{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:12px 13px}.erlab-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.erlab-name{font-weight:900;color:#173a5e;font-size:16px}.erlab-range{font-weight:850;color:#334155;font-size:14px;text-align:right}.erlab-meaning{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.erlab-low,.erlab-high{border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4}.erlab-low{background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a}.erlab-high{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}.erlab-low b,.erlab-high b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}.erlab-single{margin-top:8px;border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4;background:#f8fafc;border:1px solid #dbe4ee;color:#334155}.erlab-section{font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b;margin-top:16px}@media(max-width:520px){.erlab-head{display:block}.erlab-range{text-align:left;margin-top:3px}.erlab-meaning{grid-template-columns:1fr}}
 .cbc-grid{display:grid;gap:10px;margin-top:12px}.cbc-row{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:12px 13px}.cbc-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.cbc-name{font-weight:900;color:#173a5e;font-size:16px}.cbc-range{font-weight:850;color:#334155;font-size:14px;text-align:right}.cbc-meaning{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.cbc-low,.cbc-high{border-radius:9px;padding:8px 9px;font-size:12.5px;line-height:1.4}.cbc-low{background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a}.cbc-high{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}.cbc-low b,.cbc-high b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}.cbc-note{font-size:12px;line-height:1.5;color:#475569;background:#f8fafc;border:1px solid #dbe4ee;border-radius:10px;padding:10px 11px;margin-top:10px}.cbc-section-title{font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b;margin-top:16px}.cbc-sex-grid{display:grid;gap:5px;margin-top:5px}.cbc-sex-grid div{font-size:13px;color:#334155}@media(max-width:520px){.cbc-head{display:block}.cbc-range{text-align:left;margin-top:3px}.cbc-meaning{grid-template-columns:1fr}}
 .guideline-sheet{display:grid;gap:10px}
 .guideline-card{background:#fff;border:1px solid #dbe4ee;border-radius:12px;padding:13px 14px;box-shadow:0 1px 3px #0000000d}
@@ -645,6 +646,7 @@ function renderTools(){
         <h3>🧪 Lab & Reference</h3>
         <div class="tool-note">Quick interpretation guides for common laboratory values.</div>
         <button class="tool-launch" onclick="openToolCard('cbc')"><span class="tool-launch-icon">🩸</span><span><b>CBC Reference Guide</b><small>Typical adult CBC ranges with low/high field interpretation</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('erlabs')"><span class="tool-launch-icon">🧪</span><span><b>Common ER Labs</b><small>Electrolytes, renal, cardiac, coagulation, liver, lactate, and blood gas basics</small></span><span class="tool-chevron">›</span></button>
       </div>
 
       <div class="tool-card">
@@ -667,6 +669,64 @@ function openToolCard(which){
  const host=document.querySelector('#toolDetail');
  document.querySelector('.tool-menu').style.display='none';
  const back='<button class="back tool-back sticky-back" onclick="toolBack()">‹ Back to Tools</button>';
+ if(which==='erlabs')host.innerHTML=back+`
+   <div class="tool-card">
+    <h3>🧪 Common ER Labs</h3>
+    <div class="tool-note"><b>Typical adult reference values only.</b> The reporting laboratory's range and assay are authoritative. Trends and clinical context matter more than a single isolated result.</div>
+
+    <div class="erlab-section">Electrolytes / Metabolic</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Sodium (Na)</div><div class="erlab-range">135–145 mEq/L</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Hyponatremia — may contribute to confusion, weakness, seizures, or cerebral edema when severe/acute.</div><div class="erlab-high"><b>High</b>Hypernatremia — often reflects free-water deficit; may cause neurologic symptoms when severe.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Potassium (K)</div><div class="erlab-range">3.7–5.2 mEq/L</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Hypokalemia — can cause weakness and dysrhythmias.</div><div class="erlab-high"><b>High</b>Hyperkalemia — can produce dangerous conduction changes and dysrhythmias.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Chloride (Cl)</div><div class="erlab-range">96–106 mEq/L</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>May occur with vomiting, diuretics, or metabolic alkalosis.</div><div class="erlab-high"><b>High</b>May occur with dehydration, saline load, or hyperchloremic metabolic acidosis.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">CO₂ / Bicarbonate</div><div class="erlab-range">23–29 mEq/L</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Often supports metabolic acidosis or compensation for respiratory alkalosis.</div><div class="erlab-high"><b>High</b>Often supports metabolic alkalosis or compensation for chronic respiratory acidosis.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Glucose</div><div class="erlab-range">70–100 mg/dL fasting</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Hypoglycemia — altered mental status, seizures, weakness, diaphoresis may occur.</div><div class="erlab-high"><b>High</b>Hyperglycemia — consider diabetes, stress response, DKA/HHS depending on context.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Calcium</div><div class="erlab-range">8.5–10.2 mg/dL</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>May cause paresthesias, tetany, QT prolongation, or seizures when significant.</div><div class="erlab-high"><b>High</b>May cause weakness, confusion, dehydration, constipation, or dysrhythmia.</div></div></div>
+    </div>
+
+    <div class="erlab-section">Renal Function</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">BUN</div><div class="erlab-range">6–20 mg/dL</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Can occur with low protein intake, liver disease, or overhydration.</div><div class="erlab-high"><b>High</b>May reflect dehydration, renal dysfunction, GI bleeding, or catabolic state.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Creatinine</div><div class="erlab-range">~0.6–1.3 mg/dL</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Often reflects lower muscle mass and is usually less concerning in isolation.</div><div class="erlab-high"><b>High</b>May indicate impaired renal filtration, dehydration, or acute/chronic kidney injury.</div></div></div>
+    </div>
+
+    <div class="erlab-section">Perfusion / Sepsis</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Lactate</div><div class="erlab-range">0.5–2.2 mmol/L</div></div><div class="erlab-single"><b>High:</b> may reflect impaired perfusion, sepsis, shock, seizures, hypoxemia, liver dysfunction, beta-agonists, or other causes. Trend matters.</div></div>
+    </div>
+
+    <div class="erlab-section">Cardiac</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Troponin I / T</div><div class="erlab-range">Assay-specific</div></div><div class="erlab-single"><b>Interpret using that hospital's assay and upper reference limit.</b> Rising/falling values above the assay cutoff indicate myocardial injury, but elevation is not specific to acute MI.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">BNP</div><div class="erlab-range">&lt;100 pg/mL generally argues against HF</div></div><div class="erlab-single"><b>High:</b> supports cardiac stretch/heart failure in the appropriate clinical setting, but may also rise with renal failure, PE, pulmonary hypertension, or severe infection.</div></div>
+    </div>
+
+    <div class="erlab-section">Coagulation</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">PT</div><div class="erlab-range">11–13.5 sec</div></div><div class="erlab-single"><b>High/prolonged:</b> slower clotting; consider warfarin effect, liver disease, vitamin K deficiency, or coagulopathy.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">INR</div><div class="erlab-range">0.8–1.1 if not anticoagulated</div></div><div class="erlab-single"><b>High:</b> increased anticoagulation / prolonged clotting. Therapeutic warfarin targets are intentionally higher and indication-specific.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">aPTT</div><div class="erlab-range">Lab-specific</div></div><div class="erlab-single"><b>Prolonged:</b> may reflect heparin effect, factor deficiency/inhibitor, liver disease, or other coagulopathy. Use the reporting lab's interval.</div></div>
+    </div>
+
+    <div class="erlab-section">Liver / Pancreas</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">AST</div><div class="erlab-range">8–33 U/L</div></div><div class="erlab-single"><b>High:</b> hepatocellular injury is common, but AST can also rise with muscle injury and other causes.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">ALT</div><div class="erlab-range">4–36 U/L</div></div><div class="erlab-single"><b>High:</b> more liver-focused marker of hepatocellular injury; interpret with AST and clinical context.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Alkaline Phosphatase</div><div class="erlab-range">20–130 U/L</div></div><div class="erlab-single"><b>High:</b> can reflect biliary obstruction/cholestasis or bone disease.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Total Bilirubin</div><div class="erlab-range">0.1–1.2 mg/dL</div></div><div class="erlab-single"><b>High:</b> may reflect hemolysis, hepatocellular dysfunction, or biliary obstruction.</div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">Lipase</div><div class="erlab-range">0–160 U/L</div></div><div class="erlab-single"><b>High:</b> may support pancreatitis or other pancreatic/biliary/GI pathology; laboratory cutoffs vary widely.</div></div>
+    </div>
+
+    <div class="erlab-section">ABG Basics</div>
+    <div class="erlabs-grid">
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">pH</div><div class="erlab-range">7.35–7.45</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Acidemia.</div><div class="erlab-high"><b>High</b>Alkalemia.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">PaCO₂</div><div class="erlab-range">35–45 mmHg</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Respiratory alkalosis component / hyperventilation.</div><div class="erlab-high"><b>High</b>Respiratory acidosis component / hypoventilation.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">HCO₃⁻</div><div class="erlab-range">22–26 mEq/L</div></div><div class="erlab-meaning"><div class="erlab-low"><b>Low</b>Metabolic acidosis component.</div><div class="erlab-high"><b>High</b>Metabolic alkalosis component.</div></div></div>
+      <div class="erlab-row"><div class="erlab-head"><div class="erlab-name">PaO₂</div><div class="erlab-range">75–100 mmHg</div></div><div class="erlab-single"><b>Low:</b> hypoxemia; interpret with FiO₂, altitude, age, pulse oximetry, and clinical condition.</div></div>
+    </div>
+
+    <div class="cbc-note"><b>Field reference only:</b> Do not use this page as a stand-alone diagnostic tool. Reference intervals vary by lab and assay. Pediatric values are age-dependent and are not represented here.</div>
+   </div>`;
  if(which==='cbc')host.innerHTML=back+`
    <div class="tool-card">
     <h3>🩸 CBC Reference Guide</h3>
@@ -1182,6 +1242,7 @@ const searchableTools=[
  {id:'pillid',title:'Pill Identifier',icon:'💊',terms:'pill identifier imprint color shape unknown medication overdose altered mental status tablet capsule',desc:'Identify an unknown tablet or capsule by imprint, color, and shape'},
  {id:'lido',title:'Lidocaine Dose',icon:'💉',terms:'lidocaine dose cardiac arrest vf pulseless vt mg kg infant pediatric pals broselow',desc:'Adult, pediatric, and infant cardiac-arrest dose calculator'},
  {id:'diltiazem',title:'Diltiazem Dose',icon:'💉',terms:'diltiazem cardizem dose afib atrial fibrillation flutter rvr age dob weight',desc:'DOB or typed age with initial and second weight-based dose'},
+ {id:'erlabs',title:'Common ER Labs',icon:'🧪',terms:'er emergency labs lab values bmp cmp sodium potassium chloride bicarbonate co2 glucose calcium bun creatinine lactate troponin bnp pt inr aptt coagulation ast alt bilirubin alkaline phosphatase lipase abg blood gas ph paco2 hco3 pao2 renal cardiac liver pancreas electrolytes sepsis shock',desc:'Common emergency-department lab reference values with low/high interpretation'},
  {id:'cbc',title:'CBC Reference Guide',icon:'🩸',terms:'cbc complete blood count lab laboratory values reference wbc white blood cells leukocytes leukopenia leukocytosis rbc red blood cells hemoglobin hgb hematocrit hct anemia platelets thrombocytopenia thrombocytosis mcv mch mchc rdw mpv neutrophils lymphocytes low high normal range',desc:'Typical adult CBC reference ranges with low/high interpretation'},
  {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, and critical contacts'}
 ];
