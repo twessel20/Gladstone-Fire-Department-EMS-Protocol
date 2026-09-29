@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v118';
-const UPDATE_SUMMARY='v118: Modified Sgarbossa wording was accuracy-reviewed; criterion 2 now clearly applies to any of V1–V3 and criterion 3 explicitly requires both ≥1 mm discordant ST elevation and ≥25% proportional elevation.';
+const C='gfd-ems-shell-v119';
+const UPDATE_SUMMARY='v119: Buttons and controls were enlarged and spaced for gloved-hand, low-light field use, with stronger press/focus feedback across the app.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
