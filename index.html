@@ -613,6 +613,23 @@ function renderHome(){
   </div>`;
  requestAnimationFrame(initHomeShortcutReorder);
 }
+function applyNumericKeypads(root=document){
+ root.querySelectorAll?.('input[type="number"]').forEach(input=>{
+   const step=String(input.getAttribute('step')||'1').toLowerCase();
+   const numericOnly=step!=='any'&&Number.isFinite(Number(step))&&Number(step)%1===0;
+   input.setAttribute('inputmode',numericOnly?'numeric':'decimal');
+   if(numericOnly)input.setAttribute('pattern','[0-9]*');
+   else input.removeAttribute('pattern');
+ });
+}
+const numericKeypadObserver=new MutationObserver(records=>{
+ records.forEach(r=>r.addedNodes.forEach(node=>{
+   if(node.nodeType!==1)return;
+   if(node.matches?.('input[type="number"]'))applyNumericKeypads(node.parentElement||document);
+   else if(node.querySelector?.('input[type="number"]'))applyNumericKeypads(node);
+ }));
+});
+numericKeypadObserver.observe(document.body,{childList:true,subtree:true});
 function roleUI(){}
 function status(){let on=navigator.onLine;document.querySelector('#net').textContent=on?'Online':'Offline';document.querySelector('#offline').classList.toggle('on',!on)}addEventListener('online',status);addEventListener('offline',status);status();
 function scopeText(x){return (x.lines||[]).join(' ').toUpperCase()}
@@ -675,7 +692,7 @@ function pillCountFormHtml(){
    <div class="calc-field"><label for="pcPerDose">Pills per dose</label><input id="pcPerDose" class="tool-input" inputmode="decimal" type="number" min="0.25" step="0.25" value="1" placeholder="Example: 1 or 2"></div>
    <div class="calc-field"><label for="pcFreqType">Prescription frequency</label><select id="pcFreqType" class="tool-input" onchange="pillCountFrequencyUI()"><option value="perday">Times per day</option><option value="hours">Every X hours</option></select></div>
    <div id="pcPerDayWrap" class="calc-field"><label for="pcPerDay">Doses per day</label><input id="pcPerDay" class="tool-input" inputmode="decimal" type="number" min="0.25" step="0.25" value="1" placeholder="Example: 1, 2, 3"></div>
-   <div id="pcHoursWrap" class="calc-field" style="display:none"><label for="pcHours">Dose every how many hours?</label><input id="pcHours" class="tool-input" inputmode="decimal" type="number" min="1" step="1" placeholder="Example: 6, 8, 12"></div>
+   <div id="pcHoursWrap" class="calc-field" style="display:none"><label for="pcHours">Dose every how many hours?</label><input id="pcHours" class="tool-input" inputmode="numeric" type="number" min="1" step="1" placeholder="Example: 6, 8, 12"></div>
 
    <div class="calc-field">
     <label>Prescription start date</label>
@@ -1287,7 +1304,7 @@ function openToolCard(which){
    <div class="tool-note">Gravity tubing only — no pump output. Enter the patient weight, ordered dose in <b>mcg/kg/min</b>, bag concentration, and tubing drop factor.</div>
    <div class="calc-field"><label for="dopWeight">1. Patient weight</label><div class="calc-pair"><input id="dopWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="dopWeightUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
    <div class="calc-field"><label for="dopDose">2. Ordered dopamine dose</label><div class="calc-unit-input"><input id="dopDose" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter dose"><span>mcg/kg/min</span></div><small>Enter the ordered micrograms per kilogram per minute.</small></div>
-   <div class="calc-field"><label>3. Dopamine bag</label><div class="calc-pair"><div class="calc-unit-input"><input id="dopMg" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Drug amount"><span>mg</span></div><div class="calc-unit-input"><input id="dopMl" class="tool-input" inputmode="decimal" type="number" min="0" step="1" placeholder="Bag volume"><span>mL</span></div></div><small>The calculator converts the medication amount from mg to mcg automatically.</small></div>
+   <div class="calc-field"><label>3. Dopamine bag</label><div class="calc-pair"><div class="calc-unit-input"><input id="dopMg" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Drug amount"><span>mg</span></div><div class="calc-unit-input"><input id="dopMl" class="tool-input" inputmode="numeric" type="number" min="0" step="1" placeholder="Bag volume"><span>mL</span></div></div><small>The calculator converts the medication amount from mg to mcg automatically.</small></div>
    <div class="calc-field"><label for="dopGtt">4. Tubing</label><select id="dopGtt" class="tool-input"><option value="10">10 gtt/mL tubing</option><option value="60">60 gtt/mL tubing</option></select></div>
    <button class="tool-btn" onclick="calcDopamine()">Calculate gtt/min</button><div id="dopResult" class="tool-result" style="display:none"></div>
    <div class="tool-note" style="margin-top:10px"><b>Gravity math:</b> gtt/min = (dose mcg/kg/min × weight kg × drop factor gtt/mL) ÷ concentration mcg/mL.</div></div>`;
@@ -3564,7 +3581,7 @@ function toolContent(which){
  if(which==='sgarbossa')return sgarbossaToolHtml();
  if(which==='apgar')return `<div class="tool-card inline-field-tool"><h3>APGAR Score</h3><div class="tool-note">Score each category 0, 1, or 2. GFD Childbirth protocol documents APGAR at 1 and 5 minutes.</div><div class="score-grid">${scoreSelect('apAppearance','Appearance / color',[['0','Blue or pale all over'],['1','Body pink, extremities blue'],['2','Completely pink']])}${scoreSelect('apPulse','Pulse / heart rate',[['0','Absent'],['1','Below 100/min'],['2','100/min or greater']])}${scoreSelect('apGrimace','Grimace / reflex irritability',[['0','No response'],['1','Grimace'],['2','Cough, sneeze, cry, or active withdrawal']])}${scoreSelect('apActivity','Activity / muscle tone',[['0','Limp'],['1','Some flexion'],['2','Active motion']])}${scoreSelect('apResp','Respiration',[['0','Absent'],['1','Slow or irregular'],['2','Good respirations / strong cry']])}</div><div id="apgarResult" class="tool-result score-total"><b>APGAR: — / 10</b></div></div>`;
  if(which==='gcs')return `<div class="tool-card inline-field-tool"><h3>Glasgow Coma Scale</h3><div class="tool-note">Select the best observed response in each category.</div><div class="score-grid">${scoreSelect('gcsEye','Eye opening',[['1','None'],['2','To pressure'],['3','To sound'],['4','Spontaneous']])}${scoreSelect('gcsVerbal','Verbal response',[['1','None'],['2','Incomprehensible sounds'],['3','Inappropriate words'],['4','Confused'],['5','Oriented']])}${scoreSelect('gcsMotor','Motor response',[['1','None'],['2','Extension'],['3','Abnormal flexion'],['4','Normal flexion / withdrawal'],['5','Localizes'],['6','Obeys commands']])}</div><div id="gcsResult" class="tool-result score-total"><b>GCS: — / 15</b></div></div>`;
- if(which==='pushdose')return `<div class="tool-card inline-field-tool"><h3>Push-Dose Epinephrine 1:100,000</h3><div class="tool-note"><b>ADULTS ONLY.</b> GFD dose: <b>10–20 mcg IV/IO every 2–3 minutes if SBP &lt; 90 mmHg</b>. Prepared concentration: <b>10 mcg/mL</b>.</div><div class="calc-field"><label for="pushDoseMcg">Dose (10–20 mcg)</label><input id="pushDoseMcg" class="tool-input" inputmode="decimal" type="number" min="10" max="20" step="1" placeholder="Enter exact dose, e.g. 15" oninput="calcPushDose()"></div><div class="dose-max">MAX DOSE: 20 mcg per dose • Repeat every 2–3 min • No total maximum specified in GFD protocol</div><div id="pushDoseResult" class="tool-result"><b>Volume: —</b></div><div class="tool-note" style="margin-top:10px"><b>GFD preparation:</b> eject 1 mL from a 10 mL saline flush, then draw 1 mL from the epinephrine 1:10,000 preload into that syringe. Final concentration: 100 mcg in 10 mL = 10 mcg/mL.</div></div>`;
+ if(which==='pushdose')return `<div class="tool-card inline-field-tool"><h3>Push-Dose Epinephrine 1:100,000</h3><div class="tool-note"><b>ADULTS ONLY.</b> GFD dose: <b>10–20 mcg IV/IO every 2–3 minutes if SBP &lt; 90 mmHg</b>. Prepared concentration: <b>10 mcg/mL</b>.</div><div class="calc-field"><label for="pushDoseMcg">Dose (10–20 mcg)</label><input id="pushDoseMcg" class="tool-input" inputmode="numeric" type="number" min="10" max="20" step="1" placeholder="Enter exact dose, e.g. 15" oninput="calcPushDose()"></div><div class="dose-max">MAX DOSE: 20 mcg per dose • Repeat every 2–3 min • No total maximum specified in GFD protocol</div><div id="pushDoseResult" class="tool-result"><b>Volume: —</b></div><div class="tool-note" style="margin-top:10px"><b>GFD preparation:</b> eject 1 mL from a 10 mL saline flush, then draw 1 mL from the epinephrine 1:10,000 preload into that syringe. Final concentration: 100 mcg in 10 mL = 10 mcg/mL.</div></div>`;
  if(which==='cincinnati')return cincinnatiToolHtml();
  if(which==='start')return `<div class="tool-card inline-field-tool"><h3>START Triage</h3><div class="tool-note"><b>Adult START decision aid.</b> Follow the prompts in order. This is an added field aid; the current GFD protocol dataset directs crews to begin triage as needed but does not contain a department START algorithm.</div><div id="startBox" class="triage-box"></div><button class="tool-btn" style="background:#475569" onclick="resetStart()">Restart START Triage</button></div>`;
  return '';
@@ -3623,6 +3640,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v128',title:'Numeric keypads for number-only fields',copy:'Standardized mobile keyboard behavior for numeric inputs. Integer-only fields now request the digits-only keypad, while fields that legitimately allow decimals use the decimal numeric keypad. A global safeguard also applies the correct keypad automatically to future number fields added to the app.',tags:['Mobile','Input','Field Use','Usability']},
  {date:'2026-09-29',version:'v127',title:'Burn result priority and header balance',copy:'Reordered Parkland burn-calculator results so the First 8 hr total appears before the 24-hour total, keeping the immediate field-use value first. Centered the Home control in the header to create a more symmetrical mobile layout.',tags:['Burns','Parkland','Home','Mobile','Layout']},
  {date:'2026-09-29',version:'v126',title:'Reorderable navigation and home shortcuts',copy:'Added Toxicology to the top navigation and Home shortcuts. Users can now tap and hold, then drag top navigation buttons or Home shortcut cards into their preferred order. Top navigation and Home grid layouts are saved independently on the device for a personalized field workflow.',tags:['Navigation','Toxicology','Home','Customization','Field Use']},
  {date:'2026-09-29',version:'v125',title:'Hospital abbreviation search',copy:'Hospital search now recognizes common field abbreviations and shorthand such as NKC/NKCH, VA, KU/KUMC, Truman/UH, Children’s/CMH, St. Luke’s/SLH, Research/RMC, Liberty/LH, and Saint Luke’s North/SLN. Aliases are search-only so the displayed hospital names remain unchanged.',tags:['Hospitals','Search','Field Use','Abbreviations']},
@@ -3690,7 +3708,7 @@ function openP(id){
 }
 function closeP(){location.hash='';document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
 document.querySelector('#q').addEventListener('input',()=>{if(document.querySelector('#detail').classList.contains('on'))leaveDetail();if(document.querySelector('#q').value.trim()&&cat!=='All'){cat='All';tabs()}render()});document.querySelector('#q').addEventListener('search',()=>{if(!document.querySelector('#q').value)render()});
-async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();tabs();render();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
+async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();tabs();render();applyNumericKeypads();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
 let appUpdateRegistration=null,appUpdateReady=false,appUpdateDismissed=false;
 function showAppUpdate(){
  if(appUpdateDismissed)return;
