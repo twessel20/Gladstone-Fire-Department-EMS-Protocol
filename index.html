@@ -1708,6 +1708,13 @@ function startRespRate(){document.getElementById('startBox').innerHTML='<h4>3. R
 function startPerfusion(){document.getElementById('startBox').innerHTML='<h4>4. Perfusion adequate?</h4><div class="tool-note">Classic START: radial pulse present or capillary refill ≤ 2 seconds.</div>'+startButtons([['No — inadequate','startResult(\'IMMEDIATE / RED\',\'Perfusion criterion is abnormal.\')'],['Yes — adequate','startMental()']])}
 function startMental(){document.getElementById('startBox').innerHTML='<h4>5. Can the patient obey simple commands?</h4>'+startButtons([['No','startResult(\'IMMEDIATE / RED\',\'Unable to obey simple commands.\')'],['Yes','startResult(\'DELAYED / YELLOW\',\'Breathing, perfusion, and mental-status criteria do not meet Immediate criteria.\')']])}
 
+function toggleParklandLiters(btn){
+ const box=btn?.closest('#parklandResult');if(!box)return;
+ const spans=[...box.querySelectorAll('.parkland-liters')];
+ const show=spans.some(x=>x.style.display==='none');
+ spans.forEach(x=>x.style.display=show?'block':'none');
+ btn.textContent=show?'Hide liters':'Show liters';
+}
 function calcParkland(){
   const box=document.querySelector('#parklandResult');
   const w=parseFloat(document.querySelector('#burnWeight').value);
@@ -1722,11 +1729,12 @@ function calcParkland(){
   box.style.display='block';
   box.innerHTML=`<div class="tool-note">Normal Saline volume estimate</div>
     <div class="parkland-grid">
-      <div class="parkland-stat">First 8 hr total<b>${Math.round(first8).toLocaleString()} mL</b><span>${(first8/1000).toFixed(2)} L</span></div>
-      <div class="parkland-stat">Next 16 hr<b>${Math.round(next16).toLocaleString()} mL</b><span>${(next16/1000).toFixed(2)} L</span></div>
-      <div class="parkland-stat">24-hour total<b>${Math.round(total).toLocaleString()} mL</b><span>${(total/1000).toFixed(2)} L</span></div>
+      <div class="parkland-stat">First 8 hr total<b>${Math.round(first8).toLocaleString()} mL</b><span class="parkland-liters" style="display:none">${(first8/1000).toFixed(2)} L</span></div>
+      <div class="parkland-stat">Next 16 hr<b>${Math.round(next16).toLocaleString()} mL</b><span class="parkland-liters" style="display:none">${(next16/1000).toFixed(2)} L</span></div>
+      <div class="parkland-stat">24-hour total<b>${Math.round(total).toLocaleString()} mL</b><span class="parkland-liters" style="display:none">${(total/1000).toFixed(2)} L</span></div>
       <div class="parkland-stat">Formula factor<b>${factor} mL/kg/%</b></div>
     </div>
+    <button class="tool-btn" style="background:#475569;margin-top:8px" onclick="toggleParklandLiters(this)">Show liters</button>
     <div class="burn-mini" style="margin-top:8px">Weight: ${kg.toFixed(1)} kg • TBSA: ${burnTBSA}% • Timing begins at the time of injury, not EMS arrival.</div>`;
 }
 function resetBurn(){burnSelected.clear();renderBurnMap()}
@@ -3655,7 +3663,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
- {date:'2026-09-29',version:'v131',title:'Automatic mL-to-liter burn conversion',copy:'Parkland burn-calculator results now display both milliliters and liters for the First 8 hr, Next 16 hr, and 24-hour totals so crews do not need to mentally convert fluid volumes in the field.',tags:['Burns','Parkland','Fluids','Field Use']},
+ {date:'2026-09-29',version:'v131',title:'Optional mL-to-liter burn conversion',copy:'Parkland burn-calculator results remain in milliliters by default and now include a one-tap Show liters option for the First 8 hr, Next 16 hr, and 24-hour totals. This keeps the display clean while eliminating manual conversion when liters are useful.',tags:['Burns','Parkland','Fluids','Field Use']},
  {date:'2026-09-29',version:'v130',title:'Burn TBSA-linked protocol highlighting',copy:'The Burns protocol now uses the TBSA selected on the body-surface calculator to highlight the applicable extent-based treatment guidance lower in the protocol. TBSA below 20% highlights the <20% guidance; TBSA above 20% highlights the >20% guidance. Exactly 20% is left unclassified because the source protocol uses strict <20% and >20% wording, and burn depth criteria remain separate.',tags:['Burns','TBSA','Protocol','Field Use']},
  {date:'2026-09-29',version:'v128',title:'Numeric keypads for number-only fields',copy:'Standardized mobile keyboard behavior for numeric inputs. Integer-only fields now request the digits-only keypad, while fields that legitimately allow decimals use the decimal numeric keypad. A global safeguard also applies the correct keypad automatically to future number fields added to the app.',tags:['Mobile','Input','Field Use','Usability']},
  {date:'2026-09-29',version:'v127',title:'Burn result priority and header balance',copy:'Reordered Parkland burn-calculator results so the First 8 hr total appears before the 24-hour total, keeping the immediate field-use value first. Centered the Home control in the header to create a more symmetrical mobile layout.',tags:['Burns','Parkland','Home','Mobile','Layout']},
