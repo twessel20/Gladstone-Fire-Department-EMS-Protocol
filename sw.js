@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v121';
-const UPDATE_SUMMARY='v121: Added a Street Drug / Substance Reference with alias search, toxidromes, emerging substances, GFD medication considerations, and an updateable offline-capable drug library.';
+const C='gfd-ems-shell-v122';
+const UPDATE_SUMMARY='v122: Hospital cards and hospital search results now open driving directions directly from the device’s current location.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
