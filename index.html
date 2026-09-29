@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173a5e"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="gfd-logo.svg"><title>Gladstone Fire Department EMS Protocols</title><style>
 :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#171717;background:#f4f4f5;-webkit-text-size-adjust:100%;text-size-adjust:100%}*{box-sizing:border-box}body{margin:0}.top{position:sticky;top:0;z-index:5;background:linear-gradient(135deg,#102a43 0%,#173a5e 58%,#2f6690 100%);color:white;border-bottom:3px solid #d7c79a;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}.headrow{display:flex;align-items:center;gap:10px}.logo{width:72px;height:90px;flex:0 0 72px;display:block;object-fit:contain;object-position:center;border:0;border-radius:0;background:transparent;padding:0;box-shadow:none}.brand{letter-spacing:.01em}.brand{font-weight:900;font-size:19px;line-height:1.08;max-width:520px}.sub{font-size:12px;opacity:.9}.status{margin-left:auto;font-size:11px;background:#ffffff22;padding:6px 8px;border-radius:999px}.rolebar{display:flex;justify-content:center;gap:8px;margin-top:10px}.rolebtn{flex:1;border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:10px;padding:9px 10px;font-weight:800;font-size:14px}.rolebtn.on{background:white;color:#173a5e}.controlrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;align-items:stretch;margin-top:9px}.search{width:100%;min-width:0;margin:0;padding:11px 12px;border:0;border-radius:10px;font-size:16px}.clearsearch{border:1px solid #ffffff66;background:#ffffff20;color:white;border-radius:10px;padding:0 12px;font-weight:850;font-size:13px;min-width:58px}.homebtn{border:1px solid #ffffff66;background:#ffffff20;color:white;border-radius:10px;padding:0 12px;font-weight:850;font-size:13px;min-width:74px;text-align:center}.tabs{display:flex;gap:7px;overflow:auto;padding:10px 12px;background:white;border-bottom:1px solid #ddd}.tab{white-space:nowrap;border:0;border-radius:999px;padding:8px 12px;background:#eee}.tab.on{background:#2f6690;color:#fff;box-shadow:inset 0 -2px 0 #d7c79a}
-.tab.nav-hold-ready{position:relative}
+.tab.nav-hold-ready{position:relative;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-x}
 .tab.nav-dragging{opacity:.84;transform:scale(1.05);box-shadow:0 6px 16px #173a5e33;background:#dbeafe;color:#173a5e;z-index:20;touch-action:none}
 .tabs.nav-reordering{overflow-x:auto;user-select:none;-webkit-user-select:none}
-.home-shortcut-card.home-hold-ready{position:relative}
+.home-shortcut-card.home-hold-ready{position:relative;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 .home-shortcut-card.home-dragging{opacity:.84;transform:scale(1.03);box-shadow:0 8px 20px #173a5e33;border-color:#9fbdd3;z-index:20;touch-action:none}
 .clinical-shortcuts.home-reordering{user-select:none;-webkit-user-select:none}
 .reorder-hint{grid-column:1/-1;font-size:11px;line-height:1.35;color:#64748b;padding:2px 2px 4px}
@@ -452,33 +452,67 @@ function orderedBySaved(items,key){
  const used=new Set(ordered.map(x=>x.key));
  return [...ordered,...items.filter(x=>!used.has(x.key))];
 }
-let dragState={timer:null,el:null,pointerId:null,suppress:false,kind:null};
+let dragState={timer:null,el:null,pointerId:null,suppress:false,kind:null,touchId:null,startX:0,startY:0};
 function clearDragTimer(){if(dragState.timer){clearTimeout(dragState.timer);dragState.timer=null}}
+function activateHeldDrag(kind,host,el){
+ clearDragTimer();
+ dragState.el=el;dragState.kind=kind;dragState.suppress=true;
+ host.classList.add(kind==='nav'?'nav-reordering':'home-reordering');
+ el.classList.add(kind==='nav'?'nav-dragging':'home-dragging');
+ if(navigator.vibrate)navigator.vibrate(18);
+}
 function startHoldDrag(kind,host,el,e){
  if(e.pointerType==='mouse'&&e.button!==0)return;
  clearDragTimer();dragState.pointerId=e.pointerId;
+ dragState.startX=e.clientX;dragState.startY=e.clientY;
  dragState.timer=setTimeout(()=>{
-  dragState.timer=null;dragState.el=el;dragState.kind=kind;dragState.suppress=true;
-  host.classList.add(kind==='nav'?'nav-reordering':'home-reordering');
-  el.classList.add(kind==='nav'?'nav-dragging':'home-dragging');
+  activateHeldDrag(kind,host,el);
   try{el.setPointerCapture(e.pointerId)}catch(_){}
-  if(navigator.vibrate)navigator.vibrate(18);
- },420);
+ },360);
 }
-function moveHeldItem(kind,host,e){
+function startTouchHold(kind,host,el,e){
+ if(!e.touches||e.touches.length!==1)return;
+ const t=e.touches[0];
+ clearDragTimer();dragState.touchId=t.identifier;dragState.startX=t.clientX;dragState.startY=t.clientY;
+ dragState.timer=setTimeout(()=>activateHeldDrag(kind,host,el),360);
+}
+function dragMoveAt(kind,host,x,y){
  const el=dragState.el;if(!el||dragState.kind!==kind)return;
- e.preventDefault();
- const others=[...host.querySelectorAll(kind==='nav'?'.tab[data-navkey]':'.home-shortcut-card[data-homekey]')].filter(x=>x!==el);
+ const others=[...host.querySelectorAll(kind==='nav'?'.tab[data-navkey]':'.home-shortcut-card[data-homekey]')].filter(v=>v!==el);
  let target=null,before=true;
  if(kind==='nav'){
-  for(const x of others){const r=x.getBoundingClientRect();if(e.clientX<r.left+r.width/2){target=x;before=true;break}}
+  for(const item of others){const r=item.getBoundingClientRect();if(x<r.left+r.width/2){target=item;before=true;break}}
   if(!target&&others.length){target=others[others.length-1];before=false}
  }else{
   let best=null,dist=Infinity;
-  for(const x of others){const r=x.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,d=Math.hypot(e.clientX-cx,e.clientY-cy);if(d<dist){dist=d;best=x}}
-  if(best){const r=best.getBoundingClientRect();target=best;before=e.clientY<r.top+r.height/2||(Math.abs(e.clientY-(r.top+r.height/2))<r.height*.35&&e.clientX<r.left+r.width/2)}
+  for(const item of others){
+    const r=item.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,d=Math.hypot(x-cx,y-cy);
+    if(d<dist){dist=d;best=item}
+  }
+  if(best){
+    const r=best.getBoundingClientRect();target=best;
+    before=y<r.top+r.height/2||(Math.abs(y-(r.top+r.height/2))<r.height*.35&&x<r.left+r.width/2);
+  }
  }
- if(target){host.insertBefore(el,before?target:target.nextSibling)}
+ if(target)host.insertBefore(el,before?target:target.nextSibling);
+}
+function moveHeldItem(kind,host,e){
+ if(!dragState.el||dragState.kind!==kind){
+  if(dragState.timer&&Math.hypot(e.clientX-dragState.startX,e.clientY-dragState.startY)>10)clearDragTimer();
+  return;
+ }
+ e.preventDefault();
+ dragMoveAt(kind,host,e.clientX,e.clientY);
+}
+function moveTouchHeldItem(kind,host,e){
+ const touch=[...(e.touches||[])].find(t=>t.identifier===dragState.touchId)||e.touches?.[0];
+ if(!touch)return;
+ if(!dragState.el||dragState.kind!==kind){
+  if(dragState.timer&&Math.hypot(touch.clientX-dragState.startX,touch.clientY-dragState.startY)>10)clearDragTimer();
+  return;
+ }
+ e.preventDefault();
+ dragMoveAt(kind,host,touch.clientX,touch.clientY);
 }
 function endHeldItem(kind,host){
  clearDragTimer();
@@ -488,17 +522,26 @@ function endHeldItem(kind,host){
   const selector=kind==='nav'?'.tab[data-navkey]':'.home-shortcut-card[data-homekey]';
   const storage=kind==='nav'?'gfdTopNavOrder':'gfdHomeShortcutOrder';
   localStorage.setItem(storage,JSON.stringify([...host.querySelectorAll(selector)].map(x=>kind==='nav'?x.dataset.navkey:x.dataset.homekey)));
-  setTimeout(()=>{dragState.suppress=false},220);
+  setTimeout(()=>{dragState.suppress=false},260);
  }
- dragState.el=null;dragState.kind=null;dragState.pointerId=null;
+ dragState.el=null;dragState.kind=null;dragState.pointerId=null;dragState.touchId=null;
 }
 function bindHoldReorder(kind,host,selector){
  host.querySelectorAll(selector).forEach(el=>{
+  el.setAttribute('draggable','false');
+  el.addEventListener('dragstart',e=>e.preventDefault());
+  el.addEventListener('selectstart',e=>e.preventDefault());
+  el.addEventListener('contextmenu',e=>e.preventDefault());
+
   el.addEventListener('pointerdown',e=>startHoldDrag(kind,host,el,e));
   el.addEventListener('pointermove',e=>moveHeldItem(kind,host,e));
   el.addEventListener('pointerup',()=>endHeldItem(kind,host));
   el.addEventListener('pointercancel',()=>endHeldItem(kind,host));
-  el.addEventListener('contextmenu',e=>{if(dragState.el===el)e.preventDefault()});
+
+  el.addEventListener('touchstart',e=>startTouchHold(kind,host,el,e),{passive:true});
+  el.addEventListener('touchmove',e=>moveTouchHeldItem(kind,host,e),{passive:false});
+  el.addEventListener('touchend',()=>endHeldItem(kind,host),{passive:true});
+  el.addEventListener('touchcancel',()=>endHeldItem(kind,host),{passive:true});
  });
 }
 function topNavClick(key){
@@ -3655,6 +3698,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v134',title:'iOS tap-hold-drag fix',copy:'Fixed shortcut reordering on iPhone and iPad. Long-press text selection and Safari touch callouts are disabled on draggable navigation and Home shortcut items, and native touch tracking now handles hold-and-drag movement directly. Saved ordering behavior is unchanged.',tags:['iOS','Navigation','Home','Drag and Drop','Mobile']},
  {date:'2026-09-29',version:'v133',title:'Compact Home/Search/Clear header row',copy:'Combined Home, Search, and Clear into a single compact header row. Search now takes the available width while Home and Clear remain small fixed controls, reducing wasted vertical space and maximizing usable room on mobile.',tags:['Header','Search','Home','Mobile','Layout']},
  {date:'2026-09-29',version:'v132',title:'Burn fluid results in liters only',copy:'Parkland burn-calculator fluid results now display liters only for the First 8 hr, Next 16 hr, and 24-hour totals. The mL display and liters toggle were removed to reduce field interpretation steps.',tags:['Burns','Parkland','Fluids','Field Use']},
  {date:'2026-09-29',version:'v131',title:'Optional mL-to-liter burn conversion',copy:'Parkland burn-calculator results remain in milliliters by default and now include a one-tap Show liters option for the First 8 hr, Next 16 hr, and 24-hour totals. This keeps the display clean while eliminating manual conversion when liters are useful.',tags:['Burns','Parkland','Fluids','Field Use']},
