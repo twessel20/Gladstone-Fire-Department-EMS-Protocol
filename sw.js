@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v119';
-const UPDATE_SUMMARY='v119: Buttons and controls were enlarged and spaced for gloved-hand, low-light field use, with stronger press/focus feedback across the app.';
+const C='gfd-ems-shell-v120';
+const UPDATE_SUMMARY='v120: Modified Sgarbossa now includes an ECG visual example with every question. Tap any tracing for a large teaching view.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
