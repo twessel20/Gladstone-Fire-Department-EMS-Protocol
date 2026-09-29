@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v128';
-const UPDATE_SUMMARY='v128: Number-only fields now open the appropriate numeric keypad on mobile, with digits-only input for integer fields and decimal numeric input where needed.';
+const C='gfd-ems-shell-v129';
+const UPDATE_SUMMARY='v129: Burn calculator result order now shows First 8 hr, Next 16 hr, then the 24-hour total.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
