@@ -404,6 +404,8 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
 @media(hover:hover) and (pointer:fine){
  .tool-launch:hover,.quick-card:hover,.tab:hover,.homebtn:hover,.rolebtn:hover,.tool-section-toggle:hover{box-shadow:0 4px 14px #173a5e14}
 }
+/* v121 Street Drug / Substance Reference */
+.streetdrug-shell{display:grid;gap:12px}.streetdrug-search-card{border:1px solid #d8e3ec;border-radius:14px;background:#fff;padding:14px}.streetdrug-search-card h3{margin:0 0 6px;color:#173a5e;font-size:20px}.streetdrug-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}.streetdrug-search-row .tool-input{margin:0}.streetdrug-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.streetdrug-tab{min-height:48px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#334155;font-weight:900}.streetdrug-tab.on{background:#173a5e;color:#fff;border-color:#173a5e}.streetdrug-list{display:grid;gap:9px}.streetdrug-hit,.streetdrug-common{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;border:1px solid #d8e3ec;border-radius:12px;background:#fff;padding:12px;min-height:64px;color:#173a5e}.streetdrug-hit b,.streetdrug-common b{display:block;font-size:15px}.streetdrug-hit small,.streetdrug-common small{display:block;margin-top:3px;color:#64748b;font-size:12px;line-height:1.35}.streetdrug-card{border:1px solid #d8e3ec;border-radius:14px;background:#fff;overflow:hidden}.streetdrug-head{padding:14px 15px;background:#173a5e;color:#fff}.streetdrug-head h3{margin:0;color:#fff;font-size:21px}.streetdrug-alias{margin-top:5px;color:#dbeafe;font-size:12px;line-height:1.4}.streetdrug-body{padding:13px 14px;display:grid;gap:10px}.streetdrug-row{border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;padding:10px 11px}.streetdrug-row b{display:block;color:#173a5e;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}.streetdrug-row span{display:block;color:#334155;font-size:13px;line-height:1.45}.streetdrug-row.med{background:#eef4f8;border-color:#cbdbe8}.streetdrug-row.danger{background:#fff7ed;border-color:#fed7aa}.streetdrug-row.danger b{color:#9a3412}.streetdrug-pattern{border:1px solid #d8e3ec;border-radius:12px;background:#fff;padding:12px}.streetdrug-pattern b{display:block;color:#173a5e;font-size:15px}.streetdrug-pattern span{display:block;margin-top:5px;color:#475569;font-size:13px;line-height:1.45}.streetdrug-pattern small{display:block;margin-top:7px;color:#92400e;font-size:11px;line-height:1.4}.streetdrug-source{font-size:11px;line-height:1.45;color:#64748b;padding:2px 2px 0}.streetdrug-badge{display:inline-block;margin-left:6px;padding:3px 6px;border-radius:999px;background:#fff7ed;color:#9a3412;font-size:10px;font-weight:900;vertical-align:1px}@media(max-width:620px){.streetdrug-search-row{grid-template-columns:1fr}.streetdrug-search-row .tool-btn{width:100%;margin:0}.streetdrug-tabs{grid-template-columns:1fr}.streetdrug-tab{min-height:54px}}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -540,6 +542,7 @@ function renderPatientMeds(){
     <div class="quick-grid">
      <button class="quick-card" onclick="showPatientMedPillCount()"><b>🔢 Pill Count</b><span>Estimate pills missing from a prescription bottle.</span></button>
      <button class="quick-card" onclick="showPatientMedPillId()"><b>💊 Pill Identifier</b><span>Identify a pill using imprint, color, and shape.</span></button>
+     <button class="quick-card" onclick="showPatientMedStreetDrug()"><b>☠️ Street Drug / Substance</b><span>Aliases, toxidromes, emerging substances, and GFD medication considerations.</span></button>
     </div>
    </div>
 
@@ -883,6 +886,18 @@ function renderTools(){
 
       <div class="tool-section">
         <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>☠️ Toxicology & Overdose</b><span>Fast substance identification, toxidromes, and overdose support.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('streetdrug')"><span class="tool-launch-icon">☠️</span><span><b>Street Drug / Substance Reference</b><small>Aliases, emerging drugs, field findings, and GFD medication considerations</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('pillcount')"><span class="tool-launch-icon">🔢</span><span><b>Pill Count</b><small>Estimate pills missing from a prescription bottle</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('pillid')"><span class="tool-launch-icon">💊</span><span><b>Pill Identifier</b><small>Identify an unknown tablet or capsule by imprint and appearance</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('phones')"><span class="tool-launch-icon">☎️</span><span><b>Poison Control</b><small>Quick access to Poison Control and critical contacts</small></span><span class="tool-chevron">›</span></button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
           <span class="tool-section-heading"><b>☎️ Important Phone Numbers</b><span>Tap a number to call directly from a mobile device.</span></span><span class="tool-section-chevron">›</span>
         </button>
         <div class="tool-section-body">
@@ -1003,6 +1018,7 @@ function openToolCard(which){
  const host=document.querySelector('#toolDetail');
  document.querySelector('.tool-menu').style.display='none';
  const back='<button class="back tool-back sticky-back" onclick="toolBack()">‹ Back to Tools</button>';
+ if(which==='streetdrug'){host.innerHTML=back+streetDrugToolHtml();initStreetDrugTool();return}
  if(which==='erlabs')host.innerHTML=back+`
    <div class="tool-card">
     <h3>🧪 Common ER Labs</h3>
@@ -1566,6 +1582,7 @@ function calcParkland(){
 }
 function resetBurn(){burnSelected.clear();renderBurnMap()}
 const searchableTools=[
+ {id:'streetdrug',title:'Street Drug / Substance Reference',icon:'☠️',terms:'street drug substance overdose toxidrome fentanyl heroin tranq xylazine medetomidine nitazene cychlorphine kratom 7-oh meth methamphetamine cocaine crack molly mdma ecstasy k2 spice synthetic cannabinoid pcp ghb lsd mushrooms psilocybin ketamine xanax benzo blues m30 counterfeit pill',desc:'Fast EMS substance reference with aliases, emerging drugs, risks, and GFD medication considerations'},
  {id:'sgarbossa',title:'Sgarbossa Criteria',icon:'ECG',terms:'sgarbossa scarbossa sgarbossas stemi lbbb left bundle branch block ventricular paced rhythm pacemaker concordant discordant st elevation depression myocardial infarction acute coronary occlusion',desc:'Clickable Sgarbossa checklist with automatic weighted score'},
  {id:'apgar',title:'APGAR Score',icon:'👶',terms:'apgar newborn neonatal infant childbirth appearance pulse grimace activity respiration',desc:'Appearance, pulse, grimace, activity and respiration'},
  {id:'gcs',title:'Glasgow Coma Scale',icon:'🧠',terms:'gcs glasgow coma scale neuro neurological eye verbal motor mental status',desc:'Eye, verbal and motor scoring'},
@@ -3211,9 +3228,67 @@ function protocolToolLinks(x){
  if(['general-trauma-protocol','head-trauma','patient-destination-criteria'].includes(x.id))tools.push(['🧠','Glasgow Coma Scale','gcs']);
  if(['mci-triage-start-jump-start','general-trauma-protocol'].includes(x.id))tools.push(['🚑','START Triage','start']);
  if(x.id==='code-stemi')tools.push(['ECG','Sgarbossa Criteria','sgarbossa']);
+ if(x.id==='poisoning')tools.push(['☠️','Street Drug / Substance Reference','streetdrug']);
  if(x.id==='cva-strokes')tools.push(['🧠','Cincinnati Prehospital Stroke Scale','cincinnati']);
  if(!tools.length)return '';
  return '<div class="protocol-tools"><div class="related-title">Field Tools — Use Here</div>'+tools.map(t=>'<button class="protocol-tool-btn" onclick="toggleInlineProtocolTool(\''+t[2]+'\',this)"><span>'+t[0]+'</span><b>'+t[1]+'</b><span class="tool-chevron">›</span></button><div class="inline-tool-slot" data-tool="'+t[2]+'"></div>').join('')+'</div>';
+}
+let streetDrugData=null,streetDrugTab='common';
+function streetDrugToolHtml(){
+ return '<div class="tool-card inline-field-tool"><div class="streetdrug-shell"><div class="streetdrug-search-card"><h3>☠️ Street Drug / Substance Reference</h3><div class="tool-note"><b>Fast EMS reference.</b> Search a reported drug, slang term, or counterfeit-pill name. Treat the patient and toxidrome—the actual contents of street drugs are often unknown.</div><div class="streetdrug-search-row"><input id="streetDrugQ" class="tool-input" type="search" autocomplete="off" placeholder="Search: blues, tranq, meth, nitazene…"><button class="tool-btn" onclick="searchStreetDrugs()">Search</button></div><div class="streetdrug-tabs"><button id="sdTabCommon" class="streetdrug-tab on" onclick="showStreetDrugTab(\'common\')">Common substances</button><button id="sdTabEmerging" class="streetdrug-tab" onclick="showStreetDrugTab(\'emerging\')">Emerging / new</button><button id="sdTabToxidrome" class="streetdrug-tab" onclick="showStreetDrugTab(\'toxidrome\')">Toxidromes</button></div></div><div id="streetDrugResults" class="streetdrug-list"><div class="notice">Loading substance reference…</div></div></div></div>';
+}
+async function loadStreetDrugData(){
+ try{
+   const r=await fetch('street-drugs.json?refresh='+Date.now(),{cache:'no-store'});
+   if(!r.ok)throw 0;
+   streetDrugData=await r.json();
+ }catch(e){
+   try{const r=await caches.match('street-drugs.json');if(r)streetDrugData=await r.json()}catch(_){}
+ }
+ return streetDrugData;
+}
+async function initStreetDrugTool(){
+ const input=document.getElementById('streetDrugQ');
+ if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter')searchStreetDrugs()});
+ if(!streetDrugData)await loadStreetDrugData();
+ showStreetDrugTab(streetDrugTab||'common');
+}
+function setStreetDrugTabs(tab){
+ ['Common','Emerging','Toxidrome'].forEach(n=>document.getElementById('sdTab'+n)?.classList.toggle('on',tab===n.toLowerCase()));
+}
+function showStreetDrugTab(tab){
+ streetDrugTab=tab;setStreetDrugTabs(tab);
+ const host=document.getElementById('streetDrugResults');if(!host)return;
+ if(!streetDrugData){host.innerHTML='<div class="notice">Substance reference is unavailable right now.</div>';return}
+ if(tab==='toxidrome'){
+   host.innerHTML=streetDrugData.toxidromes.map(x=>'<div class="streetdrug-pattern"><b>'+esc(x.name)+'</b><span><b>Pattern:</b> '+esc(x.findings)+'</span><span><b>Field focus:</b> '+esc(x.action)+'</span><small>'+esc(x.note)+'</small></div>').join('')+streetDrugFooter();
+   return;
+ }
+ const list=streetDrugData.substances.filter(x=>tab==='emerging'?x.emerging:true);
+ host.innerHTML=list.map(x=>'<button class="streetdrug-common" onclick="openStreetDrug(\''+x.id+'\')"><span><b>'+esc(x.name)+(x.emerging?'<span class="streetdrug-badge">EMERGING</span>':'')+'</b><small>'+esc(x.category)+' • '+esc((x.aliases||[]).slice(0,4).join(', '))+'</small></span><span>›</span></button>').join('')+streetDrugFooter();
+}
+function searchStreetDrugs(){
+ const host=document.getElementById('streetDrugResults'),q=normText(document.getElementById('streetDrugQ')?.value||'').toLowerCase().trim();
+ if(!host||!streetDrugData)return;
+ if(!q){showStreetDrugTab('common');return}
+ const terms=q.replace(/[^a-z0-9]+/g,' ').split(/\s+/).filter(Boolean);
+ const hits=streetDrugData.substances.filter(x=>{const hay=normText([x.name,x.category,...(x.aliases||[])].join(' ')).toLowerCase().replace(/[^a-z0-9]+/g,' ');return terms.every(t=>hay.includes(t))});
+ host.innerHTML=hits.length?hits.map(x=>'<button class="streetdrug-hit" onclick="openStreetDrug(\''+x.id+'\')"><span><b>'+esc(x.name)+(x.emerging?'<span class="streetdrug-badge">EMERGING</span>':'')+'</b><small>'+esc(x.category)+' • '+esc((x.aliases||[]).join(', '))+'</small></span><span>›</span></button>').join('')+streetDrugFooter():'<div class="notice"><b>No local reference match.</b><br>Try another slang/name, use the Toxidromes tab, and consider Poison Control for an unknown exposure.</div>'+streetDrugFooter();
+}
+function openStreetDrug(id){
+ const host=document.getElementById('streetDrugResults'),x=streetDrugData?.substances?.find(v=>v.id===id);if(!host||!x)return;
+ host.innerHTML='<button class="back" onclick="showStreetDrugTab(\''+streetDrugTab+'\')">‹ Back to list</button><div class="streetdrug-card"><div class="streetdrug-head"><h3>'+esc(x.name)+(x.emerging?'<span class="streetdrug-badge">EMERGING</span>':'')+'</h3><div class="streetdrug-alias">'+esc(x.category)+' • Also searched as: '+esc((x.aliases||[]).join(', '))+'</div></div><div class="streetdrug-body"><div class="streetdrug-row"><b>Likely presentation</b><span>'+esc(x.presentation)+'</span></div><div class="streetdrug-row danger"><b>Immediate concerns</b><span>'+esc(x.danger)+'</span></div><div class="streetdrug-row med"><b>GFD meds / treatment considerations</b><span>'+esc(x.gfd)+'</span></div><div class="streetdrug-row"><b>Medic pearl</b><span>'+esc(x.pearl)+'</span></div><div class="tool-note"><b>Field principle:</b> Reported street name, pill color, logo, or appearance cannot confirm contents. Follow the applicable GFD protocol and Medical Control.</div></div></div>'+streetDrugFooter();
+ host.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function streetDrugFooter(){
+ if(!streetDrugData)return '';
+ return '<div class="streetdrug-source"><b>Reference reviewed '+esc(streetDrugData.last_reviewed||'')+'.</b> '+esc(streetDrugData.review_note||'')+' Core reference remains available offline when previously cached. Poison Control: <a href="tel:18002221222">1-800-222-1222</a>.</div>';
+}
+function showPatientMedStreetDrug(){
+ const host=document.getElementById('patientMedToolResult');if(!host)return;
+ host.innerHTML=streetDrugToolHtml();
+ initStreetDrugTool();
+ host.scrollIntoView({behavior:'smooth',block:'start'});
 }
 let sgarbossaState={c1:null,c2:null,c3:null};
 let sgarbossaStep=1;
@@ -3361,6 +3436,7 @@ function resetSgarbossa(){
  renderSgarbossaWizard();
 }
 function toolContent(which){
+ if(which==='streetdrug')return streetDrugToolHtml();
  if(which==='sgarbossa')return sgarbossaToolHtml();
  if(which==='apgar')return `<div class="tool-card inline-field-tool"><h3>APGAR Score</h3><div class="tool-note">Score each category 0, 1, or 2. GFD Childbirth protocol documents APGAR at 1 and 5 minutes.</div><div class="score-grid">${scoreSelect('apAppearance','Appearance / color',[['0','Blue or pale all over'],['1','Body pink, extremities blue'],['2','Completely pink']])}${scoreSelect('apPulse','Pulse / heart rate',[['0','Absent'],['1','Below 100/min'],['2','100/min or greater']])}${scoreSelect('apGrimace','Grimace / reflex irritability',[['0','No response'],['1','Grimace'],['2','Cough, sneeze, cry, or active withdrawal']])}${scoreSelect('apActivity','Activity / muscle tone',[['0','Limp'],['1','Some flexion'],['2','Active motion']])}${scoreSelect('apResp','Respiration',[['0','Absent'],['1','Slow or irregular'],['2','Good respirations / strong cry']])}</div><div id="apgarResult" class="tool-result score-total"><b>APGAR: — / 10</b></div></div>`;
  if(which==='gcs')return `<div class="tool-card inline-field-tool"><h3>Glasgow Coma Scale</h3><div class="tool-note">Select the best observed response in each category.</div><div class="score-grid">${scoreSelect('gcsEye','Eye opening',[['1','None'],['2','To pressure'],['3','To sound'],['4','Spontaneous']])}${scoreSelect('gcsVerbal','Verbal response',[['1','None'],['2','Incomprehensible sounds'],['3','Inappropriate words'],['4','Confused'],['5','Oriented']])}${scoreSelect('gcsMotor','Motor response',[['1','None'],['2','Extension'],['3','Abnormal flexion'],['4','Normal flexion / withdrawal'],['5','Localizes'],['6','Obeys commands']])}</div><div id="gcsResult" class="tool-result score-total"><b>GCS: — / 15</b></div></div>`;
@@ -3419,9 +3495,11 @@ function toggleInlineProtocolTool(which,btn){
  slot.innerHTML=toolContent(which);btn.classList.add('open');
  if(which==='start')resetStart();
  if(which==='sgarbossa'){resetSgarbossa();setTimeout(renderSgarbossaWizard,0)}
+ if(which==='streetdrug')setTimeout(initStreetDrugTool,0);
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v121',title:'Street Drug / Substance Reference',copy:'Added a fast EMS street-drug reference accessible from Field Tools, Patient Meds / Overdose tools, and the Poisoning protocol. Includes slang/alias search, common substances, toxidrome patterns, emerging substances, concise field risks, and GFD medication/treatment considerations. The substance library is stored separately so emerging drugs and slang can be updated without redesigning the app, while the last reviewed dataset remains available offline.',tags:['Toxicology','Overdose','Field Tool','Emerging Drugs','Offline']},
  {date:'2026-09-29',version:'v120',title:'Sgarbossa ECG visual examples',copy:'Added an ECG teaching visual to each question in the Modified Sgarbossa tap-through checklist. Each step now shows a labeled positive schematic for concordant ST elevation, concordant ST depression in V1–V3, or excessively discordant ST elevation. The tracing can be tapped for a large full-screen view, with simplified measurements and a clear reminder that the graphic is a teaching aid rather than a diagnostic tracing.',tags:['Clinical Tool','Sgarbossa','ECG','Visual Aid','Field Use']},
  {date:'2026-09-29',version:'v119',title:'Glove-friendly field controls',copy:'Improved buttons and interactive controls for low-light, high-stress field use with gloved hands. Increased tap-target sizes, spacing, button height, text size, selected/pressed feedback, focus visibility, and touch behavior across navigation, tools, calculators, protocol actions, Sgarbossa, stroke scoring, hospital links, and other critical controls.',tags:['Accessibility','Field Use','Buttons','Mobile']},
  {date:'2026-09-29',version:'v118',title:'Modified Sgarbossa accuracy review',copy:'Reviewed the tap-through Modified Sgarbossa workflow against published criteria and validation literature. Clarified that criterion 2 is positive in any one of V1–V3, and tightened criterion 3 so both requirements are explicit: discordant ST elevation at least 1 mm and at least 25% of S-wave depth in the same lead.',tags:['Clinical Tool','Sgarbossa','Accuracy']},
