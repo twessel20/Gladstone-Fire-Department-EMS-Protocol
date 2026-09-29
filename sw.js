@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v126';
-const UPDATE_SUMMARY='v126: Added Toxicology to top navigation and Home, with tap-hold-drag reordering saved independently on each device.';
+const C='gfd-ems-shell-v127';
+const UPDATE_SUMMARY='v127: Burn results now show the First 8 hr total before the 24-hour total, and the Home control is centered for a more balanced header.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
