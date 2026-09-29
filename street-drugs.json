@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "last_reviewed": "2026-09-29",
+  "review_note": "Field reference. Substance composition and slang change rapidly; treat the patient and toxidrome, not the reported product name.",
+  "sources": [
+    {
+      "name": "CDC Overdose Prevention",
+      "url": "https://www.cdc.gov/overdose-prevention/"
+    },
+    {
+      "name": "CDC Medetomidine Situation Summary",
+      "url": "https://www.cdc.gov/overdose-prevention/situation-summary/medetomidine.html"
+    },
+    {
+      "name": "DEA Public Safety Advisory — Emerging Synthetic Drugs",
+      "url": "https://www.dea.gov/press-releases/2026/05/12/public-safety-advisory"
+    },
+    {
+      "name": "DEA Drug Intelligence / Missouri",
+      "url": "https://www.dea.gov/resources/documents"
+    }
+  ],
+  "substances": [
+    {
+      "id": "fentanyl-opioids",
+      "name": "Fentanyl / Illicit Opioids",
+      "aliases": [
+        "fentanyl",
+        "fent",
+        "fetty",
+        "heroin",
+        "dope",
+        "blues",
+        "blue 30",
+        "m30",
+        "perc 30",
+        "counterfeit oxy",
+        "opioid"
+      ],
+      "category": "Opioid",
+      "emerging": false,
+      "presentation": "Decreased LOC, slow or absent respirations, pinpoint pupils, hypoxia/cyanosis; hypotension or bradycardia may occur.",
+      "danger": "Apnea and recurrent respiratory depression. Counterfeit tablets may contain fentanyl or other synthetic opioids without the patient knowing.",
+      "gfd": "Airway/ventilation first. Naloxone per GFD protocol when opioid toxicity is suspected. Additional fentanyl, morphine, midazolam, ketamine, or nitrous oxide may worsen CNS/respiratory depression unless clearly indicated for another problem; monitor ventilation closely.",
+      "pearl": "Clinical response to naloxone supports opioid effect but does not identify the actual street product."
+    },
+    {
+      "id": "xylazine",
+      "name": "Xylazine / Tranq",
+      "aliases": [
+        "xylazine",
+        "tranq",
+        "tranq dope"
+      ],
+      "category": "Non-opioid sedative adulterant",
+      "emerging": true,
+      "presentation": "Marked sedation, respiratory depression, bradycardia and hypotension; chronic exposure can be associated with significant skin wounds.",
+      "danger": "Often mixed with fentanyl. Naloxone does not reverse xylazine itself, so persistent sedation may remain after opioid effects improve.",
+      "gfd": "Support airway and ventilation. If opioid co-exposure is possible, naloxone remains appropriate per GFD protocol. Be cautious with additional sedating medications unless clearly needed for another indication.",
+      "pearl": "Do not withhold naloxone just because xylazine is suspected; fentanyl co-exposure is common."
+    },
+    {
+      "id": "medetomidine",
+      "name": "Medetomidine / “Rhino Tranq”",
+      "aliases": [
+        "medetomidine",
+        "rhino tranq",
+        "mede",
+        "dex"
+      ],
+      "category": "Alpha-2 sedative adulterant",
+      "emerging": true,
+      "presentation": "Profound sedation, bradycardia, hypotension and respiratory depression; severe withdrawal has been reported with repeated exposure.",
+      "danger": "Increasingly found with illicit fentanyl. Naloxone will not reverse the non-opioid sedative component.",
+      "gfd": "Airway/ventilation and hemodynamic support are priorities. Give naloxone per GFD protocol when opioid exposure is suspected. Avoid assuming persistent sedation after naloxone means treatment failure.",
+      "pearl": "CDC reported substantial U.S. growth in detections through 2025, including the Midwest."
+    },
+    {
+      "id": "nitazenes",
+      "name": "Nitazenes",
+      "aliases": [
+        "nitazene",
+        "nitazenes",
+        "isotonitazene",
+        "metonitazene",
+        "protonitazene",
+        "etonitazene"
+      ],
+      "category": "High-potency synthetic opioids",
+      "emerging": true,
+      "presentation": "Opioid toxidrome: CNS depression, respiratory depression/apnea, miosis and hypoxia.",
+      "danger": "May be present in fentanyl, heroin or counterfeit pills. Some compounds are highly potent and may require repeated naloxone dosing and prolonged reassessment.",
+      "gfd": "Ventilate first and use naloxone according to GFD protocol; repeat dosing should follow patient respiratory response and protocol. Expect possible recurrence.",
+      "pearl": "Treat the opioid toxidrome; the exact analog is usually unknown in the field."
+    },
+    {
+      "id": "cychlorphine",
+      "name": "Cychlorphine",
+      "aliases": [
+        "cychlorphine"
+      ],
+      "category": "Emerging synthetic opioid",
+      "emerging": true,
+      "presentation": "Expected severe opioid-type CNS and respiratory depression.",
+      "danger": "DEA has identified it among emerging synthetic drugs being mixed with illicit fentanyl.",
+      "gfd": "Manage as suspected opioid poisoning: airway/ventilation, oxygenation, naloxone per GFD protocol, and frequent reassessment.",
+      "pearl": "Field identification is unlikely; consider it part of the evolving synthetic-opioid supply."
+    },
+    {
+      "id": "benzodiazepines-counterfeit",
+      "name": "Benzodiazepines / Counterfeit “Xanax”",
+      "aliases": [
+        "xanax",
+        "bars",
+        "benzos",
+        "benzodiazepine",
+        "alprazolam",
+        "pressed xanax",
+        "counterfeit xanax"
+      ],
+      "category": "Sedative / counterfeit pill risk",
+      "emerging": false,
+      "presentation": "Sedation, slurred speech, ataxia, impaired coordination; severe respiratory depression is more likely with opioids or alcohol.",
+      "danger": "Counterfeit tablets may contain fentanyl or other substances instead of, or in addition to, a benzodiazepine.",
+      "gfd": "Support airway/ventilation. If opioid co-exposure is possible, naloxone may improve the opioid component. Additional midazolam, fentanyl, morphine, ketamine or nitrous oxide can increase sedation; use only for a separate clear indication with close monitoring.",
+      "pearl": "A pill marked like a prescription tablet is not proof of contents."
+    },
+    {
+      "id": "methamphetamine",
+      "name": "Methamphetamine",
+      "aliases": [
+        "meth",
+        "methamphetamine",
+        "ice",
+        "crystal",
+        "crystal meth",
+        "glass",
+        "speed"
+      ],
+      "category": "Stimulant / sympathomimetic",
+      "emerging": false,
+      "presentation": "Agitation, tachycardia, hypertension, diaphoresis, mydriasis, hyperthermia, chest pain, paranoia or seizures.",
+      "danger": "Hyperthermia, severe agitation, dysrhythmia, myocardial ischemia and rhabdomyolysis.",
+      "gfd": "Treat the patient and complication per GFD protocol. Midazolam and/or ketamine may be relevant for severe agitation or seizures when indicated by protocol. Continuous ECG, temperature awareness and supportive care are important.",
+      "pearl": "Marked agitation plus hyperthermia should raise concern for a time-critical sympathomimetic emergency."
+    },
+    {
+      "id": "cocaine",
+      "name": "Cocaine / Crack",
+      "aliases": [
+        "cocaine",
+        "coke",
+        "crack",
+        "snow",
+        "blow"
+      ],
+      "category": "Stimulant / sympathomimetic",
+      "emerging": false,
+      "presentation": "Tachycardia, hypertension, agitation, diaphoresis, chest pain, mydriasis; seizures or dysrhythmias can occur.",
+      "danger": "Acute coronary syndrome, malignant dysrhythmias, hyperthermia and seizures.",
+      "gfd": "Manage chest pain, seizures, dysrhythmia and agitation using the applicable GFD protocol. Aspirin/nitroglycerin or sedation decisions should be driven by the patient’s presentation and protocol, not the street-drug label alone.",
+      "pearl": "Cocaine-associated chest pain still requires a full ACS evaluation."
+    },
+    {
+      "id": "mdma",
+      "name": "MDMA / Molly / Ecstasy",
+      "aliases": [
+        "mdma",
+        "molly",
+        "ecstasy",
+        "e",
+        "rolls"
+      ],
+      "category": "Stimulant / serotonergic",
+      "emerging": false,
+      "presentation": "Agitation, tachycardia, diaphoresis, hyperthermia, bruxism, anxiety; altered mental status and seizures may occur.",
+      "danger": "Hyperthermia, hyponatremia, seizures, serotonin toxicity and dehydration/overhydration complications.",
+      "gfd": "Supportive care, temperature assessment, ECG monitoring and seizure/agitation management per GFD protocol. Do not assume a product sold as Molly contains only MDMA.",
+      "pearl": "Severe hyperthermia or neurologic change is a major red flag."
+    },
+    {
+      "id": "synthetic-cannabinoids",
+      "name": "Synthetic Cannabinoids / K2 / Spice",
+      "aliases": [
+        "k2",
+        "spice",
+        "synthetic cannabinoid",
+        "synthetic weed",
+        "fake weed"
+      ],
+      "category": "Synthetic cannabinoid",
+      "emerging": false,
+      "presentation": "Highly variable: agitation, anxiety, psychosis, vomiting, tachycardia, seizures, sedation or unresponsiveness.",
+      "danger": "Effects are unpredictable and may be much more severe than cannabis.",
+      "gfd": "Treat the dominant complication per GFD protocol. Midazolam or ketamine may be relevant for severe agitation/seizures when protocol criteria are met; maintain ECG and airway monitoring.",
+      "pearl": "A normal-looking cannabis product or vape does not reliably indicate contents."
+    },
+    {
+      "id": "pcp",
+      "name": "PCP",
+      "aliases": [
+        "pcp",
+        "angel dust",
+        "wet",
+        "sherm"
+      ],
+      "category": "Dissociative",
+      "emerging": false,
+      "presentation": "Agitation, analgesia, nystagmus, hypertension, altered perception, unusual strength or unresponsiveness.",
+      "danger": "Violent agitation, hyperthermia, seizures, trauma and rhabdomyolysis.",
+      "gfd": "Scene safety first. Treat severe agitation/seizure using the appropriate GFD protocol; monitor temperature, ECG, airway and trauma risk.",
+      "pearl": "Horizontal or vertical nystagmus can support a dissociative toxidrome but is not diagnostic."
+    },
+    {
+      "id": "ghb",
+      "name": "GHB / GBL",
+      "aliases": [
+        "ghb",
+        "gbl",
+        "g",
+        "liquid ecstasy",
+        "georgia home boy"
+      ],
+      "category": "CNS depressant",
+      "emerging": false,
+      "presentation": "Rapid-onset sedation, coma, bradycardia, vomiting and respiratory depression; patients may awaken relatively abruptly.",
+      "danger": "Aspiration and respiratory compromise, especially with alcohol or other depressants.",
+      "gfd": "Airway protection and ventilation are the priorities. Additional sedatives/opioids can worsen depression and should only be used for a separate indication.",
+      "pearl": "Abrupt changes in level of consciousness can occur."
+    },
+    {
+      "id": "hallucinogens",
+      "name": "LSD / Psilocybin / Hallucinogens",
+      "aliases": [
+        "lsd",
+        "acid",
+        "tabs",
+        "psilocybin",
+        "mushrooms",
+        "shrooms",
+        "magic mushrooms"
+      ],
+      "category": "Hallucinogen",
+      "emerging": false,
+      "presentation": "Perceptual changes, anxiety/panic, tachycardia, mydriasis and altered behavior; severe agitation is less common but possible.",
+      "danger": "Trauma, panic reactions, unsafe behavior, hyperthermia or polysubstance exposure.",
+      "gfd": "Supportive environment and assessment for co-ingestants/trauma. Treat severe agitation or seizures only when clinically indicated under GFD protocol.",
+      "pearl": "The major field concern is often behavior, environment, trauma or an unexpected co-ingestant."
+    },
+    {
+      "id": "ketamine-illicit",
+      "name": "Ketamine (Illicit/Recreational)",
+      "aliases": [
+        "ketamine",
+        "ket",
+        "special k",
+        "k"
+      ],
+      "category": "Dissociative",
+      "emerging": false,
+      "presentation": "Dissociation, nystagmus, altered perception, tachycardia/hypertension, sedation or impaired coordination.",
+      "danger": "Airway risk, aspiration, trauma and polysubstance CNS depression.",
+      "gfd": "The patient’s illicit exposure is separate from GFD ketamine indications. If GFD ketamine is considered for another reason, account for existing dissociation/sedation and monitor airway/ventilation closely.",
+      "pearl": "A reported recreational dose does not reliably establish actual concentration or co-ingestants."
+    },
+    {
+      "id": "kratom-7oh",
+      "name": "Kratom / 7-OH",
+      "aliases": [
+        "kratom",
+        "7-oh",
+        "7oh",
+        "7-hydroxymitragynine",
+        "mitragynine"
+      ],
+      "category": "Kratom alkaloid / opioid-like effects",
+      "emerging": true,
+      "presentation": "Can produce stimulant-like effects at lower exposure and opioid-like sedation, nausea, vomiting, respiratory depression or seizures at higher/toxic exposure.",
+      "danger": "Concentrated 7-OH products are increasingly associated with poisonings; polysubstance use can worsen CNS/respiratory depression.",
+      "gfd": "Treat the clinical syndrome. Support airway/ventilation; if an opioid-like toxidrome with respiratory depression is present, naloxone may be considered according to GFD opioid-poisoning protocol and patient response.",
+      "pearl": "DEA St. Louis has specifically highlighted increasing kratom/7-OH poisonings in Missouri."
+    }
+  ],
+  "toxidromes": [
+    {
+      "name": "Opioid pattern",
+      "findings": "Decreased LOC + slow/absent respirations ± pinpoint pupils",
+      "action": "Ventilate/oxygenate; naloxone per GFD protocol when opioid effect is suspected.",
+      "note": "Pattern suggests an opioid effect, not a specific product."
+    },
+    {
+      "name": "Sympathomimetic pattern",
+      "findings": "Agitation + tachycardia + hypertension + diaphoresis + mydriasis ± hyperthermia",
+      "action": "Supportive care, ECG/temperature monitoring, treat seizures or severe agitation per GFD protocol.",
+      "note": "Common with methamphetamine, cocaine, MDMA and mixed stimulants."
+    },
+    {
+      "name": "Sedative / depressant pattern",
+      "findings": "Somnolence, slurred speech, ataxia, bradypnea or hypotension",
+      "action": "Airway and ventilation first; evaluate for opioid co-exposure and other depressants.",
+      "note": "Can reflect benzodiazepines, GHB, alcohol, xylazine/medetomidine or mixtures."
+    },
+    {
+      "name": "Dissociative / severe agitation pattern",
+      "findings": "Agitation, altered perception, nystagmus, analgesia or unusual behavior",
+      "action": "Scene safety, trauma check, temperature/ECG monitoring, treat severe agitation per GFD protocol.",
+      "note": "May occur with PCP, ketamine or synthetic cannabinoids."
+    }
+  ]
+}
