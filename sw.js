@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v130';
-const UPDATE_SUMMARY='v130: Burn TBSA selections now highlight the matching extent-based treatment guidance lower in the Burns protocol.';
+const C='gfd-ems-shell-v131';
+const UPDATE_SUMMARY='v131: Parkland results stay in mL by default, with a one-tap option to show or hide liter conversions.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
