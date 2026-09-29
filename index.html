@@ -201,19 +201,41 @@ body{background:#f4f7fa}
 
 .pc-scroll-date{display:grid;grid-template-columns:1.25fr .9fr 1.15fr;gap:8px;margin-top:6px}.pc-scroll-select{min-height:58px;font-size:18px;font-weight:800;padding:12px 10px;background:#fff;touch-action:manipulation}@media(max-width:600px){.pc-scroll-date{gap:6px}.pc-scroll-select{min-height:62px;font-size:18px;padding:12px 6px}}
 
-/* v112 GFD Sgarbossa + unobtrusive change log */
-.sgarbossa-card{border:1px solid #cad8e3;background:#fff}.sgarbossa-flow{display:grid;gap:10px;margin-top:12px}
-.sgarbossa-step{border:1px solid #dbe4ee;border-radius:13px;padding:12px;background:#f8fafc}
-.sgarbossa-step-head{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:9px;align-items:start}
-.sgarbossa-num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#173a5e;color:#fff;font-weight:900}
-.sgarbossa-step b{color:#173a5e;font-size:14px;line-height:1.3}.sgarbossa-points{font-weight:950;color:#173a5e;background:#eaf2f8;border-radius:999px;padding:5px 8px;font-size:12px;white-space:nowrap}
-.sgarbossa-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sgarbossa-actions.three{grid-template-columns:1fr 1fr 1fr}
-.sgarbossa-actions button{min-height:48px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#334155;font-weight:900;font-size:14px}
-.sgarbossa-actions button.yes.on{background:#fee2e2;border-color:#dc2626;color:#991b1b}.sgarbossa-actions button.no.on{background:#dcfce7;border-color:#16a34a;color:#166534}.sgarbossa-actions button.unknown.on{background:#fef3c7;border-color:#d97706;color:#92400e}.sgarbossa-step small{display:block;margin-top:4px;color:#64748b;line-height:1.35}.sgarbossa-badge{font-weight:950;color:#991b1b;background:#fee2e2;border-radius:999px;padding:5px 8px;font-size:11px;white-space:nowrap}.sgarbossa-plain{margin-top:10px;padding:9px 10px;border-radius:9px;background:#eef4f8;color:#334155;font-size:12px;line-height:1.4}.sgarbossa-key{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sgarbossa-key div{border:1px solid #dbe4ee;border-radius:10px;padding:9px;background:#f8fafc}.sgarbossa-key b{display:block;color:#173a5e}.sgarbossa-key span{font-size:12px;color:#475569}.sgarbossa-ratio{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sgarbossa-ratio label{font-size:12px;font-weight:800;color:#334155}.sgarbossa-ratio input{width:100%;box-sizing:border-box;margin-top:4px;min-height:44px;border:1px solid #cbd5e1;border-radius:9px;padding:9px;font-size:16px;background:#fff}.sgarbossa-ratio-out{grid-column:1/-1;padding:9px 10px;background:#f8fafc;border:1px solid #dbe4ee;border-radius:9px;font-size:13px;color:#334155}.sgarbossa-result.ind{background:#fffbeb;border-color:#d97706;color:#92400e}@media(max-width:520px){.sgarbossa-step-head{grid-template-columns:34px minmax(0,1fr)}.sgarbossa-badge{grid-column:2;justify-self:start}.sgarbossa-actions.three{grid-template-columns:1fr}.sgarbossa-actions button{min-height:46px}.sgarbossa-key,.sgarbossa-ratio{grid-template-columns:1fr}}
-.sgarbossa-arrow{text-align:center;color:#2f6690;font-size:22px;font-weight:900;line-height:1}
-.sgarbossa-result{margin-top:12px;border-radius:13px;padding:14px;text-align:center;border:2px solid #cbd5e1;background:#f8fafc}
-.sgarbossa-result.pos{background:#fff1f2;border-color:#dc2626;color:#7f1d1d}.sgarbossa-result.neg{background:#f8fafc;border-color:#94a3b8;color:#334155}
-.sgarbossa-score{font-size:27px;font-weight:950;display:block}.sgarbossa-note{font-size:12px;line-height:1.45;margin-top:7px;color:#475569}
+/* v114 GFD Sgarbossa tap-through workflow + unobtrusive change log */
+.sgarbossa-card{border:1px solid #cad8e3;background:#fff}
+.sgarbossa-wizard{display:grid;gap:12px;margin-top:12px}
+.sgarbossa-progress{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:900;color:#475569}
+.sgarbossa-progress-track{height:8px;flex:1;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.sgarbossa-progress-fill{height:100%;background:#2f6690;border-radius:999px;transition:width .18s ease}
+.sgarbossa-step{border:1px solid #dbe4ee;border-radius:14px;padding:14px;background:#f8fafc}
+.sgarbossa-step-head{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:start}
+.sgarbossa-num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#173a5e;color:#fff;font-weight:950}
+.sgarbossa-step h4{margin:0;color:#173a5e;font-size:18px;line-height:1.25}
+.sgarbossa-step small{display:block;margin-top:7px;color:#64748b;line-height:1.4;font-size:13px}
+.sgarbossa-plain{margin-top:12px;padding:11px 12px;border-radius:10px;background:#eef4f8;color:#334155;font-size:13px;line-height:1.45}
+.sgarbossa-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.sgarbossa-actions button{min-height:56px;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#334155;font-weight:950;font-size:15px;touch-action:manipulation}
+.sgarbossa-actions button.yes{border-color:#ef4444;color:#991b1b}
+.sgarbossa-actions button.no{border-color:#86efac;color:#166534}
+.sgarbossa-actions button.unknown{border-color:#f59e0b;color:#92400e}
+.sgarbossa-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.sgarbossa-nav button{min-height:44px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-weight:850}
+.sgarbossa-result{margin-top:12px;border-radius:13px;padding:15px;text-align:center;border:2px solid #cbd5e1;background:#f8fafc}
+.sgarbossa-result.pos{background:#fff1f2;border-color:#dc2626;color:#7f1d1d}
+.sgarbossa-result.neg{background:#f0fdf4;border-color:#16a34a;color:#166534}
+.sgarbossa-result.ind{background:#fffbeb;border-color:#d97706;color:#92400e}
+.sgarbossa-score{font-size:27px;font-weight:950;display:block}
+.sgarbossa-note{font-size:12px;line-height:1.45;margin-top:9px;color:#475569}
+.sgarbossa-key{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.sgarbossa-key div{border:1px solid #dbe4ee;border-radius:10px;padding:9px;background:#f8fafc}
+.sgarbossa-key b{display:block;color:#173a5e}
+.sgarbossa-key span{font-size:12px;color:#475569}
+@media(max-width:520px){
+ .sgarbossa-actions{grid-template-columns:1fr}
+ .sgarbossa-actions button{min-height:54px;font-size:16px}
+ .sgarbossa-key{grid-template-columns:1fr}
+ .sgarbossa-nav{grid-template-columns:1fr}
+}
 .change-log-link{border:0;background:transparent;color:#64748b;text-decoration:underline;text-underline-offset:2px;font-size:11px;padding:4px 6px;cursor:pointer}
 .change-log-panel{display:grid;gap:9px}.change-log-item{border:1px solid #dbe4ee;border-radius:11px;padding:11px;background:#fff}.change-log-item b{color:#173a5e}.change-log-date{font-size:11px;color:#64748b;margin-top:2px}.change-log-copy{font-size:13px;line-height:1.4;color:#334155;margin-top:6px}
 </style></head><body>
@@ -653,7 +675,7 @@ function renderTools(){
       <div class="tool-card">
         <h3>🫀 Cardiac / ECG</h3>
         <div class="tool-note">Rapid ECG interpretation support for time-critical cardiac patients.</div>
-        <button class="tool-launch" onclick="openToolCard('sgarbossa')"><span class="tool-launch-icon">ECG</span><span><b>Sgarbossa Criteria</b><small>Modified Sgarbossa decision aid with Positive / Negative / Indeterminate result</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('sgarbossa')"><span class="tool-launch-icon">ECG</span><span><b>Sgarbossa Criteria</b><small>Tap-through Modified Sgarbossa check — no data entry</small></span><span class="tool-chevron">›</span></button>
       </div>
 
       <div class="tool-card">
@@ -2999,90 +3021,103 @@ function protocolToolLinks(x){
  return '<div class="protocol-tools"><div class="related-title">Field Tools — Use Here</div>'+tools.map(t=>'<button class="protocol-tool-btn" onclick="toggleInlineProtocolTool(\''+t[2]+'\',this)"><span>'+t[0]+'</span><b>'+t[1]+'</b><span class="tool-chevron">›</span></button><div class="inline-tool-slot" data-tool="'+t[2]+'"></div>').join('')+'</div>';
 }
 let sgarbossaState={c1:null,c2:null,c3:null};
+let sgarbossaStep=1;
+const sgarbossaQuestions={
+ 1:{
+   key:'c1',
+   title:'Concordant ST elevation ≥1 mm?',
+   detail:'Look for any lead where the QRS is mostly UP and the ST segment is also elevated in the SAME direction.',
+   easy:'QRS mostly UP + ST also UP ≥1 mm = YES.'
+ },
+ 2:{
+   key:'c2',
+   title:'Concordant ST depression ≥1 mm in V1–V3?',
+   detail:'In V1–V3, look for a predominantly negative QRS with ST depression moving in the SAME direction.',
+   easy:'V1–V3: QRS mostly DOWN + ST also DOWN ≥1 mm = YES.'
+ },
+ 3:{
+   key:'c3',
+   title:'Excessively discordant ST elevation?',
+   detail:'Look for a mostly DOWN QRS with ST elevation in the opposite direction. The ST elevation is positive when it is ≥1 mm and at least one-quarter (25%) of the preceding S-wave depth.',
+   easy:'QRS mostly DOWN + ST UP. If the ST rise is at least 1/4 as tall as the S wave is deep = YES. No numbers need to be entered.'
+ }
+};
 function sgarbossaToolHtml(){
  return `<div class="tool-card inline-field-tool sgarbossa-card">
-  <h3>🫀 Modified Sgarbossa — Rapid ECG Check</h3>
-  <div class="tool-note"><b>Use with LBBB or ventricular-paced rhythm when acute coronary occlusion is suspected.</b> Check each finding. <b>Any ONE positive criterion = Modified Sgarbossa POSITIVE.</b></div>
-
+  <h3>🫀 Modified Sgarbossa — Tap-Through ECG Check</h3>
+  <div class="tool-note"><b>Use with LBBB or ventricular-paced rhythm when acute coronary occlusion is suspected.</b> Tap Yes, No, or Unsure. No scoring or data entry is required. <b>Any ONE positive criterion = Modified Sgarbossa POSITIVE.</b></div>
   <div class="sgarbossa-key">
    <div><b>Concordant</b><span>ST segment moves in the SAME direction as the main QRS.</span></div>
    <div><b>Discordant</b><span>ST segment moves OPPOSITE the main QRS.</span></div>
   </div>
-
-  <div class="sgarbossa-flow">
-   <div class="sgarbossa-step">
-    <div class="sgarbossa-step-head"><span class="sgarbossa-num">1</span><div><b>Concordant ST elevation ≥1 mm?</b><small>Any lead with a predominantly positive QRS.</small></div><span class="sgarbossa-badge">ANY 1 = +</span></div>
-    <div class="sgarbossa-plain"><b>Easy check:</b> QRS mostly UP + ST also UP ≥1 mm.</div>
-    <div class="sgarbossa-actions three"><button id="sgC1Y" class="yes" onclick="setSgarbossa('c1',true)">YES</button><button id="sgC1N" class="no" onclick="setSgarbossa('c1',false)">NO</button><button id="sgC1U" class="unknown" onclick="setSgarbossa('c1','unknown')">UNSURE</button></div>
-   </div>
-
-   <div class="sgarbossa-step">
-    <div class="sgarbossa-step-head"><span class="sgarbossa-num">2</span><div><b>Concordant ST depression ≥1 mm in V1–V3?</b><small>ST depression moves in the same direction as the predominantly negative QRS.</small></div><span class="sgarbossa-badge">ANY 1 = +</span></div>
-    <div class="sgarbossa-plain"><b>Easy check:</b> In V1–V3, QRS mostly DOWN + ST also DOWN ≥1 mm.</div>
-    <div class="sgarbossa-actions three"><button id="sgC2Y" class="yes" onclick="setSgarbossa('c2',true)">YES</button><button id="sgC2N" class="no" onclick="setSgarbossa('c2',false)">NO</button><button id="sgC2U" class="unknown" onclick="setSgarbossa('c2','unknown')">UNSURE</button></div>
-   </div>
-
-   <div class="sgarbossa-step">
-    <div class="sgarbossa-step-head"><span class="sgarbossa-num">3</span><div><b>Excessively discordant ST elevation?</b><small>ST elevation ≥1 mm AND ST elevation is ≥25% of the depth of the preceding S wave.</small></div><span class="sgarbossa-badge">ANY 1 = +</span></div>
-    <div class="sgarbossa-plain"><b>Easy check:</b> QRS mostly DOWN + ST UP. If ST elevation ÷ S-wave depth ≥0.25, this criterion is POSITIVE.</div>
-    <div class="sgarbossa-ratio">
-      <label>ST elevation (mm)<input id="sgSTE" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 3" oninput="calcSgarbossaRatio()"></label>
-      <label>S-wave depth (mm)<input id="sgSDepth" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 10" oninput="calcSgarbossaRatio()"></label>
-      <div id="sgRatioOut" class="sgarbossa-ratio-out">Ratio: —</div>
-    </div>
-    <div class="sgarbossa-actions three"><button id="sgC3Y" class="yes" onclick="setSgarbossa('c3',true)">YES</button><button id="sgC3N" class="no" onclick="setSgarbossa('c3',false)">NO</button><button id="sgC3U" class="unknown" onclick="setSgarbossa('c3','unknown')">UNSURE</button></div>
-   </div>
-  </div>
-
-  <div id="sgarbossaResult" class="sgarbossa-result"><span class="sgarbossa-score">Complete the checklist</span><div>Result will display as Positive, Negative, or Indeterminate.</div></div>
-  <button class="tool-btn" style="background:#475569" onclick="resetSgarbossa()">Reset Checklist</button>
+  <div id="sgarbossaWizard" class="sgarbossa-wizard"></div>
+  <div id="sgarbossaResult" class="sgarbossa-result" style="display:none"></div>
   <div class="sgarbossa-note"><b>Important:</b> A negative Modified Sgarbossa result does not rule out acute coronary occlusion. Continue clinical assessment, serial ECGs, comparison with prior ECGs when available, and follow the GFD STEMI pathway / Medical Control as appropriate.</div>
  </div>`;
 }
-function setSgarbossa(key,val){
- sgarbossaState[key]=val;
- const n=key.slice(1);
- document.getElementById('sgC'+n+'Y')?.classList.toggle('on',val===true);
- document.getElementById('sgC'+n+'N')?.classList.toggle('on',val===false);
- document.getElementById('sgC'+n+'U')?.classList.toggle('on',val==='unknown');
- updateSgarbossa();
+function renderSgarbossaWizard(){
+ const wiz=document.getElementById('sgarbossaWizard');
+ const out=document.getElementById('sgarbossaResult');
+ if(!wiz||!out)return;
+ const vals=[sgarbossaState.c1,sgarbossaState.c2,sgarbossaState.c3];
+ const pos=vals.findIndex(v=>v===true);
+ if(pos>=0){
+   wiz.innerHTML='';
+   out.style.display='block';
+   out.className='sgarbossa-result pos';
+   out.innerHTML='<span class="sgarbossa-score">POSITIVE</span><div>Modified Sgarbossa criterion '+(pos+1)+' is present. Treat as a high-concern ECG finding and follow the GFD STEMI pathway / Medical Control as appropriate.</div><button class="tool-btn" style="margin-top:12px;background:#475569" onclick="resetSgarbossa()">Start New Check</button>';
+   return;
+ }
+ if(sgarbossaStep>3){
+   const uncertain=vals.filter(v=>v==='unknown').length;
+   wiz.innerHTML='';
+   out.style.display='block';
+   if(uncertain){
+     out.className='sgarbossa-result ind';
+     out.innerHTML='<span class="sgarbossa-score">INDETERMINATE</span><div>No definite positive criterion was identified, but '+uncertain+' criterion '+(uncertain===1?'was':'were')+' marked Unsure. Reassess the ECG, repeat/compare ECGs, and continue clinical assessment.</div><button class="tool-btn" style="margin-top:12px;background:#475569" onclick="resetSgarbossa()">Start New Check</button>';
+   }else{
+     out.className='sgarbossa-result neg';
+     out.innerHTML='<span class="sgarbossa-score">NEGATIVE</span><div>No Modified Sgarbossa criterion identified. This does <b>not</b> rule out acute coronary occlusion.</div><button class="tool-btn" style="margin-top:12px;background:#475569" onclick="resetSgarbossa()">Start New Check</button>';
+   }
+   return;
+ }
+ out.style.display='none';
+ const q=sgarbossaQuestions[sgarbossaStep];
+ const pct=Math.round((sgarbossaStep-1)/3*100);
+ wiz.innerHTML=`
+   <div class="sgarbossa-progress"><span>Step ${sgarbossaStep} of 3</span><div class="sgarbossa-progress-track"><div class="sgarbossa-progress-fill" style="width:${pct}%"></div></div></div>
+   <div class="sgarbossa-step">
+    <div class="sgarbossa-step-head"><span class="sgarbossa-num">${sgarbossaStep}</span><div><h4>${q.title}</h4><small>${q.detail}</small></div></div>
+    <div class="sgarbossa-plain"><b>Easy check:</b> ${q.easy}</div>
+    <div class="sgarbossa-actions">
+      <button class="yes" onclick="answerSgarbossa(true)">YES</button>
+      <button class="no" onclick="answerSgarbossa(false)">NO</button>
+      <button class="unknown" onclick="answerSgarbossa('unknown')">UNSURE</button>
+    </div>
+    ${sgarbossaStep>1?'<div class="sgarbossa-nav"><button onclick="backSgarbossa()">‹ Back one step</button><button onclick="resetSgarbossa()">Restart</button></div>':'<div class="sgarbossa-nav"><button style="grid-column:1/-1" onclick="resetSgarbossa()">Restart</button></div>'}
+   </div>`;
 }
-function calcSgarbossaRatio(){
- const ste=parseFloat(document.getElementById('sgSTE')?.value);
- const sdepth=parseFloat(document.getElementById('sgSDepth')?.value);
- const out=document.getElementById('sgRatioOut');
- if(!out)return;
- if(!(ste>=0)||!(sdepth>0)){out.textContent='Ratio: —';return}
- const ratio=ste/sdepth;
- out.innerHTML='Ratio: <b>'+ratio.toFixed(2)+'</b> ('+Math.round(ratio*100)+'%)'+(ste>=1&&ratio>=0.25?' • <b>MEETS ≥25%</b>':'');
- if(ste>=1&&ratio>=0.25)setSgarbossa('c3',true);
+function answerSgarbossa(val){
+ const q=sgarbossaQuestions[sgarbossaStep];
+ sgarbossaState[q.key]=val;
+ if(val===true){
+   renderSgarbossaWizard();
+   return;
+ }
+ sgarbossaStep+=1;
+ renderSgarbossaWizard();
+}
+function backSgarbossa(){
+ if(sgarbossaStep<=1)return;
+ sgarbossaStep-=1;
+ const q=sgarbossaQuestions[sgarbossaStep];
+ sgarbossaState[q.key]=null;
+ renderSgarbossaWizard();
 }
 function resetSgarbossa(){
  sgarbossaState={c1:null,c2:null,c3:null};
- ['1','2','3'].forEach(n=>{
-  document.getElementById('sgC'+n+'Y')?.classList.remove('on');
-  document.getElementById('sgC'+n+'N')?.classList.remove('on');
-  document.getElementById('sgC'+n+'U')?.classList.remove('on');
- });
- const ste=document.getElementById('sgSTE'),sd=document.getElementById('sgSDepth'),ratio=document.getElementById('sgRatioOut');
- if(ste)ste.value='';if(sd)sd.value='';if(ratio)ratio.textContent='Ratio: —';
- updateSgarbossa();
-}
-function updateSgarbossa(){
- const out=document.getElementById('sgarbossaResult');if(!out)return;
- const vals=[sgarbossaState.c1,sgarbossaState.c2,sgarbossaState.c3];
- const pos=vals.map((v,i)=>v===true?i+1:null).filter(Boolean);
- const unknown=vals.filter(v=>v==='unknown'||v===null).length;
- if(pos.length){
-   out.className='sgarbossa-result pos';
-   out.innerHTML='<span class="sgarbossa-score">POSITIVE</span><div>Modified Sgarbossa criterion '+pos.join(', ')+' met. Treat as a high-concern ECG finding and follow the GFD STEMI pathway / Medical Control as appropriate.</div>';
- }else if(unknown){
-   out.className='sgarbossa-result ind';
-   out.innerHTML='<span class="sgarbossa-score">INDETERMINATE</span><div>'+unknown+' criterion '+(unknown===1?'is':'are')+' unanswered or uncertain. Re-measure, repeat/compare ECGs, and continue clinical assessment.</div>';
- }else{
-   out.className='sgarbossa-result neg';
-   out.innerHTML='<span class="sgarbossa-score">NEGATIVE</span><div>No Modified Sgarbossa criterion identified. This does <b>not</b> rule out acute coronary occlusion.</div>';
- }
+ sgarbossaStep=1;
+ renderSgarbossaWizard();
 }
 function toolContent(which){
  if(which==='sgarbossa')return sgarbossaToolHtml();
@@ -3142,9 +3177,11 @@ function toggleInlineProtocolTool(which,btn){
  if(!opening){slot.innerHTML='';return}
  slot.innerHTML=toolContent(which);btn.classList.add('open');
  if(which==='start')resetStart();
+ if(which==='sgarbossa'){resetSgarbossa();setTimeout(renderSgarbossaWizard,0)}
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v114',title:'Sgarbossa tap-through workflow',copy:'Simplified the Modified Sgarbossa tool into a one-question-at-a-time Yes / No / Unsure workflow. Removed all measurement-entry fields and automatic ratio calculation so crews can move through the criteria by tapping only. Any positive criterion stops immediately with a Positive result; otherwise the tool returns Negative or Indeterminate.'},
  {date:'2026-09-29',version:'v113',title:'Modified Sgarbossa + App Version history',copy:'Updated the STEMI/Field Tools Sgarbossa aid to Modified Sgarbossa logic with Positive, Negative, and Indeterminate results, plain-language concordant/discordant guidance, and a 25% ST/S ratio helper. Expanded the app update log so users can clearly see version, date, summary, and what changed.'},
  {date:'2026-09-29',version:'v112',title:'Sgarbossa Criteria field aid',copy:'Added the first mobile-friendly Sgarbossa checklist to the GFD STEMI protocol and Field Tools, plus the initial Updates / Change Log view.'},
  {date:'2026-09-29',version:'v111',title:'Update descriptions',copy:'Added brief update descriptions so crews can see what changed before refreshing.'}
@@ -3152,7 +3189,7 @@ const gfdChangeLog=[
 function openChangeLog(){
  leaveDetail();
  document.querySelector('#list').classList.add('off');
- document.querySelector('#detail').innerHTML='<button class="back sticky-back" onclick="closeChangeLog()">‹ Back</button><div class="card"><h2>GFD EMS Protocol App — Updates</h2><div class="tool-note"><b>Current app version: v113</b><br>Released 2026-09-29<br><br>Chronological app-change history. This records app presentation, tool, workflow, and reference changes; official protocol revisions remain controlled by Gladstone Fire Department source documents.</div><div class="change-log-panel" style="margin-top:12px">'+gfdChangeLog.map(x=>'<div class="change-log-item"><b>'+esc(x.title)+'</b><div class="change-log-date">'+esc(x.date)+' • '+esc(x.version)+'</div><div class="change-log-copy">'+esc(x.copy)+'</div></div>').join('')+'</div></div>';
+ document.querySelector('#detail').innerHTML='<button class="back sticky-back" onclick="closeChangeLog()">‹ Back</button><div class="card"><h2>GFD EMS Protocol App — Updates</h2><div class="tool-note"><b>Current app version: v114</b><br>Released 2026-09-29<br><br>Chronological app-change history. This records app presentation, tool, workflow, and reference changes; official protocol revisions remain controlled by Gladstone Fire Department source documents.</div><div class="change-log-panel" style="margin-top:12px">'+gfdChangeLog.map(x=>'<div class="change-log-item"><b>'+esc(x.title)+'</b><div class="change-log-date">'+esc(x.date)+' • '+esc(x.version)+'</div><div class="change-log-copy">'+esc(x.copy)+'</div></div>').join('')+'</div></div>';
  document.querySelector('#detail').classList.add('on');scrollTo(0,0);
 }
 function closeChangeLog(){document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off');render()}
