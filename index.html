@@ -301,7 +301,6 @@ body{background:#f4f7fa}
 .version-copy{font-size:13px;line-height:1.48;color:#334155;margin-top:9px}
 .version-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}.version-tag{background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:850}
 .version-note{border:1px solid #d8e3ec;background:#f8fafc;border-radius:11px;padding:10px 11px;color:#475569;font-size:12px;line-height:1.45}
-.version-home-card{border-left:4px solid #2f6690!important}
 @media(max-width:520px){.version-hero-top{flex-direction:column}.version-current{align-self:flex-start}.version-summary{grid-template-columns:1fr}.version-hero h2{font-size:22px!important}.version-item{padding:12px}.version-row{gap:7px}}
 
 /* v116 desktop presentation layer — mobile rules remain unchanged */
@@ -527,6 +526,14 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
  .guide-steps,
  .mission-card{box-shadow:0 1px 4px rgba(23,58,94,.07)}
 }
+
+/* v121 Version History home card consistency */
+.version-home-card{
+ background:linear-gradient(180deg,var(--surface-card) 0%,var(--surface-soft) 100%)!important;
+ border:1px solid var(--surface-border)!important;
+ box-shadow:var(--surface-shadow)!important;
+}
+.version-home-card:before,.version-home-card:after{display:none!important}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -3862,6 +3869,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v121',title:'Version History card consistency',copy:'Removed the special visual treatment from the Home-screen Version History shortcut so it now matches the same surface, border, and shadow treatment as the other Home cards.',tags:['App UI','Consistency','Home']},
  {date:'2026-09-29',version:'v120',title:'Unified card shading',copy:'Standardized the visual treatment of cards and panels across the app. Home shortcuts, tool categories, tool buttons, protocol cards, hospital/contact cards, version-history cards, scoring panels, and supporting sections now share the same border, radius, subtle gradient, and shadow treatment for a more consistent interface.',tags:['App UI','Consistency','Cards']},
  {date:'2026-09-29',version:'v140',title:'Smoother Home card reordering',copy:'Reworked Home shortcut dragging for touch devices. A held card now visibly lifts, moves only when the finger enters another card, highlights the current drop target, gives light haptic feedback when crossing positions, and supports gentle page auto-scroll. This replaces the jittery nearest-card behavior.',tags:['Home','Drag and Drop','iOS','Mobile','Usability']},
  {date:'2026-09-29',version:'v139',title:'Flat Home shortcut cards',copy:'Removed shaded card styling from the Home screen. Shortcut cards now use a clean white background with no card shadow while keeping borders, spacing, and large tap targets intact.',tags:['Home','Cards','Layout','Mobile']},
