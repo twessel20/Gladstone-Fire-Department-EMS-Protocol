@@ -492,8 +492,25 @@ function dragMoveAt(kind,host,x,y){
  const others=[...host.querySelectorAll(kind==='nav'?'.tab[data-navkey]':'.home-shortcut-card[data-homekey]')].filter(v=>v!==el);
  let target=null,before=true;
  if(kind==='nav'){
-  for(const item of others){const r=item.getBoundingClientRect();if(x<r.left+r.width/2){target=item;before=true;break}}
-  if(!target&&others.length){target=others[others.length-1];before=false}
+  // Continuous horizontal reorder: keep swapping across as many siblings as the held finger crosses.
+  let moved=true,guard=0;
+  while(moved&&guard++<50){
+   moved=false;
+   const prev=el.previousElementSibling;
+   const next=el.nextElementSibling;
+   if(prev?.matches('.tab[data-navkey]')){
+    const r=prev.getBoundingClientRect();
+    if(x<r.left+r.width/2){host.insertBefore(el,prev);moved=true;continue}
+   }
+   if(next?.matches('.tab[data-navkey]')){
+    const r=next.getBoundingClientRect();
+    if(x>r.left+r.width/2){host.insertBefore(next,el);moved=true;continue}
+   }
+  }
+  const hr=host.getBoundingClientRect(),edge=42;
+  if(x<hr.left+edge)host.scrollLeft-=18;
+  else if(x>hr.right-edge)host.scrollLeft+=18;
+  return;
  }else{
   let best=null,dist=Infinity;
   for(const item of others){
@@ -537,6 +554,24 @@ function endHeldItem(kind,host){
  }
  dragState.el=null;dragState.kind=null;dragState.pointerId=null;dragState.touchId=null;
 }
+function activeTouchDragMove(e){
+ if(!dragState.el||!dragState.kind)return;
+ const touch=[...(e.touches||[])].find(t=>t.identifier===dragState.touchId)||e.touches?.[0];
+ if(!touch)return;
+ const host=dragState.kind==='nav'?document.querySelector('#tabs'):document.querySelector('.clinical-shortcuts');
+ if(!host)return;
+ e.preventDefault();
+ dragMoveAt(dragState.kind,host,touch.clientX,touch.clientY);
+}
+function activeTouchDragEnd(){
+ if(!dragState.el||!dragState.kind)return;
+ const host=dragState.kind==='nav'?document.querySelector('#tabs'):document.querySelector('.clinical-shortcuts');
+ if(host)endHeldItem(dragState.kind,host);
+}
+document.addEventListener('touchmove',activeTouchDragMove,{passive:false});
+document.addEventListener('touchend',activeTouchDragEnd,{passive:true});
+document.addEventListener('touchcancel',activeTouchDragEnd,{passive:true});
+
 function bindHoldReorder(kind,host,selector){
  host.querySelectorAll(selector).forEach(el=>{
   el.setAttribute('draggable','false');
@@ -551,8 +586,8 @@ function bindHoldReorder(kind,host,selector){
 
   el.addEventListener('touchstart',e=>startTouchHold(kind,host,el,e),{passive:true});
   el.addEventListener('touchmove',e=>moveTouchHeldItem(kind,host,e),{passive:false});
-  el.addEventListener('touchend',()=>endHeldItem(kind,host),{passive:true});
-  el.addEventListener('touchcancel',()=>endHeldItem(kind,host),{passive:true});
+  el.addEventListener('touchend',()=>{if(!dragState.el)endHeldItem(kind,host)},{passive:true});
+  el.addEventListener('touchcancel',()=>{if(!dragState.el)endHeldItem(kind,host)},{passive:true});
  });
 }
 function topNavClick(key){
@@ -3713,6 +3748,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v137',title:'Continuous top-row drag reordering',copy:'Top navigation buttons can now be moved across multiple positions during one tap-hold-drag gesture. The held button continuously swaps past each shortcut as the finger crosses it, supports edge auto-scroll, and saves the final order only on release.',tags:['Navigation','Drag and Drop','iOS','Mobile','Customization']},
  {date:'2026-09-29',version:'v136',title:'Animated Home mission intro',copy:'The Gladstone Fire/EMS mission statement now appears as a brief animated Home-screen intro and automatically fades/slides away after about three seconds, leaving the shortcut grid as the primary working view.',tags:['Home','Animation','Mission','Mobile']},
  {date:'2026-09-29',version:'v135',title:'Clear search behavior cleanup',copy:'The Clear button now clears the search without automatically refocusing the search field or reopening the keyboard. It also keeps the user on the current section instead of forcing a jump back into search mode.',tags:['Search','Mobile','Header','Usability']},
  {date:'2026-09-29',version:'v134',title:'iOS tap-hold-drag fix',copy:'Fixed shortcut reordering on iPhone and iPad. Long-press text selection and Safari touch callouts are disabled on draggable navigation and Home shortcut items, and native touch tracking now handles hold-and-drag movement directly. Saved ordering behavior is unchanged.',tags:['iOS','Navigation','Home','Drag and Drop','Mobile']},
