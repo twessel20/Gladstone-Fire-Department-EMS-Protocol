@@ -135,7 +135,7 @@ body{background:#f4f7fa}
 .tabs{background:#eef4f8;border-bottom:1px solid #cad8e3}
 .tab{background:#fff;color:#244b6b;border-color:#cbd9e4}.tab.on{background:#2f6690;color:#fff;border-color:#2f6690}
 .home-hero{border-top-color:#2f6690}.home-hero h2{color:#173a5e}
-.quick-card{border-top-color:#b8cddd;box-shadow:0 1px 3px #00000010}.quick-card b{color:#173a5e}
+.quick-card{background:#fff;border-top-color:#b8cddd;box-shadow:none}.quick-card b{color:#173a5e}
 .quick-primary{border-left:4px solid #2f6690}
 .section{background:#2f6690}.source,.dose-btn{background:#2f6690;border-bottom-color:#173a5e}
 .rolebtn.on{background:#dceaf4;color:#173a5e}.status{background:#244b6b}
@@ -3748,6 +3748,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v139',title:'Flat Home shortcut cards',copy:'Removed shaded card styling from the Home screen. Shortcut cards now use a clean white background with no card shadow while keeping borders, spacing, and large tap targets intact.',tags:['Home','Cards','Layout','Mobile']},
  {date:'2026-09-29',version:'v138',title:'Longer Home mission animation',copy:'Extended the animated Home mission statement from about three seconds to seven seconds before it fades/slides away and the shortcut grid takes over the space.',tags:['Home','Animation','Mission','Mobile']},
  {date:'2026-09-29',version:'v137',title:'Continuous top-row drag reordering',copy:'Top navigation buttons can now be moved across multiple positions during one tap-hold-drag gesture. The held button continuously swaps past each shortcut as the finger crosses it, supports edge auto-scroll, and saves the final order only on release.',tags:['Navigation','Drag and Drop','iOS','Mobile','Customization']},
  {date:'2026-09-29',version:'v136',title:'Animated Home mission intro',copy:'The Gladstone Fire/EMS mission statement now appears as a brief animated Home-screen intro and automatically fades/slides away after about three seconds, leaving the shortcut grid as the primary working view.',tags:['Home','Animation','Mission','Mobile']},
