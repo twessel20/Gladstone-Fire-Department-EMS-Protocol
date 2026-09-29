@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v117';
-const UPDATE_SUMMARY='v117: Field Tools categories are now collapsible, reducing scrolling and making both mobile and desktop navigation cleaner.';
+const C='gfd-ems-shell-v118';
+const UPDATE_SUMMARY='v118: Modified Sgarbossa wording was accuracy-reviewed; criterion 2 now clearly applies to any of V1–V3 and criterion 3 explicitly requires both ≥1 mm discordant ST elevation and ≥25% proportional elevation.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
