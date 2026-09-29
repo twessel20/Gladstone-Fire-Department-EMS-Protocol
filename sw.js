@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v139';
-const UPDATE_SUMMARY='v139: Home shortcut cards now use a clean flat white presentation with no shading or drop shadow.';
+const C='gfd-ems-shell-v140';
+const UPDATE_SUMMARY='v140: Home shortcut reordering is smoother on touch devices, with a lifted card, highlighted drop target, light haptics, and page auto-scroll.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
