@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v122';
-const UPDATE_SUMMARY='v122: Hospital cards and hospital search results now open driving directions directly from the device’s current location.';
+const C='gfd-ems-shell-v123';
+const UPDATE_SUMMARY='v123: Hospital navigation now launches only from the Directions from current location button; tapping the hospital card itself no longer opens maps.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
