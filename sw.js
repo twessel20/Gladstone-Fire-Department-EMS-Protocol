@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v115';
-const UPDATE_SUMMARY='v115: Added a permanent themed Version History / Change Log screen with release dates, version numbers, and concise descriptions of each app update.';
+const C='gfd-ems-shell-v116';
+const UPDATE_SUMMARY='v116: Desktop layout refreshed with wider content, multi-column navigation cards, larger protocol reading space, and improved responsive presentation.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
