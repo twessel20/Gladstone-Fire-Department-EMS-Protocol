@@ -1,6 +1,6 @@
-const C='gfd-ems-shell-v120';
-const UPDATE_SUMMARY='v120: Modified Sgarbossa now includes an ECG visual example with every question. Tap any tracing for a large teaching view.';
-const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
+const C='gfd-ems-shell-v121';
+const UPDATE_SUMMARY='v121: Added a Street Drug / Substance Reference with alias search, toxidromes, emerging substances, GFD medication considerations, and an updateable offline-capable drug library.';
+const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
@@ -71,6 +71,17 @@ self.addEventListener('fetch',e=>{
      fetch(req,{cache:'no-store'}).then(r=>{
        const copy=r.clone();caches.open(C).then(cache=>cache.put(req,copy));return r;
      }).catch(()=>caches.match(req))
+   );
+   return;
+ }
+
+ if(u.pathname.endsWith('/street-drugs.json')){
+   const cacheKey=new Request(new URL('street-drugs.json',location.href).href);
+   e.respondWith(
+     fetch(cacheKey,{cache:'no-store'}).then(r=>{
+       if(r.ok&&r.status===200){const copy=r.clone();caches.open(C).then(cache=>cache.put(cacheKey,copy))}
+       return r;
+     }).catch(()=>caches.match(cacheKey))
    );
    return;
  }
