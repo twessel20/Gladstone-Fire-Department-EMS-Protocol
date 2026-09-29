@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v136';
-const UPDATE_SUMMARY='v136: The Home mission statement now animates briefly for about three seconds, then fades/slides away to maximize shortcut space.';
+const C='gfd-ems-shell-v137';
+const UPDATE_SUMMARY='v137: Top navigation buttons can now move across multiple positions in one continuous tap-hold-drag gesture, with edge auto-scroll.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
