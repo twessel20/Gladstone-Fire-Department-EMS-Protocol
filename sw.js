@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v137';
-const UPDATE_SUMMARY='v137: Top navigation buttons can now move across multiple positions in one continuous tap-hold-drag gesture, with edge auto-scroll.';
+const C='gfd-ems-shell-v138';
+const UPDATE_SUMMARY='v138: The Home mission statement animation now remains visible for about seven seconds before fading and sliding away.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
