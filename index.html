@@ -3164,15 +3164,15 @@ const sgarbossaQuestions={
  },
  2:{
    key:'c2',
-   title:'Concordant ST depression ≥1 mm in V1–V3?',
-   detail:'In V1–V3, look for a predominantly negative QRS with ST depression moving in the SAME direction.',
-   easy:'V1–V3: QRS mostly DOWN + ST also DOWN ≥1 mm = YES.'
+   title:'Concordant ST depression ≥1 mm in V1, V2, or V3?',
+   detail:'Check V1 through V3. If any ONE of these leads has a predominantly negative QRS with ST depression ≥1 mm in the SAME direction, this criterion is positive.',
+   easy:'Any of V1–V3: QRS mostly DOWN + ST also DOWN ≥1 mm = YES.'
  },
  3:{
    key:'c3',
-   title:'Excessively discordant ST elevation?',
-   detail:'Look for a mostly DOWN QRS with ST elevation in the opposite direction. The ST elevation is positive when it is ≥1 mm and at least one-quarter (25%) of the preceding S-wave depth.',
-   easy:'QRS mostly DOWN + ST UP. If the ST rise is at least 1/4 as tall as the S wave is deep = YES. No numbers need to be entered.'
+   title:'Discordant ST elevation ≥1 mm AND ≥25% of S-wave depth?',
+   detail:'Look for a mostly DOWN QRS with ST elevation in the opposite direction. BOTH must be present in the same lead: ST elevation ≥1 mm AND ST elevation at least one-quarter (25%) of the S-wave depth.',
+   easy:'QRS mostly DOWN + ST UP. First confirm ST elevation is ≥1 mm. Then ask: is the ST rise at least 1/4 as tall as the S wave is deep? If BOTH are yes, tap YES.'
  }
 };
 function sgarbossaToolHtml(){
@@ -3314,6 +3314,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v118',title:'Modified Sgarbossa accuracy review',copy:'Reviewed the tap-through Modified Sgarbossa workflow against published criteria and validation literature. Clarified that criterion 2 is positive in any one of V1–V3, and tightened criterion 3 so both requirements are explicit: discordant ST elevation at least 1 mm and at least 25% of S-wave depth in the same lead.',tags:['Clinical Tool','Sgarbossa','Accuracy']},
  {date:'2026-09-29',version:'v117',title:'Collapsible Tools categories',copy:'Made each Field Tools category expandable and collapsible. Tool groups now start in a clean collapsed state and open by tapping the category header, reducing scrolling while preserving all existing tool buttons and workflows.',tags:['Tools','Navigation','Mobile','Desktop']},
  {date:'2026-09-29',version:'v116',title:'Desktop layout refresh',copy:'Added a dedicated desktop presentation layer while preserving the mobile experience. Desktop now uses a wider content area, multi-column home shortcuts, larger protocol reading space, improved tool and destination grids, refined spacing, hover feedback, and a two-column version-history layout on larger screens.',tags:['Desktop','App UI','Responsive']},
  {date:'2026-09-29',version:'v115',title:'Version History & Change Log',copy:'Added a permanent, themed Version History screen that users can reopen from the Home screen or footer. The log now clearly shows the current app version, release date, chronological version history, and concise descriptions of what changed in each release.',tags:['App UI','Version History','Navigation']},
