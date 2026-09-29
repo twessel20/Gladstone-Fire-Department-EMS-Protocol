@@ -1708,8 +1708,8 @@ function calcParkland(){
   box.innerHTML=`<div class="tool-note">Normal Saline volume estimate</div>
     <div class="parkland-grid">
       <div class="parkland-stat">First 8 hr total<b>${Math.round(first8).toLocaleString()} mL</b></div>
-      <div class="parkland-stat">24-hour total<b>${Math.round(total).toLocaleString()} mL</b></div>
       <div class="parkland-stat">Next 16 hr<b>${Math.round(next16).toLocaleString()} mL</b></div>
+      <div class="parkland-stat">24-hour total<b>${Math.round(total).toLocaleString()} mL</b></div>
       <div class="parkland-stat">Formula factor<b>${factor} mL/kg/%</b></div>
     </div>
     <div class="burn-mini" style="margin-top:8px">Weight: ${kg.toFixed(1)} kg • TBSA: ${burnTBSA}% • Timing begins at the time of injury, not EMS arrival.</div>`;
