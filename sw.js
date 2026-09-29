@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v127';
-const UPDATE_SUMMARY='v127: Burn results now show the First 8 hr total before the 24-hour total, and the Home control is centered for a more balanced header.';
+const C='gfd-ems-shell-v128';
+const UPDATE_SUMMARY='v128: Number-only fields now open the appropriate numeric keypad on mobile, with digits-only input for integer fields and decimal numeric input where needed.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
