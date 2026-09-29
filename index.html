@@ -230,6 +230,23 @@ body{background:#f4f7fa}
 .sgarbossa-key div{border:1px solid #dbe4ee;border-radius:10px;padding:9px;background:#f8fafc}
 .sgarbossa-key b{display:block;color:#173a5e}
 .sgarbossa-key span{font-size:12px;color:#475569}
+.sgarbossa-ecg-example{margin-top:12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 1px 3px #173a5e12}
+.sgarbossa-ecg-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.sgarbossa-ecg-top b{font-size:12px;color:#173a5e;text-transform:uppercase;letter-spacing:.04em}
+.sgarbossa-ecg-top span{font-size:11px;color:#64748b;font-weight:750}
+.sgarbossa-ecg-button{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in;text-align:left;touch-action:manipulation}
+.sgarbossa-ecg-svg{display:block;width:100%;height:auto;min-height:170px}
+.sgarbossa-ecg-caption{padding:9px 11px 11px;color:#475569;font-size:12px;line-height:1.4;border-top:1px solid #eef2f6}
+.sgarbossa-ecg-caption b{color:#173a5e}
+.sgarbossa-ecg-expand{display:inline-flex;align-items:center;gap:5px;margin-top:5px;color:#2f6690;font-weight:900;font-size:11px}
+.sgarbossa-ecg-modal{position:fixed;inset:0;z-index:9999;background:#0f172aeF;display:flex;align-items:center;justify-content:center;padding:14px}
+.sgarbossa-ecg-modal-card{width:min(100%,1000px);max-height:96vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 20px 60px #0008}
+.sgarbossa-ecg-modal-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:#173a5e;color:#fff}
+.sgarbossa-ecg-modal-head b{font-size:16px}
+.sgarbossa-ecg-close{min-width:52px;min-height:48px;border:1px solid #ffffff66;border-radius:10px;background:#fff;color:#173a5e;font-size:15px;font-weight:950;cursor:pointer}
+.sgarbossa-ecg-modal-body{padding:12px}
+.sgarbossa-ecg-modal-body .sgarbossa-ecg-svg{min-height:260px}
+.sgarbossa-ecg-disclaimer{margin-top:10px;padding:10px 11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:12px;line-height:1.45}
 @media(max-width:520px){
  .sgarbossa-actions{grid-template-columns:1fr}
  .sgarbossa-actions button{min-height:54px;font-size:16px}
@@ -3200,6 +3217,51 @@ function protocolToolLinks(x){
 }
 let sgarbossaState={c1:null,c2:null,c3:null};
 let sgarbossaStep=1;
+function sgarbossaExampleSvg(step){
+ const common='<defs><pattern id="sgGrid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="#f3c7c7" stroke-width="0.6"/></pattern><pattern id="sgGridBig" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="url(#sgGrid)"/><path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e8a9a9" stroke-width="1"/></pattern></defs><rect width="720" height="230" fill="url(#sgGridBig)"/><line x1="24" y1="120" x2="696" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5 5"/>';
+ if(step===1)return '<svg class="sgarbossa-ecg-svg" viewBox="0 0 720 230" role="img" aria-label="Positive example of concordant ST elevation">'+common+
+  '<path d="M24 120 L75 120 Q92 118 102 120 L115 120 L126 113 L136 120 L146 60 L157 142 L169 120 L194 120 L207 91 L270 91 Q292 90 309 104 Q331 120 360 120 L405 120 L416 113 L427 120 L437 62 L448 141 L461 120 L486 120 L500 92 L561 92 Q585 92 602 104 Q624 120 654 120 L696 120" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<line x1="210" y1="120" x2="210" y2="92" stroke="#dc2626" stroke-width="3"/><path d="M204 99 L210 91 L216 99" fill="none" stroke="#dc2626" stroke-width="3"/>'+
+  '<text x="224" y="82" font-size="18" font-weight="800" fill="#991b1b">ST ↑ ≥1 mm</text><text x="118" y="38" font-size="17" font-weight="800" fill="#173a5e">Dominant QRS ↑</text>'+
+  '<rect x="500" y="22" width="172" height="38" rx="19" fill="#dcfce7" stroke="#16a34a"/><text x="586" y="47" text-anchor="middle" font-size="16" font-weight="900" fill="#166534">POSITIVE EXAMPLE</text></svg>';
+ if(step===2)return '<svg class="sgarbossa-ecg-svg" viewBox="0 0 720 230" role="img" aria-label="Positive example of concordant ST depression in V1 through V3">'+common+
+  '<path d="M24 120 L73 120 L89 118 L101 120 L113 113 L124 120 L138 174 L150 91 L163 120 L191 120 L205 148 L271 148 Q298 148 318 135 Q337 120 365 120 L406 120 L419 114 L432 120 L447 174 L459 92 L473 120 L500 120 L514 148 L579 148 Q604 148 623 135 Q641 120 671 120 L696 120" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<line x1="207" y1="120" x2="207" y2="148" stroke="#dc2626" stroke-width="3"/><path d="M201 141 L207 149 L213 141" fill="none" stroke="#dc2626" stroke-width="3"/>'+
+  '<text x="222" y="168" font-size="18" font-weight="800" fill="#991b1b">ST ↓ ≥1 mm</text><text x="112" y="202" font-size="17" font-weight="800" fill="#173a5e">Dominant QRS ↓</text>'+
+  '<text x="28" y="34" font-size="18" font-weight="900" fill="#173a5e">Check V1, V2, or V3</text><rect x="500" y="22" width="172" height="38" rx="19" fill="#dcfce7" stroke="#16a34a"/><text x="586" y="47" text-anchor="middle" font-size="16" font-weight="900" fill="#166534">POSITIVE EXAMPLE</text></svg>';
+ return '<svg class="sgarbossa-ecg-svg" viewBox="0 0 720 230" role="img" aria-label="Positive example of excessively discordant ST elevation at least 25 percent of S wave depth">'+common+
+  '<path d="M24 120 L72 120 L89 117 L101 120 L113 110 L126 120 L141 194 L154 89 L167 120 L193 120 L208 91 L270 91 Q294 91 313 105 Q333 120 362 120 L404 120 L419 112 L432 120 L447 193 L460 90 L474 120 L500 120 L514 91 L577 91 Q601 91 620 105 Q641 120 672 120 L696 120" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '<line x1="178" y1="120" x2="178" y2="194" stroke="#2f6690" stroke-width="3"/><line x1="170" y1="120" x2="186" y2="120" stroke="#2f6690" stroke-width="3"/><line x1="170" y1="194" x2="186" y2="194" stroke="#2f6690" stroke-width="3"/><text x="188" y="182" font-size="15" font-weight="800" fill="#173a5e">S = 8 mm</text>'+
+  '<line x1="283" y1="120" x2="283" y2="91" stroke="#dc2626" stroke-width="3"/><line x1="275" y1="120" x2="291" y2="120" stroke="#dc2626" stroke-width="3"/><line x1="275" y1="91" x2="291" y2="91" stroke="#dc2626" stroke-width="3"/><text x="295" y="86" font-size="15" font-weight="800" fill="#991b1b">STE = 3 mm</text>'+
+  '<text x="28" y="34" font-size="17" font-weight="900" fill="#173a5e">3 ÷ 8 = 37.5% → ≥25%</text><rect x="500" y="22" width="172" height="38" rx="19" fill="#dcfce7" stroke="#16a34a"/><text x="586" y="47" text-anchor="middle" font-size="16" font-weight="900" fill="#166534">POSITIVE EXAMPLE</text></svg>';
+}
+function sgarbossaExampleHtml(step){
+ const captions={
+  1:'<b>Concordant elevation:</b> the dominant QRS and ST elevation point in the same direction.',
+  2:'<b>Concordant depression:</b> in V1–V3, the dominant QRS and ST depression point in the same direction.',
+  3:'<b>Excessive discordance:</b> ST elevation points opposite the dominant negative QRS and is at least 25% of S-wave depth.'
+ };
+ return '<div class="sgarbossa-ecg-example"><div class="sgarbossa-ecg-top"><b>ECG visual aid</b><span>Schematic positive example</span></div><button type="button" class="sgarbossa-ecg-button" onclick="openSgarbossaExample('+step+')" aria-label="Enlarge Sgarbossa ECG example">'+sgarbossaExampleSvg(step)+'</button><div class="sgarbossa-ecg-caption">'+captions[step]+'<div class="sgarbossa-ecg-expand">↗ Tap ECG to enlarge</div></div></div>';
+}
+function openSgarbossaExample(step){
+ closeSgarbossaExample();
+ const titles={1:'Criterion 1 — Concordant ST Elevation',2:'Criterion 2 — Concordant ST Depression',3:'Criterion 3 — Excessively Discordant ST Elevation'};
+ const modal=document.createElement('div');
+ modal.id='sgarbossaEcgModal';
+ modal.className='sgarbossa-ecg-modal';
+ modal.setAttribute('role','dialog');
+ modal.setAttribute('aria-modal','true');
+ modal.innerHTML='<div class="sgarbossa-ecg-modal-card" onclick="event.stopPropagation()"><div class="sgarbossa-ecg-modal-head"><b>'+titles[step]+'</b><button type="button" class="sgarbossa-ecg-close" onclick="closeSgarbossaExample()">Close</button></div><div class="sgarbossa-ecg-modal-body">'+sgarbossaExampleSvg(step)+'<div class="sgarbossa-ecg-disclaimer"><b>Teaching schematic only.</b> Use the patient\'s actual 12-lead ECG for interpretation. Grid, waveform proportions, and annotations are simplified to highlight the criterion.</div></div></div>';
+ modal.onclick=closeSgarbossaExample;
+ document.body.appendChild(modal);
+ document.body.style.overflow='hidden';
+}
+function closeSgarbossaExample(){
+ const modal=document.getElementById('sgarbossaEcgModal');
+ if(modal)modal.remove();
+ document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sgarbossaEcgModal'))closeSgarbossaExample()});
 const sgarbossaQuestions={
  1:{
    key:'c1',
@@ -3267,6 +3329,7 @@ function renderSgarbossaWizard(){
    <div class="sgarbossa-step">
     <div class="sgarbossa-step-head"><span class="sgarbossa-num">${sgarbossaStep}</span><div><h4>${q.title}</h4><small>${q.detail}</small></div></div>
     <div class="sgarbossa-plain"><b>Easy check:</b> ${q.easy}</div>
+    ${sgarbossaExampleHtml(sgarbossaStep)}
     <div class="sgarbossa-actions">
       <button class="yes" onclick="answerSgarbossa(true)">YES</button>
       <button class="no" onclick="answerSgarbossa(false)">NO</button>
