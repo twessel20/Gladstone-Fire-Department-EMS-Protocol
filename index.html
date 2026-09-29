@@ -3001,8 +3001,8 @@ function protocolToolLinks(x){
 let sgarbossaState={c1:null,c2:null,c3:null};
 function sgarbossaToolHtml(){
  return `<div class="tool-card inline-field-tool sgarbossa-card">
-  <h3>🫀 Sgarbossa Criteria — GFD Field Aid</h3>
-  <div class="tool-note"><b>Use with LBBB or ventricular-paced rhythm when acute coronary occlusion is suspected.</b> Tap Yes or No for each criterion. Score updates automatically.</div>
+  <h3>🫀 Sgarbossa Criteria — GFD Field Reference</h3>
+  <div class="tool-note"><b>For ECGs with LBBB or ventricular-paced rhythm.</b> Tap Yes or No for each published criterion. The weighted score totals automatically.</div>
   <div class="sgarbossa-flow">
    <div class="sgarbossa-step"><div class="sgarbossa-step-head"><span class="sgarbossa-num">1</span><b>Concordant ST elevation ≥1 mm in any lead with a positive QRS?</b><span class="sgarbossa-points">+5</span></div><div class="sgarbossa-actions"><button id="sgC1Y" class="yes" onclick="setSgarbossa('c1',true)">YES</button><button id="sgC1N" class="no" onclick="setSgarbossa('c1',false)">NO</button></div></div>
    <div class="sgarbossa-arrow">↓</div>
@@ -3012,7 +3012,7 @@ function sgarbossaToolHtml(){
   </div>
   <div id="sgarbossaResult" class="sgarbossa-result"><span class="sgarbossa-score">Score: — / 10</span><div>Complete all 3 criteria.</div></div>
   <button class="tool-btn" style="background:#475569" onclick="resetSgarbossa()">Reset Checklist</button>
-  <div class="sgarbossa-note"><b>Interpretation:</b> Score ≥3 strongly supports acute MI/occlusion in the appropriate clinical setting. A score below 3 does <b>not</b> exclude MI. This is a GFD quick-reference aid; follow the Gladstone STEMI protocol, serial ECGs, clinical presentation, and Medical Control.</div>
+  <div class="sgarbossa-note"><b>Reference note:</b> Published literature commonly uses a score ≥3 as a high-specificity threshold. A score below 3 does <b>not</b> exclude acute MI. Apply the Gladstone STEMI protocol, serial ECGs, patient presentation, clinical judgment, and Medical Control as appropriate.</div>
  </div>`;
 }
 function setSgarbossa(key,val){
@@ -3031,9 +3031,7 @@ function updateSgarbossa(){
  const out=document.getElementById('sgarbossaResult');if(!out)return;
  const vals=[sgarbossaState.c1,sgarbossaState.c2,sgarbossaState.c3],done=vals.filter(v=>v!==null).length;
  const score=(sgarbossaState.c1===true?5:0)+(sgarbossaState.c2===true?3:0)+(sgarbossaState.c3===true?2:0);
- if(done<3){out.className='sgarbossa-result';out.innerHTML='<span class="sgarbossa-score">Score: '+score+' / 10</span><div>'+done+' of 3 criteria completed.</div>';return}
- if(score>=3){out.className='sgarbossa-result pos';out.innerHTML='<span class="sgarbossa-score">Score: '+score+' / 10</span><b>POSITIVE / HIGH-SPECIFICITY PATTERN</b><div class="sgarbossa-note">Treat as concerning for acute MI/occlusion in the appropriate clinical context and follow the GFD STEMI pathway.</div>'}
- else{out.className='sgarbossa-result neg';out.innerHTML='<span class="sgarbossa-score">Score: '+score+' / 10</span><b>Does not meet the ≥3 threshold</b><div class="sgarbossa-note">A low or zero score does not rule out MI. Continue the GFD STEMI evaluation and clinical assessment.</div>'}
+ out.className='sgarbossa-result';out.innerHTML='<span class="sgarbossa-score">Score: '+score+' / 10</span><div>'+done+' of 3 criteria completed.</div>';
 }
 
 function toolContent(which){
