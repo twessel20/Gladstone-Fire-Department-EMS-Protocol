@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v133';
-const UPDATE_SUMMARY='v133: Home, Search, and Clear now share one compact header row, giving Search the available width and reducing wasted vertical space.';
+const C='gfd-ems-shell-v134';
+const UPDATE_SUMMARY='v134: Fixed iPhone/iPad tap-hold-drag reordering by preventing text selection/callouts and handling touch movement directly.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
