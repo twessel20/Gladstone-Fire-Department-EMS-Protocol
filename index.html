@@ -323,6 +323,25 @@ body{background:#f4f7fa}
  .detail.on{max-width:1060px}
  .tool-menu{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+/* v117 collapsible Tools categories */
+.tool-section{background:#fff;border:1px solid #d8e3ec;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px #0000000d}
+.tool-section-toggle{width:100%;border:0;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;padding:15px 16px;cursor:pointer;color:#173a5e}
+.tool-section-toggle:hover{background:#f8fafc}
+.tool-section-heading{min-width:0}
+.tool-section-heading b{display:block;font-size:17px;line-height:1.2;color:#173a5e}
+.tool-section-heading span{display:block;margin-top:4px;font-size:12px;line-height:1.35;color:#64748b;font-weight:600}
+.tool-section-chevron{font-size:24px;line-height:1;color:#64748b;transition:transform .16s ease}
+.tool-section.open .tool-section-chevron{transform:rotate(90deg);color:#2f6690}
+.tool-section-body{display:none;padding:0 14px 14px}
+.tool-section.open .tool-section-body{display:grid;gap:9px}
+.tool-section .lab-search-wrap{margin:0 0 2px}
+@media(min-width:900px){
+ .tools-grid.tool-menu{align-items:start}
+ .tool-section-toggle{padding:17px 18px}
+ .tool-section-heading b{font-size:18px}
+ .tool-section-body{padding:0 16px 16px}
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -742,63 +761,91 @@ async function loadPatientMedication(rxcui,fallbackName){
 function renderTools(){
   document.querySelector('#list').innerHTML=`
     <div class="tools-grid tool-menu">
-      <div class="tool-card">
-        <h3>💉 Medication & Infusion</h3>
-        <div class="tool-note">Dose, infusion, and medication-support calculators.</div>
-        <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult, pediatric, and infant initial + repeat dose calculator</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('diltiazem')"><span class="tool-launch-icon">💉</span><span><b>Diltiazem Dose</b><small>DOB or typed age with initial + second weight-based dose</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
-      </div>
-
-      <div class="tool-card">
-        <h3>🔥 Trauma & Burns</h3>
-        <div class="tool-note">Burn assessment, fluid estimation, and triage tools.</div>
-        <button class="tool-launch" onclick="openToolCard('burn')"><span class="tool-launch-icon">🔥</span><span><b>Burn Calculator — TBSA + Parkland</b><small>Burn map, TBSA calculation, and Parkland fluid formula</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('start')"><span class="tool-launch-icon">🚑</span><span><b>START Triage</b><small>Step-by-step adult mass-casualty triage aid</small></span><span class="tool-chevron">›</span></button>
-      </div>
-
-      <div class="tool-card">
-        <h3>🫀 Cardiac / ECG</h3>
-        <div class="tool-note">Rapid ECG interpretation support for time-critical cardiac patients.</div>
-        <button class="tool-launch" onclick="openToolCard('sgarbossa')"><span class="tool-launch-icon">ECG</span><span><b>Sgarbossa Criteria</b><small>Tap-through Modified Sgarbossa check — no data entry</small></span><span class="tool-chevron">›</span></button>
-      </div>
-
-      <div class="tool-card">
-        <h3>🧠 Assessment & Scoring</h3>
-        <div class="tool-note">Rapid neurologic and clinical scoring references.</div>
-        <button class="tool-launch" onclick="openToolCard('gcs')"><span class="tool-launch-icon">🧠</span><span><b>Glasgow Coma Scale</b><small>Eye, verbal, and motor scoring</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('cincinnati')"><span class="tool-launch-icon">🧠</span><span><b>Cincinnati Prehospital Stroke Scale</b><small>Facial droop, arm drift, and speech screen</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('van')"><span class="tool-launch-icon">🧠</span><span><b>VAN Stroke Assessment</b><small>Vision, aphasia, neglect + GFD routing result</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('nihss')"><span class="tool-launch-icon">🧠</span><span><b>NIH Stroke Scale</b><small>Fast 15-item NIHSS calculator with live total</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('apgar')"><span class="tool-launch-icon">👶</span><span><b>APGAR Score</b><small>Appearance, pulse, grimace, activity, respiration</small></span><span class="tool-chevron">›</span></button>
-      </div>
-
-      <div class="tool-card">
-        <h3>🧪 Lab & Reference</h3>
-        <div class="tool-note">Search a specific lab value or open a full reference guide.</div>
-        <div class="lab-search-wrap">
-          <input id="labToolSearch" type="search" autocomplete="off" placeholder="Search: potassium, Hgb, troponin, INR…" oninput="searchLabTools(this.value)">
-          <div id="labToolResults" class="lab-search-results"></div>
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>💉 Medication & Infusion</b><span>Dose, infusion, and medication-support calculators.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('lido')"><span class="tool-launch-icon">💉</span><span><b>Lidocaine Dose</b><small>Adult, pediatric, and infant initial + repeat dose calculator</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('diltiazem')"><span class="tool-launch-icon">💉</span><span><b>Diltiazem Dose</b><small>DOB or typed age with initial + second weight-based dose</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
         </div>
-        <button class="tool-launch" onclick="openToolCard('cbc')"><span class="tool-launch-icon">🩸</span><span><b>CBC Reference Guide</b><small>Typical adult CBC ranges with low/high field interpretation</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('erlabs')"><span class="tool-launch-icon">🧪</span><span><b>Common ER Labs</b><small>Electrolytes, renal, cardiac, coagulation, liver, lactate, and blood gas basics</small></span><span class="tool-chevron">›</span></button>
       </div>
 
-      <div class="tool-card">
-        <h3>☎️ Important Phone Numbers</h3>
-        <div class="tool-note">Tap a number to call directly from a mobile device.</div>
-        <button class="tool-launch" onclick="openToolCard('phones')"><span class="tool-launch-icon">☎️</span><span><b>Important Phone Numbers</b><small>Poison Control and other critical contacts</small></span><span class="tool-chevron">›</span></button>
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>🔥 Trauma & Burns</b><span>Burn assessment, fluid estimation, and triage tools.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('burn')"><span class="tool-launch-icon">🔥</span><span><b>Burn Calculator — TBSA + Parkland</b><small>Burn map, TBSA calculation, and Parkland fluid formula</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('start')"><span class="tool-launch-icon">🚑</span><span><b>START Triage</b><small>Step-by-step adult mass-casualty triage aid</small></span><span class="tool-chevron">›</span></button>
+        </div>
       </div>
 
-      <div class="tool-card">
-        <h3>💊 Medication Identification</h3>
-        <div class="tool-note">Tools for evaluating home or unknown medications.</div>
-        <button class="tool-launch" onclick="openToolCard('pillcount')"><span class="tool-launch-icon">🔢</span><span><b>Pill Count</b><small>Estimate pills missing from a prescription bottle</small></span><span class="tool-chevron">›</span></button>
-        <button class="tool-launch" onclick="openToolCard('pillid')"><span class="tool-launch-icon">💊</span><span><b>Pill Identifier</b><small>Identify an unknown tablet or capsule by imprint and appearance</small></span><span class="tool-chevron">›</span></button>
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>🫀 Cardiac / ECG</b><span>Rapid ECG interpretation support for time-critical cardiac patients.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('sgarbossa')"><span class="tool-launch-icon">ECG</span><span><b>Sgarbossa Criteria</b><small>Tap-through Modified Sgarbossa check — no data entry</small></span><span class="tool-chevron">›</span></button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>🧠 Assessment & Scoring</b><span>Rapid neurologic and clinical scoring references.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('gcs')"><span class="tool-launch-icon">🧠</span><span><b>Glasgow Coma Scale</b><small>Eye, verbal, and motor scoring</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('cincinnati')"><span class="tool-launch-icon">🧠</span><span><b>Cincinnati Prehospital Stroke Scale</b><small>Facial droop, arm drift, and speech screen</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('van')"><span class="tool-launch-icon">🧠</span><span><b>VAN Stroke Assessment</b><small>Vision, aphasia, neglect + GFD routing result</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('nihss')"><span class="tool-launch-icon">🧠</span><span><b>NIH Stroke Scale</b><small>Fast 15-item NIHSS calculator with live total</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('apgar')"><span class="tool-launch-icon">👶</span><span><b>APGAR Score</b><small>Appearance, pulse, grimace, activity, respiration</small></span><span class="tool-chevron">›</span></button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>🧪 Lab & Reference</b><span>Search a specific lab value or open a full reference guide.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <div class="lab-search-wrap">
+            <input id="labToolSearch" type="search" autocomplete="off" placeholder="Search: potassium, Hgb, troponin, INR…" oninput="searchLabTools(this.value)">
+            <div id="labToolResults" class="lab-search-results"></div>
+          </div>
+          <button class="tool-launch" onclick="openToolCard('cbc')"><span class="tool-launch-icon">🩸</span><span><b>CBC Reference Guide</b><small>Typical adult CBC ranges with low/high field interpretation</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('erlabs')"><span class="tool-launch-icon">🧪</span><span><b>Common ER Labs</b><small>Electrolytes, renal, cardiac, coagulation, liver, lactate, and blood gas basics</small></span><span class="tool-chevron">›</span></button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>☎️ Important Phone Numbers</b><span>Tap a number to call directly from a mobile device.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('phones')"><span class="tool-launch-icon">☎️</span><span><b>Important Phone Numbers</b><small>Poison Control and other critical contacts</small></span><span class="tool-chevron">›</span></button>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <button class="tool-section-toggle" onclick="toggleToolSection(this)" aria-expanded="false">
+          <span class="tool-section-heading"><b>💊 Medication Identification</b><span>Tools for evaluating home or unknown medications.</span></span><span class="tool-section-chevron">›</span>
+        </button>
+        <div class="tool-section-body">
+          <button class="tool-launch" onclick="openToolCard('pillcount')"><span class="tool-launch-icon">🔢</span><span><b>Pill Count</b><small>Estimate pills missing from a prescription bottle</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('pillid')"><span class="tool-launch-icon">💊</span><span><b>Pill Identifier</b><small>Identify an unknown tablet or capsule by imprint and appearance</small></span><span class="tool-chevron">›</span></button>
+        </div>
       </div>
     </div>
     <div id="toolDetail"></div>`;
+}
+function toggleToolSection(btn){
+ const section=btn.closest('.tool-section');
+ if(!section)return;
+ const open=!section.classList.contains('open');
+ section.classList.toggle('open',open);
+ btn.setAttribute('aria-expanded',open?'true':'false');
 }
 const labReferenceIndex=[
  {name:'WBC',guide:'cbc',terms:'white blood cell leukocyte leukopenia leukocytosis infection'},
@@ -3267,6 +3314,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v117',title:'Collapsible Tools categories',copy:'Made each Field Tools category expandable and collapsible. Tool groups now start in a clean collapsed state and open by tapping the category header, reducing scrolling while preserving all existing tool buttons and workflows.',tags:['Tools','Navigation','Mobile','Desktop']},
  {date:'2026-09-29',version:'v116',title:'Desktop layout refresh',copy:'Added a dedicated desktop presentation layer while preserving the mobile experience. Desktop now uses a wider content area, multi-column home shortcuts, larger protocol reading space, improved tool and destination grids, refined spacing, hover feedback, and a two-column version-history layout on larger screens.',tags:['Desktop','App UI','Responsive']},
  {date:'2026-09-29',version:'v115',title:'Version History & Change Log',copy:'Added a permanent, themed Version History screen that users can reopen from the Home screen or footer. The log now clearly shows the current app version, release date, chronological version history, and concise descriptions of what changed in each release.',tags:['App UI','Version History','Navigation']},
  {date:'2026-09-29',version:'v114',title:'Sgarbossa tap-through workflow',copy:'Simplified the Modified Sgarbossa tool into a one-question-at-a-time Yes / No / Unsure workflow. Removed all measurement-entry fields and automatic ratio calculation so crews can move through the criteria by tapping only. Any positive criterion stops immediately with a Positive result; otherwise the tool returns Negative or Indeterminate.',tags:['Clinical Tool','Sgarbossa','Mobile']},
