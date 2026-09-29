@@ -207,9 +207,9 @@ body{background:#f4f7fa}
 .sgarbossa-step-head{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:9px;align-items:start}
 .sgarbossa-num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#173a5e;color:#fff;font-weight:900}
 .sgarbossa-step b{color:#173a5e;font-size:14px;line-height:1.3}.sgarbossa-points{font-weight:950;color:#173a5e;background:#eaf2f8;border-radius:999px;padding:5px 8px;font-size:12px;white-space:nowrap}
-.sgarbossa-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.sgarbossa-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sgarbossa-actions.three{grid-template-columns:1fr 1fr 1fr}
 .sgarbossa-actions button{min-height:48px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#334155;font-weight:900;font-size:14px}
-.sgarbossa-actions button.yes.on{background:#fee2e2;border-color:#dc2626;color:#991b1b}.sgarbossa-actions button.no.on{background:#dcfce7;border-color:#16a34a;color:#166534}
+.sgarbossa-actions button.yes.on{background:#fee2e2;border-color:#dc2626;color:#991b1b}.sgarbossa-actions button.no.on{background:#dcfce7;border-color:#16a34a;color:#166534}.sgarbossa-actions button.unknown.on{background:#fef3c7;border-color:#d97706;color:#92400e}.sgarbossa-step small{display:block;margin-top:4px;color:#64748b;line-height:1.35}.sgarbossa-badge{font-weight:950;color:#991b1b;background:#fee2e2;border-radius:999px;padding:5px 8px;font-size:11px;white-space:nowrap}.sgarbossa-plain{margin-top:10px;padding:9px 10px;border-radius:9px;background:#eef4f8;color:#334155;font-size:12px;line-height:1.4}.sgarbossa-key{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sgarbossa-key div{border:1px solid #dbe4ee;border-radius:10px;padding:9px;background:#f8fafc}.sgarbossa-key b{display:block;color:#173a5e}.sgarbossa-key span{font-size:12px;color:#475569}.sgarbossa-ratio{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.sgarbossa-ratio label{font-size:12px;font-weight:800;color:#334155}.sgarbossa-ratio input{width:100%;box-sizing:border-box;margin-top:4px;min-height:44px;border:1px solid #cbd5e1;border-radius:9px;padding:9px;font-size:16px;background:#fff}.sgarbossa-ratio-out{grid-column:1/-1;padding:9px 10px;background:#f8fafc;border:1px solid #dbe4ee;border-radius:9px;font-size:13px;color:#334155}.sgarbossa-result.ind{background:#fffbeb;border-color:#d97706;color:#92400e}@media(max-width:520px){.sgarbossa-step-head{grid-template-columns:34px minmax(0,1fr)}.sgarbossa-badge{grid-column:2;justify-self:start}.sgarbossa-actions.three{grid-template-columns:1fr}.sgarbossa-actions button{min-height:46px}.sgarbossa-key,.sgarbossa-ratio{grid-template-columns:1fr}}
 .sgarbossa-arrow{text-align:center;color:#2f6690;font-size:22px;font-weight:900;line-height:1}
 .sgarbossa-result{margin-top:12px;border-radius:13px;padding:14px;text-align:center;border:2px solid #cbd5e1;background:#f8fafc}
 .sgarbossa-result.pos{background:#fff1f2;border-color:#dc2626;color:#7f1d1d}.sgarbossa-result.neg{background:#f8fafc;border-color:#94a3b8;color:#334155}
@@ -653,7 +653,7 @@ function renderTools(){
       <div class="tool-card">
         <h3>🫀 Cardiac / ECG</h3>
         <div class="tool-note">Rapid ECG interpretation support for time-critical cardiac patients.</div>
-        <button class="tool-launch" onclick="openToolCard('sgarbossa')"><span class="tool-launch-icon">ECG</span><span><b>Sgarbossa Criteria</b><small>Clickable LBBB / ventricular-paced rhythm checklist with automatic score</small></span><span class="tool-chevron">›</span></button>
+        <button class="tool-launch" onclick="openToolCard('sgarbossa')"><span class="tool-launch-icon">ECG</span><span><b>Sgarbossa Criteria</b><small>Modified Sgarbossa decision aid with Positive / Negative / Indeterminate result</small></span><span class="tool-chevron">›</span></button>
       </div>
 
       <div class="tool-card">
@@ -3001,18 +3001,42 @@ function protocolToolLinks(x){
 let sgarbossaState={c1:null,c2:null,c3:null};
 function sgarbossaToolHtml(){
  return `<div class="tool-card inline-field-tool sgarbossa-card">
-  <h3>🫀 Sgarbossa Criteria — GFD Field Reference</h3>
-  <div class="tool-note"><b>For ECGs with LBBB or ventricular-paced rhythm.</b> Tap Yes or No for each published criterion. The weighted score totals automatically.</div>
-  <div class="sgarbossa-flow">
-   <div class="sgarbossa-step"><div class="sgarbossa-step-head"><span class="sgarbossa-num">1</span><b>Concordant ST elevation ≥1 mm in any lead with a positive QRS?</b><span class="sgarbossa-points">+5</span></div><div class="sgarbossa-actions"><button id="sgC1Y" class="yes" onclick="setSgarbossa('c1',true)">YES</button><button id="sgC1N" class="no" onclick="setSgarbossa('c1',false)">NO</button></div></div>
-   <div class="sgarbossa-arrow">↓</div>
-   <div class="sgarbossa-step"><div class="sgarbossa-step-head"><span class="sgarbossa-num">2</span><b>Concordant ST depression ≥1 mm in V1, V2, or V3?</b><span class="sgarbossa-points">+3</span></div><div class="sgarbossa-actions"><button id="sgC2Y" class="yes" onclick="setSgarbossa('c2',true)">YES</button><button id="sgC2N" class="no" onclick="setSgarbossa('c2',false)">NO</button></div></div>
-   <div class="sgarbossa-arrow">↓</div>
-   <div class="sgarbossa-step"><div class="sgarbossa-step-head"><span class="sgarbossa-num">3</span><b>Discordant ST elevation ≥5 mm in any lead with a negative QRS?</b><span class="sgarbossa-points">+2</span></div><div class="sgarbossa-actions"><button id="sgC3Y" class="yes" onclick="setSgarbossa('c3',true)">YES</button><button id="sgC3N" class="no" onclick="setSgarbossa('c3',false)">NO</button></div></div>
+  <h3>🫀 Modified Sgarbossa — Rapid ECG Check</h3>
+  <div class="tool-note"><b>Use with LBBB or ventricular-paced rhythm when acute coronary occlusion is suspected.</b> Check each finding. <b>Any ONE positive criterion = Modified Sgarbossa POSITIVE.</b></div>
+
+  <div class="sgarbossa-key">
+   <div><b>Concordant</b><span>ST segment moves in the SAME direction as the main QRS.</span></div>
+   <div><b>Discordant</b><span>ST segment moves OPPOSITE the main QRS.</span></div>
   </div>
-  <div id="sgarbossaResult" class="sgarbossa-result"><span class="sgarbossa-score">Score: — / 10</span><div>Complete all 3 criteria.</div></div>
+
+  <div class="sgarbossa-flow">
+   <div class="sgarbossa-step">
+    <div class="sgarbossa-step-head"><span class="sgarbossa-num">1</span><div><b>Concordant ST elevation ≥1 mm?</b><small>Any lead with a predominantly positive QRS.</small></div><span class="sgarbossa-badge">ANY 1 = +</span></div>
+    <div class="sgarbossa-plain"><b>Easy check:</b> QRS mostly UP + ST also UP ≥1 mm.</div>
+    <div class="sgarbossa-actions three"><button id="sgC1Y" class="yes" onclick="setSgarbossa('c1',true)">YES</button><button id="sgC1N" class="no" onclick="setSgarbossa('c1',false)">NO</button><button id="sgC1U" class="unknown" onclick="setSgarbossa('c1','unknown')">UNSURE</button></div>
+   </div>
+
+   <div class="sgarbossa-step">
+    <div class="sgarbossa-step-head"><span class="sgarbossa-num">2</span><div><b>Concordant ST depression ≥1 mm in V1–V3?</b><small>ST depression moves in the same direction as the predominantly negative QRS.</small></div><span class="sgarbossa-badge">ANY 1 = +</span></div>
+    <div class="sgarbossa-plain"><b>Easy check:</b> In V1–V3, QRS mostly DOWN + ST also DOWN ≥1 mm.</div>
+    <div class="sgarbossa-actions three"><button id="sgC2Y" class="yes" onclick="setSgarbossa('c2',true)">YES</button><button id="sgC2N" class="no" onclick="setSgarbossa('c2',false)">NO</button><button id="sgC2U" class="unknown" onclick="setSgarbossa('c2','unknown')">UNSURE</button></div>
+   </div>
+
+   <div class="sgarbossa-step">
+    <div class="sgarbossa-step-head"><span class="sgarbossa-num">3</span><div><b>Excessively discordant ST elevation?</b><small>ST elevation ≥1 mm AND ST elevation is ≥25% of the depth of the preceding S wave.</small></div><span class="sgarbossa-badge">ANY 1 = +</span></div>
+    <div class="sgarbossa-plain"><b>Easy check:</b> QRS mostly DOWN + ST UP. If ST elevation ÷ S-wave depth ≥0.25, this criterion is POSITIVE.</div>
+    <div class="sgarbossa-ratio">
+      <label>ST elevation (mm)<input id="sgSTE" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 3" oninput="calcSgarbossaRatio()"></label>
+      <label>S-wave depth (mm)<input id="sgSDepth" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 10" oninput="calcSgarbossaRatio()"></label>
+      <div id="sgRatioOut" class="sgarbossa-ratio-out">Ratio: —</div>
+    </div>
+    <div class="sgarbossa-actions three"><button id="sgC3Y" class="yes" onclick="setSgarbossa('c3',true)">YES</button><button id="sgC3N" class="no" onclick="setSgarbossa('c3',false)">NO</button><button id="sgC3U" class="unknown" onclick="setSgarbossa('c3','unknown')">UNSURE</button></div>
+   </div>
+  </div>
+
+  <div id="sgarbossaResult" class="sgarbossa-result"><span class="sgarbossa-score">Complete the checklist</span><div>Result will display as Positive, Negative, or Indeterminate.</div></div>
   <button class="tool-btn" style="background:#475569" onclick="resetSgarbossa()">Reset Checklist</button>
-  <div class="sgarbossa-note"><b>Reference note:</b> Published literature commonly uses a score ≥3 as a high-specificity threshold. A score below 3 does <b>not</b> exclude acute MI. Apply the Gladstone STEMI protocol, serial ECGs, patient presentation, clinical judgment, and Medical Control as appropriate.</div>
+  <div class="sgarbossa-note"><b>Important:</b> A negative Modified Sgarbossa result does not rule out acute coronary occlusion. Continue clinical assessment, serial ECGs, comparison with prior ECGs when available, and follow the GFD STEMI pathway / Medical Control as appropriate.</div>
  </div>`;
 }
 function setSgarbossa(key,val){
@@ -3020,20 +3044,46 @@ function setSgarbossa(key,val){
  const n=key.slice(1);
  document.getElementById('sgC'+n+'Y')?.classList.toggle('on',val===true);
  document.getElementById('sgC'+n+'N')?.classList.toggle('on',val===false);
+ document.getElementById('sgC'+n+'U')?.classList.toggle('on',val==='unknown');
  updateSgarbossa();
+}
+function calcSgarbossaRatio(){
+ const ste=parseFloat(document.getElementById('sgSTE')?.value);
+ const sdepth=parseFloat(document.getElementById('sgSDepth')?.value);
+ const out=document.getElementById('sgRatioOut');
+ if(!out)return;
+ if(!(ste>=0)||!(sdepth>0)){out.textContent='Ratio: —';return}
+ const ratio=ste/sdepth;
+ out.innerHTML='Ratio: <b>'+ratio.toFixed(2)+'</b> ('+Math.round(ratio*100)+'%)'+(ste>=1&&ratio>=0.25?' • <b>MEETS ≥25%</b>':'');
+ if(ste>=1&&ratio>=0.25)setSgarbossa('c3',true);
 }
 function resetSgarbossa(){
  sgarbossaState={c1:null,c2:null,c3:null};
- ['1','2','3'].forEach(n=>{document.getElementById('sgC'+n+'Y')?.classList.remove('on');document.getElementById('sgC'+n+'N')?.classList.remove('on')});
+ ['1','2','3'].forEach(n=>{
+  document.getElementById('sgC'+n+'Y')?.classList.remove('on');
+  document.getElementById('sgC'+n+'N')?.classList.remove('on');
+  document.getElementById('sgC'+n+'U')?.classList.remove('on');
+ });
+ const ste=document.getElementById('sgSTE'),sd=document.getElementById('sgSDepth'),ratio=document.getElementById('sgRatioOut');
+ if(ste)ste.value='';if(sd)sd.value='';if(ratio)ratio.textContent='Ratio: —';
  updateSgarbossa();
 }
 function updateSgarbossa(){
  const out=document.getElementById('sgarbossaResult');if(!out)return;
- const vals=[sgarbossaState.c1,sgarbossaState.c2,sgarbossaState.c3],done=vals.filter(v=>v!==null).length;
- const score=(sgarbossaState.c1===true?5:0)+(sgarbossaState.c2===true?3:0)+(sgarbossaState.c3===true?2:0);
- out.className='sgarbossa-result';out.innerHTML='<span class="sgarbossa-score">Score: '+score+' / 10</span><div>'+done+' of 3 criteria completed.</div>';
+ const vals=[sgarbossaState.c1,sgarbossaState.c2,sgarbossaState.c3];
+ const pos=vals.map((v,i)=>v===true?i+1:null).filter(Boolean);
+ const unknown=vals.filter(v=>v==='unknown'||v===null).length;
+ if(pos.length){
+   out.className='sgarbossa-result pos';
+   out.innerHTML='<span class="sgarbossa-score">POSITIVE</span><div>Modified Sgarbossa criterion '+pos.join(', ')+' met. Treat as a high-concern ECG finding and follow the GFD STEMI pathway / Medical Control as appropriate.</div>';
+ }else if(unknown){
+   out.className='sgarbossa-result ind';
+   out.innerHTML='<span class="sgarbossa-score">INDETERMINATE</span><div>'+unknown+' criterion '+(unknown===1?'is':'are')+' unanswered or uncertain. Re-measure, repeat/compare ECGs, and continue clinical assessment.</div>';
+ }else{
+   out.className='sgarbossa-result neg';
+   out.innerHTML='<span class="sgarbossa-score">NEGATIVE</span><div>No Modified Sgarbossa criterion identified. This does <b>not</b> rule out acute coronary occlusion.</div>';
+ }
 }
-
 function toolContent(which){
  if(which==='sgarbossa')return sgarbossaToolHtml();
  if(which==='apgar')return `<div class="tool-card inline-field-tool"><h3>APGAR Score</h3><div class="tool-note">Score each category 0, 1, or 2. GFD Childbirth protocol documents APGAR at 1 and 5 minutes.</div><div class="score-grid">${scoreSelect('apAppearance','Appearance / color',[['0','Blue or pale all over'],['1','Body pink, extremities blue'],['2','Completely pink']])}${scoreSelect('apPulse','Pulse / heart rate',[['0','Absent'],['1','Below 100/min'],['2','100/min or greater']])}${scoreSelect('apGrimace','Grimace / reflex irritability',[['0','No response'],['1','Grimace'],['2','Cough, sneeze, cry, or active withdrawal']])}${scoreSelect('apActivity','Activity / muscle tone',[['0','Limp'],['1','Some flexion'],['2','Active motion']])}${scoreSelect('apResp','Respiration',[['0','Absent'],['1','Slow or irregular'],['2','Good respirations / strong cry']])}</div><div id="apgarResult" class="tool-result score-total"><b>APGAR: — / 10</b></div></div>`;
@@ -3095,13 +3145,14 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
- {date:'2026-09-29',version:'v112',title:'Sgarbossa Criteria field aid',copy:'Added a mobile-friendly, clickable Sgarbossa checklist with automatic weighted scoring to the GFD STEMI protocol and Field Tools. Also added this unobtrusive Updates / Change Log view.'},
+ {date:'2026-09-29',version:'v113',title:'Modified Sgarbossa + App Version history',copy:'Updated the STEMI/Field Tools Sgarbossa aid to Modified Sgarbossa logic with Positive, Negative, and Indeterminate results, plain-language concordant/discordant guidance, and a 25% ST/S ratio helper. Expanded the app update log so users can clearly see version, date, summary, and what changed.'},
+ {date:'2026-09-29',version:'v112',title:'Sgarbossa Criteria field aid',copy:'Added the first mobile-friendly Sgarbossa checklist to the GFD STEMI protocol and Field Tools, plus the initial Updates / Change Log view.'},
  {date:'2026-09-29',version:'v111',title:'Update descriptions',copy:'Added brief update descriptions so crews can see what changed before refreshing.'}
 ];
 function openChangeLog(){
  leaveDetail();
  document.querySelector('#list').classList.add('off');
- document.querySelector('#detail').innerHTML='<button class="back sticky-back" onclick="closeChangeLog()">‹ Back</button><div class="card"><h2>GFD EMS Protocol App — Updates</h2><div class="tool-note">Chronological app-change history. This records app presentation, tool, workflow, and reference changes; official protocol revisions remain controlled by Gladstone Fire Department source documents.</div><div class="change-log-panel" style="margin-top:12px">'+gfdChangeLog.map(x=>'<div class="change-log-item"><b>'+esc(x.title)+'</b><div class="change-log-date">'+esc(x.date)+' • '+esc(x.version)+'</div><div class="change-log-copy">'+esc(x.copy)+'</div></div>').join('')+'</div></div>';
+ document.querySelector('#detail').innerHTML='<button class="back sticky-back" onclick="closeChangeLog()">‹ Back</button><div class="card"><h2>GFD EMS Protocol App — Updates</h2><div class="tool-note"><b>Current app version: v113</b><br>Released 2026-09-29<br><br>Chronological app-change history. This records app presentation, tool, workflow, and reference changes; official protocol revisions remain controlled by Gladstone Fire Department source documents.</div><div class="change-log-panel" style="margin-top:12px">'+gfdChangeLog.map(x=>'<div class="change-log-item"><b>'+esc(x.title)+'</b><div class="change-log-date">'+esc(x.date)+' • '+esc(x.version)+'</div><div class="change-log-copy">'+esc(x.copy)+'</div></div>').join('')+'</div></div>';
  document.querySelector('#detail').classList.add('on');scrollTo(0,0);
 }
 function closeChangeLog(){document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off');render()}
