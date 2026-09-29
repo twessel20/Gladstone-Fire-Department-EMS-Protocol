@@ -599,7 +599,7 @@ const quickGroups={
 };
 function quickSearch(group){leaveDetail();quickSet=group;cat='All';document.querySelector('#q').value='';tabs();render();scrollTo(0,0)}
 function quickMedical(){quickSet=null;leaveDetail();cat='Medical';document.querySelector('#q').value='';tabs();render();scrollTo(0,0)}
-function clearSearch(){const q=document.querySelector('#q');q.value='';leaveDetail();if(cat==='Home')cat='All';tabs();render();q.focus()}
+function clearSearch(){const q=document.querySelector('#q');q.value='';leaveDetail();tabs();render();q.blur()}
 function goHome(){quickSet=null;leaveDetail();cat='Home';document.querySelector('#q').value='';tabs();render();scrollTo(0,0)}
 function homeShortcutItems(){
  return [
@@ -3698,6 +3698,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v135',title:'Clear search behavior cleanup',copy:'The Clear button now clears the search without automatically refocusing the search field or reopening the keyboard. It also keeps the user on the current section instead of forcing a jump back into search mode.',tags:['Search','Mobile','Header','Usability']},
  {date:'2026-09-29',version:'v134',title:'iOS tap-hold-drag fix',copy:'Fixed shortcut reordering on iPhone and iPad. Long-press text selection and Safari touch callouts are disabled on draggable navigation and Home shortcut items, and native touch tracking now handles hold-and-drag movement directly. Saved ordering behavior is unchanged.',tags:['iOS','Navigation','Home','Drag and Drop','Mobile']},
  {date:'2026-09-29',version:'v133',title:'Compact Home/Search/Clear header row',copy:'Combined Home, Search, and Clear into a single compact header row. Search now takes the available width while Home and Clear remain small fixed controls, reducing wasted vertical space and maximizing usable room on mobile.',tags:['Header','Search','Home','Mobile','Layout']},
  {date:'2026-09-29',version:'v132',title:'Burn fluid results in liters only',copy:'Parkland burn-calculator fluid results now display liters only for the First 8 hr, Next 16 hr, and 24-hour totals. The mL display and liters toggle were removed to reduce field interpretation steps.',tags:['Burns','Parkland','Fluids','Field Use']},
