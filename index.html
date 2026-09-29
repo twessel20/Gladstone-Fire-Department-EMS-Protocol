@@ -5,8 +5,9 @@
 .tab.nav-dragging{opacity:.84;transform:scale(1.05);box-shadow:0 6px 16px #173a5e33;background:#dbeafe;color:#173a5e;z-index:20;touch-action:none}
 .tabs.nav-reordering{overflow-x:auto;user-select:none;-webkit-user-select:none}
 .home-shortcut-card.home-hold-ready{position:relative;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
-.home-shortcut-card.home-dragging{opacity:.84;transform:scale(1.03);box-shadow:0 8px 20px #173a5e33;border-color:#9fbdd3;z-index:20;touch-action:none}
-.clinical-shortcuts.home-reordering{user-select:none;-webkit-user-select:none}
+.home-shortcut-card.home-dragging{opacity:.94;transform:scale(1.055);box-shadow:0 10px 24px #173a5e44;border:2px solid #2f6690;z-index:30;touch-action:none}
+.home-shortcut-card.home-drop-target{outline:3px solid #93c5fd;outline-offset:2px}
+.clinical-shortcuts.home-reordering{user-select:none;-webkit-user-select:none;touch-action:none}
 .reorder-hint{grid-column:1/-1;font-size:11px;line-height:1.35;color:#64748b;padding:2px 2px 4px}
 .wrap{padding:12px;max-width:800px;margin:auto}.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px #0001}.title{font-weight:750;font-size:17px}.meta{font-size:12px;color:#666;margin-top:4px}.detail{display:none}.detail.on{display:block}.list{display:block}.list.off{display:none}.back{border:0;background:#eee;border-radius:9px;padding:9px 12px;margin-bottom:10px}.sticky-back{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:60;display:inline-flex;align-items:center;box-shadow:0 3px 12px #0003;background:#fff;border:1px solid #cbd5e1;font-weight:850;margin:0}.sticky-back:before{content:'';position:absolute;inset:-5px;background:#f7f9fbdd;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:-1;border-radius:12px}.source{display:inline-block;text-decoration:none;background:#2f6690;color:#fff;border-radius:10px;padding:10px 12px;margin:8px 0 14px}.section{font-weight:850;margin:22px 0 9px;color:#7f1d1d;font-size:15px;letter-spacing:.02em}.med-section{margin-top:20px;padding-top:12px;border-top:1px solid #e5e7eb}.source-med-sheet{max-width:760px;margin:10px auto 18px;background:#fff;border:1px solid #dbe3ea;border-radius:12px;padding:18px 20px}.source-med-header{position:relative;margin:0 -20px 18px;padding:16px 18px;background:linear-gradient(135deg,#173a5e 0%,#2f6690 100%);color:#fff;border-bottom:4px solid #d7c79a;overflow:hidden}
 .source-med-header:before{content:"";position:absolute;right:-18px;top:-24px;width:150px;height:150px;border:18px solid rgba(255,255,255,.06);border-radius:50%}
@@ -463,11 +464,11 @@ function orderedBySaved(items,key){
  const used=new Set(ordered.map(x=>x.key));
  return [...ordered,...items.filter(x=>!used.has(x.key))];
 }
-let dragState={timer:null,el:null,pointerId:null,suppress:false,kind:null,touchId:null,startX:0,startY:0};
+let dragState={timer:null,el:null,pointerId:null,suppress:false,kind:null,touchId:null,startX:0,startY:0,lastHomeTarget:null,lastX:0,lastY:0};
 function clearDragTimer(){if(dragState.timer){clearTimeout(dragState.timer);dragState.timer=null}}
 function activateHeldDrag(kind,host,el){
  clearDragTimer();
- dragState.el=el;dragState.kind=kind;dragState.suppress=true;
+ dragState.el=el;dragState.kind=kind;dragState.suppress=true;dragState.lastHomeTarget=null;
  host.classList.add(kind==='nav'?'nav-reordering':'home-reordering');
  el.classList.add(kind==='nav'?'nav-dragging':'home-dragging');
  if(navigator.vibrate)navigator.vibrate(18);
@@ -512,15 +513,30 @@ function dragMoveAt(kind,host,x,y){
   else if(x>hr.right-edge)host.scrollLeft+=18;
   return;
  }else{
-  let best=null,dist=Infinity;
-  for(const item of others){
-    const r=item.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,d=Math.hypot(x-cx,y-cy);
-    if(d<dist){dist=d;best=item}
+  // Home grid: reorder only when the finger actually enters a different card.
+  // This avoids nearest-card jitter and makes the destination visually obvious.
+  const hit=document.elementFromPoint(x,y)?.closest?.('.home-shortcut-card[data-homekey]');
+  host.querySelectorAll('.home-drop-target').forEach(v=>v.classList.remove('home-drop-target'));
+  if(hit&&hit!==el&&host.contains(hit)){
+   hit.classList.add('home-drop-target');
+   const key=hit.dataset.homekey;
+   if(key!==dragState.lastHomeTarget){
+    const cards=[...host.querySelectorAll('.home-shortcut-card[data-homekey]')];
+    const from=cards.indexOf(el),to=cards.indexOf(hit);
+    if(from>=0&&to>=0){
+      if(to<from)host.insertBefore(el,hit);
+      else host.insertBefore(el,hit.nextSibling);
+      dragState.lastHomeTarget=key;
+      if(navigator.vibrate)navigator.vibrate(8);
+    }
+   }
   }
-  if(best){
-    const r=best.getBoundingClientRect();target=best;
-    before=y<r.top+r.height/2||(Math.abs(y-(r.top+r.height/2))<r.height*.35&&x<r.left+r.width/2);
-  }
+  // Gentle page auto-scroll so a card can be carried farther down/up the Home grid.
+  const edge=78,step=14;
+  if(y<edge)window.scrollBy(0,-step);
+  else if(y>window.innerHeight-edge)window.scrollBy(0,step);
+  dragState.lastX=x;dragState.lastY=y;
+  return;
  }
  if(target)host.insertBefore(el,before?target:target.nextSibling);
 }
@@ -547,12 +563,13 @@ function endHeldItem(kind,host){
  if(dragState.el&&dragState.kind===kind){
   dragState.el.classList.remove(kind==='nav'?'nav-dragging':'home-dragging');
   host.classList.remove(kind==='nav'?'nav-reordering':'home-reordering');
+  if(kind==='home')host.querySelectorAll('.home-drop-target').forEach(v=>v.classList.remove('home-drop-target'));
   const selector=kind==='nav'?'.tab[data-navkey]':'.home-shortcut-card[data-homekey]';
   const storage=kind==='nav'?'gfdTopNavOrder':'gfdHomeShortcutOrder';
   localStorage.setItem(storage,JSON.stringify([...host.querySelectorAll(selector)].map(x=>kind==='nav'?x.dataset.navkey:x.dataset.homekey)));
   setTimeout(()=>{dragState.suppress=false},260);
  }
- dragState.el=null;dragState.kind=null;dragState.pointerId=null;dragState.touchId=null;
+ dragState.el=null;dragState.kind=null;dragState.pointerId=null;dragState.touchId=null;dragState.lastHomeTarget=null;
 }
 function activeTouchDragMove(e){
  if(!dragState.el||!dragState.kind)return;
@@ -691,7 +708,7 @@ function renderHome(){
    </div>
 
    <div class="quick-grid clinical-shortcuts">
-    <div class="reorder-hint">Tap and hold any shortcut, then drag to rearrange. Your layout is saved on this device.</div>
+    <div class="reorder-hint">Hold a shortcut until it lifts, then slide over another card to move it. Release to save your layout.</div>
     ${renderHomeShortcuts()}
    </div>
    <div class="guide-steps">
@@ -3748,6 +3765,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v140',title:'Smoother Home card reordering',copy:'Reworked Home shortcut dragging for touch devices. A held card now visibly lifts, moves only when the finger enters another card, highlights the current drop target, gives light haptic feedback when crossing positions, and supports gentle page auto-scroll. This replaces the jittery nearest-card behavior.',tags:['Home','Drag and Drop','iOS','Mobile','Usability']},
  {date:'2026-09-29',version:'v139',title:'Flat Home shortcut cards',copy:'Removed shaded card styling from the Home screen. Shortcut cards now use a clean white background with no card shadow while keeping borders, spacing, and large tap targets intact.',tags:['Home','Cards','Layout','Mobile']},
  {date:'2026-09-29',version:'v138',title:'Longer Home mission animation',copy:'Extended the animated Home mission statement from about three seconds to seven seconds before it fades/slides away and the shortcut grid takes over the space.',tags:['Home','Animation','Mission','Mobile']},
  {date:'2026-09-29',version:'v137',title:'Continuous top-row drag reordering',copy:'Top navigation buttons can now be moved across multiple positions during one tap-hold-drag gesture. The held button continuously swaps past each shortcut as the finger crosses it, supports edge auto-scroll, and saves the final order only on release.',tags:['Navigation','Drag and Drop','iOS','Mobile','Customization']},
