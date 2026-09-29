@@ -262,6 +262,67 @@ body{background:#f4f7fa}
 .version-note{border:1px solid #d8e3ec;background:#f8fafc;border-radius:11px;padding:10px 11px;color:#475569;font-size:12px;line-height:1.45}
 .version-home-card{border-left:4px solid #2f6690!important}
 @media(max-width:520px){.version-hero-top{flex-direction:column}.version-current{align-self:flex-start}.version-summary{grid-template-columns:1fr}.version-hero h2{font-size:22px!important}.version-item{padding:12px}.version-row{gap:7px}}
+
+/* v116 desktop presentation layer — mobile rules remain unchanged */
+@media(min-width:900px){
+ body{background:#edf2f6}
+ .top{padding:16px 24px 14px}
+ .top>.headrow,.top>.rolebar,.top>.searchrow{max-width:1180px;margin-left:auto;margin-right:auto}
+ .headrow{gap:16px}
+ .logo{width:82px;height:102px;flex-basis:82px}
+ .brand{font-size:25px;line-height:1.05;max-width:none}
+ .sub{font-size:13px;margin-top:4px}
+ .status{font-size:12px;padding:7px 10px}
+ .rolebar{margin-top:12px}
+ .homebtn,.rolebtn{width:auto;flex:0 0 auto;padding:9px 14px}
+ .searchrow{grid-template-columns:minmax(0,1fr) auto;margin-top:12px}
+ .search{font-size:16px;padding:13px 15px}
+ .clearsearch{padding:0 18px}
+ .tabs{justify-content:center;flex-wrap:wrap;overflow:visible;padding:10px 20px;gap:7px;position:sticky;top:0;z-index:4}
+ .tab{padding:9px 14px;font-size:13px}
+ .wrap{max-width:1180px;padding:22px 24px 40px}
+ .home-guide{grid-template-columns:minmax(300px,360px) minmax(0,1fr);gap:18px;align-items:start}
+ .mission-card{grid-column:1;grid-row:1;padding:24px;position:sticky;top:86px}
+ .mission-title{font-size:27px}.mission-copy{font-size:16px;line-height:1.7}.mission-motto{font-size:13px}
+ .quick-grid{grid-column:2;grid-row:1;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+ .quick-card{min-height:118px;padding:16px 15px;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;cursor:pointer}
+ .quick-card:hover{transform:translateY(-2px);box-shadow:0 7px 18px #173a5e18;border-color:#a9c1d2}
+ .quick-card b{font-size:16px;margin-bottom:6px}.quick-card span{font-size:13px;line-height:1.45}
+ .guide-steps{grid-column:1/-1;padding:20px 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;row-gap:2px}
+ .guide-steps h3{grid-column:1/-1;font-size:19px;margin-bottom:6px}
+ .guide-step{margin:8px 0}
+ .card{padding:18px 20px;border:1px solid #e1e7ec;box-shadow:0 2px 8px #173a5e0b}
+ .list>.card{margin-bottom:12px}
+ .detail.on{max-width:1000px;margin:0 auto}
+ .detail .card{padding:26px 30px;border-radius:16px;box-shadow:0 4px 16px #173a5e10}
+ .detail h2{font-size:28px;line-height:1.12}
+ .detail .meta{font-size:12px;margin-top:6px}
+ .protocol-body{font-size:16px;line-height:1.58}
+ .protocol-body .line,.protocol-body .para{font-size:16px;line-height:1.58}
+ .protocol-body .section{font-size:14px;margin-top:26px;padding:10px 13px}
+ .source-med-sheet{max-width:900px;padding:22px 26px}
+ .tool-menu{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+ .tool-card{padding:18px}
+ .tool-launch{min-height:92px;padding:16px}
+ .hospital-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .contact-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .sticky-back{left:max(24px,calc((100vw - 1180px)/2));bottom:24px}
+ .version-history{max-width:1000px;margin:0 auto;gap:16px}
+ .version-hero{padding:22px 24px}
+ .version-hero h2{font-size:30px!important}
+ .version-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+ .version-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .version-item{height:100%;box-sizing:border-box}
+ .version-note{grid-column:1/-1}
+ .footer{font-size:12px;padding-top:30px}
+}
+@media(min-width:1250px){
+ .wrap{max-width:1260px}
+ .top>.headrow,.top>.rolebar,.top>.searchrow{max-width:1260px}
+ .quick-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .detail.on{max-width:1060px}
+ .tool-menu{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -3206,6 +3267,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v116',title:'Desktop layout refresh',copy:'Added a dedicated desktop presentation layer while preserving the mobile experience. Desktop now uses a wider content area, multi-column home shortcuts, larger protocol reading space, improved tool and destination grids, refined spacing, hover feedback, and a two-column version-history layout on larger screens.',tags:['Desktop','App UI','Responsive']},
  {date:'2026-09-29',version:'v115',title:'Version History & Change Log',copy:'Added a permanent, themed Version History screen that users can reopen from the Home screen or footer. The log now clearly shows the current app version, release date, chronological version history, and concise descriptions of what changed in each release.',tags:['App UI','Version History','Navigation']},
  {date:'2026-09-29',version:'v114',title:'Sgarbossa tap-through workflow',copy:'Simplified the Modified Sgarbossa tool into a one-question-at-a-time Yes / No / Unsure workflow. Removed all measurement-entry fields and automatic ratio calculation so crews can move through the criteria by tapping only. Any positive criterion stops immediately with a Positive result; otherwise the tool returns Negative or Indeterminate.',tags:['Clinical Tool','Sgarbossa','Mobile']},
  {date:'2026-09-29',version:'v113',title:'Modified Sgarbossa + App Version history',copy:'Updated the STEMI/Field Tools Sgarbossa aid to Modified Sgarbossa logic with Positive, Negative, and Indeterminate results, plain-language concordant/discordant guidance, and a 25% ST/S ratio helper. Expanded the app update log so users can clearly see version, date, summary, and what changed.',tags:['Clinical Tool','STEMI','Updates']},
