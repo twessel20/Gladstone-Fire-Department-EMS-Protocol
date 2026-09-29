@@ -430,6 +430,103 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
 }
 /* v121 Street Drug / Substance Reference */
 .streetdrug-shell{display:grid;gap:12px}.streetdrug-search-card{border:1px solid #d8e3ec;border-radius:14px;background:#fff;padding:14px}.streetdrug-search-card h3{margin:0 0 6px;color:#173a5e;font-size:20px}.streetdrug-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}.streetdrug-search-row .tool-input{margin:0}.streetdrug-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.streetdrug-tab{min-height:48px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#334155;font-weight:900}.streetdrug-tab.on{background:#173a5e;color:#fff;border-color:#173a5e}.streetdrug-list{display:grid;gap:9px}.streetdrug-hit,.streetdrug-common{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;border:1px solid #d8e3ec;border-radius:12px;background:#fff;padding:12px;min-height:64px;color:#173a5e}.streetdrug-hit b,.streetdrug-common b{display:block;font-size:15px}.streetdrug-hit small,.streetdrug-common small{display:block;margin-top:3px;color:#64748b;font-size:12px;line-height:1.35}.streetdrug-card{border:1px solid #d8e3ec;border-radius:14px;background:#fff;overflow:hidden}.streetdrug-head{padding:14px 15px;background:#173a5e;color:#fff}.streetdrug-head h3{margin:0;color:#fff;font-size:21px}.streetdrug-alias{margin-top:5px;color:#dbeafe;font-size:12px;line-height:1.4}.streetdrug-body{padding:13px 14px;display:grid;gap:10px}.streetdrug-row{border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;padding:10px 11px}.streetdrug-row b{display:block;color:#173a5e;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}.streetdrug-row span{display:block;color:#334155;font-size:13px;line-height:1.45}.streetdrug-row.med{background:#eef4f8;border-color:#cbdbe8}.streetdrug-row.danger{background:#fff7ed;border-color:#fed7aa}.streetdrug-row.danger b{color:#9a3412}.streetdrug-pattern{border:1px solid #d8e3ec;border-radius:12px;background:#fff;padding:12px}.streetdrug-pattern b{display:block;color:#173a5e;font-size:15px}.streetdrug-pattern span{display:block;margin-top:5px;color:#475569;font-size:13px;line-height:1.45}.streetdrug-pattern small{display:block;margin-top:7px;color:#92400e;font-size:11px;line-height:1.4}.streetdrug-source{font-size:11px;line-height:1.45;color:#64748b;padding:2px 2px 0}.streetdrug-badge{display:inline-block;margin-left:6px;padding:3px 6px;border-radius:999px;background:#fff7ed;color:#9a3412;font-size:10px;font-weight:900;vertical-align:1px}@media(max-width:620px){.streetdrug-search-row{grid-template-columns:1fr}.streetdrug-search-row .tool-btn{width:100%;margin:0}.streetdrug-tabs{grid-template-columns:1fr}.streetdrug-tab{min-height:54px}}
+
+/* v120 unified card surface/shading */
+:root{
+ --surface-card:#ffffff;
+ --surface-soft:#f8fbfd;
+ --surface-muted:#f3f7fa;
+ --surface-border:#cfdce6;
+ --surface-shadow:0 2px 8px rgba(23,58,94,.08);
+ --surface-shadow-hover:0 6px 18px rgba(23,58,94,.12);
+ --surface-radius:14px;
+}
+.card,
+.quick-card,
+.tool-card,
+.tool-section,
+.hospital-card,
+.contact-card,
+.version-item,
+.cpss-item,
+.score-field,
+.patient-med-card,
+.burn-side,
+.body-map,
+.parkland-stat,
+.related-box,
+.notice,
+.guide-steps,
+.mission-card{
+ background:var(--surface-card);
+ border:1px solid var(--surface-border);
+ border-radius:var(--surface-radius);
+ box-shadow:var(--surface-shadow);
+}
+.quick-card,
+.tool-section,
+.tool-card,
+.hospital-card,
+.contact-card,
+.version-item,
+.cpss-item,
+.score-field,
+.patient-med-card,
+.burn-side,
+.body-map,
+.parkland-stat{
+ background:linear-gradient(180deg,var(--surface-card) 0%,var(--surface-soft) 100%);
+}
+.quick-card,
+.tool-launch,
+.tool-section,
+.hospital-card,
+.contact-card{
+ transition:box-shadow .14s ease,border-color .14s ease,transform .12s ease;
+}
+.tool-section-toggle{background:transparent}
+.tool-section.open{box-shadow:0 4px 14px rgba(23,58,94,.10)}
+.tool-section-body{background:transparent}
+.tool-launch{
+ background:linear-gradient(180deg,#fff 0%,#f8fbfd 100%);
+ border-color:var(--surface-border);
+ box-shadow:0 1px 4px rgba(23,58,94,.06);
+}
+.tool-launch:hover,.quick-card:hover,.hospital-card:hover,.contact-card:hover{
+ box-shadow:var(--surface-shadow-hover);
+ border-color:#b8cddd;
+}
+.detail .card{background:linear-gradient(180deg,#fff 0%,#fbfdff 100%)}
+.version-hero{box-shadow:0 4px 16px rgba(23,58,94,.16)}
+.version-note,
+.sgarbossa-plain,
+.tool-note,
+.role-note,
+.patient-med-warning,
+.home-alert{
+ background:var(--surface-muted);
+ border-color:var(--surface-border);
+ box-shadow:none;
+}
+@media(max-width:620px){
+ .card,
+ .quick-card,
+ .tool-card,
+ .tool-section,
+ .hospital-card,
+ .contact-card,
+ .version-item,
+ .cpss-item,
+ .score-field,
+ .patient-med-card,
+ .burn-side,
+ .body-map,
+ .parkland-stat,
+ .related-box,
+ .notice,
+ .guide-steps,
+ .mission-card{box-shadow:0 1px 4px rgba(23,58,94,.07)}
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -3765,6 +3862,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v120',title:'Unified card shading',copy:'Standardized the visual treatment of cards and panels across the app. Home shortcuts, tool categories, tool buttons, protocol cards, hospital/contact cards, version-history cards, scoring panels, and supporting sections now share the same border, radius, subtle gradient, and shadow treatment for a more consistent interface.',tags:['App UI','Consistency','Cards']},
  {date:'2026-09-29',version:'v140',title:'Smoother Home card reordering',copy:'Reworked Home shortcut dragging for touch devices. A held card now visibly lifts, moves only when the finger enters another card, highlights the current drop target, gives light haptic feedback when crossing positions, and supports gentle page auto-scroll. This replaces the jittery nearest-card behavior.',tags:['Home','Drag and Drop','iOS','Mobile','Usability']},
  {date:'2026-09-29',version:'v139',title:'Flat Home shortcut cards',copy:'Removed shaded card styling from the Home screen. Shortcut cards now use a clean white background with no card shadow while keeping borders, spacing, and large tap targets intact.',tags:['Home','Cards','Layout','Mobile']},
  {date:'2026-09-29',version:'v138',title:'Longer Home mission animation',copy:'Extended the animated Home mission statement from about three seconds to seven seconds before it fades/slides away and the shortcut grid takes over the space.',tags:['Home','Animation','Mission','Mobile']},
