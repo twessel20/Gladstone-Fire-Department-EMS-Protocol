@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v124';
-const UPDATE_SUMMARY='v124: Field tools linked to a protocol now appear at both the top and bottom for faster access without scrolling back.';
+const C='gfd-ems-shell-v125';
+const UPDATE_SUMMARY='v125: Hospital search now recognizes common field abbreviations such as NKC/NKCH, VA, KU/KUMC, Truman/UH, CMH, SLH, RMC, and more.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
