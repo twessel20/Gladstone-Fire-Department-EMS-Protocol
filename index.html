@@ -342,6 +342,51 @@ body{background:#f4f7fa}
  .tool-section-heading b{font-size:18px}
  .tool-section-body{padding:0 16px 16px}
 }
+
+/* v119 glove-friendly field interaction layer */
+:root{--tap-min:52px;--tap-min-critical:58px;--tap-gap:10px}
+button,a,.tab,.tool-launch,.quick-card,.hospital-gps,.source,.homebtn,.clearsearch,.rolebtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,.tab:focus-visible,.tool-launch:focus-visible,.quick-card:focus-visible{outline:3px solid #f3c75f;outline-offset:3px}
+button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:active,.source:active{transform:scale(.985)}
+.homebtn,.rolebtn,.clearsearch,.tab,.back,.tool-btn,.dose-btn,.source,.hospital-gps{min-height:var(--tap-min)}
+.quick-card{min-height:108px}
+.tool-launch{min-height:72px;padding:16px}
+.tool-launch-icon{width:46px;height:46px}
+.tool-section-toggle{min-height:68px}
+.sgarbossa-actions,.cpss-actions,.sgarbossa-nav{gap:var(--tap-gap)}
+.sgarbossa-actions button,.cpss-actions button{min-height:var(--tap-min-critical);font-size:16px}
+.score-field .tool-input,.calc-field .tool-input,.calc-pair .tool-input,select.tool-input,input.tool-input{min-height:var(--tap-min);font-size:17px}
+.contact-card{min-height:68px}
+.contact-call{min-height:46px;min-width:68px}
+.version-item{scroll-margin-top:90px}
+@media(max-width:620px){
+ .tabs{gap:7px}
+ .tab{padding:10px 13px;min-height:48px;font-size:13px}
+ .homebtn,.rolebtn{min-height:50px;padding:10px 12px}
+ .clearsearch{min-height:50px;padding:0 14px}
+ .quick-grid{gap:11px}
+ .quick-card{min-height:112px;padding:14px}
+ .quick-card b{font-size:16px}
+ .quick-card span{font-size:13px;line-height:1.42}
+ .tool-launch{grid-template-columns:50px minmax(0,1fr) 24px;gap:12px;min-height:78px;padding:16px 14px}
+ .tool-launch b{font-size:16px;line-height:1.25}
+ .tool-launch small{font-size:13px;line-height:1.4}
+ .tool-chevron{font-size:30px}
+ .tool-section-toggle{min-height:72px;padding:16px}
+ .tool-section-heading b{font-size:17px}
+ .tool-section-heading span{font-size:13px}
+ .sgarbossa-actions button,.cpss-actions button{min-height:64px;font-size:17px}
+ .sgarbossa-nav button{min-height:52px;font-size:15px}
+ .tool-btn{min-height:58px;font-size:16px}
+ .hospital-gps{min-height:56px;font-size:16px}
+ .source{min-height:54px;display:flex;align-items:center;justify-content:center}
+ .back{min-height:52px;font-size:15px}
+ .contact-card{padding:13px 12px}
+ .contact-call{min-height:48px;min-width:76px;font-size:13px}
+}
+@media(hover:hover) and (pointer:fine){
+ .tool-launch:hover,.quick-card:hover,.tab:hover,.homebtn:hover,.rolebtn:hover,.tool-section-toggle:hover{box-shadow:0 4px 14px #173a5e14}
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -3314,6 +3359,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-29',version:'v119',title:'Glove-friendly field controls',copy:'Improved buttons and interactive controls for low-light, high-stress field use with gloved hands. Increased tap-target sizes, spacing, button height, text size, selected/pressed feedback, focus visibility, and touch behavior across navigation, tools, calculators, protocol actions, Sgarbossa, stroke scoring, hospital links, and other critical controls.',tags:['Accessibility','Field Use','Buttons','Mobile']},
  {date:'2026-09-29',version:'v118',title:'Modified Sgarbossa accuracy review',copy:'Reviewed the tap-through Modified Sgarbossa workflow against published criteria and validation literature. Clarified that criterion 2 is positive in any one of V1–V3, and tightened criterion 3 so both requirements are explicit: discordant ST elevation at least 1 mm and at least 25% of S-wave depth in the same lead.',tags:['Clinical Tool','Sgarbossa','Accuracy']},
  {date:'2026-09-29',version:'v117',title:'Collapsible Tools categories',copy:'Made each Field Tools category expandable and collapsible. Tool groups now start in a clean collapsed state and open by tapping the category header, reducing scrolling while preserving all existing tool buttons and workflows.',tags:['Tools','Navigation','Mobile','Desktop']},
  {date:'2026-09-29',version:'v116',title:'Desktop layout refresh',copy:'Added a dedicated desktop presentation layer while preserving the mobile experience. Desktop now uses a wider content area, multi-column home shortcuts, larger protocol reading space, improved tool and destination grids, refined spacing, hover feedback, and a two-column version-history layout on larger screens.',tags:['Desktop','App UI','Responsive']},
