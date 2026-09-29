@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v113';
-const UPDATE_SUMMARY='v113: Modified Sgarbossa decision aid improved with clear Positive / Negative / Indeterminate results and expanded App Version / What’s New history.';
+const C='gfd-ems-shell-v114';
+const UPDATE_SUMMARY='v114: Sgarbossa is now a one-question-at-a-time tap-through workflow with no measurement entry or scorekeeping.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
