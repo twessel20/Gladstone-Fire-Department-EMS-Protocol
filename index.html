@@ -2486,6 +2486,14 @@ function pediatricMedicationHtml(x){
  return '<div class="source-med-row'+cls+'"><div class="source-med-label">Pediatric / Neonatal:</div><div class="source-med-value"><div>'+esc(p.text)+'</div>'+(calc?'<div class="source-med-calc">'+calc+'</div>':'')+'</div></div>';
 }
 
+
+function medicationPaincheckHtml(x){
+ if(!['morphine-sulfate','fentanyl'].includes(x.id))return '';
+ return '<div class="protocol-tools" style="margin-top:14px"><div class="related-title">Pain Medication Safety Check</div>'
+  +'<button class="protocol-tool-btn" onclick="toggleInlineProtocolTool(\'paincheck\',this)"><span>✓</span><b>Run Yes / No Safety Check</b><span class="tool-chevron">›</span></button>'
+  +'<div class="inline-tool-slot" data-tool="paincheck"></div></div>';
+}
+
 function formatMedication(x){
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
@@ -2592,7 +2600,7 @@ function formatMedication(x){
    pedRendered=true;
  }
  const icon=/dextrose|glucose/i.test(x.title)?'drop':(/epi|fentanyl|morphine|ketamine|versed|midazolam|diltiazem|amiodarone|adenosine|atropine|lidocaine|dopamine|calcium|magnesium|narcan|naloxone|terbutaline|methylprednisolone/i.test(x.title)?'syringe':'pill');
- return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+medicationCrossProtocolHtml(x)+'</div>';
+ return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+medicationCrossProtocolHtml(x)+medicationPaincheckHtml(x)+'</div>';
 }
 const protocolDoseCalcs={
 'amiodarone':[
@@ -3960,7 +3968,8 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
-  {date:'2026-09-30',version:'v142',title:'Pain medication Yes / No safety check',copy:'Added a rapid one-question-at-a-time analgesic medication safety workflow. Medics confirm a protocol-approved pain indication, then move through each listed contraindication with large Yes / No buttons. Any failed indication or identified contraindication stops the workflow for reassessment. The same tool is available in Field Tools and directly inside the Analgesic Medication Administration protocol.',tags:['Analgesia','Narcotics','Clinical Tool','Workflow','Field Use']},
+   {date:'2026-09-30',version:'v143',title:'Pain safety check added to analgesic medication pages',copy:'Extended the same rapid Yes / No Pain Medication Safety Check into the medication list for Morphine Sulfate and Fentanyl. Medics can now launch the identical indication/contraindication workflow directly from either analgesic medication page as well as from the Analgesic Medication Administration protocol and Field Tools.',tags:['Analgesia','Medications','Morphine','Fentanyl','Clinical Tool','Workflow']},
+{date:'2026-09-30',version:'v142',title:'Pain medication Yes / No safety check',copy:'Added a rapid one-question-at-a-time analgesic medication safety workflow. Medics confirm a protocol-approved pain indication, then move through each listed contraindication with large Yes / No buttons. Any failed indication or identified contraindication stops the workflow for reassessment. The same tool is available in Field Tools and directly inside the Analgesic Medication Administration protocol.',tags:['Analgesia','Narcotics','Clinical Tool','Workflow','Field Use']},
 {date:'2026-09-29',version:'v141',title:'Native hospital navigation',copy:'Hospital Directions buttons now hand off directly to the phone’s native mapping experience. iPhone and iPad open Apple Maps, Android uses the device map-navigation handler, and desktop browsers retain web directions. Hospital cards still do not launch directions unless the Directions button is tapped.',tags:['Hospitals','Navigation','iOS','Android','PWA','Field Use']},
  {date:'2026-09-29',version:'v121',title:'Version History card consistency',copy:'Removed the special visual treatment from the Home-screen Version History shortcut so it now matches the same surface, border, and shadow treatment as the other Home cards.',tags:['App UI','Consistency','Home']},
  {date:'2026-09-29',version:'v120',title:'Unified card shading',copy:'Standardized the visual treatment of cards and panels across the app. Home shortcuts, tool categories, tool buttons, protocol cards, hospital/contact cards, version-history cards, scoring panels, and supporting sections now share the same border, radius, subtle gradient, and shadow treatment for a more consistent interface.',tags:['App UI','Consistency','Cards']},
