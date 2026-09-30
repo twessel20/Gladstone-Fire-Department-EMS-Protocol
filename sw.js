@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v142';
-const UPDATE_SUMMARY='v142: Added a rapid Yes / No pain-medication safety check in Field Tools and the Analgesic Medication Administration protocol.';
+const C='gfd-ems-shell-v143';
+const UPDATE_SUMMARY='v143: The rapid Yes / No pain-medication safety check is now available from Morphine, Fentanyl, the analgesic protocol, and Field Tools.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
