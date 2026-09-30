@@ -534,6 +534,29 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
  box-shadow:var(--surface-shadow)!important;
 }
 .version-home-card:before,.version-home-card:after{display:none!important}
+
+/* v142 Analgesic medication rapid Yes / No safety workflow */
+.paincheck-card{border:1px solid #cad8e3;background:#fff}
+.paincheck-wizard{display:grid;gap:12px;margin-top:12px}
+.paincheck-progress{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:900;color:#475569}
+.paincheck-progress span{white-space:nowrap}
+.paincheck-progress-track{height:8px;flex:1;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.paincheck-progress-fill{height:100%;background:#2f6690;border-radius:999px;transition:width .16s ease}
+.paincheck-step{border:1px solid #dbe4ee;border-radius:14px;padding:15px;background:#f8fafc}
+.paincheck-step h4{margin:0;color:#173a5e;font-size:20px;line-height:1.3}
+.paincheck-step small{display:block;margin-top:8px;color:#64748b;font-size:13px;line-height:1.45}
+.paincheck-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.paincheck-actions button{min-height:68px;border-radius:12px;border:2px solid #cbd5e1;background:#fff;font-weight:950;font-size:19px;touch-action:manipulation}
+.paincheck-actions .yes{border-color:#ef4444;color:#991b1b}
+.paincheck-actions .no{border-color:#22c55e;color:#166534}
+.paincheck-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.paincheck-nav button{min-height:50px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-weight:850}
+.paincheck-result{border-radius:14px;padding:16px;border:2px solid #cbd5e1;background:#f8fafc;text-align:center}
+.paincheck-result.go{background:#f0fdf4;border-color:#16a34a;color:#166534}
+.paincheck-result.stop{background:#fff1f2;border-color:#dc2626;color:#7f1d1d}
+.paincheck-result b{display:block;font-size:23px;line-height:1.2}
+.paincheck-result span{display:block;margin-top:7px;font-size:13px;line-height:1.45}
+@media(max-width:620px){.paincheck-actions button{min-height:74px;font-size:20px}.paincheck-step{padding:15px 13px}}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -1187,6 +1210,7 @@ function renderTools(){
           <button class="tool-launch" onclick="openToolCard('diltiazem')"><span class="tool-launch-icon">💉</span><span><b>Diltiazem Dose</b><small>DOB or typed age with initial + second weight-based dose</small></span><span class="tool-chevron">›</span></button>
           <button class="tool-launch" onclick="openToolCard('dopamine')"><span class="tool-launch-icon">IV</span><span><b>Dopamine Gravity Drip</b><small>Calculate gravity tubing gtt/min</small></span><span class="tool-chevron">›</span></button>
           <button class="tool-launch" onclick="openToolCard('pushdose')"><span class="tool-launch-icon">💉</span><span><b>Push-Dose Epinephrine</b><small>GFD 10–20 mcg dose / 10 mcg/mL preparation</small></span><span class="tool-chevron">›</span></button>
+          <button class="tool-launch" onclick="openToolCard('paincheck')"><span class="tool-launch-icon">✓</span><span><b>Pain Medication Safety Check</b><small>Rapid Yes / No indication and contraindication screen</small></span><span class="tool-chevron">›</span></button>
         </div>
       </div>
 
@@ -1371,6 +1395,7 @@ function openToolCard(which){
  document.querySelector('.tool-menu').style.display='none';
  const back='<button class="back tool-back sticky-back" onclick="toolBack()">‹ Back to Tools</button>';
  if(which==='streetdrug'){host.innerHTML=back+streetDrugToolHtml();initStreetDrugTool();return}
+ if(which==='paincheck'){host.innerHTML=back+paincheckToolHtml();resetPaincheck();return}
  if(which==='erlabs')host.innerHTML=back+`
    <div class="tool-card">
     <h3>🧪 Common ER Labs</h3>
@@ -1945,6 +1970,7 @@ function calcParkland(){
 }
 function resetBurn(){burnSelected.clear();renderBurnMap()}
 const searchableTools=[
+ {id:'paincheck',title:'Pain Medication Safety Check',icon:'✓',terms:'pain analgesic narcotic opioid morphine fentanyl indication contraindication safety check hypotension shock respiratory pregnancy allergy altered mental status dysrhythmia head spinal trauma',desc:'Rapid GFD Yes / No indication and contraindication workflow before analgesic medication administration'},
  {id:'streetdrug',title:'Street Drug / Substance Reference',icon:'☠️',terms:'street drug substance overdose toxidrome fentanyl heroin tranq xylazine medetomidine nitazene cychlorphine kratom 7-oh meth methamphetamine cocaine crack molly mdma ecstasy k2 spice synthetic cannabinoid pcp ghb lsd mushrooms psilocybin ketamine xanax benzo blues m30 counterfeit pill',desc:'Fast EMS substance reference with aliases, emerging drugs, risks, and GFD medication considerations'},
  {id:'sgarbossa',title:'Sgarbossa Criteria',icon:'ECG',terms:'sgarbossa scarbossa sgarbossas stemi lbbb left bundle branch block ventricular paced rhythm pacemaker concordant discordant st elevation depression myocardial infarction acute coronary occlusion',desc:'Clickable Sgarbossa checklist with automatic weighted score'},
  {id:'apgar',title:'APGAR Score',icon:'👶',terms:'apgar newborn neonatal infant childbirth appearance pulse grimace activity respiration',desc:'Appearance, pulse, grimace, activity and respiration'},
@@ -3603,6 +3629,7 @@ function protocolToolLinks(x){
  if(['hypotension','return-of-spontaneous-circulation-rosc','bradycardia-algorithm','push-dose-epi-1-100-000'].includes(x.id))tools.push(['💉','Push-Dose Epinephrine','pushdose']);
  if(['general-trauma-protocol','head-trauma','patient-destination-criteria'].includes(x.id))tools.push(['🧠','Glasgow Coma Scale','gcs']);
  if(['mci-triage-start-jump-start','general-trauma-protocol'].includes(x.id))tools.push(['🚑','START Triage','start']);
+ if(x.id==='analgesic-medication-administration')tools.push(['✓','Pain Medication Safety Check','paincheck']);
  if(x.id==='code-stemi')tools.push(['ECG','Sgarbossa Criteria','sgarbossa']);
  if(x.id==='poisoning')tools.push(['☠️','Street Drug / Substance Reference','streetdrug']);
  if(x.id==='cva-strokes')tools.push(['🧠','Cincinnati Prehospital Stroke Scale','cincinnati']);
@@ -3811,7 +3838,64 @@ function resetSgarbossa(){
  sgarbossaStep=1;
  renderSgarbossaWizard();
 }
+
+const paincheckQuestions=[
+ {type:'indication',title:'Is there moderate to severe acute pain from a GFD-approved indication?',detail:'Extremity injury; shoulder or hip injury; non-traumatic back or abdominal pain; burn without airway/respiratory compromise; or cardiac chest pain.'},
+ {type:'contra',title:'Is there a head injury?',detail:'Listed GFD trauma contraindication.'},
+ {type:'contra',title:'Is there a suspected spinal injury?',detail:'Listed GFD trauma contraindication.'},
+ {type:'contra',title:'Is there thoraco-abdominal trauma?',detail:'Listed GFD trauma contraindication.'},
+ {type:'contra',title:'Is there respiratory distress or respiratory compromise?',detail:'GFD lists respiratory distress/compromise, including asthma or COPD, as a contraindication.'},
+ {type:'contra',title:'Is a cardiac dysrhythmia present?',detail:'Listed GFD systems contraindication.'},
+ {type:'contra',title:'Is the patient altered?',detail:'Altered mental status is a listed contraindication.'},
+ {type:'contra',title:'Is the patient pregnant?',detail:'Pregnancy is a listed contraindication in this protocol.'},
+ {type:'contra',title:'Is there a known sensitivity or allergy to opiates?',detail:'Listed drug contraindication.'},
+ {type:'contra',title:'Is the patient hypotensive or is shock suspected?',detail:'Hypotension and suspected shock are listed contraindications.'},
+ {type:'contra',title:'Is the patient younger than 12 months?',detail:'Age less than 12 months is a listed contraindication.'}
+];
+let paincheckStep=0,paincheckAnswers=[];
+function paincheckToolHtml(){
+ return `<div class="tool-card inline-field-tool paincheck-card"><h3>✓ Pain Medication Safety Check</h3>
+ <div class="tool-note"><b>Quick GFD reference.</b> Answer one Yes / No question at a time before analgesic medication administration. This mirrors the indications and contraindications in the GFD Analgesic Medication Administration protocol.</div>
+ <div id="paincheckHost" class="paincheck-wizard"></div></div>`;
+}
+function renderPaincheck(){
+ const host=document.getElementById('paincheckHost');if(!host)return;
+ const total=paincheckQuestions.length;
+ if(paincheckStep>=total){
+   host.innerHTML='<div class="paincheck-result go"><b>NO LISTED CONTRAINDICATION IDENTIFIED</b><span>Indication confirmed and this quick screen found none of the listed GFD contraindications. Continue with the Analgesic Medication Administration protocol, appropriate monitoring, medication/dose selection, reassessment, and Medical Control when required.</span></div><button class="tool-btn" style="margin-top:12px;background:#475569" onclick="resetPaincheck()">Start New Check</button>';
+   return;
+ }
+ const q=paincheckQuestions[paincheckStep],pct=Math.round((paincheckStep/total)*100);
+ const yesIsSafe=q.type==='indication';
+ host.innerHTML=`<div class="paincheck-progress"><span>Step ${paincheckStep+1} of ${total}</span><div class="paincheck-progress-track"><div class="paincheck-progress-fill" style="width:${pct}%"></div></div></div>
+ <div class="paincheck-step"><h4>${esc(q.title)}</h4><small>${esc(q.detail)}</small>
+ <div class="paincheck-actions">
+   <button class="yes" onclick="answerPaincheck(true)">YES</button>
+   <button class="no" onclick="answerPaincheck(false)">NO</button>
+ </div>
+ <div class="paincheck-nav">${paincheckStep>0?'<button onclick="backPaincheck()">‹ Back</button>':'<button disabled>‹ Back</button>'}<button onclick="resetPaincheck()">Restart</button></div>
+ </div>`;
+}
+function answerPaincheck(answer){
+ const q=paincheckQuestions[paincheckStep];
+ paincheckAnswers[paincheckStep]=answer;
+ const unsafe=(q.type==='indication'&&!answer)||(q.type==='contra'&&answer);
+ if(unsafe){
+   const host=document.getElementById('paincheckHost');if(!host)return;
+   const why=q.type==='indication'?'No GFD analgesic indication confirmed by this quick screen.':'A listed GFD contraindication was identified.';
+   host.innerHTML='<div class="paincheck-result stop"><b>STOP / REASSESS</b><span>'+esc(why)+' Review the full protocol and use clinical judgment / Medical Control as appropriate.</span></div><div class="paincheck-nav"><button onclick="backPaincheck()">‹ Back</button><button onclick="resetPaincheck()">Restart</button></div>';
+   return;
+ }
+ paincheckStep+=1;renderPaincheck();
+}
+function backPaincheck(){
+ if(paincheckStep>0)paincheckStep-=1;
+ renderPaincheck();
+}
+function resetPaincheck(){paincheckStep=0;paincheckAnswers=[];renderPaincheck()}
+
 function toolContent(which){
+ if(which==='paincheck')return paincheckToolHtml();
  if(which==='streetdrug')return streetDrugToolHtml();
  if(which==='sgarbossa')return sgarbossaToolHtml();
  if(which==='apgar')return `<div class="tool-card inline-field-tool"><h3>APGAR Score</h3><div class="tool-note">Score each category 0, 1, or 2. GFD Childbirth protocol documents APGAR at 1 and 5 minutes.</div><div class="score-grid">${scoreSelect('apAppearance','Appearance / color',[['0','Blue or pale all over'],['1','Body pink, extremities blue'],['2','Completely pink']])}${scoreSelect('apPulse','Pulse / heart rate',[['0','Absent'],['1','Below 100/min'],['2','100/min or greater']])}${scoreSelect('apGrimace','Grimace / reflex irritability',[['0','No response'],['1','Grimace'],['2','Cough, sneeze, cry, or active withdrawal']])}${scoreSelect('apActivity','Activity / muscle tone',[['0','Limp'],['1','Some flexion'],['2','Active motion']])}${scoreSelect('apResp','Respiration',[['0','Absent'],['1','Slow or irregular'],['2','Good respirations / strong cry']])}</div><div id="apgarResult" class="tool-result score-total"><b>APGAR: — / 10</b></div></div>`;
@@ -3868,14 +3952,16 @@ function toggleInlineProtocolTool(which,btn){
  document.querySelectorAll('.inline-tool-slot').forEach(x=>{if(x!==slot)x.innerHTML=''});
  document.querySelectorAll('.protocol-tool-btn').forEach(x=>x.classList.remove('open'));
  if(!opening){slot.innerHTML='';return}
- slot.innerHTML=toolContent(which);btn.classList.add('open');
+ slot.innerHTML=toolContent(which);
+ if(which==='paincheck')resetPaincheck();btn.classList.add('open');
  if(which==='start')resetStart();
  if(which==='sgarbossa'){resetSgarbossa();setTimeout(renderSgarbossaWizard,0)}
  if(which==='streetdrug')setTimeout(initStreetDrugTool,0);
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
- {date:'2026-09-29',version:'v141',title:'Native hospital navigation',copy:'Hospital Directions buttons now hand off directly to the phone’s native mapping experience. iPhone and iPad open Apple Maps, Android uses the device map-navigation handler, and desktop browsers retain web directions. Hospital cards still do not launch directions unless the Directions button is tapped.',tags:['Hospitals','Navigation','iOS','Android','PWA','Field Use']},
+  {date:'2026-09-30',version:'v142',title:'Pain medication Yes / No safety check',copy:'Added a rapid one-question-at-a-time analgesic medication safety workflow. Medics confirm a protocol-approved pain indication, then move through each listed contraindication with large Yes / No buttons. Any failed indication or identified contraindication stops the workflow for reassessment. The same tool is available in Field Tools and directly inside the Analgesic Medication Administration protocol.',tags:['Analgesia','Narcotics','Clinical Tool','Workflow','Field Use']},
+{date:'2026-09-29',version:'v141',title:'Native hospital navigation',copy:'Hospital Directions buttons now hand off directly to the phone’s native mapping experience. iPhone and iPad open Apple Maps, Android uses the device map-navigation handler, and desktop browsers retain web directions. Hospital cards still do not launch directions unless the Directions button is tapped.',tags:['Hospitals','Navigation','iOS','Android','PWA','Field Use']},
  {date:'2026-09-29',version:'v121',title:'Version History card consistency',copy:'Removed the special visual treatment from the Home-screen Version History shortcut so it now matches the same surface, border, and shadow treatment as the other Home cards.',tags:['App UI','Consistency','Home']},
  {date:'2026-09-29',version:'v120',title:'Unified card shading',copy:'Standardized the visual treatment of cards and panels across the app. Home shortcuts, tool categories, tool buttons, protocol cards, hospital/contact cards, version-history cards, scoring panels, and supporting sections now share the same border, radius, subtle gradient, and shadow treatment for a more consistent interface.',tags:['App UI','Consistency','Cards']},
  {date:'2026-09-29',version:'v140',title:'Smoother Home card reordering',copy:'Reworked Home shortcut dragging for touch devices. A held card now visibly lifts, moves only when the finger enters another card, highlights the current drop target, gives light haptic feedback when crossing positions, and supports gentle page auto-scroll. This replaces the jittery nearest-card behavior.',tags:['Home','Drag and Drop','iOS','Mobile','Usability']},
