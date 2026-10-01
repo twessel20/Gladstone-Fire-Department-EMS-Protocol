@@ -124,7 +124,7 @@
 .protocol-body .burn-extent-active{background:#fff7ed;border:2px solid #f59e0b;border-left:6px solid #d97706;border-radius:10px;padding:10px 12px!important;margin:10px 0!important;color:#7c2d12;font-weight:850}
 .protocol-body .burn-extent-active:before{content:'CURRENT TBSA → ';font-size:11px;font-weight:950;letter-spacing:.04em;color:#9a3412}
 .protocol-body .burn-extent-threshold{scroll-margin-top:150px}
-.parkland-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.parkland-stat{background:#fff;border:1px solid #dbe4ee;border-radius:10px;padding:10px}.parkland-stat b{display:block;font-size:20px;color:#173a5e;margin-top:3px}.parkland-stat span{display:block;margin-top:2px;font-size:13px;font-weight:850;color:#475569}.flag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:3px 7px;margin:2px 4px 2px 0}.bls{background:#e5e7eb}.als{background:#dcfce7;color:#166534}.mc{background:#fee2e2;color:#991b1b}.footer{color:#777;font-size:11px;text-align:center;padding:24px 12px 90px}.offline{display:none;background:#fff3cd;color:#664d03;padding:7px 12px;text-align:center;font-size:12px}.offline.on{display:block}
+.parkland-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.parkland-stat{background:#fff;border:1px solid #dbe4ee;border-radius:10px;padding:10px}.parkland-stat b{display:block;font-size:20px;color:#173a5e;margin-top:3px}.parkland-stat span{display:block;margin-top:2px;font-size:13px;font-weight:850;color:#475569}.parkland-volume{width:100%;border:0;background:transparent;padding:0;margin:0;text-align:left;color:inherit;font:inherit;cursor:pointer;min-height:48px;touch-action:manipulation}.parkland-volume b{display:block;font-size:20px;color:#173a5e;margin-top:3px}.parkland-volume small{display:block;margin-top:4px;color:#64748b;font-size:10px;font-weight:800}.parkland-volume:focus-visible{outline:3px solid #f3c75f;outline-offset:3px;border-radius:7px}.flag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:3px 7px;margin:2px 4px 2px 0}.bls{background:#e5e7eb}.als{background:#dcfce7;color:#166534}.mc{background:#fee2e2;color:#991b1b}.footer{color:#777;font-size:11px;text-align:center;padding:24px 12px 90px}.offline{display:none;background:#fff3cd;color:#664d03;padding:7px 12px;text-align:center;font-size:12px}.offline.on{display:block}
 .app-update{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:50;max-width:760px;margin:auto;background:#173a5e;color:#fff;border:1px solid #2f6690;border-radius:14px;padding:12px;box-shadow:0 6px 24px #0004;align-items:center;gap:10px}
 .app-update.on{display:flex}.app-update-copy{flex:1;min-width:0;font-size:13px;line-height:1.35}.app-update-copy b{display:block;font-size:14px;margin-bottom:2px}.app-update-actions{display:flex;gap:7px;flex:0 0 auto}
 .app-update button{border:0;border-radius:9px;padding:9px 11px;font-weight:850}.app-update-now{background:#fff;color:#173a5e}.app-update-later{background:#ffffff20;color:#fff;border:1px solid #ffffff55!important}
@@ -2116,6 +2116,21 @@ function startRespRate(){document.getElementById('startBox').innerHTML='<h4>3. R
 function startPerfusion(){document.getElementById('startBox').innerHTML='<h4>4. Perfusion adequate?</h4><div class="tool-note">Classic START: radial pulse present or capillary refill ≤ 2 seconds.</div>'+startButtons([['No — inadequate','startResult(\'IMMEDIATE / RED\',\'Perfusion criterion is abnormal.\')'],['Yes — adequate','startMental()']])}
 function startMental(){document.getElementById('startBox').innerHTML='<h4>5. Can the patient obey simple commands?</h4>'+startButtons([['No','startResult(\'IMMEDIATE / RED\',\'Unable to obey simple commands.\')'],['Yes','startResult(\'DELAYED / YELLOW\',\'Breathing, perfusion, and mental-status criteria do not meet Immediate criteria.\')']])}
 
+function formatParklandVolume(ml,unit){
+  if(unit==='ml')return Math.round(ml).toLocaleString()+' mL';
+  return (ml/1000).toFixed(2)+' L';
+}
+function toggleParklandVolume(btn){
+  if(!btn)return;
+  const ml=Number(btn.dataset.ml);
+  if(!Number.isFinite(ml))return;
+  const next=btn.dataset.unit==='ml'?'l':'ml';
+  btn.dataset.unit=next;
+  const value=btn.querySelector('b');
+  if(value)value.textContent=formatParklandVolume(ml,next);
+  const hint=btn.querySelector('small');
+  if(hint)hint.textContent=next==='ml'?'Tap for liters':'Tap for mL';
+}
 function calcParkland(){
   const box=document.querySelector('#parklandResult');
   const w=parseFloat(document.querySelector('#burnWeight').value);
@@ -2128,11 +2143,11 @@ function calcParkland(){
   const first8=total/2;
   const next16=total/2;
   box.style.display='block';
-  box.innerHTML=`<div class="tool-note">Normal Saline volume estimate</div>
+  box.innerHTML=`<div class="tool-note">Normal Saline volume estimate • tap a volume to switch between liters and mL</div>
     <div class="parkland-grid">
-      <div class="parkland-stat">First 8 hr total<b>${(first8/1000).toFixed(2)} L</b></div>
-      <div class="parkland-stat">Next 16 hr<b>${(next16/1000).toFixed(2)} L</b></div>
-      <div class="parkland-stat">24-hour total<b>${(total/1000).toFixed(2)} L</b></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${first8}" data-unit="l" onclick="toggleParklandVolume(this)">First 8 hr total<b>${formatParklandVolume(first8,'l')}</b><small>Tap for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${next16}" data-unit="l" onclick="toggleParklandVolume(this)">Next 16 hr<b>${formatParklandVolume(next16,'l')}</b><small>Tap for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${total}" data-unit="l" onclick="toggleParklandVolume(this)">24-hour total<b>${formatParklandVolume(total,'l')}</b><small>Tap for mL</small></button></div>
       <div class="parkland-stat">Formula factor<b>${factor} mL/kg/%</b></div>
     </div>
     <div class="burn-mini" style="margin-top:8px">Weight: ${kg.toFixed(1)} kg • TBSA: ${burnTBSA}% • Timing begins at the time of injury, not EMS arrival.</div>`;
@@ -4289,6 +4304,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v189',title:'Tappable Parkland Volume Units',copy:'Parkland burn volume estimates are now tappable. First 8-hour, next 16-hour, and 24-hour totals default to liters and switch to mL with one tap; tapping again returns to liters.',tags:['Burns','Parkland','Calculator','Field Use','Units']},
  {date:'2026-10-01',version:'v188',title:'Shared Weight Across All Weight-Based Calculators',copy:'Fixed shared patient weight propagation so the saved patient weight now automatically fills every applicable weight-based calculator, including Parkland burn volume, lidocaine, diltiazem, dopamine, and protocol medication dose helpers. Dynamically opened tools also receive the active patient weight, and changing a linked calculator weight updates the shared patient context.',tags:['Patient Context','Weight','Calculators','Pediatrics','Medication Safety','Burns']},
  {date:'2026-10-01',version:'v187',title:'Protocol-to-Medication Cross-Links',copy:'Protocols now surface the GFD medications they reference in a dedicated cross-link panel. Tapping a medication opens its full medication reference while preserving the shared patient context, and medication pages opened from a protocol provide a direct return path to that protocol.',tags:['Cross-Linking','Medications','Protocols','Patient Context','Field Use']},
  {date:'2026-10-01',version:'v186',title:'Pediatric Mode + Shared Patient Context',copy:'Added a persistent Adult/PEDS patient mode and shared patient weight. Enter weight once and compatible weight-based medication helpers reuse it while navigating. Pediatric mode visually prioritizes pediatric-relevant content without hiding adult references, and patient context can be reset instantly between patients.',tags:['Pediatrics','Patient Context','Medication Safety','Mobile','Field Use']},
