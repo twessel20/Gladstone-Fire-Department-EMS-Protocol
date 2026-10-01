@@ -2122,14 +2122,16 @@ function formatParklandVolume(ml,unit){
 }
 function toggleParklandVolume(btn){
   if(!btn)return;
-  const ml=Number(btn.dataset.ml);
-  if(!Number.isFinite(ml))return;
   const next=btn.dataset.unit==='ml'?'l':'ml';
-  btn.dataset.unit=next;
-  const value=btn.querySelector('b');
-  if(value)value.textContent=formatParklandVolume(ml,next);
-  const hint=btn.querySelector('small');
-  if(hint)hint.textContent=next==='ml'?'Tap for liters':'Tap for mL';
+  document.querySelectorAll('#parklandResult .parkland-volume').forEach(item=>{
+    const ml=Number(item.dataset.ml);
+    if(!Number.isFinite(ml))return;
+    item.dataset.unit=next;
+    const value=item.querySelector('b');
+    if(value)value.textContent=formatParklandVolume(ml,next);
+    const hint=item.querySelector('small');
+    if(hint)hint.textContent=next==='ml'?'Tap all for liters':'Tap all for mL';
+  });
 }
 function calcParkland(){
   const box=document.querySelector('#parklandResult');
@@ -2145,9 +2147,9 @@ function calcParkland(){
   box.style.display='block';
   box.innerHTML=`<div class="tool-note">Normal Saline volume estimate • tap a volume to switch between liters and mL</div>
     <div class="parkland-grid">
-      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${first8}" data-unit="l" onclick="toggleParklandVolume(this)">First 8 hr total<b>${formatParklandVolume(first8,'l')}</b><small>Tap for mL</small></button></div>
-      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${next16}" data-unit="l" onclick="toggleParklandVolume(this)">Next 16 hr<b>${formatParklandVolume(next16,'l')}</b><small>Tap for mL</small></button></div>
-      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${total}" data-unit="l" onclick="toggleParklandVolume(this)">24-hour total<b>${formatParklandVolume(total,'l')}</b><small>Tap for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${first8}" data-unit="l" onclick="toggleParklandVolume(this)">First 8 hr total<b>${formatParklandVolume(first8,'l')}</b><small>Tap all for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${next16}" data-unit="l" onclick="toggleParklandVolume(this)">Next 16 hr<b>${formatParklandVolume(next16,'l')}</b><small>Tap all for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${total}" data-unit="l" onclick="toggleParklandVolume(this)">24-hour total<b>${formatParklandVolume(total,'l')}</b><small>Tap all for mL</small></button></div>
       <div class="parkland-stat">Formula factor<b>${factor} mL/kg/%</b></div>
     </div>
     <div class="burn-mini" style="margin-top:8px">Weight: ${kg.toFixed(1)} kg • TBSA: ${burnTBSA}% • Timing begins at the time of injury, not EMS arrival.</div>`;
@@ -4304,6 +4306,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v190',title:'Unified Parkland Unit Toggle',copy:'Tapping any Parkland volume now switches all displayed volume estimates together between liters and mL, keeping the first 8-hour, next 16-hour, and 24-hour totals in the same unit.',tags:['Burns','Parkland','Calculator','Units','Field Use']},
  {date:'2026-10-01',version:'v189',title:'Tappable Parkland Volume Units',copy:'Parkland burn volume estimates are now tappable. First 8-hour, next 16-hour, and 24-hour totals default to liters and switch to mL with one tap; tapping again returns to liters.',tags:['Burns','Parkland','Calculator','Field Use','Units']},
  {date:'2026-10-01',version:'v188',title:'Shared Weight Across All Weight-Based Calculators',copy:'Fixed shared patient weight propagation so the saved patient weight now automatically fills every applicable weight-based calculator, including Parkland burn volume, lidocaine, diltiazem, dopamine, and protocol medication dose helpers. Dynamically opened tools also receive the active patient weight, and changing a linked calculator weight updates the shared patient context.',tags:['Patient Context','Weight','Calculators','Pediatrics','Medication Safety','Burns']},
  {date:'2026-10-01',version:'v187',title:'Protocol-to-Medication Cross-Links',copy:'Protocols now surface the GFD medications they reference in a dedicated cross-link panel. Tapping a medication opens its full medication reference while preserving the shared patient context, and medication pages opened from a protocol provide a direct return path to that protocol.',tags:['Cross-Linking','Medications','Protocols','Patient Context','Field Use']},
