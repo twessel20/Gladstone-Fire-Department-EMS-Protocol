@@ -2020,17 +2020,18 @@ const gfdHospitals=[
  ["Saint Luke's Hospital of Kansas City – Plaza",'4401 Wornall Road, Kansas City, MO 64111','',['Level I Trauma','Acute STEMI — Secondary','Acute CVA — Primary','Definitive Stroke Center'],['SLH','St Lukes','Saint Lukes','Plaza','Saint Lukes Plaza']],
  ['Research Medical Center','2316 E Meyer Boulevard, Kansas City, MO 64132','',['Level I Trauma','Burn Center — Secondary','Acute CVA — Secondary'],['Research','RMC']]
 ]
-function hospitalDirectionsTarget(address){
+function hospitalDirectionsTarget(address,exactPinUrl){
  const destination=encodeURIComponent(address);
  const ua=navigator.userAgent||'';
  const isiOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ if(isiOS&&exactPinUrl)return exactPinUrl;
  if(isiOS)return 'maps://?daddr='+destination+'&dirflg=d';
  if(/Android/i.test(ua))return 'geo:0,0?q='+destination;
  return 'https://www.google.com/maps/dir/?api=1&destination='+destination+'&travelmode=driving';
 }
-function openHospitalDirections(address){
- const url=hospitalDirectionsTarget(address);
- if(/^https?:/i.test(url))window.open(url,'_blank','noopener');
+function openHospitalDirections(address,exactPinUrl){
+ const url=hospitalDirectionsTarget(address,exactPinUrl);
+ if(/^https?:/i.test(url))window.location.href=url;
  else window.location.href=url;
 }
 function toggleEntranceView(id,btn){
@@ -2041,7 +2042,7 @@ function toggleEntranceView(id,btn){
 function renderHospitals(){
  const q=(document.querySelector('#q')?.value||'').trim().toLowerCase();
  const rows=gfdHospitals.filter(([name,address,,tags,aliases])=>!q||(name+' '+address+' '+(tags||[]).join(' ')+' '+(aliases||[]).join(' ')).toLowerCase().includes(q));
- const cards=rows.map(([name,address,status,tags,aliases])=>{
+ const cards=rows.map(([name,address,status,tags,aliases,exactPinUrl])=>{
    const destination=encodeURIComponent(address);
    const primary=status==='Primary'?'<span class="route-tag primary" style="margin-left:6px">PRIMARY</span>':'';
    const tagHtml=(tags||[]).length?'<div class="hospital-tags">'+(tags||[]).map(tag=>{
@@ -2050,7 +2051,8 @@ function renderHospitals(){
    }).join('')+'</div>':'';
    const isKu=/University of Kansas Hospital/i.test(name);
    const entranceView=isKu?'<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'kuEntranceView\',this)">👁 Entrance View</button><div id="kuEntranceView" class="entrance-view-panel"><div class="entrance-view-stage"><div class="entrance-view-placeholder"><b>KU ER Entrance View — Test</b>Fixed Street View will occupy this panel. The arrow and label will stay locked to the ambulance approach so the annotation cannot drift if the map is moved.</div><div class="entrance-arrow-label">ER / AMBULANCE ENTRANCE</div><div class="entrance-arrow">➜</div></div><div class="entrance-view-meta"><b>Prototype only.</b> The final panel will use a verified fixed Street View camera angle. <a href="https://maps.app.goo.gl/oU7Xd8UrMxkedpyL6" target="_blank" rel="noopener">Open exact KU ER pin ↗</a></div></div>':'';
-   return '<div class="hospital-card"><h3>🏥 '+esc(name)+primary+'</h3>'+tagHtml+'<div class="hospital-address">'+esc(address)+'</div><button type="button" class="hospital-gps" onclick="openHospitalDirections(decodeURIComponent(\''+destination+'\'))">Directions from current location ↗</button>'+entranceView+'</div>';
+   const pinArg=exactPinUrl?encodeURIComponent(exactPinUrl):'';
+   return '<div class="hospital-card"><h3>🏥 '+esc(name)+primary+'</h3>'+tagHtml+'<div class="hospital-address">'+esc(address)+'</div><button type="button" class="hospital-gps" onclick="openHospitalDirections(decodeURIComponent(\''+destination+'\'),\''+decodeURIComponent(pinArg)+'\')">Directions from current location ↗</button>'+entranceView+'</div>';
  }).join('');
  document.querySelector('#list').innerHTML='<div class="hospital-note"><b>Use the Directions from current location button to launch navigation.</b> North Kansas City Hospital remains listed first as GFD\'s primary medical-control destination; remaining hospitals are ordered by approximate proximity from Gladstone.</div><div class="hospital-list">'+(cards||'<div class="empty">No hospitals match your search.</div>')+'</div><div style="margin-top:14px">'+patientDestinationCriteriaHtml()+'</div>';
 }
