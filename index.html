@@ -2116,22 +2116,25 @@ function startRespRate(){document.getElementById('startBox').innerHTML='<h4>3. R
 function startPerfusion(){document.getElementById('startBox').innerHTML='<h4>4. Perfusion adequate?</h4><div class="tool-note">Classic START: radial pulse present or capillary refill ≤ 2 seconds.</div>'+startButtons([['No — inadequate','startResult(\'IMMEDIATE / RED\',\'Perfusion criterion is abnormal.\')'],['Yes — adequate','startMental()']])}
 function startMental(){document.getElementById('startBox').innerHTML='<h4>5. Can the patient obey simple commands?</h4>'+startButtons([['No','startResult(\'IMMEDIATE / RED\',\'Unable to obey simple commands.\')'],['Yes','startResult(\'DELAYED / YELLOW\',\'Breathing, perfusion, and mental-status criteria do not meet Immediate criteria.\')']])}
 
+let parklandDisplayUnit='l';
 function formatParklandVolume(ml,unit){
   if(unit==='ml')return Math.round(ml).toLocaleString()+' mL';
   return (ml/1000).toFixed(2)+' L';
 }
-function toggleParklandVolume(btn){
-  if(!btn)return;
-  const next=btn.dataset.unit==='ml'?'l':'ml';
-  document.querySelectorAll('#parklandResult .parkland-volume').forEach(item=>{
+function setParklandDisplayUnit(unit){
+  parklandDisplayUnit=unit==='ml'?'ml':'l';
+  document.querySelectorAll('.parkland-volume').forEach(item=>{
     const ml=Number(item.dataset.ml);
     if(!Number.isFinite(ml))return;
-    item.dataset.unit=next;
+    item.dataset.unit=parklandDisplayUnit;
     const value=item.querySelector('b');
-    if(value)value.textContent=formatParklandVolume(ml,next);
+    if(value)value.textContent=formatParklandVolume(ml,parklandDisplayUnit);
     const hint=item.querySelector('small');
-    if(hint)hint.textContent=next==='ml'?'Tap all for liters':'Tap all for mL';
+    if(hint)hint.textContent=parklandDisplayUnit==='ml'?'Tap any volume for liters':'Tap any volume for mL';
   });
+}
+function toggleParklandVolume(){
+  setParklandDisplayUnit(parklandDisplayUnit==='ml'?'l':'ml');
 }
 function calcParkland(){
   const box=document.querySelector('#parklandResult');
@@ -2144,12 +2147,13 @@ function calcParkland(){
   const total=factor*kg*burnTBSA;
   const first8=total/2;
   const next16=total/2;
+  parklandDisplayUnit='l';
   box.style.display='block';
-  box.innerHTML=`<div class="tool-note">Normal Saline volume estimate • tap a volume to switch between liters and mL</div>
+  box.innerHTML=`<div class="tool-note">Normal Saline volume estimate • tap any volume to switch all three between liters and mL</div>
     <div class="parkland-grid">
-      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${first8}" data-unit="l" onclick="toggleParklandVolume(this)">First 8 hr total<b>${formatParklandVolume(first8,'l')}</b><small>Tap all for mL</small></button></div>
-      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${next16}" data-unit="l" onclick="toggleParklandVolume(this)">Next 16 hr<b>${formatParklandVolume(next16,'l')}</b><small>Tap all for mL</small></button></div>
-      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${total}" data-unit="l" onclick="toggleParklandVolume(this)">24-hour total<b>${formatParklandVolume(total,'l')}</b><small>Tap all for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${first8}" data-unit="l" onclick="toggleParklandVolume()">First 8 hr total<b>${formatParklandVolume(first8,'l')}</b><small>Tap any volume for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${next16}" data-unit="l" onclick="toggleParklandVolume()">Next 16 hr<b>${formatParklandVolume(next16,'l')}</b><small>Tap any volume for mL</small></button></div>
+      <div class="parkland-stat"><button type="button" class="parkland-volume" data-ml="${total}" data-unit="l" onclick="toggleParklandVolume()">24-hour total<b>${formatParklandVolume(total,'l')}</b><small>Tap any volume for mL</small></button></div>
       <div class="parkland-stat">Formula factor<b>${factor} mL/kg/%</b></div>
     </div>
     <div class="burn-mini" style="margin-top:8px">Weight: ${kg.toFixed(1)} kg • TBSA: ${burnTBSA}% • Timing begins at the time of injury, not EMS arrival.</div>`;
@@ -4306,6 +4310,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v191',title:'Parkland Shared Unit State Fix',copy:'Corrected the Parkland display so all three volume estimates use one shared unit state. Tapping any of the three now changes First 8-hour, Next 16-hour, and 24-hour totals together between liters and mL.',tags:['Burns','Parkland','Calculator','Units','Fix']},
  {date:'2026-10-01',version:'v190',title:'Unified Parkland Unit Toggle',copy:'Tapping any Parkland volume now switches all displayed volume estimates together between liters and mL, keeping the first 8-hour, next 16-hour, and 24-hour totals in the same unit.',tags:['Burns','Parkland','Calculator','Units','Field Use']},
  {date:'2026-10-01',version:'v189',title:'Tappable Parkland Volume Units',copy:'Parkland burn volume estimates are now tappable. First 8-hour, next 16-hour, and 24-hour totals default to liters and switch to mL with one tap; tapping again returns to liters.',tags:['Burns','Parkland','Calculator','Field Use','Units']},
  {date:'2026-10-01',version:'v188',title:'Shared Weight Across All Weight-Based Calculators',copy:'Fixed shared patient weight propagation so the saved patient weight now automatically fills every applicable weight-based calculator, including Parkland burn volume, lidocaine, diltiazem, dopamine, and protocol medication dose helpers. Dynamically opened tools also receive the active patient weight, and changing a linked calculator weight updates the shared patient context.',tags:['Patient Context','Weight','Calculators','Pediatrics','Medication Safety','Burns']},
