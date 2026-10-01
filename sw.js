@@ -1,6 +1,6 @@
-const C='gfd-ems-shell-v169';
-const UPDATE_SUMMARY='v169: Added Truman ER Entrance View with turn-in image and ramp caution.';
-const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','updates/current-protocol-book.pdf'];
+const C='gfd-ems-shell-v170';
+const UPDATE_SUMMARY='v170: Added NKCH ER Entrance View with marked middle-entrance guidance.';
+const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
