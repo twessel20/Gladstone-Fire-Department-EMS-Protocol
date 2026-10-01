@@ -2045,11 +2045,16 @@ const LIBERTY_ENTRANCE_IMAGE_PARTS=[
  'assets/liberty-er-entrance-4.b64?v=173',
  'assets/liberty-er-entrance-5.b64?v=173'
 ];
+const STL_NORTH_ENTRANCE_IMAGE_PARTS=[
+ 'assets/st-lukes-northland-er-entrance-1.b64?v=174',
+ 'assets/st-lukes-northland-er-entrance-2.b64?v=174'
+];
 let kuEntranceImagePromise=null;
 let stlPlazaEntranceImagePromise=null;
 let trumanEntranceImagePromise=null;
 let nkchEntranceImagePromise=null;
 let libertyEntranceImagePromise=null;
+let stlNorthEntranceImagePromise=null;
 function loadKuEntranceImage(){
  const img=document.getElementById('kuEntranceImage');if(!img||img.dataset.loaded==='1')return;
  if(!kuEntranceImagePromise)kuEntranceImagePromise=fetch(KU_ENTRANCE_IMAGE_DATA,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('KU image data unavailable');return r.text();}).then(t=>'data:image/webp;base64,'+t.trim());
@@ -2069,6 +2074,11 @@ function loadLibertyEntranceImage(){
  const img=document.getElementById('libertyEntranceImage');if(!img||img.dataset.loaded==='1')return;
  if(!libertyEntranceImagePromise)libertyEntranceImagePromise=Promise.all(LIBERTY_ENTRANCE_IMAGE_PARTS.map(u=>fetch(u,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Liberty image data unavailable');return r.text();}))).then(parts=>'data:image/webp;base64,'+parts.join('').replace(/\s+/g,''));
  libertyEntranceImagePromise.then(src=>{img.src=src;img.dataset.loaded='1';img.classList.remove('loading');}).catch(()=>{img.classList.remove('loading');img.alt='Liberty Hospital Entrance View photo could not be loaded';const s=document.getElementById('libertyEntranceImageStatus');if(s)s.textContent='Entrance photo unavailable — use Directions for navigation.';});
+}
+function loadStlNorthEntranceImage(){
+ const img=document.getElementById('stlNorthEntranceImage');if(!img||img.dataset.loaded==='1')return;
+ if(!stlNorthEntranceImagePromise)stlNorthEntranceImagePromise=Promise.all(STL_NORTH_ENTRANCE_IMAGE_PARTS.map(u=>fetch(u,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Saint Luke Northland image data unavailable');return r.text();}))).then(parts=>'data:image/webp;base64,'+parts.join('').replace(/\s+/g,''));
+ stlNorthEntranceImagePromise.then(src=>{img.src=src;img.dataset.loaded='1';img.classList.remove('loading');}).catch(()=>{img.classList.remove('loading');img.alt='Saint Luke\'s Northland Entrance View photo could not be loaded';const s=document.getElementById('stlNorthEntranceImageStatus');if(s)s.textContent='Entrance photo unavailable — use Directions for navigation.';});
 }
 function loadNkchEntranceImage(){
  const img=document.getElementById('nkchEntranceImage');if(!img||img.dataset.loaded==='1')return;
@@ -2097,6 +2107,7 @@ function toggleEntranceView(id,btn){
  if(open&&id==='trumanEntranceView')loadTrumanEntranceImage();
  if(open&&id==='nkchEntranceView')loadNkchEntranceImage();
  if(open&&id==='libertyEntranceView')loadLibertyEntranceImage();
+ if(open&&id==='stlNorthEntranceView')loadStlNorthEntranceImage();
 }
 function renderHospitals(){
  const q=(document.querySelector('#q')?.value||'').trim().toLowerCase();
@@ -2113,8 +2124,10 @@ function renderHospitals(){
    const isStlPlaza=/Saint Luke.?s Hospital of Kansas City.*Plaza/i.test(name);
    const isTruman=/University Health Truman Medical Center/i.test(name);
    const isLiberty=/Liberty Hospital/i.test(name);
+   const isStlNorth=/Saint Luke.?s North Hospital.*Barry Road/i.test(name);
    let entranceView='';
-   if(isNkch) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'nkchEntranceView\',this)">👁 Entrance View</button><div id="nkchEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="nkchEntranceImage" class="entrance-static-img loading" alt="North Kansas City Hospital emergency entrance approach"></div><div id="nkchEntranceImageStatus" class="entrance-view-meta" style="display:none"></div></div>';
+   if(isStlNorth) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'stlNorthEntranceView\',this)">👁 Entrance View</button><div id="stlNorthEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="stlNorthEntranceImage" class="entrance-static-img loading" alt="Saint Luke\'s Northland ambulance entrance approach"></div><div id="stlNorthEntranceImageStatus" class="entrance-view-meta"><b>Saint Luke\'s Northland:</b> Turn right toward the white garage door.</div></div>';
+   else if(isNkch) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'nkchEntranceView\',this)">👁 Entrance View</button><div id="nkchEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="nkchEntranceImage" class="entrance-static-img loading" alt="North Kansas City Hospital emergency entrance approach"></div><div id="nkchEntranceImageStatus" class="entrance-view-meta" style="display:none"></div></div>';
    else if(isKu) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'kuEntranceView\',this)">👁 Entrance View</button><div id="kuEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="kuEntranceImage" class="entrance-static-img loading" alt="KU Emergency Department turn-in and ramp approach"></div><div id="kuEntranceImageStatus" class="entrance-view-meta"><b>KU ER:</b> Turn here, then continue up the ramp to the ambulance entrance.</div></div>';
    else if(isStlPlaza) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'stlPlazaEntranceView\',this)">👁 Entrance View</button><div id="stlPlazaEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="stlPlazaEntranceImage" class="entrance-static-img stl-plaza-entrance-img loading" alt="Saint Luke\'s Hospital Plaza garage entrance"></div><div id="stlPlazaEntranceImageStatus" class="entrance-view-meta"><b>Saint Luke\'s Plaza:</b> Turn into the garage entrance. <b>Careful of columns inside the garage.</b></div></div>';
    else if(isTruman) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'trumanEntranceView\',this)">👁 Entrance View</button><div id="trumanEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="trumanEntranceImage" class="entrance-static-img loading" alt="Truman Emergency Department ramp entrance turn"></div><div id="trumanEntranceImageStatus" class="entrance-view-meta"><b>Truman ER:</b> Turn here. <b>Careful of tight turns up the ramp.</b></div></div>';
