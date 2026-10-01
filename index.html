@@ -2037,7 +2037,7 @@ function openHospitalDirections(address,coords){
 const KU_ENTRANCE_IMAGE_DATA='assets/ku-entrance-image.b64?v=166';
 const STL_PLAZA_ENTRANCE_IMAGE_DATA='assets/st-lukes-plaza-entrance.b64?v=168';
 const TRUMAN_ENTRANCE_IMAGE_DATA='assets/truman-er-entrance.b64?v=169';
-const NKCH_ENTRANCE_IMAGE_DATA='assets/nkch-er-entrance.b64?v=170';
+const NKCH_ENTRANCE_IMAGE_DATA='assets/nkch-er-entrance.b64?v=171';
 let kuEntranceImagePromise=null;
 let stlPlazaEntranceImagePromise=null;
 let trumanEntranceImagePromise=null;
@@ -4029,6 +4029,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-30',version:'v171',title:'NKCH Entrance View image fix',copy:'Repaired the North Kansas City Hospital Entrance View image payload so the photo now loads reliably on mobile and desktop.',tags:['Hospitals','NKCH','Entrance View','Fix']},
  {date:'2026-09-30',version:'v170',title:'NKCH ER Entrance View',copy:'Added a dedicated Entrance View to North Kansas City Hospital using the marked approach photo. The field note directs crews to use the middle entrance to the right of the ER sign.',tags:['Hospitals','NKCH','Entrance View','Navigation','Field Use']},
  {date:'2026-09-30',version:'v169',title:'Truman ER Entrance View',copy:'Added a dedicated Entrance View to University Health Truman Medical Center using the marked turn-in photo. The field note reads “Turn here.” with a caution to be careful of tight turns up the ramp.',tags:['Hospitals','Truman','Entrance View','Navigation','Field Use']},
    {date:'2026-09-30',version:'v143',title:'Pain safety check added to analgesic medication pages',copy:'Extended the same rapid Yes / No Pain Medication Safety Check into the medication list for Morphine Sulfate and Fentanyl. Medics can now launch the identical indication/contraindication workflow directly from either analgesic medication page as well as from the Analgesic Medication Administration protocol and Field Tools.',tags:['Analgesia','Medications','Morphine','Fentanyl','Clinical Tool','Workflow']},
