@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v171';
-const UPDATE_SUMMARY='v171: Fixed NKCH Entrance View image loading.';
+const C='gfd-ems-shell-v172';
+const UPDATE_SUMMARY='v172: Removed NKCH hospital-view descriptor.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
