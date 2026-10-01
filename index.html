@@ -557,14 +557,111 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
 .paincheck-result b{display:block;font-size:23px;line-height:1.2}
 .paincheck-result span{display:block;margin-top:7px;font-size:13px;line-height:1.45}
 @media(max-width:620px){.paincheck-actions button{min-height:74px;font-size:20px}.paincheck-step{padding:15px 13px}}
+
+/* Shared patient context / pediatric mode */
+.patient-context{display:flex;align-items:center;gap:7px;margin-top:8px;min-height:38px}
+.patient-mode-toggle{display:flex;gap:4px;padding:3px;background:#ffffff18;border:1px solid #ffffff33;border-radius:10px;flex:0 0 auto}
+.patient-mode-btn{border:0;border-radius:7px;padding:7px 10px;background:transparent;color:#fff;font-weight:900;font-size:12px;line-height:1;min-height:30px}
+.patient-mode-btn.on{background:#fff;color:#173a5e;box-shadow:0 1px 3px #0002}
+.patient-context-summary{min-width:0;flex:1;border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:10px;padding:8px 10px;font-weight:900;font-size:12px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:36px}
+.patient-context-summary.peds{background:#dbeafe;color:#173a5e;border-color:#bfdbfe}
+.patient-context-reset{border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:10px;padding:8px 10px;font-weight:900;font-size:12px;min-height:36px}
+.patient-context-reset:disabled{opacity:.42}
+.patient-sheet{position:fixed;inset:0;z-index:150;display:none;align-items:flex-end;justify-content:center;background:#0f172a88;padding:14px}
+.patient-sheet.on{display:flex}
+.patient-sheet-card{width:min(520px,100%);background:#fff;border-radius:18px;padding:18px;box-shadow:0 18px 50px #0005;margin-bottom:env(safe-area-inset-bottom)}
+.patient-sheet-title{font-size:20px;font-weight:950;color:#173a5e;margin:0 0 5px}
+.patient-sheet-copy{font-size:13px;line-height:1.45;color:#475569;margin-bottom:14px}
+.patient-weight-row{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:8px}
+.patient-weight-row input,.patient-weight-row select{width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:13px 12px;font-size:18px;background:#fff;min-height:50px}
+.patient-sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.patient-sheet-actions button{border:0;border-radius:11px;padding:13px 12px;font-weight:900;font-size:15px;min-height:48px}
+.patient-sheet-cancel{background:#e2e8f0;color:#334155}.patient-sheet-save{background:#2f6690;color:#fff}
+.peds-priority{border-left:5px solid #2f6690}
+.peds-badge{display:inline-block;margin-left:7px;padding:3px 6px;border-radius:999px;background:#dbeafe;color:#173a5e;font-size:10px;font-weight:950;letter-spacing:.04em;vertical-align:2px}
+@media(max-width:520px){.patient-context{gap:5px}.patient-mode-btn{padding:7px 8px}.patient-context-summary{padding:8px;font-size:11px}.patient-context-reset{padding:8px;font-size:11px}.patient-sheet{padding:10px}}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
   <div class="app-update-copy"><b>New app version ready</b><span id="appUpdateSummary">What changed: Improvements and fixes are ready.</span><span style="display:block;margin-top:3px;opacity:.82">Update without closing the app. Your current protocol/favorites remain available after refresh.</span></div>
   <div class="app-update-actions"><button class="app-update-later" onclick="dismissAppUpdate()">Later</button><button class="app-update-now" onclick="applyAppUpdate()">Update now</button></div>
 </div>
-<div class="top"><div class="headrow"><img class="logo" src="data:image/png;base64,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" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div></div><div class="controlrow"><button class="homebtn" onclick="goHome()" aria-label="Home">⌂ Home</button><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, meds, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div></div><div id="tabs" class="tabs"></div><main class="wrap"><div id="list" class="list"></div><div id="detail" class="detail"></div><div class="footer">Quick-reference tool. Department protocol source and Medical Control remain authoritative.<br><button class="change-log-link" onclick="openChangeLog()">Version History / Change Log</button></div></main><script>
+<div class="top"><div class="headrow"><img class="logo" src="data:image/png;base64,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" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div></div><div class="controlrow"><button class="homebtn" onclick="goHome()" aria-label="Home">⌂ Home</button><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, meds, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div>
+<div class="patient-context" id="patientContextBar">
+ <div class="patient-mode-toggle" aria-label="Patient mode">
+  <button id="adultModeBtn" class="patient-mode-btn" onclick="setPatientMode('adult')">ADULT</button>
+  <button id="pedsModeBtn" class="patient-mode-btn" onclick="setPatientMode('pediatric')">PEDS</button>
+ </div>
+ <button id="patientContextSummary" class="patient-context-summary" onclick="openPatientWeight()" aria-label="Set shared patient weight">ADULT • Add weight</button>
+ <button id="patientContextReset" class="patient-context-reset" onclick="clearPatientContext()" aria-label="Reset patient context">Reset</button>
+</div></div>
+<div id="patientWeightSheet" class="patient-sheet" role="dialog" aria-modal="true" aria-labelledby="patientWeightTitle" onclick="if(event.target===this)closePatientWeight()">
+ <div class="patient-sheet-card">
+  <div id="patientWeightTitle" class="patient-sheet-title">Shared Patient Weight</div>
+  <div class="patient-sheet-copy">Enter the weight once. Weight-based medication helpers will automatically use the same patient weight while you move through the app.</div>
+  <div class="patient-weight-row">
+   <input id="patientWeightInput" type="number" inputmode="decimal" min="0" step="0.1" placeholder="Patient weight">
+   <select id="patientWeightUnit" aria-label="Weight unit"><option value="kg">kg</option><option value="lb">lb</option></select>
+  </div>
+  <div class="patient-sheet-actions"><button class="patient-sheet-cancel" onclick="closePatientWeight()">Cancel</button><button class="patient-sheet-save" onclick="savePatientWeight()">Use weight</button></div>
+ </div>
+</div>
+<div id="tabs" class="tabs"></div><main class="wrap"><div id="list" class="list"></div><div id="detail" class="detail"></div><div class="footer">Quick-reference tool. Department protocol source and Medical Control remain authoritative.<br><button class="change-log-link" onclick="openChangeLog()">Version History / Change Log</button></div></main><script>
 let data=[],cat='Home',quickSet=null;const cats=['All','Favorites','Medical','Trauma','Procedures','Medications','Tools','Patient Meds','Hospitals','Guidelines','Appendix'];let fav=new Set(JSON.parse(localStorage.getItem('gfdFav')||'[]'));const role='PARAMEDIC';
+let patientContext=(()=>{try{const v=JSON.parse(sessionStorage.getItem('gfdPatientContext')||'null');return v&&['adult','pediatric'].includes(v.mode)?{mode:v.mode,weightKg:Number.isFinite(Number(v.weightKg))&&Number(v.weightKg)>0?Number(v.weightKg):null}:{mode:'adult',weightKg:null}}catch(e){return {mode:'adult',weightKg:null}}})();
+function savePatientContextState(){try{sessionStorage.setItem('gfdPatientContext',JSON.stringify(patientContext))}catch(e){}}
+function patientWeightText(){return Number.isFinite(patientContext.weightKg)&&patientContext.weightKg>0?(Math.round(patientContext.weightKg*10)/10).toString()+' kg':'Add weight'}
+function renderPatientContext(){
+ const adult=document.getElementById('adultModeBtn'),peds=document.getElementById('pedsModeBtn'),summary=document.getElementById('patientContextSummary'),reset=document.getElementById('patientContextReset');
+ if(adult)adult.classList.toggle('on',patientContext.mode==='adult');
+ if(peds)peds.classList.toggle('on',patientContext.mode==='pediatric');
+ if(summary){summary.textContent=(patientContext.mode==='pediatric'?'PEDS':'ADULT')+' • '+patientWeightText();summary.classList.toggle('peds',patientContext.mode==='pediatric')}
+ if(reset)reset.disabled=patientContext.mode==='adult'&&!patientContext.weightKg;
+}
+function setPatientMode(mode){
+ patientContext.mode=mode==='pediatric'?'pediatric':'adult';savePatientContextState();renderPatientContext();applySharedPatientContextToDOM();
+ if(!document.querySelector('#detail')?.classList.contains('on'))render();
+}
+function openPatientWeight(){
+ const sheet=document.getElementById('patientWeightSheet'),input=document.getElementById('patientWeightInput'),unit=document.getElementById('patientWeightUnit');
+ if(input)input.value=patientContext.weightKg?String(Math.round(patientContext.weightKg*10)/10):'';
+ if(unit)unit.value='kg';
+ sheet?.classList.add('on');setTimeout(()=>input?.focus(),60);
+}
+function closePatientWeight(){document.getElementById('patientWeightSheet')?.classList.remove('on')}
+function savePatientWeight(){
+ const input=document.getElementById('patientWeightInput'),unit=document.getElementById('patientWeightUnit');
+ const raw=parseFloat(input?.value),u=unit?.value||'kg';
+ if(!Number.isFinite(raw)||raw<=0){input?.focus();return}
+ patientContext.weightKg=u==='lb'?raw/2.2046226218:raw;
+ savePatientContextState();closePatientWeight();renderPatientContext();applySharedPatientContextToDOM();
+}
+function clearPatientContext(){
+ patientContext={mode:'adult',weightKg:null};savePatientContextState();renderPatientContext();
+ document.querySelectorAll('input[id^="dc-"][id$="-w"]').forEach(el=>{el.value=''});
+ if(!document.querySelector('#detail')?.classList.contains('on'))render();
+}
+function isPediatricRelevant(x){
+ const t=[x?.id,x?.title,(x?.aliases||[]).join(' '),(x?.lines||[]).join(' ')].join(' ').toLowerCase();
+ return /\bpediatric\b|\bpediatrics\b|\bpeds\b|\bneonatal\b|\binfant\b|\bchild(?:ren)?\b/.test(t);
+}
+function applySharedPatientContextToDOM(root=document){
+ if(!Number.isFinite(patientContext.weightKg)||patientContext.weightKg<=0)return;
+ const v=(Math.round(patientContext.weightKg*10)/10).toString();
+ root.querySelectorAll?.('input[id^="dc-"][id$="-w"],input[data-patient-weight]').forEach(input=>{
+   input.value=v;
+   const unit=input.id?.endsWith('-w')?document.getElementById(input.id.slice(0,-2)+'-u'):null;
+   if(unit&&[...unit.options].some(o=>o.value==='kg'))unit.value='kg';
+ });
+}
+document.addEventListener('change',e=>{
+ const input=e.target;
+ if(!(input instanceof HTMLInputElement)||!input.matches('input[id^="dc-"][id$="-w"],input[data-patient-weight]'))return;
+ const raw=parseFloat(input.value);if(!Number.isFinite(raw)||raw<=0)return;
+ const unit=input.id?.endsWith('-w')?document.getElementById(input.id.slice(0,-2)+'-u'):null;
+ patientContext.weightKg=unit?.value==='lb'?raw/2.2046226218:raw;savePatientContextState();renderPatientContext();
+},{capture:true});
+
 const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function topNavItems(){
  return [
@@ -2268,6 +2365,7 @@ function render(){
    a=searchResults();
  }
  if(quickSet&&quickGroups[quickSet]){const allowed=new Set(quickGroups[quickSet]);a=a.filter(x=>allowed.has(x.id));}
+ if(patientContext.mode==='pediatric'&&!query){a=[...a].sort((x,y)=>Number(isPediatricRelevant(y))-Number(isPediatricRelevant(x)));}
  const toolHits=q&&cat==='All'?toolSearchResults(q):[];
  const hospitalHits=q&&cat==='All'?gfdHospitals.filter(([name,address,,tags,aliases])=>{
    const h=searchText([name,address,(tags||[]).join(' '),(aliases||[]).join(' ')].join(' '));
@@ -2275,7 +2373,7 @@ function render(){
  }):[];
  const toolHtml=toolHits.length?'<div class="search-tool-group"><div class="related-title">Matching Field Tools</div>'+toolHits.map(t=>'<button class="tool-launch search-tool" onclick="openSearchTool(\''+t.id+'\')"><span class="tool-launch-icon">'+t.icon+'</span><span><b>'+esc(t.title)+'</b><small>'+esc(t.desc)+'</small></span><span class="tool-chevron">›</span></button>').join('')+'</div>':'';
  const hospitalHtml=hospitalHits.length?'<div class="search-tool-group"><div class="related-title">Matching Hospitals</div>'+hospitalHits.map(([name,address,status,tags,aliases])=>'<button class="tool-launch search-tool" onclick="setCat(\'Hospitals\')"><span class="tool-launch-icon">🏥</span><span><b>'+esc(name)+'</b><small>'+esc([status==='Primary'?'Primary':'',...(tags||[]),address].filter(Boolean).join(' • '))+'</small></span><span class="tool-chevron">›</span></button>').join('')+'</div>':'';
- const protocolHtml=a.length?a.map(x=>`<div class="card" onclick="openP('${x.id}')"><button class="fav" aria-label="favorite" onclick="event.stopPropagation();toggleFav('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><div class="title">${esc(displayTitle(x))}</div><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:`2026 source`}</div></div>`).join(''):'';
+ const protocolHtml=a.length?a.map(x=>`<div class="card ${patientContext.mode==='pediatric'&&isPediatricRelevant(x)?'peds-priority':''}" onclick="openP('${x.id}')"><button class="fav" aria-label="favorite" onclick="event.stopPropagation();toggleFav('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><div class="title">${esc(displayTitle(x))}${patientContext.mode==='pediatric'&&isPediatricRelevant(x)?'<span class="peds-badge">PEDS</span>':''}</div><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:`2026 source`}</div></div>`).join(''):'';
  document.querySelector('#list').innerHTML=protocolHtml+toolHtml+hospitalHtml||'<div class="empty">'+(q?'No protocols, tools, or hospitals match “'+esc(q)+'”.<br><button class="back" style="margin-top:12px" onclick="clearSearch()">Clear Search</button>':'No protocols found in this section.')+'</div>'
 }
 function toggleFav(id){fav.has(id)?fav.delete(id):fav.add(id);localStorage.setItem('gfdFav',JSON.stringify([...fav]));render()}
@@ -4119,6 +4217,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v186',title:'Pediatric Mode + Shared Patient Context',copy:'Added a persistent Adult/PEDS patient mode and shared patient weight. Enter weight once and compatible weight-based medication helpers reuse it while navigating. Pediatric mode visually prioritizes pediatric-relevant content without hiding adult references, and patient context can be reset instantly between patients.',tags:['Pediatrics','Patient Context','Medication Safety','Mobile','Field Use']},
  {date:'2026-09-30',version:'v171',title:'NKCH Entrance View image fix',copy:'Repaired the North Kansas City Hospital Entrance View image payload so the photo now loads reliably on mobile and desktop.',tags:['Hospitals','NKCH','Entrance View','Fix']},
  {date:'2026-09-30',version:'v170',title:'NKCH ER Entrance View',copy:'Added a dedicated Entrance View to North Kansas City Hospital using the marked approach photo. The field note directs crews to use the middle entrance to the right of the ER sign.',tags:['Hospitals','NKCH','Entrance View','Navigation','Field Use']},
  {date:'2026-09-30',version:'v169',title:'Truman ER Entrance View',copy:'Added a dedicated Entrance View to University Health Truman Medical Center using the marked turn-in photo. The field note reads “Turn here.” with a caution to be careful of tight turns up the ramp.',tags:['Hospitals','Truman','Entrance View','Navigation','Field Use']},
@@ -4202,11 +4301,12 @@ function openP(id){
  document.querySelector('#detail').classList.add('on');
  if(x.id==='burns'){renderBurnMap();requestAnimationFrame(updateBurnExtentHighlight);}
  if(x.id==='tcd-destinations')renderTcdOfficialPage();
+ requestAnimationFrame(()=>applySharedPatientContextToDOM(document.querySelector('#detail')||document));
  scrollTo(0,0);
 }
 function closeP(){location.hash='';document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
 document.querySelector('#q').addEventListener('input',()=>{if(document.querySelector('#detail').classList.contains('on'))leaveDetail();if(document.querySelector('#q').value.trim()&&cat!=='All'){cat='All';tabs()}render()});document.querySelector('#q').addEventListener('search',()=>{if(!document.querySelector('#q').value)render()});
-async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();tabs();render();applyNumericKeypads();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
+async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();renderPatientContext();tabs();render();applyNumericKeypads();applySharedPatientContextToDOM();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
 let appUpdateRegistration=null,appUpdateReady=false,appUpdateDismissed=false;
 function showAppUpdate(){
  if(appUpdateDismissed)return;
