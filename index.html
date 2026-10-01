@@ -712,6 +712,62 @@ body.dark-mode .home-alert b{color:#fde68a!important}
 body.dark-mode .guide-num{background:#3b82b6;color:#fff}
 body.dark-mode .source-med-subtitle{color:#e2e8f0!important}
 body.dark-mode .section{color:#fff!important}
+
+/* v194 dark mode guide/header cleanup */
+body.dark-mode .guide-steps{
+  background:#111827!important;
+  border:1px solid #334155!important;
+  box-shadow:none!important;
+}
+body.dark-mode .guide-steps h3{
+  color:#ffffff!important;
+  border-bottom:1px solid #475569;
+  padding-bottom:8px;
+  margin-bottom:10px;
+}
+body.dark-mode .guide-step{
+  border-bottom:1px solid #263244;
+  padding-bottom:10px;
+}
+body.dark-mode .guide-step:last-child{border-bottom:0;padding-bottom:0}
+body.dark-mode .guide-num{
+  background:#256b9a!important;
+  color:#fff!important;
+  border:1px solid #6ea6c9;
+}
+body.dark-mode .guide-copy{color:#e5edf7!important}
+body.dark-mode .guide-copy b{color:#ffffff!important}
+
+body.dark-mode .section,
+body.dark-mode .med-label,
+body.dark-mode .source-med-label,
+body.dark-mode .related-title,
+body.dark-mode .protocol-med-links .related-title{
+  color:#ffffff!important;
+}
+body.dark-mode .section{
+  background:#255f8b!important;
+  border:1px solid #4c86ac!important;
+  border-radius:8px;
+  padding:8px 10px;
+}
+body.dark-mode .med-label{
+  color:#f6d98a!important;
+}
+body.dark-mode .source-med-label{
+  color:#dbeafe!important;
+}
+body.dark-mode .source-med-header{
+  background:linear-gradient(135deg,#0d2740 0%,#184d73 100%)!important;
+  border-bottom-color:#f0d98e!important;
+}
+body.dark-mode .source-med-header .source-med-title{color:#fff!important}
+body.dark-mode .source-med-subtitle{color:#dbeafe!important}
+body.dark-mode .related-link{
+  background:#172033!important;
+  color:#b9dcff!important;
+  border-color:#475569!important;
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -4452,6 +4508,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v194',title:'Dark Mode Guide + Header Cleanup',copy:'Refined the Quick Use Guide and clinical section headers for dark mode with darker cards, brighter copy, clearer dividers, stronger section bars, and higher-contrast medication and related-content labels.',tags:['Dark Mode','Quick Use Guide','Headers','Contrast','Accessibility']},
  {date:'2026-10-01',version:'v193',title:'Dark Mode Contrast Refinement',copy:'Improved dark-mode readability across the app, with a redesigned mission statement card, brighter primary text, lighter secondary text, stronger gold accents, and higher contrast on Home, protocol, medication, and tool content.',tags:['Dark Mode','Accessibility','Contrast','Home','UI']},
  {date:'2026-10-01',version:'v192',title:'Dark Mode + Stronger Back Button',copy:'Added an optional persistent dark mode toggle in the header and increased the contrast, size, border, and shadow of the floating Back button so it remains easy to find during field use.',tags:['Dark Mode','Navigation','Accessibility','Field Use','UI']},
  {date:'2026-10-01',version:'v191',title:'Parkland Shared Unit State Fix',copy:'Corrected the Parkland display so all three volume estimates use one shared unit state. Tapping any of the three now changes First 8-hour, Next 16-hour, and 24-hour totals together between liters and mL.',tags:['Burns','Parkland','Calculator','Units','Fix']},
