@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v167';
-const UPDATE_SUMMARY='v167: Added Saint Lukes Plaza garage Entrance View with field guidance.';
+const C='gfd-ems-shell-v168';
+const UPDATE_SUMMARY='v168: Repaired Saint Lukes Plaza Entrance View image delivery and full-frame scaling.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
