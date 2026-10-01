@@ -9,7 +9,7 @@
 .home-shortcut-card.home-drop-target{outline:3px solid #93c5fd;outline-offset:2px}
 .clinical-shortcuts.home-reordering{user-select:none;-webkit-user-select:none;touch-action:none}
 .reorder-hint{grid-column:1/-1;font-size:11px;line-height:1.35;color:#64748b;padding:2px 2px 4px}
-.wrap{padding:12px;max-width:800px;margin:auto}.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px #0001}.title{font-weight:750;font-size:17px}.meta{font-size:12px;color:#666;margin-top:4px}.detail{display:none}.detail.on{display:block}.list{display:block}.list.off{display:none}.back{border:0;background:#eee;border-radius:9px;padding:9px 12px;margin-bottom:10px}.sticky-back{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:60;display:inline-flex;align-items:center;box-shadow:0 3px 12px #0003;background:#fff;border:1px solid #cbd5e1;font-weight:850;margin:0}.sticky-back:before{content:'';position:absolute;inset:-5px;background:#f7f9fbdd;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:-1;border-radius:12px}.source{display:inline-block;text-decoration:none;background:#2f6690;color:#fff;border-radius:10px;padding:10px 12px;margin:8px 0 14px}.section{font-weight:850;margin:22px 0 9px;color:#7f1d1d;font-size:15px;letter-spacing:.02em}.med-section{margin-top:20px;padding-top:12px;border-top:1px solid #e5e7eb}.source-med-sheet{max-width:760px;margin:10px auto 18px;background:#fff;border:1px solid #dbe3ea;border-radius:12px;padding:18px 20px}.source-med-header{position:relative;margin:0 -20px 18px;padding:16px 18px;background:linear-gradient(135deg,#173a5e 0%,#2f6690 100%);color:#fff;border-bottom:4px solid #d7c79a;overflow:hidden}
+.wrap{padding:12px;max-width:800px;margin:auto}.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px #0001}.title{font-weight:750;font-size:17px}.meta{font-size:12px;color:#666;margin-top:4px}.detail{display:none}.detail.on{display:block}.list{display:block}.list.off{display:none}.back{border:0;background:#eee;border-radius:9px;padding:9px 12px;margin-bottom:10px}.sticky-back{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:60;display:inline-flex;align-items:center;box-shadow:0 5px 18px #173a5e66;background:#2f6690;color:#fff;border:2px solid #d7c79a;font-weight:950;margin:0;min-height:44px;padding:10px 15px}.sticky-back:before{content:'';position:absolute;inset:-5px;background:#f7f9fbee;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:-1;border-radius:13px}.source{display:inline-block;text-decoration:none;background:#2f6690;color:#fff;border-radius:10px;padding:10px 12px;margin:8px 0 14px}.section{font-weight:850;margin:22px 0 9px;color:#7f1d1d;font-size:15px;letter-spacing:.02em}.med-section{margin-top:20px;padding-top:12px;border-top:1px solid #e5e7eb}.source-med-sheet{max-width:760px;margin:10px auto 18px;background:#fff;border:1px solid #dbe3ea;border-radius:12px;padding:18px 20px}.source-med-header{position:relative;margin:0 -20px 18px;padding:16px 18px;background:linear-gradient(135deg,#173a5e 0%,#2f6690 100%);color:#fff;border-bottom:4px solid #d7c79a;overflow:hidden}
 .source-med-header:before{content:"";position:absolute;right:-18px;top:-24px;width:150px;height:150px;border:18px solid rgba(255,255,255,.06);border-radius:50%}
 .source-med-header:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 0 67%,rgba(255,255,255,.06) 67% 70%,transparent 70% 100%);pointer-events:none}
 .source-med-header-inner{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
@@ -590,13 +590,94 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
 .protocol-med-link .chev{font-size:21px;color:#64748b}
 .linked-med-return{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 11px;border-radius:10px;background:#eef4f8;border:1px solid #cbdde9;color:#173a5e;font-size:12px;font-weight:850}
 @media(max-width:520px){.protocol-med-grid{grid-template-columns:1fr}.protocol-med-link{min-height:58px;font-size:15px}}
+
+/* v192 prominent back button + optional dark mode */
+.theme-toggle{flex:0 0 auto;width:42px;height:38px;display:grid;place-items:center;border:1px solid #ffffff66;background:#ffffff18;color:#fff;border-radius:10px;font-size:18px;cursor:pointer;touch-action:manipulation}
+.theme-toggle:active{transform:scale(.97)}
+body.dark-mode{background:#0b1220;color:#e5e7eb}
+body.dark-mode .tabs{background:#111827;border-color:#334155}
+body.dark-mode .tab{background:#1f2937;color:#e5e7eb}
+body.dark-mode .tab.on{background:#2f6690;color:#fff}
+body.dark-mode .wrap,
+body.dark-mode .detail,
+body.dark-mode .list{color:#e5e7eb}
+body.dark-mode .card,
+body.dark-mode .tool-card,
+body.dark-mode .hospital-card,
+body.dark-mode .source-med-sheet,
+body.dark-mode .patient-sheet-card,
+body.dark-mode .protocol-tools,
+body.dark-mode .dose-calc,
+body.dark-mode .score-field,
+body.dark-mode .triage-box,
+body.dark-mode .tcd-card,
+body.dark-mode .entrance-view-panel,
+body.dark-mode .streetdrug-search-card,
+body.dark-mode .patient-med-search,
+body.dark-mode .patient-med-result,
+body.dark-mode .related-box{background:#111827!important;border-color:#334155!important;color:#e5e7eb!important;box-shadow:none}
+body.dark-mode .title,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode .med-subhead,
+body.dark-mode .related-title,
+body.dark-mode .hospital-card h3,
+body.dark-mode .tcd-card h3{color:#e5e7eb!important}
+body.dark-mode .meta,
+body.dark-mode .tool-note,
+body.dark-mode .hospital-address,
+body.dark-mode .hospital-note,
+body.dark-mode .burn-mini,
+body.dark-mode small,
+body.dark-mode .reorder-hint,
+body.dark-mode .patient-sheet-copy{color:#aebbd0!important}
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .tool-input,
+body.dark-mode .search{background:#0f172a!important;color:#f8fafc!important;border-color:#475569!important}
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder{color:#94a3b8}
+body.dark-mode .protocol-med-links,
+body.dark-mode .role-note,
+body.dark-mode .notice,
+body.dark-mode .entrance-view-meta,
+body.dark-mode .vitals-scroll,
+body.dark-mode .tcd-official,
+body.dark-mode .tool-result{background:#172033!important;border-color:#334155!important;color:#e5e7eb!important}
+body.dark-mode .protocol-med-link,
+body.dark-mode .protocol-tool-btn,
+body.dark-mode .entrance-view-btn,
+body.dark-mode .tool-launch,
+body.dark-mode .quick-card,
+body.dark-mode .home-shortcut-card{background:#111827!important;border-color:#475569!important;color:#e5e7eb!important}
+body.dark-mode .protocol-med-link small{color:#94a3b8!important}
+body.dark-mode .section{background:#2f6690!important;color:#fff!important}
+body.dark-mode .med-item,
+body.dark-mode .med-dose,
+body.dark-mode .med-text,
+body.dark-mode .line,
+body.dark-mode p,
+body.dark-mode li{color:#e5e7eb}
+body.dark-mode .parkland-stat{background:#111827;border-color:#334155;color:#e5e7eb}
+body.dark-mode .parkland-volume{color:#e5e7eb}
+body.dark-mode .parkland-volume b{color:#93c5fd}
+body.dark-mode .sticky-back{background:#3b82b6;color:#fff;border-color:#f0d98e;box-shadow:0 5px 20px #0009}
+body.dark-mode .sticky-back:before{background:#0b1220e8}
+body.dark-mode .back:not(.sticky-back){background:#1f2937;color:#fff}
+body.dark-mode .patient-context-summary.peds{background:#173a5e;color:#fff;border-color:#5b8db4}
+body.dark-mode .app-update{background:#111827;color:#fff;border-color:#475569}
+body.dark-mode a{color:#93c5fd}
+@media(max-width:520px){.theme-toggle{width:38px;height:36px;font-size:17px}.sticky-back{min-height:48px;padding:11px 16px;font-size:15px}}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
   <div class="app-update-copy"><b>New app version ready</b><span id="appUpdateSummary">What changed: Improvements and fixes are ready.</span><span style="display:block;margin-top:3px;opacity:.82">Update without closing the app. Your current protocol/favorites remain available after refresh.</span></div>
   <div class="app-update-actions"><button class="app-update-later" onclick="dismissAppUpdate()">Later</button><button class="app-update-now" onclick="applyAppUpdate()">Update now</button></div>
 </div>
-<div class="top"><div class="headrow"><img class="logo" src="data:image/png;base64,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" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div></div><div class="controlrow"><button class="homebtn" onclick="goHome()" aria-label="Home">⌂ Home</button><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, meds, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div>
+<div class="top"><div class="headrow"><img class="logo" src="data:image/png;base64,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" alt="Gladstone Fire Department logo"><div><div class="brand">Gladstone Fire Department EMS Protocols</div><div class="sub" id="ver">Field Reference</div></div><div class="status" id="net">Online</div><button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Turn on dark mode" title="Dark mode">🌙</button></div><div class="controlrow"><button class="homebtn" onclick="goHome()" aria-label="Home">⌂ Home</button><input id="q" class="search" type="search" autocomplete="off" placeholder="Search protocols, meds, symptoms…"><button id="clearQ" class="clearsearch" onclick="clearSearch()" aria-label="Clear search">Clear</button></div>
 <div class="patient-context" id="patientContextBar">
  <div class="patient-mode-toggle" aria-label="Patient mode">
   <button id="adultModeBtn" class="patient-mode-btn" onclick="setPatientMode('adult')">ADULT</button>
@@ -684,6 +765,26 @@ document.addEventListener('change',e=>{
  const unit=unitForPatientWeightInput(input);
  patientContext.weightKg=unit?.value==='lb'?raw/2.2046226218:raw;savePatientContextState();renderPatientContext();
 },{capture:true});
+
+let appTheme=(()=>{try{return localStorage.getItem('gfdTheme')==='dark'?'dark':'light'}catch(e){return 'light'}})();
+function applyTheme(){
+ const dark=appTheme==='dark';
+ document.body.classList.toggle('dark-mode',dark);
+ const btn=document.getElementById('themeToggle');
+ if(btn){
+   btn.textContent=dark?'☀️':'🌙';
+   btn.setAttribute('aria-label',dark?'Turn off dark mode':'Turn on dark mode');
+   btn.title=dark?'Light mode':'Dark mode';
+ }
+ const meta=document.querySelector('meta[name="theme-color"]');
+ if(meta)meta.setAttribute('content',dark?'#0b1220':'#173a5e');
+}
+function toggleTheme(){
+ appTheme=appTheme==='dark'?'light':'dark';
+ try{localStorage.setItem('gfdTheme',appTheme)}catch(e){}
+ applyTheme();
+}
+applyTheme();
 
 const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function topNavItems(){
@@ -4310,6 +4411,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v192',title:'Dark Mode + Stronger Back Button',copy:'Added an optional persistent dark mode toggle in the header and increased the contrast, size, border, and shadow of the floating Back button so it remains easy to find during field use.',tags:['Dark Mode','Navigation','Accessibility','Field Use','UI']},
  {date:'2026-10-01',version:'v191',title:'Parkland Shared Unit State Fix',copy:'Corrected the Parkland display so all three volume estimates use one shared unit state. Tapping any of the three now changes First 8-hour, Next 16-hour, and 24-hour totals together between liters and mL.',tags:['Burns','Parkland','Calculator','Units','Fix']},
  {date:'2026-10-01',version:'v190',title:'Unified Parkland Unit Toggle',copy:'Tapping any Parkland volume now switches all displayed volume estimates together between liters and mL, keeping the first 8-hour, next 16-hour, and 24-hour totals in the same unit.',tags:['Burns','Parkland','Calculator','Units','Field Use']},
  {date:'2026-10-01',version:'v189',title:'Tappable Parkland Volume Units',copy:'Parkland burn volume estimates are now tappable. First 8-hour, next 16-hour, and 24-hour totals default to liters and switch to mL with one tap; tapping again returns to liters.',tags:['Burns','Parkland','Calculator','Field Use','Units']},
@@ -4404,7 +4506,7 @@ function openP(id,returnProtocolId=null){
 }
 function closeP(){location.hash='';document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
 document.querySelector('#q').addEventListener('input',()=>{if(document.querySelector('#detail').classList.contains('on'))leaveDetail();if(document.querySelector('#q').value.trim()&&cat!=='All'){cat='All';tabs()}render()});document.querySelector('#q').addEventListener('search',()=>{if(!document.querySelector('#q').value)render()});
-async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();renderPatientContext();tabs();render();applyNumericKeypads();applySharedPatientContextToDOM();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
+async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();applyTheme();renderPatientContext();tabs();render();applyNumericKeypads();applySharedPatientContextToDOM();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
 let appUpdateRegistration=null,appUpdateReady=false,appUpdateDismissed=false;
 function showAppUpdate(){
  if(appUpdateDismissed)return;
