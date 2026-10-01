@@ -2037,9 +2037,11 @@ function openHospitalDirections(address,coords){
 const KU_ENTRANCE_IMAGE_DATA='assets/ku-entrance-image.b64?v=166';
 const STL_PLAZA_ENTRANCE_IMAGE_DATA='assets/st-lukes-plaza-entrance.b64?v=168';
 const TRUMAN_ENTRANCE_IMAGE_DATA='assets/truman-er-entrance.b64?v=169';
+const NKCH_ENTRANCE_IMAGE_DATA='assets/nkch-er-entrance.b64?v=170';
 let kuEntranceImagePromise=null;
 let stlPlazaEntranceImagePromise=null;
 let trumanEntranceImagePromise=null;
+let nkchEntranceImagePromise=null;
 function loadKuEntranceImage(){
  const img=document.getElementById('kuEntranceImage');if(!img||img.dataset.loaded==='1')return;
  if(!kuEntranceImagePromise)kuEntranceImagePromise=fetch(KU_ENTRANCE_IMAGE_DATA,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('KU image data unavailable');return r.text();}).then(t=>'data:image/webp;base64,'+t.trim());
@@ -2054,6 +2056,11 @@ function loadTrumanEntranceImage(){
  const img=document.getElementById('trumanEntranceImage');if(!img||img.dataset.loaded==='1')return;
  if(!trumanEntranceImagePromise)trumanEntranceImagePromise=fetch(TRUMAN_ENTRANCE_IMAGE_DATA,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Truman image data unavailable');return r.text();}).then(t=>'data:image/webp;base64,'+t.trim());
  trumanEntranceImagePromise.then(src=>{img.src=src;img.dataset.loaded='1';img.classList.remove('loading');}).catch(()=>{img.classList.remove('loading');img.alt='Truman Entrance View photo could not be loaded';const s=document.getElementById('trumanEntranceImageStatus');if(s)s.textContent='Entrance photo unavailable — use Directions for navigation.';});
+}
+function loadNkchEntranceImage(){
+ const img=document.getElementById('nkchEntranceImage');if(!img||img.dataset.loaded==='1')return;
+ if(!nkchEntranceImagePromise)nkchEntranceImagePromise=fetch(NKCH_ENTRANCE_IMAGE_DATA,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('NKCH image data unavailable');return r.text();}).then(t=>'data:image/webp;base64,'+t.trim());
+ nkchEntranceImagePromise.then(src=>{img.src=src;img.dataset.loaded='1';img.classList.remove('loading');}).catch(()=>{img.classList.remove('loading');img.alt='North Kansas City Hospital Entrance View photo could not be loaded';const s=document.getElementById('nkchEntranceImageStatus');if(s)s.textContent='Entrance photo unavailable — use Directions for navigation.';});
 }
 const GFD_GOOGLE_MAPS_EMBED_KEY=''; // Optional browser-restricted Google Maps Embed API key
 const hospitalEntranceViews={
@@ -2075,6 +2082,7 @@ function toggleEntranceView(id,btn){
  if(open&&id==='kuEntranceView')loadKuEntranceImage();
  if(open&&id==='stlPlazaEntranceView')loadStlPlazaEntranceImage();
  if(open&&id==='trumanEntranceView')loadTrumanEntranceImage();
+ if(open&&id==='nkchEntranceView')loadNkchEntranceImage();
 }
 function renderHospitals(){
  const q=(document.querySelector('#q')?.value||'').trim().toLowerCase();
@@ -2086,11 +2094,13 @@ function renderHospitals(){
      const cls=/medical control/i.test(tag)?'medcontrol':/(stroke|cva|van)/i.test(tag)?'stroke':/burn/i.test(tag)?'burn':/trauma/i.test(tag)?'trauma':/stemi/i.test(tag)?'primary':'';
      return '<span class="route-tag '+cls+'">'+esc(tag)+'</span>';
    }).join('')+'</div>':'';
+   const isNkch=/North Kansas City Hospital/i.test(name);
    const isKu=/University of Kansas Hospital/i.test(name);
    const isStlPlaza=/Saint Luke.?s Hospital of Kansas City.*Plaza/i.test(name);
    const isTruman=/University Health Truman Medical Center/i.test(name);
    let entranceView='';
-   if(isKu) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'kuEntranceView\',this)">👁 Entrance View</button><div id="kuEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="kuEntranceImage" class="entrance-static-img loading" alt="KU Emergency Department turn-in and ramp approach"></div><div id="kuEntranceImageStatus" class="entrance-view-meta"><b>KU ER:</b> Turn here, then continue up the ramp to the ambulance entrance.</div></div>';
+   if(isNkch) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'nkchEntranceView\',this)">👁 Entrance View</button><div id="nkchEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="nkchEntranceImage" class="entrance-static-img loading" alt="North Kansas City Hospital emergency entrance approach"></div><div id="nkchEntranceImageStatus" class="entrance-view-meta"><b>NKCH ER:</b> Use the middle entrance to the right of the ER sign.</div></div>';
+   else if(isKu) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'kuEntranceView\',this)">👁 Entrance View</button><div id="kuEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="kuEntranceImage" class="entrance-static-img loading" alt="KU Emergency Department turn-in and ramp approach"></div><div id="kuEntranceImageStatus" class="entrance-view-meta"><b>KU ER:</b> Turn here, then continue up the ramp to the ambulance entrance.</div></div>';
    else if(isStlPlaza) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'stlPlazaEntranceView\',this)">👁 Entrance View</button><div id="stlPlazaEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="stlPlazaEntranceImage" class="entrance-static-img stl-plaza-entrance-img loading" alt="Saint Luke\'s Hospital Plaza garage entrance"></div><div id="stlPlazaEntranceImageStatus" class="entrance-view-meta"><b>Saint Luke\'s Plaza:</b> Turn into the garage entrance. <b>Careful of columns inside the garage.</b></div></div>';
    else if(isTruman) entranceView='<button type="button" class="entrance-view-btn" aria-expanded="false" onclick="toggleEntranceView(\'trumanEntranceView\',this)">👁 Entrance View</button><div id="trumanEntranceView" class="entrance-view-panel"><div class="entrance-view-stage static"><img id="trumanEntranceImage" class="entrance-static-img loading" alt="Truman Emergency Department ramp entrance turn"></div><div id="trumanEntranceImageStatus" class="entrance-view-meta"><b>Truman ER:</b> Turn here. <b>Careful of tight turns up the ramp.</b></div></div>';
    const coordArg=coords?encodeURIComponent(coords):'';
@@ -4019,6 +4029,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-09-30',version:'v170',title:'NKCH ER Entrance View',copy:'Added a dedicated Entrance View to North Kansas City Hospital using the marked approach photo. The field note directs crews to use the middle entrance to the right of the ER sign.',tags:['Hospitals','NKCH','Entrance View','Navigation','Field Use']},
  {date:'2026-09-30',version:'v169',title:'Truman ER Entrance View',copy:'Added a dedicated Entrance View to University Health Truman Medical Center using the marked turn-in photo. The field note reads “Turn here.” with a caution to be careful of tight turns up the ramp.',tags:['Hospitals','Truman','Entrance View','Navigation','Field Use']},
    {date:'2026-09-30',version:'v143',title:'Pain safety check added to analgesic medication pages',copy:'Extended the same rapid Yes / No Pain Medication Safety Check into the medication list for Morphine Sulfate and Fentanyl. Medics can now launch the identical indication/contraindication workflow directly from either analgesic medication page as well as from the Analgesic Medication Administration protocol and Field Tools.',tags:['Analgesia','Medications','Morphine','Fentanyl','Clinical Tool','Workflow']},
 {date:'2026-09-30',version:'v142',title:'Pain medication Yes / No safety check',copy:'Added a rapid one-question-at-a-time analgesic medication safety workflow. Medics confirm a protocol-approved pain indication, then move through each listed contraindication with large Yes / No buttons. Any failed indication or identified contraindication stops the workflow for reassessment. The same tool is available in Field Tools and directly inside the Analgesic Medication Administration protocol.',tags:['Analgesia','Narcotics','Clinical Tool','Workflow','Field Use']},
