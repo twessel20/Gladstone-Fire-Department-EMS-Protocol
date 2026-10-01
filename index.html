@@ -648,19 +648,32 @@ function savePatientWeight(){
 }
 function clearPatientContext(){
  patientContext={mode:'adult',weightKg:null};savePatientContextState();renderPatientContext();
- document.querySelectorAll('input[id^="dc-"][id$="-w"]').forEach(el=>{el.value=''});
+ patientWeightInputs(document).forEach(el=>{el.value=''});
  if(!document.querySelector('#detail')?.classList.contains('on'))render();
 }
 function isPediatricRelevant(x){
  const t=[x?.id,x?.title,(x?.aliases||[]).join(' '),(x?.lines||[]).join(' ')].join(' ').toLowerCase();
  return /\bpediatric\b|\bpediatrics\b|\bpeds\b|\bneonatal\b|\binfant\b|\bchild(?:ren)?\b/.test(t);
 }
+function patientWeightInputs(root=document){
+ const sel='input[id^="dc-"][id$="-w"],input[data-patient-weight]';
+ const out=[];
+ if(root?.matches?.(sel))out.push(root);
+ root?.querySelectorAll?.(sel).forEach(el=>out.push(el));
+ return out;
+}
+function unitForPatientWeightInput(input){
+ if(!input)return null;
+ if(input.dataset?.weightUnit)return document.getElementById(input.dataset.weightUnit);
+ if(input.id?.endsWith('-w'))return document.getElementById(input.id.slice(0,-2)+'-u');
+ return null;
+}
 function applySharedPatientContextToDOM(root=document){
  if(!Number.isFinite(patientContext.weightKg)||patientContext.weightKg<=0)return;
  const v=(Math.round(patientContext.weightKg*10)/10).toString();
- root.querySelectorAll?.('input[id^="dc-"][id$="-w"],input[data-patient-weight]').forEach(input=>{
+ patientWeightInputs(root).forEach(input=>{
    input.value=v;
-   const unit=input.id?.endsWith('-w')?document.getElementById(input.id.slice(0,-2)+'-u'):null;
+   const unit=unitForPatientWeightInput(input);
    if(unit&&[...unit.options].some(o=>o.value==='kg'))unit.value='kg';
  });
 }
@@ -668,7 +681,7 @@ document.addEventListener('change',e=>{
  const input=e.target;
  if(!(input instanceof HTMLInputElement)||!input.matches('input[id^="dc-"][id$="-w"],input[data-patient-weight]'))return;
  const raw=parseFloat(input.value);if(!Number.isFinite(raw)||raw<=0)return;
- const unit=input.id?.endsWith('-w')?document.getElementById(input.id.slice(0,-2)+'-u'):null;
+ const unit=unitForPatientWeightInput(input);
  patientContext.weightKg=unit?.value==='lb'?raw/2.2046226218:raw;savePatientContextState();renderPatientContext();
 },{capture:true});
 
@@ -978,6 +991,13 @@ const numericKeypadObserver=new MutationObserver(records=>{
  }));
 });
 numericKeypadObserver.observe(document.body,{childList:true,subtree:true});
+const patientWeightObserver=new MutationObserver(records=>{
+ records.forEach(r=>r.addedNodes.forEach(node=>{
+   if(node.nodeType!==1)return;
+   applySharedPatientContextToDOM(node);
+ }));
+});
+patientWeightObserver.observe(document.body,{childList:true,subtree:true});
 function roleUI(){}
 function status(){let on=navigator.onLine;document.querySelector('#net').textContent=on?'Online':'Offline';document.querySelector('#offline').classList.toggle('on',!on)}addEventListener('online',status);addEventListener('offline',status);status();
 function scopeText(x){return (x.lines||[]).join(' ').toUpperCase()}
@@ -1678,7 +1698,7 @@ function openToolCard(which){
      <button id="lidoAdult" onclick="setLidoPatientType('adult')">Adult<br><span style="font-size:11px;font-weight:700">18+ years</span></button>
    </div>
    <div class="tool-note"><b>2. Enter patient weight.</b></div>
-   <input id="lidoWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
+   <input id="lidoWeight" class="tool-input" data-patient-weight data-weight-unit="lidoUnit" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
    <select id="lidoUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select>
    <button class="tool-btn" onclick="calcLido()">Calculate Initial + Second Dose</button><div id="lidoResult" class="tool-result" style="display:none"></div>
    <div class="tool-note" style="margin-top:10px"><b>Dosing hierarchy:</b> explicit GFD protocol guidance supersedes this calculator. When GFD is silent, use AHA adult guidance or PALS/Broselow pediatric fallback logic.</div></div>`;
@@ -1687,14 +1707,14 @@ function openToolCard(which){
    <div class="tool-note"><b>GFD dosing:</b> Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Maximum 20 mg for each calculated dose. For patients <b>older than 70 years</b>, decrease each dose by 5 mg.</div>
    <div class="calc-field"><label for="toolDiltDob">Patient date of birth</label><input id="toolDiltDob" class="tool-input" type="date" max="${new Date().toISOString().slice(0,10)}"><small>Enter DOB if known, or enter the patient's age below.</small></div>
    <div class="calc-field"><label for="toolDiltAge">Patient age (years)</label><input id="toolDiltAge" class="tool-input" inputmode="numeric" type="number" min="0" step="1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>
-   <div class="calc-field"><label for="toolDiltWeight">Patient weight</label><div class="calc-pair"><input id="toolDiltWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="toolDiltUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
+   <div class="calc-field"><label for="toolDiltWeight">Patient weight</label><div class="calc-pair"><input id="toolDiltWeight" class="tool-input" data-patient-weight data-weight-unit="toolDiltUnit" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="toolDiltUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
    <button class="tool-btn" onclick="calcToolDiltiazem()">Calculate Initial + Second Dose</button>
    <div id="toolDiltResult" class="tool-result" style="display:none"></div>
    <div class="tool-note" style="margin-top:10px">This standalone tool uses the same age-adjustment and weight-based logic as the Diltiazem calculator embedded in the protocol.</div></div>`;
  if(which==='dopamine')host.innerHTML=back+`
    <div class="tool-card"><h3>Dopamine Gravity-Drip Calculator</h3>
    <div class="tool-note">Gravity tubing only — no pump output. Enter the patient weight, ordered dose in <b>mcg/kg/min</b>, bag concentration, and tubing drop factor.</div>
-   <div class="calc-field"><label for="dopWeight">1. Patient weight</label><div class="calc-pair"><input id="dopWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="dopWeightUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
+   <div class="calc-field"><label for="dopWeight">1. Patient weight</label><div class="calc-pair"><input id="dopWeight" class="tool-input" data-patient-weight data-weight-unit="dopWeightUnit" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="dopWeightUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
    <div class="calc-field"><label for="dopDose">2. Ordered dopamine dose</label><div class="calc-unit-input"><input id="dopDose" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter dose"><span>mcg/kg/min</span></div><small>Enter the ordered micrograms per kilogram per minute.</small></div>
    <div class="calc-field"><label>3. Dopamine bag</label><div class="calc-pair"><div class="calc-unit-input"><input id="dopMg" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Drug amount"><span>mg</span></div><div class="calc-unit-input"><input id="dopMl" class="tool-input" inputmode="numeric" type="number" min="0" step="1" placeholder="Bag volume"><span>mL</span></div></div><small>The calculator converts the medication amount from mg to mcg automatically.</small></div>
    <div class="calc-field"><label for="dopGtt">4. Tubing</label><select id="dopGtt" class="tool-input"><option value="10">10 gtt/mL tubing</option><option value="60">60 gtt/mL tubing</option></select></div>
@@ -1737,7 +1757,7 @@ function openToolCard(which){
    <div style="margin-top:16px;border-top:1px solid #dbe4ee;padding-top:14px">
     <h3 style="font-size:17px">Parkland Burn Volume</h3>
     <div class="tool-note">The selected TBSA above is used automatically. Enter patient weight to estimate total crystalloid volume for the first 24 hours.</div>
-    <input id="burnWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
+    <input id="burnWeight" class="tool-input" data-patient-weight data-weight-unit="burnWeightUnit" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
     <select id="burnWeightUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select>
     <button class="tool-btn" onclick="calcParkland()">Calculate Burn Fluid Volume</button>
     <div id="parklandResult" class="tool-result" style="display:none"></div>
@@ -3920,7 +3940,7 @@ function burnProtocolTools(){
    <div style="margin-top:16px;border-top:1px solid #e5e7eb;padding-top:14px">
      <h3 style="font-size:17px">Parkland Burn Volume Calculator</h3>
      <div class="tool-note">Uses the TBSA selected on the body map above. Enter patient weight to estimate the first-24-hour crystalloid volume.</div>
-     <input id="burnWeight" class="tool-input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
+     <input id="burnWeight" class="tool-input" data-patient-weight data-weight-unit="burnWeightUnit" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
      <select id="burnWeightUnit" class="tool-input">
        <option value="lb">lb</option>
        <option value="kg">kg</option>
@@ -4269,6 +4289,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v188',title:'Shared Weight Across All Weight-Based Calculators',copy:'Fixed shared patient weight propagation so the saved patient weight now automatically fills every applicable weight-based calculator, including Parkland burn volume, lidocaine, diltiazem, dopamine, and protocol medication dose helpers. Dynamically opened tools also receive the active patient weight, and changing a linked calculator weight updates the shared patient context.',tags:['Patient Context','Weight','Calculators','Pediatrics','Medication Safety','Burns']},
  {date:'2026-10-01',version:'v187',title:'Protocol-to-Medication Cross-Links',copy:'Protocols now surface the GFD medications they reference in a dedicated cross-link panel. Tapping a medication opens its full medication reference while preserving the shared patient context, and medication pages opened from a protocol provide a direct return path to that protocol.',tags:['Cross-Linking','Medications','Protocols','Patient Context','Field Use']},
  {date:'2026-10-01',version:'v186',title:'Pediatric Mode + Shared Patient Context',copy:'Added a persistent Adult/PEDS patient mode and shared patient weight. Enter weight once and compatible weight-based medication helpers reuse it while navigating. Pediatric mode visually prioritizes pediatric-relevant content without hiding adult references, and patient context can be reset instantly between patients.',tags:['Pediatrics','Patient Context','Medication Safety','Mobile','Field Use']},
  {date:'2026-09-30',version:'v171',title:'NKCH Entrance View image fix',copy:'Repaired the North Kansas City Hospital Entrance View image payload so the photo now loads reliably on mobile and desktop.',tags:['Hospitals','NKCH','Entrance View','Fix']},
