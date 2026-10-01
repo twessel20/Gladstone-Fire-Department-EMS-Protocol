@@ -2063,7 +2063,13 @@ const CHILDRENS_MERCY_ENTRANCE_IMAGE_PARTS=[
  'assets/childrens-mercy-er-9.b64?v=176'
 ];
 const VA_ENTRANCE_IMAGE_URL='https://streetviewpixels-pa.googleapis.com/v1/thumbnail?output=thumbnail&cb_client=maps_sv.tactile.gps&panoid=Tzb8VH6sygChReKpnjwRWg&w=1200&h=800&yaw=167.53&pitch=-3.98&thumbfov=90';
-const RESEARCH_ENTRANCE_IMAGE_URL='assets/research-er-entrance.jpeg?v=182';
+const RESEARCH_ENTRANCE_IMAGE_PARTS=[
+ 'assets/research-hq-01.b64?v=183',
+ 'assets/research-hq-02.b64?v=183',
+ 'assets/research-hq-03.b64?v=183',
+ 'assets/research-hq-04.b64?v=183',
+ 'assets/research-hq-05.b64?v=183'
+];
 let kuEntranceImagePromise=null;
 let stlPlazaEntranceImagePromise=null;
 let trumanEntranceImagePromise=null;
@@ -2110,8 +2116,8 @@ function loadVaEntranceImage(){
 }
 function loadResearchEntranceImage(){
  const img=document.getElementById('researchEntranceImage');if(!img||img.dataset.loaded==='1')return;
- if(!researchEntranceImagePromise)researchEntranceImagePromise=Promise.resolve(RESEARCH_ENTRANCE_IMAGE_URL);
- researchEntranceImagePromise.then(src=>{img.onload=()=>{img.dataset.loaded='1';img.classList.remove('loading');};img.onerror=()=>{img.classList.remove('loading');img.alt='Research Medical Center Entrance View photo could not be loaded';};img.src=src;});
+ if(!researchEntranceImagePromise)researchEntranceImagePromise=Promise.all(RESEARCH_ENTRANCE_IMAGE_PARTS.map(u=>fetch(u,{cache:'no-store'}).then(r=>r.text()))).then(parts=>'data:image/jpeg;base64,'+parts.join('').replace(/\s+/g,''));
+ researchEntranceImagePromise.then(src=>{img.onload=()=>{img.dataset.loaded='1';img.classList.remove('loading');};img.onerror=()=>{img.classList.remove('loading');};img.src=src;});
 }
 function loadNkchEntranceImage(){
  const img=document.getElementById('nkchEntranceImage');if(!img||img.dataset.loaded==='1')return;
