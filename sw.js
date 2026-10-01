@@ -1,6 +1,6 @@
-const C='gfd-ems-shell-v173';
-const UPDATE_SUMMARY='v173: Added Liberty Hospital Entrance View.';
-const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','updates/current-protocol-book.pdf'];
+const C='gfd-ems-shell-v174';
+const UPDATE_SUMMARY='v174: Added Saint Luke\'s Northland ER Entrance View.';
+const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-entrance-1.b64','assets/st-lukes-northland-er-entrance-2.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
