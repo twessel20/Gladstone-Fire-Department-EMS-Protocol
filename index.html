@@ -580,6 +580,16 @@ button:active,.tool-launch:active,.quick-card:active,.tab:active,.hospital-gps:a
 .peds-priority{border-left:5px solid #2f6690}
 .peds-badge{display:inline-block;margin-left:7px;padding:3px 6px;border-radius:999px;background:#dbeafe;color:#173a5e;font-size:10px;font-weight:950;letter-spacing:.04em;vertical-align:2px}
 @media(max-width:520px){.patient-context{gap:5px}.patient-mode-btn{padding:7px 8px}.patient-context-summary{padding:8px;font-size:11px}.patient-context-reset{padding:8px;font-size:11px}.patient-sheet{padding:10px}}
+
+/* v187 protocol ↔ medication cross-links */
+.protocol-med-links{margin:12px 0 14px;padding:12px;background:#f8fbfd;border:1px solid #cbdde9;border-radius:12px}
+.protocol-med-links .related-title{margin:0 0 8px;color:#173a5e;font-size:13px;font-weight:950;text-transform:uppercase;letter-spacing:.035em}
+.protocol-med-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.protocol-med-link{min-height:52px;border:1px solid #b8cddd;border-radius:10px;background:#fff;color:#173a5e;padding:10px 11px;text-align:left;font-weight:900;font-size:14px;line-height:1.25;display:grid;grid-template-columns:24px minmax(0,1fr) 18px;align-items:center;gap:7px;touch-action:manipulation}
+.protocol-med-link small{display:block;color:#64748b;font-size:10px;font-weight:750;margin-top:2px}
+.protocol-med-link .chev{font-size:21px;color:#64748b}
+.linked-med-return{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 11px;border-radius:10px;background:#eef4f8;border:1px solid #cbdde9;color:#173a5e;font-size:12px;font-weight:850}
+@media(max-width:520px){.protocol-med-grid{grid-template-columns:1fr}.protocol-med-link{min-height:58px;font-size:15px}}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -991,6 +1001,48 @@ function relatedAppendixHtml(x){
   let items=relatedAppendices(x);
   if(!items.length)return '';
   return `<div class="related-box"><div class="related-title">Related Appendix</div>${items.map(a=>`<button class="related-link" onclick="openP('${a.id}')">${esc(a.title)}</button>`).join('')}</div>`;
+}
+
+const medicationTermExtras={
+ 'albuterol-proventil-ventolin':['albuterol'],
+ 'albuterol-and-atrovent-duoneb':['albuterol & atrovent','albuterol and atrovent','atrovent','ipratropium'],
+ 'adenocard-adenosine':['adenocard','adenosine'],
+ 'benadryl-diphenhydramine':['benadryl','diphenhydramine'],
+ 'diltiazem-hcl-cardizem':['diltiazem','cardizem'],
+ 'epinephrine-1-1-000':['epinephrine 1:1,000','epinephrine 1:1000','epi 1:1000'],
+ 'epinephrine-1-10-000':['epinephrine 1:10,000','epinephrine 1:10000','epi 1:10000'],
+ 'methylprednisolone-medrol-solu-medrol':['methylprednisolone','solu-medrol','solu medrol'],
+ 'morphine-sulfate':['morphine'],
+ 'narcan-naloxone':['narcan','naloxone'],
+ 'tranexamic-acid-txa':['tranexamic acid','txa'],
+ 'versed-midazolam':['versed','midazolam'],
+ 'zofran-ondansetron':['zofran','ondansetron']
+};
+function medicationTerms(m){
+ const raw=[m.title,...(m.aliases||[]),...(medicationTermExtras[m.id]||[])];
+ const titleBase=String(m.title||'').split('(')[0].trim();
+ if(titleBase)raw.push(titleBase);
+ const paren=String(m.title||'').match(/\(([^)]+)\)/);
+ if(paren)raw.push(...paren[1].split(',').map(v=>v.trim()));
+ return [...new Set(raw.map(v=>normText(v).toLowerCase()).filter(v=>v.length>=3))].sort((a,b)=>b.length-a.length);
+}
+function medicationsForProtocol(x){
+ if(!x||x.category==='Medications')return [];
+ const hay=normText([(x.lines||[]).join(' '),x.title].join(' ')).toLowerCase();
+ const meds=data.filter(m=>m.category==='Medications');
+ let hits=meds.filter(m=>medicationTerms(m).some(term=>hay.includes(term)));
+ // If the combined DuoNeb entry is present, avoid duplicating standalone albuterol just because the phrase contains albuterol.
+ if(hits.some(m=>m.id==='albuterol-and-atrovent-duoneb')&&/albuterol\s*(?:&|and)\s*atrovent|duoneb|ipratropium/i.test(hay)){
+   hits=hits.filter(m=>m.id!=='albuterol-proventil-ventolin'||/\balbuterol\b(?!\s*(?:&|and)\s*atrovent)/i.test(hay.replace(/albuterol\s*(?:&|and)\s*atrovent/ig,'')));
+ }
+ return hits.sort((a,b)=>displayTitle(a).localeCompare(displayTitle(b)));
+}
+function protocolMedicationLinksHtml(x){
+ const meds=medicationsForProtocol(x);
+ if(!meds.length)return '';
+ return '<div class="protocol-med-links"><div class="related-title">💊 Medications in this Protocol</div><div class="protocol-med-grid">'+
+   meds.map(m=>'<button class="protocol-med-link" onclick="openP(\''+m.id+'\',\''+x.id+'\')"><span>💊</span><span>'+esc(displayTitle(m))+'<small>Open medication reference</small></span><span class="chev">›</span></button>').join('')+
+   '</div></div>';
 }
 
 
@@ -4217,6 +4269,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v187',title:'Protocol-to-Medication Cross-Links',copy:'Protocols now surface the GFD medications they reference in a dedicated cross-link panel. Tapping a medication opens its full medication reference while preserving the shared patient context, and medication pages opened from a protocol provide a direct return path to that protocol.',tags:['Cross-Linking','Medications','Protocols','Patient Context','Field Use']},
  {date:'2026-10-01',version:'v186',title:'Pediatric Mode + Shared Patient Context',copy:'Added a persistent Adult/PEDS patient mode and shared patient weight. Enter weight once and compatible weight-based medication helpers reuse it while navigating. Pediatric mode visually prioritizes pediatric-relevant content without hiding adult references, and patient context can be reset instantly between patients.',tags:['Pediatrics','Patient Context','Medication Safety','Mobile','Field Use']},
  {date:'2026-09-30',version:'v171',title:'NKCH Entrance View image fix',copy:'Repaired the North Kansas City Hospital Entrance View image payload so the photo now loads reliably on mobile and desktop.',tags:['Hospitals','NKCH','Entrance View','Fix']},
  {date:'2026-09-30',version:'v170',title:'NKCH ER Entrance View',copy:'Added a dedicated Entrance View to North Kansas City Hospital using the marked approach photo. The field note directs crews to use the middle entrance to the right of the ER sign.',tags:['Hospitals','NKCH','Entrance View','Navigation','Field Use']},
@@ -4293,11 +4346,11 @@ function openChangeLog(){
  scrollTo(0,0);
 }
 function closeChangeLog(){document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off');render()}
-function openP(id){
+function openP(id,returnProtocolId=null){
  let x=data.find(z=>z.id===id);if(!x)return;
  location.hash=id;document.querySelector('#list').classList.add('off');
  let body=(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+formatProtocol(x)+(x.category==='Medications'||x.id==='dextrose'?'':protocolDoseTools(x))),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x));
- document.querySelector('#detail').innerHTML=`<button class="back sticky-back" onclick="closeP()">‹ Back</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}')">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div>${relatedAppendixHtml(x)}${protocolToolLinks(x)}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div>${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p style="margin-top:18px"><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}</div>`;
+ document.querySelector('#detail').innerHTML=`<button class="back sticky-back" onclick="${returnProtocolId?`openP('${returnProtocolId}')`:'closeP()'}">‹ ${returnProtocolId?'Protocol':'Back'}</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}'${returnProtocolId?`, '${returnProtocolId}'`:''})">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div>${returnProtocolId&&x.category==='Medications'?`<div class="linked-med-return">↩ Opened from ${esc(displayTitle(data.find(z=>z.id===returnProtocolId)||{title:'protocol'}))}</div>`:''}${relatedAppendixHtml(x)}${protocolMedicationLinksHtml(x)}${protocolToolLinks(x)}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div>${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p style="margin-top:18px"><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}</div>`;
  document.querySelector('#detail').classList.add('on');
  if(x.id==='burns'){renderBurnMap();requestAnimationFrame(updateBurnExtentHighlight);}
  if(x.id==='tcd-destinations')renderTcdOfficialPage();
