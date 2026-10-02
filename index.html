@@ -1434,6 +1434,60 @@ body.dark-mode .sgarbossa-result.ind{
 body.dark-mode .sgarbossa-result .tool-btn{
   color:#fff!important;
 }
+
+/* Desktop home layout correction — keep home centered and prevent narrow/drifting cards */
+@media(min-width:900px){
+ html,body{max-width:100%;overflow-x:hidden}
+ .wrap{width:100%;max-width:1180px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+ .home-guide{
+   width:100%;
+   max-width:1100px;
+   margin:0 auto;
+   display:grid;
+   grid-template-columns:minmax(0,1fr);
+   gap:18px;
+   align-items:start;
+   min-width:0;
+ }
+ .mission-card{
+   grid-column:1;
+   grid-row:auto;
+   position:relative;
+   top:auto;
+   width:100%;
+   max-width:none;
+   text-align:center;
+   padding:24px 32px 22px;
+ }
+ .mission-card:before{left:0;right:0;top:0;bottom:auto;width:auto;height:4px}
+ .mission-kicker,.mission-title{text-align:center}
+ .mission-rule{margin:12px auto 14px}
+ .mission-copy{max-width:780px;margin:0 auto;text-align:center}
+ .mission-motto{max-width:780px;margin:18px auto 0}
+ .quick-grid,.clinical-shortcuts{
+   grid-column:1;
+   grid-row:auto;
+   width:100%;
+   min-width:0;
+   display:grid;
+   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+   gap:12px;
+   align-items:stretch;
+ }
+ .quick-card{
+   width:100%;
+   min-width:0;
+   min-height:126px;
+   height:100%;
+ }
+ .reorder-hint{grid-column:1/-1}
+ .guide-steps,.home-alert{grid-column:1;width:100%;min-width:0}
+}
+@media(min-width:1250px){
+ .home-guide{max-width:1180px}
+ .quick-grid,.clinical-shortcuts{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+}
+
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
