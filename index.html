@@ -1268,6 +1268,38 @@ body.dark-mode .workflow-inline-caution{
   border-left-color:#f59e0b!important;
   color:#fff3c4!important;
 }
+
+/* v198 keep Sgarbossa ECG schematics on light ECG paper in dark mode */
+body.dark-mode .sgarbossa-ecg-button{
+  background:#fff!important;
+  border:0!important;
+}
+body.dark-mode .sgarbossa-ecg-svg{
+  background:#fff!important;
+  color-scheme:light;
+}
+body.dark-mode .sgarbossa-ecg-modal-body{
+  background:#0f172a!important;
+}
+body.dark-mode .sgarbossa-ecg-modal-body .sgarbossa-ecg-svg{
+  background:#fff!important;
+  border:2px solid #94a3b8;
+  border-radius:10px;
+}
+body.dark-mode .sgarbossa-ecg-example{
+  border-color:#64748b!important;
+  background:#111827!important;
+}
+body.dark-mode .sgarbossa-ecg-caption{
+  color:#e2e8f0!important;
+  border-top-color:#475569!important;
+}
+body.dark-mode .sgarbossa-ecg-caption b{
+  color:#fff!important;
+}
+body.dark-mode .sgarbossa-ecg-expand{
+  color:#93c5fd!important;
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -5008,6 +5040,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v198',title:'Sgarbossa ECG Dark-Mode Readability',copy:'Kept the Sgarbossa ECG teaching schematics on a white ECG-paper surface in dark mode so the waveform, grid, measurements, and annotations remain high contrast. Dark mode still applies to the surrounding helper and captions.',tags:['Dark Mode','Sgarbossa','ECG','Contrast','Clinical Tools']},
  {date:'2026-10-01',version:'v197',title:'STEMI Warning Contrast Fix',copy:'Improved dark-mode warning visibility in the Code STEMI protocol and other protocol warning/caution panels with darker warning backgrounds, brighter text, stronger borders, and dedicated red/amber edge accents.',tags:['Dark Mode','STEMI','Warnings','Contrast','Accessibility']},
  {date:'2026-10-01',version:'v196',title:'Global Dark Mode Contrast Audit',copy:'Completed a global dark-mode visibility pass across cards, calculators, lab references, Sgarbossa, pain safety, street-drug reference, patient-medication lookup, contacts, change log, tool sections, forms, and secondary text. Increased contrast while preserving source PDFs and clinical images in their original presentation.',tags:['Dark Mode','Accessibility','Contrast','Global UI','Field Use']},
  {date:'2026-10-01',version:'v195',title:'Comprehensive Protocol Dark Mode',copy:'Reworked dark mode across protocol content, including Patient Destination Criteria, guideline cards, flowcharts, decision branches, caution/danger panels, medication dose helpers, source-medication rows, TCD destination cards, and pediatric vital-sign tables.',tags:['Dark Mode','Protocols','Patient Destination Criteria','Guidelines','Accessibility']},
