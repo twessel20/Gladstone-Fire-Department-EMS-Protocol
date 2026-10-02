@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "last_reviewed": "2026-09-29",
+  "last_reviewed": "2026-10-01",
   "review_note": "Field reference. Substance composition and slang change rapidly; treat the patient and toxidrome, not the reported product name.",
   "sources": [
     {
@@ -279,6 +279,166 @@
       "danger": "Concentrated 7-OH products are increasingly associated with poisonings; polysubstance use can worsen CNS/respiratory depression.",
       "gfd": "Treat the clinical syndrome. Support airway/ventilation; if an opioid-like toxidrome with respiratory depression is present, naloxone may be considered according to GFD opioid-poisoning protocol and patient response.",
       "pearl": "DEA St. Louis has specifically highlighted increasing kratom/7-OH poisonings in Missouri."
+    },
+    {
+      "id": "flakka-synthetic-cathinones",
+      "name": "Flakka / Alpha-PVP / Synthetic Cathinones",
+      "aliases": [
+        "flakka",
+        "alpha-pvp",
+        "a-pvp",
+        "alpha pvp",
+        "bath salts",
+        "synthetic cathinone",
+        "cathinones",
+        "gravel"
+      ],
+      "category": "Synthetic cathinone / stimulant",
+      "emerging": false,
+      "presentation": "Severe agitation, paranoia, tachycardia, hypertension, diaphoresis, mydriasis, hyperthermia, chest pain, seizures or excited-delirium-type behavior.",
+      "danger": "Hyperthermia, severe agitation, dysrhythmia, myocardial ischemia, seizures, rhabdomyolysis and traumatic injury can occur.",
+      "gfd": "Prioritize scene safety, temperature awareness, ECG monitoring and supportive care. Treat severe agitation or seizures using the applicable GFD protocol and reassess airway, ventilation and perfusion frequently.",
+      "pearl": "Flakka is commonly used as a street name for alpha-PVP, a synthetic cathinone; products sold under street names may contain different stimulants."
+    },
+    {
+      "id": "cannabis-thc",
+      "name": "Cannabis / THC / Edibles / Dabs",
+      "aliases": [
+        "marijuana",
+        "weed",
+        "pot",
+        "thc",
+        "cannabis",
+        "edible",
+        "edibles",
+        "dab",
+        "dabs",
+        "wax",
+        "shatter",
+        "hash",
+        "hash oil",
+        "vape cart"
+      ],
+      "category": "Cannabinoid",
+      "emerging": false,
+      "presentation": "Anxiety, altered perception, tachycardia, dizziness, impaired coordination, nausea/vomiting or somnolence. High-potency products and edibles may cause more pronounced effects.",
+      "danger": "Severe anxiety/panic, vomiting, impaired judgment, trauma, pediatric ingestion and unexpected co-exposures are important concerns.",
+      "gfd": "Supportive care and assessment for trauma, co-ingestants and alternate causes of altered mental status. Treat significant symptoms using the applicable GFD protocol.",
+      "pearl": "Edibles can have delayed onset and prolonged effects; a reported cannabis product does not exclude other substances."
+    },
+    {
+      "id": "dextromethorphan",
+      "name": "Dextromethorphan / DXM",
+      "aliases": [
+        "dextromethorphan",
+        "dxm",
+        "robo",
+        "robotripping",
+        "robo tripping",
+        "triple c",
+        "ccc",
+        "cough syrup"
+      ],
+      "category": "Dissociative / serotonergic",
+      "emerging": false,
+      "presentation": "Dizziness, agitation, dissociation, ataxia, nystagmus, tachycardia, hypertension, vomiting or altered mental status; seizures may occur in severe toxicity.",
+      "danger": "Severe agitation, seizures, serotonin toxicity, dysrhythmia and co-ingested acetaminophen, antihistamines or decongestants may add toxicity.",
+      "gfd": "Support airway and circulation, monitor ECG and temperature, and treat seizures or severe agitation per GFD protocol. Consider that combination cold products may contain additional active ingredients.",
+      "pearl": "The brand or bottle may contain several medications, so do not assume DXM is the only exposure."
+    },
+    {
+      "id": "inhalants",
+      "name": "Inhalants / Huffing",
+      "aliases": [
+        "inhalant",
+        "inhalants",
+        "huffing",
+        "huff",
+        "dusting",
+        "duster",
+        "air duster",
+        "glue",
+        "paint thinner",
+        "gasoline",
+        "solvent"
+      ],
+      "category": "Volatile inhalant",
+      "emerging": false,
+      "presentation": "Dizziness, euphoria, slurred speech, ataxia, headache, nausea, altered mental status or syncope.",
+      "danger": "Hypoxia, dysrhythmia, aspiration, seizures, trauma and sudden cardiac arrest can occur.",
+      "gfd": "Remove from exposure when safe, support airway/oxygenation/ventilation, monitor ECG and treat complications per GFD protocol. Avoid assumptions about the specific chemical involved.",
+      "pearl": "Aerosol and solvent products vary widely; scene clues and the container may be more useful than the street name."
+    },
+    {
+      "id": "nitrous-oxide-misuse",
+      "name": "Nitrous Oxide Misuse / Whippets",
+      "aliases": [
+        "nitrous oxide",
+        "nitrous",
+        "n2o",
+        "whippet",
+        "whippets",
+        "whippits",
+        "laughing gas"
+      ],
+      "category": "Inhaled dissociative / asphyxiant risk",
+      "emerging": false,
+      "presentation": "Dizziness, euphoria, impaired coordination, altered perception, headache, syncope or hypoxia.",
+      "danger": "Hypoxia/asphyxia, falls or other trauma, and neurologic complications with repeated heavy exposure.",
+      "gfd": "Remove from exposure, provide oxygen and supportive care, assess for trauma and alternate causes, and monitor mental status and ventilation.",
+      "pearl": "Recreational nitrous exposure is different from controlled medical nitrous oxide administration."
+    },
+    {
+      "id": "codeine-promethazine-lean",
+      "name": "Lean / Codeine-Promethazine Mixtures",
+      "aliases": [
+        "lean",
+        "purple drank",
+        "sizzurp",
+        "codeine syrup",
+        "promethazine codeine",
+        "dirty sprite"
+      ],
+      "category": "Opioid / sedative mixture",
+      "emerging": false,
+      "presentation": "Somnolence, slurred speech, impaired coordination, nausea, miosis and respiratory depression; effects may be worsened by alcohol, benzodiazepines or other opioids.",
+      "danger": "Respiratory depression, aspiration and polysubstance overdose.",
+      "gfd": "Support airway and ventilation. If opioid toxicity with respiratory depression is suspected, use naloxone according to GFD protocol and reassess for persistent sedation from non-opioid co-exposures.",
+      "pearl": "Street mixtures may contain additional opioids or sedatives beyond the reported syrup."
+    },
+    {
+      "id": "tianeptine",
+      "name": "Tianeptine / “Gas Station Heroin”",
+      "aliases": [
+        "tianeptine",
+        "gas station heroin",
+        "za za",
+        "zaza",
+        "tianna",
+        "pegasus"
+      ],
+      "category": "Atypical antidepressant with opioid-like toxicity",
+      "emerging": true,
+      "presentation": "Sedation, respiratory depression, miosis, nausea/vomiting, agitation or withdrawal-like symptoms depending on exposure pattern.",
+      "danger": "Opioid-like respiratory depression and severe withdrawal have been reported; products may contain uncertain doses or additional substances.",
+      "gfd": "Treat the clinical syndrome. Support airway/ventilation and consider naloxone according to GFD opioid-poisoning protocol when opioid-type respiratory depression is present.",
+      "pearl": "The product label or brand name may not reliably indicate dose or contents."
+    },
+    {
+      "id": "dmt",
+      "name": "DMT / Ayahuasca",
+      "aliases": [
+        "dmt",
+        "dimethyltryptamine",
+        "ayahuasca",
+        "changa"
+      ],
+      "category": "Hallucinogen",
+      "emerging": false,
+      "presentation": "Intense perceptual changes, anxiety/panic, tachycardia, hypertension, nausea/vomiting and altered behavior.",
+      "danger": "Trauma, severe agitation, aspiration and unpredictable co-ingestants or plant preparations.",
+      "gfd": "Provide a calm environment, assess for trauma and co-ingestants, and treat severe agitation, seizures or other complications per GFD protocol.",
+      "pearl": "Effects may be brief after inhaled DMT but longer and less predictable with oral preparations."
     }
   ],
   "toxidromes": [
