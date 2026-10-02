@@ -2551,6 +2551,32 @@ function openToolCard(which){
          </div>
        </details>
      </div>
+     <div class="contact-card" style="display:block;padding:0;overflow:hidden">
+       <div style="display:flex;align-items:center;gap:12px;padding:13px 14px">
+         <span class="contact-icon">👴</span>
+         <span class="contact-copy" style="flex:1"><span class="contact-name">Missouri Adult Abuse &amp; Neglect Hotline</span><span class="contact-number">1-800-392-0210</span><span class="contact-meta">Missouri DHSS • Hotline 7:00 a.m.–8:00 p.m., 365 days/year</span></span>
+         <a class="contact-call" href="tel:18003920210" style="text-decoration:none">Call</a>
+       </div>
+       <details style="border-top:1px solid #dbe4ee;padding:0 14px 13px">
+         <summary style="cursor:pointer;font-weight:900;color:#173a5e;padding:12px 0;list-style-position:inside">Quick call checklist</summary>
+         <div class="tool-note" style="margin:0">
+           <div style="display:grid;gap:8px;line-height:1.35">
+             <label><input type="checkbox"> Adult’s name, age/DOB, address, and current location if known</label>
+             <label><input type="checkbox"> Disability, cognitive impairment, or other vulnerability if known</label>
+             <label><input type="checkbox"> Suspected abuse, neglect, self-neglect, financial exploitation, or bullying</label>
+             <label><input type="checkbox"> Injuries, unmet essential needs, unsafe conditions, or immediate safety concerns</label>
+             <label><input type="checkbox"> Alleged perpetrator/caregiver name and relationship if known</label>
+             <label><input type="checkbox"> Witnesses or other people with relevant information</label>
+             <label><input type="checkbox"> When/where the concern occurred and whether it is ongoing</label>
+             <label><input type="checkbox"> Care, law-enforcement, medical, or protective actions already taken</label>
+           </div>
+           <div style="margin-top:10px"><b>Who APS serves:</b> vulnerable adults age 60+ and adults age 18–59 with disabilities who may be unable to protect their own interests or meet essential needs.</div>
+           <div style="margin-top:8px"><b>Emergency:</b> If the situation is an emergency, call 911 first.</div>
+           <div style="margin-top:8px">Online reports may be submitted 24/7. Missouri states online intake is monitored during hotline operating hours.</div>
+           <a class="source" target="_blank" rel="noopener" href="https://moapss.health.mo.gov/" style="margin-bottom:0">Missouri APS Online Reporting ↗</a>
+         </div>
+       </details>
+     </div>
    </div>
    </div>`;
  if(which==='pillcount'){host.innerHTML=back+'<div class="tool-card"><h3>🔢 Pill Count</h3>'+pillCountFormHtml()+'</div>';initPillCountDates()}
@@ -3050,7 +3076,7 @@ const searchableTools=[
  {id:'diltiazem',title:'Diltiazem Dose',icon:'💉',terms:'diltiazem cardizem dose afib atrial fibrillation flutter rvr age dob weight',desc:'DOB or typed age with initial and second weight-based dose'},
  {id:'erlabs',title:'Common ER Labs',icon:'🧪',terms:'er emergency labs lab values bmp cmp sodium potassium chloride bicarbonate co2 glucose calcium bun creatinine lactate troponin bnp pt inr aptt coagulation ast alt bilirubin alkaline phosphatase lipase abg blood gas ph paco2 hco3 pao2 renal cardiac liver pancreas electrolytes sepsis shock',desc:'Common emergency-department lab reference values with low/high interpretation'},
  {id:'cbc',title:'CBC Reference Guide',icon:'🩸',terms:'cbc complete blood count lab laboratory values reference wbc white blood cells leukocytes leukopenia leukocytosis rbc red blood cells hemoglobin hgb hematocrit hct anemia platelets thrombocytopenia thrombocytosis mcv mch mchc rdw mpv neutrophils lymphocytes low high normal range',desc:'Typical adult CBC reference ranges with low/high interpretation'},
- {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2 child abuse neglect can hotline childrens division missouri dss 1-800-392-3738 18003923738 mandated reporter',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, Missouri Child Abuse & Neglect Hotline, and critical contacts'}
+ {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2 child abuse neglect can hotline childrens division missouri dss 1-800-392-3738 18003923738 mandated reporter adult abuse neglect elderly senior disabled exploitation bullying aps missouri dhss 1-800-392-0210 18003920210',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, Missouri child and adult abuse/neglect hotlines, and critical contacts'}
 ];
 function toolSearchResults(query){
  const q=normText(query).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
