@@ -1300,6 +1300,125 @@ body.dark-mode .sgarbossa-ecg-caption b{
 body.dark-mode .sgarbossa-ecg-expand{
   color:#93c5fd!important;
 }
+
+/* v200 complete Sgarbossa dark-mode cleanup */
+body.dark-mode .sgarbossa-card{
+  background:#101827!important;
+  border-color:#475569!important;
+  color:#f8fafc!important;
+}
+body.dark-mode .sgarbossa-card>h3{
+  color:#ffffff!important;
+}
+body.dark-mode .sgarbossa-card>.tool-note{
+  background:#13263b!important;
+  border:1px solid #4f83b6!important;
+  border-left:4px solid #60a5fa!important;
+  border-radius:11px;
+  padding:11px 12px;
+  color:#eef4fb!important;
+}
+body.dark-mode .sgarbossa-card>.tool-note b,
+body.dark-mode .sgarbossa-card>.tool-note strong{
+  color:#ffffff!important;
+}
+body.dark-mode .sgarbossa-key div{
+  background:#172033!important;
+  border-color:#475569!important;
+}
+body.dark-mode .sgarbossa-key b{
+  color:#ffffff!important;
+}
+body.dark-mode .sgarbossa-key span{
+  color:#dbe4f0!important;
+}
+body.dark-mode .sgarbossa-progress{
+  color:#f1f5f9!important;
+}
+body.dark-mode .sgarbossa-progress-track{
+  background:#334155!important;
+}
+body.dark-mode .sgarbossa-progress-fill{
+  background:#60a5fa!important;
+}
+body.dark-mode .sgarbossa-step{
+  background:#172033!important;
+  border-color:#475569!important;
+}
+body.dark-mode .sgarbossa-num{
+  background:#1d4f73!important;
+  color:#fff!important;
+}
+body.dark-mode .sgarbossa-step h4{
+  color:#ffffff!important;
+}
+body.dark-mode .sgarbossa-step small{
+  color:#d5deea!important;
+}
+body.dark-mode .sgarbossa-plain{
+  background:#0f1d2c!important;
+  border:1px solid #3f536a!important;
+  color:#f1f5f9!important;
+}
+body.dark-mode .sgarbossa-plain b,
+body.dark-mode .sgarbossa-plain strong{
+  color:#ffffff!important;
+}
+body.dark-mode .sgarbossa-actions button{
+  background:#111827!important;
+  color:#f8fafc!important;
+  border-color:#64748b!important;
+}
+body.dark-mode .sgarbossa-actions button.yes{
+  background:#35181d!important;
+  border-color:#ef4444!important;
+  color:#fecaca!important;
+}
+body.dark-mode .sgarbossa-actions button.no{
+  background:#10271f!important;
+  border-color:#22c55e!important;
+  color:#dcfce7!important;
+}
+body.dark-mode .sgarbossa-actions button.unknown{
+  background:#33260f!important;
+  border-color:#f59e0b!important;
+  color:#fff3c4!important;
+}
+body.dark-mode .sgarbossa-nav button{
+  background:#172033!important;
+  border-color:#64748b!important;
+  color:#eef4fb!important;
+}
+body.dark-mode .sgarbossa-note{
+  color:#dbe4f0!important;
+}
+body.dark-mode .sgarbossa-note b,
+body.dark-mode .sgarbossa-note strong{
+  color:#ffffff!important;
+}
+body.dark-mode .sgarbossa-result{
+  background:#172033!important;
+  border-color:#64748b!important;
+  color:#f8fafc!important;
+}
+body.dark-mode .sgarbossa-result.pos{
+  background:#35181d!important;
+  border-color:#ef4444!important;
+  color:#ffe4e6!important;
+}
+body.dark-mode .sgarbossa-result.neg{
+  background:#10271f!important;
+  border-color:#22c55e!important;
+  color:#dcfce7!important;
+}
+body.dark-mode .sgarbossa-result.ind{
+  background:#33260f!important;
+  border-color:#f59e0b!important;
+  color:#fff3c4!important;
+}
+body.dark-mode .sgarbossa-result .tool-btn{
+  color:#fff!important;
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -5040,6 +5159,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v200',title:'Complete Sgarbossa Dark-Mode Cleanup',copy:'Reworked the entire Sgarbossa helper in dark mode, including the intro instructions, concordant/discordant definitions, progress indicator, step instructions, easy-check text, Yes/No/Unsure buttons, navigation, notes, and positive/negative/indeterminate result panels.',tags:['Dark Mode','Sgarbossa','ECG','Contrast','Clinical Tools']},
  {date:'2026-10-01',version:'v199',title:'Expanded Street Drug Reference',copy:'Expanded the street-drug database and global search coverage with Flakka / alpha-PVP / bath salts, cannabis/THC products, DXM, inhalants, nitrous misuse/whippets, lean/codeine-promethazine mixtures, tianeptine, DMT and additional street aliases.',tags:['Street Drugs','Toxicology','Search','EMS Reference','Substances']},
  {date:'2026-10-01',version:'v198',title:'Sgarbossa ECG Dark-Mode Readability',copy:'Kept the Sgarbossa ECG teaching schematics on a white ECG-paper surface in dark mode so the waveform, grid, measurements, and annotations remain high contrast. Dark mode still applies to the surrounding helper and captions.',tags:['Dark Mode','Sgarbossa','ECG','Contrast','Clinical Tools']},
  {date:'2026-10-01',version:'v197',title:'STEMI Warning Contrast Fix',copy:'Improved dark-mode warning visibility in the Code STEMI protocol and other protocol warning/caution panels with darker warning backgrounds, brighter text, stronger borders, and dedicated red/amber edge accents.',tags:['Dark Mode','STEMI','Warnings','Contrast','Accessibility']},
