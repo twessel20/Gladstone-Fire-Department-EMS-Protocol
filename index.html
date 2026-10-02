@@ -1223,6 +1223,51 @@ body.dark-mode .appendix-frame,
 body.dark-mode .entrance-static-img{
   color-scheme:light;
 }
+
+/* v197 STEMI warning contrast fix */
+body.dark-mode .flow-warning{
+  background:#3a151b!important;
+  border-color:#f87171!important;
+  color:#fff1f2!important;
+  box-shadow:inset 4px 0 0 #ef4444;
+}
+body.dark-mode .flow-warning h4{
+  color:#ffffff!important;
+  font-weight:950;
+}
+body.dark-mode .flow-warning p,
+body.dark-mode .flow-warning li,
+body.dark-mode .flow-warning b,
+body.dark-mode .flow-warning strong{
+  color:#ffe4e6!important;
+}
+body.dark-mode .flow-warning.caution{
+  background:#3a2a0d!important;
+  border-color:#f59e0b!important;
+  color:#fff7d6!important;
+  box-shadow:inset 4px 0 0 #f59e0b;
+}
+body.dark-mode .flow-warning.caution h4{
+  color:#ffffff!important;
+}
+body.dark-mode .flow-warning.caution p,
+body.dark-mode .flow-warning.caution li,
+body.dark-mode .flow-warning.caution b,
+body.dark-mode .flow-warning.caution strong{
+  color:#fff3c4!important;
+}
+body.dark-mode .workflow-inline-alert{
+  background:#35181d!important;
+  border-color:#b44b58!important;
+  border-left-color:#ef4444!important;
+  color:#ffe4e6!important;
+}
+body.dark-mode .workflow-inline-caution{
+  background:#33260f!important;
+  border-color:#a86a12!important;
+  border-left-color:#f59e0b!important;
+  color:#fff3c4!important;
+}
 </style></head><body>
 <div id="offline" class="offline">Offline mode — showing the most recently cached protocol set.</div>
 <div id="appUpdate" class="app-update" role="status" aria-live="polite">
@@ -4963,6 +5008,7 @@ function toggleInlineProtocolTool(which,btn){
  slot.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 const gfdChangeLog=[
+ {date:'2026-10-01',version:'v197',title:'STEMI Warning Contrast Fix',copy:'Improved dark-mode warning visibility in the Code STEMI protocol and other protocol warning/caution panels with darker warning backgrounds, brighter text, stronger borders, and dedicated red/amber edge accents.',tags:['Dark Mode','STEMI','Warnings','Contrast','Accessibility']},
  {date:'2026-10-01',version:'v196',title:'Global Dark Mode Contrast Audit',copy:'Completed a global dark-mode visibility pass across cards, calculators, lab references, Sgarbossa, pain safety, street-drug reference, patient-medication lookup, contacts, change log, tool sections, forms, and secondary text. Increased contrast while preserving source PDFs and clinical images in their original presentation.',tags:['Dark Mode','Accessibility','Contrast','Global UI','Field Use']},
  {date:'2026-10-01',version:'v195',title:'Comprehensive Protocol Dark Mode',copy:'Reworked dark mode across protocol content, including Patient Destination Criteria, guideline cards, flowcharts, decision branches, caution/danger panels, medication dose helpers, source-medication rows, TCD destination cards, and pediatric vital-sign tables.',tags:['Dark Mode','Protocols','Patient Destination Criteria','Guidelines','Accessibility']},
  {date:'2026-10-01',version:'v194',title:'Dark Mode Guide + Header Cleanup',copy:'Refined the Quick Use Guide and clinical section headers for dark mode with darker cards, brighter copy, clearer dividers, stronger section bars, and higher-contrast medication and related-content labels.',tags:['Dark Mode','Quick Use Guide','Headers','Contrast','Accessibility']},
