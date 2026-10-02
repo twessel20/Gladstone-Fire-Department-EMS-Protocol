@@ -2526,6 +2526,27 @@ function openToolCard(which){
        <span class="contact-copy"><span class="contact-name">Gladstone Dispatch — Non-Emergency</span><span class="contact-number">816-436-3550</span><span class="contact-meta"><span class="contact-client-id">Option 2</span></span><span class="contact-meta">For non-emergency / public education use.</span></span>
        <span class="contact-call">Call</span>
      </a>
+     <a class="contact-card" href="tel:18003923738">
+       <span class="contact-icon">🧒</span>
+       <span class="contact-copy"><span class="contact-name">Missouri Child Abuse &amp; Neglect Hotline</span><span class="contact-number">1-800-392-3738</span><span class="contact-meta">Missouri Children’s Division • 24/7</span></span>
+       <span class="contact-call">Call</span>
+     </a>
+     <div class="tool-note" style="margin-top:10px">
+       <b>CAN Hotline — quick call checklist</b>
+       <div style="display:grid;gap:8px;margin-top:10px;line-height:1.35">
+         <label><input type="checkbox"> Child’s name and age/DOB if known</label>
+         <label><input type="checkbox"> Parent/caregiver name(s) and contact information if known</label>
+         <label><input type="checkbox"> Alleged abuser’s name and relationship to the child if known</label>
+         <label><input type="checkbox"> Child’s present location / where the child can be located</label>
+         <label><input type="checkbox"> What happened: nature and extent of suspected abuse/neglect, injuries, and relevant history</label>
+         <label><input type="checkbox"> Immediate danger or risk of further harm; include any precipitating event</label>
+         <label><input type="checkbox"> Witnesses / third-party sources and other children who may be involved or in the home</label>
+         <label><input type="checkbox"> Care or protective actions already taken and when you last saw the child</label>
+       </div>
+       <div style="margin-top:10px"><b>Emergency:</b> If the child is in immediate danger or the situation is an emergency, call 911 first, then make the CAN report.</div>
+       <div style="margin-top:8px">Have any other helpful information ready. Missouri DSS may ask additional questions during intake.</div>
+       <a class="source" target="_blank" rel="noopener" href="https://dss.mo.gov/cd/keeping-kids-safe/can" style="margin-bottom:0">Missouri DSS CAN Reporting Info ↗</a>
+     </div>
    </div>
    </div>`;
  if(which==='pillcount'){host.innerHTML=back+'<div class="tool-card"><h3>🔢 Pill Count</h3>'+pillCountFormHtml()+'</div>';initPillCountDates()}
@@ -3025,7 +3046,7 @@ const searchableTools=[
  {id:'diltiazem',title:'Diltiazem Dose',icon:'💉',terms:'diltiazem cardizem dose afib atrial fibrillation flutter rvr age dob weight',desc:'DOB or typed age with initial and second weight-based dose'},
  {id:'erlabs',title:'Common ER Labs',icon:'🧪',terms:'er emergency labs lab values bmp cmp sodium potassium chloride bicarbonate co2 glucose calcium bun creatinine lactate troponin bnp pt inr aptt coagulation ast alt bilirubin alkaline phosphatase lipase abg blood gas ph paco2 hco3 pao2 renal cardiac liver pancreas electrolytes sepsis shock',desc:'Common emergency-department lab reference values with low/high interpretation'},
  {id:'cbc',title:'CBC Reference Guide',icon:'🩸',terms:'cbc complete blood count lab laboratory values reference wbc white blood cells leukocytes leukopenia leukocytosis rbc red blood cells hemoglobin hgb hematocrit hct anemia platelets thrombocytopenia thrombocytosis mcv mch mchc rdw mpv neutrophils lymphocytes low high normal range',desc:'Typical adult CBC reference ranges with low/high interpretation'},
- {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, and critical contacts'}
+ {id:'phones',title:'Important Phone Numbers',icon:'☎️',terms:'important phone numbers contacts poison control poison hotline overdose ingestion 1-800-222-1222 18002221222 language line languageline translator translation interpreter interpreting 1-800-523-1786 18005231786 client id 657430 gladstone dispatch non emergency non-emergency public education 816-436-3550 18164363550 option 2 child abuse neglect can hotline childrens division missouri dss 1-800-392-3738 18003923738 mandated reporter',desc:'Poison Control, Language Line translator, Gladstone Dispatch non-emergency, Missouri Child Abuse & Neglect Hotline, and critical contacts'}
 ];
 function toolSearchResults(query){
  const q=normText(query).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
