@@ -1,10 +1,10 @@
-const C='gfd-ems-shell-v224';
-const UPDATE_SUMMARY='v224: Added explicit iOS Home Screen icon handling using the Gladstone Fire EMS logo. The app now serves a PNG touch icon derived from the existing department logo, adds iOS app-title metadata, and points the install manifest to the same icon while preserving the v223 stability changes.';
+const C='gfd-ems-shell-v225';
+const UPDATE_SUMMARY='v225: Added a reliable in-app Share App button. On supported phones it opens the native share sheet; otherwise it copies or presents the public app link. The v223 stability protections and v224 Home Screen icon support remain in place.';
 
 const CORE_SHELL=[
  './','index.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg',
  'pediatric-mode.js','pediatric-workflows.js','pediatric-home-cleanup.js',
- 'adult-age-context.js','patient-context-launcher.js','patient-med-interactions.js'
+ 'adult-age-context.js','patient-context-launcher.js','patient-med-interactions.js','app-share.js'
 ];
 
 const PDFJS=[
@@ -54,14 +54,15 @@ async function injectCore(r){
  const type=r.headers.get('content-type')||'';
  if(!type.includes('text/html'))return r;
  let html=await r.text();
- html=html.replace(/<link rel="apple-touch-icon" href="gfd-logo\.svg">/i,'<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=224"><link rel="apple-touch-icon-precomposed" sizes="180x180" href="apple-touch-icon.png?v=224"><meta name="apple-mobile-web-app-title" content="GFD EMS"><meta name="apple-mobile-web-app-capable" content="yes">');
+ html=html.replace(/<link rel="apple-touch-icon" href="gfd-logo\.svg">/i,'<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=225"><link rel="apple-touch-icon-precomposed" sizes="180x180" href="apple-touch-icon.png?v=225"><meta name="apple-mobile-web-app-title" content="GFD EMS"><meta name="apple-mobile-web-app-capable" content="yes">');
  const tags=[];
- if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=224" defer></script>');
- if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=224" defer></script>');
- if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=224" defer></script>');
- if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=224" defer></script>');
- if(!html.includes('patient-context-launcher.js'))tags.push('<script src="patient-context-launcher.js?v=224" defer></script>');
- if(!html.includes('patient-med-interactions.js'))tags.push('<script src="patient-med-interactions.js?v=224" defer></script>');
+ if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=225" defer></script>');
+ if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=225" defer></script>');
+ if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=225" defer></script>');
+ if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=225" defer></script>');
+ if(!html.includes('patient-context-launcher.js'))tags.push('<script src="patient-context-launcher.js?v=225" defer></script>');
+ if(!html.includes('patient-med-interactions.js'))tags.push('<script src="patient-med-interactions.js?v=225" defer></script>');
+ if(!html.includes('app-share.js'))tags.push('<script src="app-share.js?v=225" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag}
  const headers=new Headers(r.headers);headers.delete('content-length');
  return new Response(html,{status:r.status,statusText:r.statusText,headers});
