@@ -1,6 +1,6 @@
-const C='gfd-ems-shell-v211';
-const UPDATE_SUMMARY='v211: Extended the BiPAP visual language across source-derived protocol views. Protocols now preserve source order while using connected section cards, stepwise action nodes, decision styling, and consistent flow arrows where the source structure supports a workflow.';
-const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','pediatric-mode.js','pediatric-workflows.js','pediatric-home-cleanup.js','adult-age-context.js','reorder-fluid.js','medication-layout-cleanup.js','global-view-uniformity.js','protocol-flow-enhancement.js','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-fixed-1.b64','assets/st-lukes-northland-er-fixed-1b.b64','assets/st-lukes-northland-er-fixed-2.b64','assets/st-lukes-northland-er-fixed-3.b64','assets/childrens-mercy-er-1.b64','assets/childrens-mercy-er-2.b64','assets/childrens-mercy-er-3.b64','assets/childrens-mercy-er-4.b64','assets/childrens-mercy-er-5.b64','assets/childrens-mercy-er-6.b64','assets/childrens-mercy-er-7.b64','assets/childrens-mercy-er-8.b64','assets/childrens-mercy-er-9.b64','assets/research-photo-2026-10-01-1.b64','assets/research-photo-2026-10-01-2.b64','assets/research-photo-2026-10-01-3.b64','assets/research-photo-2026-10-01-4a.b64','assets/research-photo-2026-10-01-4b.b64','assets/research-photo-2026-10-01-5.b64','assets/research-photo-2026-10-01-6.b64','assets/research-photo-2026-10-01-7.b64','assets/research-photo-2026-10-01-8.b64','updates/current-protocol-book.pdf'];
+const C='gfd-ems-shell-v212';
+const UPDATE_SUMMARY='v212: Cleaned up the Hypoglycemia protocol dose presentation. Adult and pediatric D10 dosing now appears in a single source-faithful quick-reference card to reduce visual clutter while preserving the Gladstone protocol language and workflow.';
+const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','pediatric-mode.js','pediatric-workflows.js','pediatric-home-cleanup.js','adult-age-context.js','reorder-fluid.js','medication-layout-cleanup.js','global-view-uniformity.js','protocol-flow-enhancement.js','hypoglycemia-layout.js','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-fixed-1.b64','assets/st-lukes-northland-er-fixed-1b.b64','assets/st-lukes-northland-er-fixed-2.b64','assets/st-lukes-northland-er-fixed-3.b64','assets/childrens-mercy-er-1.b64','assets/childrens-mercy-er-2.b64','assets/childrens-mercy-er-3.b64','assets/childrens-mercy-er-4.b64','assets/childrens-mercy-er-5.b64','assets/childrens-mercy-er-6.b64','assets/childrens-mercy-er-7.b64','assets/childrens-mercy-er-8.b64','assets/childrens-mercy-er-9.b64','assets/research-photo-2026-10-01-1.b64','assets/research-photo-2026-10-01-2.b64','assets/research-photo-2026-10-01-3.b64','assets/research-photo-2026-10-01-4a.b64','assets/research-photo-2026-10-01-4b.b64','assets/research-photo-2026-10-01-5.b64','assets/research-photo-2026-10-01-6.b64','assets/research-photo-2026-10-01-7.b64','assets/research-photo-2026-10-01-8.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
@@ -28,14 +28,15 @@ async function injectPatientContext(r){
  if(!type.includes('text/html'))return r;
  let html=await r.text();
  const tags=[];
- if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=211" defer></script>');
- if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=211" defer></script>');
- if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=211" defer></script>');
- if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=211" defer></script>');
- if(!html.includes('reorder-fluid.js'))tags.push('<script src="reorder-fluid.js?v=211" defer></script>');
- if(!html.includes('medication-layout-cleanup.js'))tags.push('<script src="medication-layout-cleanup.js?v=211" defer></script>');
- if(!html.includes('global-view-uniformity.js'))tags.push('<script src="global-view-uniformity.js?v=211" defer></script>');
- if(!html.includes('protocol-flow-enhancement.js'))tags.push('<script src="protocol-flow-enhancement.js?v=211" defer></script>');
+ if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=212" defer></script>');
+ if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=212" defer></script>');
+ if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=212" defer></script>');
+ if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=212" defer></script>');
+ if(!html.includes('reorder-fluid.js'))tags.push('<script src="reorder-fluid.js?v=212" defer></script>');
+ if(!html.includes('medication-layout-cleanup.js'))tags.push('<script src="medication-layout-cleanup.js?v=212" defer></script>');
+ if(!html.includes('global-view-uniformity.js'))tags.push('<script src="global-view-uniformity.js?v=212" defer></script>');
+ if(!html.includes('protocol-flow-enhancement.js'))tags.push('<script src="protocol-flow-enhancement.js?v=212" defer></script>');
+ if(!html.includes('hypoglycemia-layout.js'))tags.push('<script src="hypoglycemia-layout.js?v=212" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag}
  const headers=new Headers(r.headers);
  headers.delete('content-length');
