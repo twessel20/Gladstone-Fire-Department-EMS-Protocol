@@ -1,16 +1,23 @@
 {
   "name": "Gladstone Fire Department EMS Protocols",
   "short_name": "GFD EMS",
+  "id": "./index.html",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f4f7fa",
   "theme_color": "#173a5e",
   "icons": [
     {
-      "src": "gfd-logo.svg",
+      "src": "apple-touch-icon.png?v=224",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "gfd-logo.svg?v=224",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
