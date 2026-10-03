@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v207';
-const UPDATE_SUMMARY='v207: Reduced pediatric-mode alert clutter by collapsing supplemental pediatric workflow guidance into a single expandable row, while keeping weight/age safety flags visible. Also fixed repeated pediatric re-rendering that could fight page scrolling near the bottom of protocols.';
+const C='gfd-ems-shell-v208';
+const UPDATE_SUMMARY='v208: Fixed pediatric-mode scroll instability. The patient-context card now updates in place instead of being repeatedly removed and reinserted while a protocol is open, which prevents upward scrolling from feeling jumpy or sticky.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','pediatric-mode.js','pediatric-workflows.js','pediatric-home-cleanup.js','reorder-fluid.js','medication-layout-cleanup.js','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-fixed-1.b64','assets/st-lukes-northland-er-fixed-1b.b64','assets/st-lukes-northland-er-fixed-2.b64','assets/st-lukes-northland-er-fixed-3.b64','assets/childrens-mercy-er-1.b64','assets/childrens-mercy-er-2.b64','assets/childrens-mercy-er-3.b64','assets/childrens-mercy-er-4.b64','assets/childrens-mercy-er-5.b64','assets/childrens-mercy-er-6.b64','assets/childrens-mercy-er-7.b64','assets/childrens-mercy-er-8.b64','assets/childrens-mercy-er-9.b64','assets/research-photo-2026-10-01-1.b64','assets/research-photo-2026-10-01-2.b64','assets/research-photo-2026-10-01-3.b64','assets/research-photo-2026-10-01-4a.b64','assets/research-photo-2026-10-01-4b.b64','assets/research-photo-2026-10-01-5.b64','assets/research-photo-2026-10-01-6.b64','assets/research-photo-2026-10-01-7.b64','assets/research-photo-2026-10-01-8.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
@@ -28,11 +28,11 @@ async function injectPatientContext(r){
  if(!type.includes('text/html'))return r;
  let html=await r.text();
  const tags=[];
- if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=207" defer></script>');
- if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=207" defer></script>');
- if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=207" defer></script>');
- if(!html.includes('reorder-fluid.js'))tags.push('<script src="reorder-fluid.js?v=207" defer></script>');
- if(!html.includes('medication-layout-cleanup.js'))tags.push('<script src="medication-layout-cleanup.js?v=207" defer></script>');
+ if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=208" defer></script>');
+ if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=208" defer></script>');
+ if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=208" defer></script>');
+ if(!html.includes('reorder-fluid.js'))tags.push('<script src="reorder-fluid.js?v=208" defer></script>');
+ if(!html.includes('medication-layout-cleanup.js'))tags.push('<script src="medication-layout-cleanup.js?v=208" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag}
  const headers=new Headers(r.headers);
  headers.delete('content-length');
