@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v229: Pediatric mode selection no longer auto-opens the age/weight editor. PEDS now switches the patient mode only; tap the patient summary to add or edit age and weight. Adult behavior is unchanged. No app-shell caching is used.';
+const UPDATE_SUMMARY='v230: Adult and Pediatric mode buttons now switch patient mode only. Neither tab auto-opens the age/weight editor; tap the patient summary to add or edit age and weight. Age and weight continue to carry through supported calculators. No app-shell caching is used.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -14,10 +14,10 @@ async function injectPatientContext(response){
  const type=response.headers.get('content-type')||'';
  if(!type.includes('text/html'))return response;
  let html=await response.text();
- if(!html.includes('patient-context-stable.js')){
-  const tag='<script src="patient-context-stable.js?v=229" defer></script>';
-  html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;
- }
+ const tags=[];
+ if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=230" defer></script>');
+ if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=230" defer></script>');
+ if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
 }
