@@ -7,7 +7,7 @@ let ctx=load();
 
 function load(){try{return {...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return {...DEFAULT}}}
 function save(){localStorage.setItem(KEY,JSON.stringify(ctx));document.dispatchEvent(new CustomEvent('gfd:patient-context',{detail:{...ctx}}));renderStatus();decorateClinicalView()}
-function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#039;'}[m]))}
 function poundsToKg(lb){const n=parseFloat(lb);return Number.isFinite(n)?Math.round((n/2.2046226218)*10)/10:''}
 function kgToLb(kg){const n=parseFloat(kg);return Number.isFinite(n)?Math.round((n*2.2046226218)*10)/10:''}
 
@@ -47,13 +47,11 @@ function mount(){
  host.appendChild(wrap);
  wrap.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
  const stat=wrap.querySelector('#gfdPedStatus');stat.addEventListener('click',openEditor);stat.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openEditor()});
- renderStatus(); decorateClinicalView(); observeClinicalChanges();
+ renderStatus();decorateClinicalView();observeClinicalChanges();
 }
 
 function setMode(mode){
- if(mode==='adult'){
-   ctx={...DEFAULT,mode:'adult'};save();return;
- }
+ if(mode==='adult'){ctx={...DEFAULT,mode:'adult'};save();return}
  ctx.mode='pediatric';save();openEditor();
 }
 
@@ -66,7 +64,7 @@ function summary(){
 }
 
 function renderStatus(){
- const root=document.getElementById('gfdPatientMode'); if(!root)return;
+ const root=document.getElementById('gfdPatientMode');if(!root)return;
  root.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===ctx.mode));
  document.body.classList.toggle('gfd-pediatric',ctx.mode==='pediatric');
  const stat=root.querySelector('#gfdPedStatus');
@@ -76,21 +74,15 @@ function renderStatus(){
 }
 
 function openEditor(){
- const existing=document.getElementById('gfdPatientModal'); if(existing)existing.remove();
+ const existing=document.getElementById('gfdPatientModal');if(existing)existing.remove();
  let temp={...ctx};
  const back=document.createElement('div');back.id='gfdPatientModal';back.className='gfd-patient-modal-backdrop';
  back.innerHTML=`<div class="gfd-patient-modal" role="dialog" aria-modal="true" aria-labelledby="gfdPatientTitle">
  <h2 id="gfdPatientTitle">Pediatric Patient Context</h2>
  <p>Enter patient context once. It follows the user throughout the app. <b>Gladstone EMS protocols and Medical Control remain authoritative.</b> AHA/PALS and Broselow support the workflow only where consistent with Gladstone protocol.</p>
- <div class="gfd-grid2">
-  <div class="gfd-field"><label>Age</label><input id="gfdAge" type="number" inputmode="decimal" min="0" step="0.1" value="${esc(temp.age)}"></div>
-  <div class="gfd-field"><label>Age unit</label><select id="gfdAgeUnit"><option value="years" ${temp.ageUnit==='years'?'selected':''}>Years</option><option value="months" ${temp.ageUnit==='months'?'selected':''}>Months</option></select></div>
- </div>
+ <div class="gfd-grid2"><div class="gfd-field"><label>Age</label><input id="gfdAge" type="number" inputmode="decimal" min="0" step="0.1" value="${esc(temp.age)}"></div><div class="gfd-field"><label>Age unit</label><select id="gfdAgeUnit"><option value="years" ${temp.ageUnit==='years'?'selected':''}>Years</option><option value="months" ${temp.ageUnit==='months'?'selected':''}>Months</option></select></div></div>
  <div class="gfd-field"><label>Weight source</label><select id="gfdWeightSource"><option value="" ${!temp.weightSource?'selected':''}>Select source</option><option value="measured" ${temp.weightSource==='measured'?'selected':''}>Measured</option><option value="reported" ${temp.weightSource==='reported'?'selected':''}>Reported</option><option value="broselow" ${temp.weightSource==='broselow'?'selected':''}>Broselow tape</option></select></div>
- <div class="gfd-grid2">
-  <div class="gfd-field"><label>Weight (kg)</label><input id="gfdKg" type="number" inputmode="decimal" min="0" step="0.1" value="${esc(temp.weightKg)}"></div>
-  <div class="gfd-field"><label>Weight (lb)</label><input id="gfdLb" type="number" inputmode="decimal" min="0" step="0.1" value="${esc(kgToLb(temp.weightKg))}"></div>
- </div>
+ <div class="gfd-grid2"><div class="gfd-field"><label>Weight (kg)</label><input id="gfdKg" type="number" inputmode="decimal" min="0" step="0.1" value="${esc(temp.weightKg)}"></div><div class="gfd-field"><label>Weight (lb)</label><input id="gfdLb" type="number" inputmode="decimal" min="0" step="0.1" value="${esc(kgToLb(temp.weightKg))}"></div></div>
  <div class="gfd-field" id="gfdBroselowWrap" style="${temp.weightSource==='broselow'?'':'display:none'}"><label>Broselow color zone <span style="font-weight:500">(select the zone from the physical tape; the app does not guess the zone)</span></label><div class="gfd-broselow-colors">${COLORS.map(c=>`<button type="button" data-broselow="${c}" class="${temp.broselowColor===c?'on':''}">${c}</button>`).join('')}</div></div>
  <div class="gfd-authority-note"><b>Clinical source hierarchy</b>Gladstone EMS Protocol / Medical Control → AHA/PALS workflow support → Broselow reference. Gladstone protocol controls any conflict, discrepancy, or gap.</div>
  <div class="gfd-modal-actions"><button type="button" class="gfd-secondary" id="gfdCancel">Cancel</button><button type="button" class="gfd-primary" id="gfdSave">Use Pediatric Context</button><button type="button" class="gfd-danger" id="gfdClear">Clear Patient / Return to Adult</button></div>
@@ -107,17 +99,39 @@ function openEditor(){
  back.addEventListener('click',e=>{if(e.target===back)back.remove()});
 }
 
-function decorateClinicalView(){
- document.querySelectorAll('.gfd-ped-context-card').forEach(x=>x.remove());
- if(ctx.mode!=='pediatric')return;
- const targets=[...document.querySelectorAll('.detail.on,.protocol-body,.source-med-sheet,.tool-card')].filter(x=>x.offsetParent!==null);
- const target=targets[0];if(!target)return;
- const card=document.createElement('div');card.className='gfd-ped-context-card';
- card.innerHTML=`<div class="gfd-row"><strong>${esc(summary())}</strong><button type="button">Edit Patient</button></div><div style="margin-top:5px;font-size:12px;line-height:1.4"><b>Gladstone protocol controls.</b> Pediatric workflow support may use AHA/PALS and Broselow only where consistent with local protocol. No adult dose is automatically converted into a pediatric dose.</div>`;
- card.querySelector('button').onclick=openEditor;
- target.insertBefore(card,target.firstChild);
+function visibleClinicalTarget(){
+ const detail=document.querySelector('#detail.on,.detail.on');
+ if(!detail||detail.offsetParent===null)return null;
+ return detail.querySelector('.protocol-body,.source-med-sheet,.tool-card,.card')||detail;
 }
-function observeClinicalChanges(){let t;new MutationObserver(()=>{clearTimeout(t);t=setTimeout(decorateClinicalView,120)}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']})}
+function contextSignature(){return [ctx.mode,ctx.age,ctx.ageUnit,ctx.weightKg,ctx.weightSource,ctx.broselowColor].join('|')}
+function decorateClinicalView(){
+ const cards=[...document.querySelectorAll('.gfd-ped-context-card')];
+ if(ctx.mode!=='pediatric'){cards.forEach(x=>x.remove());return}
+ const target=visibleClinicalTarget();if(!target){cards.forEach(x=>x.remove());return}
+ const sig=contextSignature();
+ let card=cards.find(x=>target.contains(x));
+ cards.filter(x=>x!==card).forEach(x=>x.remove());
+ if(card&&card.dataset.sig===sig)return;
+ const html=`<div class="gfd-row"><strong>${esc(summary())}</strong><button type="button">Edit Patient</button></div><div style="margin-top:5px;font-size:12px;line-height:1.4"><b>Gladstone protocol controls.</b> Pediatric workflow support may use AHA/PALS and Broselow only where consistent with local protocol. No adult dose is automatically converted into a pediatric dose.</div>`;
+ if(!card){card=document.createElement('div');card.className='gfd-ped-context-card';target.insertBefore(card,target.firstChild)}
+ card.dataset.sig=sig;
+ card.innerHTML=html;
+ card.querySelector('button').onclick=openEditor;
+}
+function observeClinicalChanges(){
+ let t;
+ const detail=document.querySelector('#detail');
+ if(!detail)return;
+ new MutationObserver(records=>{
+   const relevant=records.some(r=>{
+     if(r.type==='attributes')return r.target===detail;
+     return [...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&!n.classList?.contains('gfd-ped-context-card')&&!n.closest?.('.gfd-ped-context-card'));
+   });
+   if(!relevant)return;
+   clearTimeout(t);t=setTimeout(decorateClinicalView,140);
+ }).observe(detail,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+}
 
 window.GFDPatientContext={get:()=>({...ctx}),set:(patch)=>{ctx={...ctx,...patch};save()},clear:()=>{ctx={...DEFAULT};save()},open:openEditor};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{injectStyles();mount()});else{injectStyles();mount()}
