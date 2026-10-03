@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v214';
-const UPDATE_SUMMARY='v214: Cleaned up the Glucagon medication view so Side Effects render as a readable bulleted list sourced from the Gladstone protocol instead of a dense run-on block.';
+const C='gfd-ems-shell-v215';
+const UPDATE_SUMMARY='v215: Combined the Adult age and weight controls into one patient-context experience. The separate age strip was removed; the existing patient summary now opens a single Adult Patient sheet for DOB/age and weight, and the compact summary shows only the patient data that has been entered.';
 const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','pediatric-mode.js','pediatric-workflows.js','pediatric-home-cleanup.js','adult-age-context.js','reorder-fluid.js','medication-layout-cleanup.js','global-view-uniformity.js','protocol-flow-enhancement.js','hypoglycemia-layout-cleanup.js','dosage-layout-cleanup.js','glucagon-layout-cleanup.js','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-fixed-1.b64','assets/st-lukes-northland-er-fixed-1b.b64','assets/st-lukes-northland-er-fixed-2.b64','assets/st-lukes-northland-er-fixed-3.b64','assets/childrens-mercy-er-1.b64','assets/childrens-mercy-er-2.b64','assets/childrens-mercy-er-3.b64','assets/childrens-mercy-er-4.b64','assets/childrens-mercy-er-5.b64','assets/childrens-mercy-er-6.b64','assets/childrens-mercy-er-7.b64','assets/childrens-mercy-er-8.b64','assets/childrens-mercy-er-9.b64','assets/research-photo-2026-10-01-1.b64','assets/research-photo-2026-10-01-2.b64','assets/research-photo-2026-10-01-3.b64','assets/research-photo-2026-10-01-4a.b64','assets/research-photo-2026-10-01-4b.b64','assets/research-photo-2026-10-01-5.b64','assets/research-photo-2026-10-01-6.b64','assets/research-photo-2026-10-01-7.b64','assets/research-photo-2026-10-01-8.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
@@ -28,17 +28,17 @@ async function injectPatientContext(r){
  if(!type.includes('text/html'))return r;
  let html=await r.text();
  const tags=[];
- if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=214" defer></script>');
- if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=214" defer></script>');
- if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=214" defer></script>');
- if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=214" defer></script>');
- if(!html.includes('reorder-fluid.js'))tags.push('<script src="reorder-fluid.js?v=214" defer></script>');
- if(!html.includes('medication-layout-cleanup.js'))tags.push('<script src="medication-layout-cleanup.js?v=214" defer></script>');
- if(!html.includes('global-view-uniformity.js'))tags.push('<script src="global-view-uniformity.js?v=214" defer></script>');
- if(!html.includes('protocol-flow-enhancement.js'))tags.push('<script src="protocol-flow-enhancement.js?v=214" defer></script>');
- if(!html.includes('hypoglycemia-layout-cleanup.js'))tags.push('<script src="hypoglycemia-layout-cleanup.js?v=214" defer></script>');
- if(!html.includes('dosage-layout-cleanup.js'))tags.push('<script src="dosage-layout-cleanup.js?v=214" defer></script>');
- if(!html.includes('glucagon-layout-cleanup.js'))tags.push('<script src="glucagon-layout-cleanup.js?v=214" defer></script>');
+ if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=215" defer></script>');
+ if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=215" defer></script>');
+ if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=215" defer></script>');
+ if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=215" defer></script>');
+ if(!html.includes('reorder-fluid.js'))tags.push('<script src="reorder-fluid.js?v=215" defer></script>');
+ if(!html.includes('medication-layout-cleanup.js'))tags.push('<script src="medication-layout-cleanup.js?v=215" defer></script>');
+ if(!html.includes('global-view-uniformity.js'))tags.push('<script src="global-view-uniformity.js?v=215" defer></script>');
+ if(!html.includes('protocol-flow-enhancement.js'))tags.push('<script src="protocol-flow-enhancement.js?v=215" defer></script>');
+ if(!html.includes('hypoglycemia-layout-cleanup.js'))tags.push('<script src="hypoglycemia-layout-cleanup.js?v=215" defer></script>');
+ if(!html.includes('dosage-layout-cleanup.js'))tags.push('<script src="dosage-layout-cleanup.js?v=215" defer></script>');
+ if(!html.includes('glucagon-layout-cleanup.js'))tags.push('<script src="glucagon-layout-cleanup.js?v=215" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag}
  const headers=new Headers(r.headers);
  headers.delete('content-length');
