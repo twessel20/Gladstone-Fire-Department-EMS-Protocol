@@ -25,6 +25,7 @@ function ageFromDob(v){
 }
 function age(){
  const fromDob=ageFromDob(state.dob);if(fromDob!=null)return fromDob;
+ if(state.ageYears===''||state.ageYears==null)return null;
  const n=Number(state.ageYears);return Number.isFinite(n)&&n>=0&&n<130?Math.floor(n):null;
 }
 function adultMode(){return window.GFDPatientContext?.get?.().mode!=='pediatric'}
@@ -60,10 +61,10 @@ function openEditor(){
  const existing=document.getElementById('gfdAdultAgeModal');if(existing)existing.remove();
  let temp={...state};
  const back=document.createElement('div');back.id='gfdAdultAgeModal';back.className='gfd-age-modal-backdrop';
- back.innerHTML=`<div class="gfd-age-modal" role="dialog" aria-modal="true"><h2>Adult Age Calculator</h2><p>Enter date of birth for an exact age calculation, or enter age directly when DOB is unavailable. The age follows the patient throughout the app and activates Gladstone age-specific cautions and dose rules.</p><div class="gfd-age-grid"><div class="gfd-age-field"><label>Date of birth</label><input id="gfdAdultDob" type="date" value="${esc(temp.dob)}"></div><div class="gfd-age-field"><label>Age in years</label><input id="gfdAdultAgeYears" type="number" inputmode="numeric" min="0" max="129" step="1" value="${esc(temp.ageYears)}" placeholder="Example: 72"></div></div><div class="gfd-age-result" id="gfdAdultAgeResult">${(()=>{const a=temp.dob?ageFromDob(temp.dob):Number(temp.ageYears);return Number.isFinite(a)&&a>=0?`Calculated age: ${Math.floor(a)} years`:'Age not yet entered'})()}</div><div class="gfd-age-actions"><button class="gfd-age-clear" id="gfdAgeClear">Clear age</button><button class="gfd-age-save" id="gfdAgeSave">Use Adult Age</button></div></div>`;
+ back.innerHTML=`<div class="gfd-age-modal" role="dialog" aria-modal="true"><h2>Adult Age Calculator</h2><p>Enter date of birth for an exact age calculation, or enter age directly when DOB is unavailable. The age follows the patient throughout the app and activates Gladstone age-specific cautions and dose rules.</p><div class="gfd-age-grid"><div class="gfd-age-field"><label>Date of birth</label><input id="gfdAdultDob" type="date" value="${esc(temp.dob)}"></div><div class="gfd-age-field"><label>Age in years</label><input id="gfdAdultAgeYears" type="number" inputmode="numeric" min="0" max="129" step="1" value="${esc(temp.ageYears)}" placeholder="Example: 72"></div></div><div class="gfd-age-result" id="gfdAdultAgeResult">${(()=>{const a=temp.dob?ageFromDob(temp.dob):(temp.ageYears===''?null:Number(temp.ageYears));return Number.isFinite(a)&&a>=0?`Calculated age: ${Math.floor(a)} years`:'Age not yet entered'})()}</div><div class="gfd-age-actions"><button class="gfd-age-clear" id="gfdAgeClear">Clear age</button><button class="gfd-age-save" id="gfdAgeSave">Use Adult Age</button></div></div>`;
  document.body.appendChild(back);
  const dob=back.querySelector('#gfdAdultDob'),yrs=back.querySelector('#gfdAdultAgeYears'),out=back.querySelector('#gfdAdultAgeResult');
- const refresh=()=>{const a=dob.value?ageFromDob(dob.value):Number(yrs.value);out.textContent=Number.isFinite(a)&&a>=0?`Calculated age: ${Math.floor(a)} years`:'Age not yet entered'};
+ const refresh=()=>{const a=dob.value?ageFromDob(dob.value):(yrs.value===''?null:Number(yrs.value));out.textContent=Number.isFinite(a)&&a>=0?`Calculated age: ${Math.floor(a)} years`:'Age not yet entered'};
  dob.addEventListener('input',()=>{temp.dob=dob.value;if(dob.value){const a=ageFromDob(dob.value);temp.ageYears=a==null?'':String(a);yrs.value=temp.ageYears}refresh()});
  yrs.addEventListener('input',()=>{temp.ageYears=yrs.value;if(yrs.value)temp.dob='';refresh()});
  back.querySelector('#gfdAgeClear').onclick=()=>{state={dob:'',ageYears:''};save();back.remove()};
