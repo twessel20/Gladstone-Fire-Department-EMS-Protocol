@@ -1,5 +1,5 @@
-const C='gfd-ems-shell-v223';
-const UPDATE_SUMMARY='v223: Recovery/stability build. Service-worker install no longer blocks on large PDFs, image assets, or any single failed cache request. Optional observer-heavy layout helpers are temporarily not injected so the app can load reliably while the patient mode and age/weight controls remain available.';
+const C='gfd-ems-shell-v224';
+const UPDATE_SUMMARY='v224: Added explicit iOS Home Screen icon handling using the Gladstone Fire EMS logo. The app now serves a PNG touch icon derived from the existing department logo, adds iOS app-title metadata, and points the install manifest to the same icon while preserving the v223 stability changes.';
 
 const CORE_SHELL=[
  './','index.html','protocols.json','street-drugs.json','manifest.webmanifest','gfd-logo.svg',
@@ -30,18 +30,38 @@ self.addEventListener('activate',e=>e.waitUntil((async()=>{
  await self.clients.claim();
 })()));
 
+async function gladstoneTouchIcon(){
+ try{
+  const r=await fetch(new Request('gfd-logo.svg',{cache:'no-store'}));
+  if(!r.ok)throw new Error('logo unavailable');
+  const svg=await r.text();
+  const m=svg.match(/data:image\/png;base64,([A-Za-z0-9+/=]+)/);
+  if(!m)throw new Error('embedded png unavailable');
+  const bin=atob(m[1]);
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return new Response(bytes,{status:200,headers:{
+   'content-type':'image/png',
+   'cache-control':'public, max-age=31536000, immutable'
+  }});
+ }catch(err){
+  return new Response('',{status:404});
+ }
+}
+
 async function injectCore(r){
  if(!r||!r.ok)return r;
  const type=r.headers.get('content-type')||'';
  if(!type.includes('text/html'))return r;
  let html=await r.text();
+ html=html.replace(/<link rel="apple-touch-icon" href="gfd-logo\.svg">/i,'<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=224"><link rel="apple-touch-icon-precomposed" sizes="180x180" href="apple-touch-icon.png?v=224"><meta name="apple-mobile-web-app-title" content="GFD EMS"><meta name="apple-mobile-web-app-capable" content="yes">');
  const tags=[];
- if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=223" defer></script>');
- if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=223" defer></script>');
- if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=223" defer></script>');
- if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=223" defer></script>');
- if(!html.includes('patient-context-launcher.js'))tags.push('<script src="patient-context-launcher.js?v=223" defer></script>');
- if(!html.includes('patient-med-interactions.js'))tags.push('<script src="patient-med-interactions.js?v=223" defer></script>');
+ if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=224" defer></script>');
+ if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=224" defer></script>');
+ if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=224" defer></script>');
+ if(!html.includes('adult-age-context.js'))tags.push('<script src="adult-age-context.js?v=224" defer></script>');
+ if(!html.includes('patient-context-launcher.js'))tags.push('<script src="patient-context-launcher.js?v=224" defer></script>');
+ if(!html.includes('patient-med-interactions.js'))tags.push('<script src="patient-med-interactions.js?v=224" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag}
  const headers=new Headers(r.headers);headers.delete('content-length');
  return new Response(html,{status:r.status,statusText:r.statusText,headers});
@@ -57,9 +77,12 @@ self.addEventListener('fetch',e=>{
  const u=new URL(req.url);
  const isPdfJs=PDFJS.includes(req.url);
  const isProtocolPdf=u.origin===location.origin&&u.pathname.endsWith('/updates/current-protocol-book.pdf');
+ const isTouchIcon=u.origin===location.origin&&u.pathname.endsWith('/apple-touch-icon.png');
 
  if(req.headers.has('range')){e.respondWith(fetch(req,{cache:'no-store'}));return}
  if(u.origin!==location.origin&&!isPdfJs)return;
+
+ if(isTouchIcon){e.respondWith(gladstoneTouchIcon());return}
 
  if(req.mode==='navigate'){
   e.respondWith((async()=>{
