@@ -1,6 +1,6 @@
-const C='gfd-ems-shell-v202';
-const UPDATE_SUMMARY='v202: Activated pediatric patient mode and added protocol-aware pediatric workflows for arrest, bradycardia, tachyarrhythmia, seizures, respiratory distress, anaphylaxis, hypoglycemia, ROSC, and selected medication references. Gladstone protocol remains controlling.';
-const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','pediatric-mode.js','pediatric-workflows.js','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-fixed-1.b64','assets/st-lukes-northland-er-fixed-1b.b64','assets/st-lukes-northland-er-fixed-2.b64','assets/st-lukes-northland-er-fixed-3.b64','assets/childrens-mercy-er-1.b64','assets/childrens-mercy-er-2.b64','assets/childrens-mercy-er-3.b64','assets/childrens-mercy-er-4.b64','assets/childrens-mercy-er-5.b64','assets/childrens-mercy-er-6.b64','assets/childrens-mercy-er-7.b64','assets/childrens-mercy-er-8.b64','assets/childrens-mercy-er-9.b64','assets/research-photo-2026-10-01-1.b64','assets/research-photo-2026-10-01-2.b64','assets/research-photo-2026-10-01-3.b64','assets/research-photo-2026-10-01-4a.b64','assets/research-photo-2026-10-01-4b.b64','assets/research-photo-2026-10-01-5.b64','assets/research-photo-2026-10-01-6.b64','assets/research-photo-2026-10-01-7.b64','assets/research-photo-2026-10-01-8.b64','updates/current-protocol-book.pdf'];
+const C='gfd-ems-shell-v203';
+const UPDATE_SUMMARY='v203: Cleaned up Pediatric Mode on the Home screen so patient weight is not shown redundantly. Saved weight and all pediatric calculations are unchanged.';
+const SHELL=['./','index.html','admin.html','protocol-viewer.html','protocols.json','street-drugs.json','pediatric-mode.js','pediatric-workflows.js','pediatric-home-cleanup.js','manifest.webmanifest','gfd-logo.svg','assets/ku-entrance-image.b64','assets/st-lukes-plaza-entrance.b64','assets/truman-er-entrance.b64','assets/nkch-er-entrance.b64','assets/liberty-er-entrance-1.b64','assets/liberty-er-entrance-2.b64','assets/liberty-er-entrance-3.b64','assets/liberty-er-entrance-4.b64','assets/liberty-er-entrance-5.b64','assets/st-lukes-northland-er-fixed-1.b64','assets/st-lukes-northland-er-fixed-1b.b64','assets/st-lukes-northland-er-fixed-2.b64','assets/st-lukes-northland-er-fixed-3.b64','assets/childrens-mercy-er-1.b64','assets/childrens-mercy-er-2.b64','assets/childrens-mercy-er-3.b64','assets/childrens-mercy-er-4.b64','assets/childrens-mercy-er-5.b64','assets/childrens-mercy-er-6.b64','assets/childrens-mercy-er-7.b64','assets/childrens-mercy-er-8.b64','assets/childrens-mercy-er-9.b64','assets/research-photo-2026-10-01-1.b64','assets/research-photo-2026-10-01-2.b64','assets/research-photo-2026-10-01-3.b64','assets/research-photo-2026-10-01-4a.b64','assets/research-photo-2026-10-01-4b.b64','assets/research-photo-2026-10-01-5.b64','assets/research-photo-2026-10-01-6.b64','assets/research-photo-2026-10-01-7.b64','assets/research-photo-2026-10-01-8.b64','updates/current-protocol-book.pdf'];
 const PDFJS=[
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
@@ -28,8 +28,9 @@ async function injectPatientContext(r){
  if(!type.includes('text/html'))return r;
  let html=await r.text();
  const tags=[];
- if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=202" defer></script>');
- if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=202" defer></script>');
+ if(!html.includes('pediatric-mode.js'))tags.push('<script src="pediatric-mode.js?v=203" defer></script>');
+ if(!html.includes('pediatric-workflows.js'))tags.push('<script src="pediatric-workflows.js?v=203" defer></script>');
+ if(!html.includes('pediatric-home-cleanup.js'))tags.push('<script src="pediatric-home-cleanup.js?v=203" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag}
  const headers=new Headers(r.headers);
  headers.delete('content-length');
@@ -42,8 +43,6 @@ self.addEventListener('fetch',e=>{
  const isPdfJs=PDFJS.includes(req.url);
  const isProtocolPdf=u.origin===location.origin&&u.pathname.endsWith('/updates/current-protocol-book.pdf');
 
- // Never satisfy or store byte-range requests from Cache Storage.
- // Range responses can corrupt PDF.js parsing when replayed as full files.
  if(req.headers.has('range')){
    e.respondWith(fetch(req,{cache:'no-store'}));
    return;
