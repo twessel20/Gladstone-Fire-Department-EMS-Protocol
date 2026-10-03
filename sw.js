@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v228: Rebuilt Adult/Pediatric patient context on the stable v227 recovery baseline. Tapping ADULT or PEDS opens one lightweight age/weight pop-out. Age and weight are optional, persist through the patient session, and feed supported calculator fields. No app-shell caching is used.';
+const UPDATE_SUMMARY='v229: Pediatric mode selection no longer auto-opens the age/weight editor. PEDS now switches the patient mode only; tap the patient summary to add or edit age and weight. Adult behavior is unchanged. No app-shell caching is used.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,7 +15,7 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  if(!html.includes('patient-context-stable.js')){
-  const tag='<script src="patient-context-stable.js?v=228" defer></script>';
+  const tag='<script src="patient-context-stable.js?v=229" defer></script>';
   html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;
  }
  const headers=new Headers(response.headers);headers.delete('content-length');
