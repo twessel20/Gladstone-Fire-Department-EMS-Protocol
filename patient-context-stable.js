@@ -126,7 +126,7 @@ function openEditor(mode){
  back.addEventListener('click',e=>{if(e.target===back)back.remove()});
 }
 
-function setMode(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';profile.ageUnit=profile.mode==='adult'?'years':profile.ageUnit;save();syncNative();applyAll();openEditor(profile.mode)}
+function setMode(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';profile.ageUnit=profile.mode==='adult'?'years':profile.ageUnit;save();syncNative();applyAll();if(profile.mode==='adult')openEditor(profile.mode)}
 function reset(){profile=blank();save();try{nativeClear?.()}catch(e){};syncNative();applyAll()}
 
 function start(){
