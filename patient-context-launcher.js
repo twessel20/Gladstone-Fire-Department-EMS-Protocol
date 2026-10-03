@@ -1,6 +1,7 @@
 (()=>{
 'use strict';
 const STYLE_ID='gfd-patient-context-launcher-style';
+let timer=null;
 function ctx(){try{return window.GFDPatientContext?.get?.()||{mode:'adult'}}catch(e){return {mode:'adult'}}}
 function isHome(){const d=document.getElementById('detail');return !d||!d.classList.contains('on')}
 function injectStyles(){if(document.getElementById(STYLE_ID))return;const s=document.createElement('style');s.id=STYLE_ID;s.textContent=`
@@ -23,8 +24,9 @@ function ensure(){
  if(group&&group.nextSibling)host.insertBefore(b,group.nextSibling);else host.appendChild(b);
  return b;
 }
-function render(){injectStyles();const b=ensure();if(!b)return;b.classList.toggle('on',isHome());if(isHome())b.innerHTML=labelHtml()}
-function bindMode(id){const b=document.getElementById(id);if(!b||b.dataset.gfdPatientLauncherBound)return;b.dataset.gfdPatientLauncherBound='1';b.addEventListener('click',()=>setTimeout(render,20))}
-function start(){bindMode('adultModeBtn');bindMode('pedsModeBtn');render();document.addEventListener('gfd:patient-context',render);window.addEventListener('hashchange',()=>setTimeout(render,20));const top=document.querySelector('.top');if(top)new MutationObserver(()=>{bindMode('adultModeBtn');bindMode('pedsModeBtn');render()}).observe(top,{childList:true,subtree:true})}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+function render(){clearTimeout(timer);timer=setTimeout(()=>{injectStyles();const b=ensure();if(!b)return;const home=isHome();b.classList.toggle('on',home);if(home){const next=labelHtml();if(b.innerHTML!==next)b.innerHTML=next}},20)}
+function bindMode(id){const b=document.getElementById(id);if(!b||b.dataset.gfdPatientLauncherBound)return;b.dataset.gfdPatientLauncherBound='1';b.addEventListener('click',()=>setTimeout(render,40))}
+function bind(){bindMode('adultModeBtn');bindMode('pedsModeBtn')}
+function start(){bind();render();document.addEventListener('gfd:patient-context',render);window.addEventListener('hashchange',()=>{bind();render()});document.addEventListener('visibilitychange',()=>{if(!document.hidden){bind();render()}})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
