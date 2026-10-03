@@ -1,47 +1,30 @@
 (()=>{
 'use strict';
-let timer=null;
+const STYLE_ID='gfd-patient-context-launcher-style';
 function ctx(){try{return window.GFDPatientContext?.get?.()||{mode:'adult'}}catch(e){return {mode:'adult'}}}
 function isHome(){const d=document.getElementById('detail');return !d||!d.classList.contains('on')}
-function label(){
- const c=ctx();
- if(c.mode==='pediatric'){
-  const bits=['Pediatric Patient'];
-  if(c.age)bits.push(`${c.age} ${c.ageUnit==='months'?'mo':'yr'}`);
-  if(c.weightKg)bits.push(`${Math.round(Number(c.weightKg)*10)/10} kg`);
-  if(!c.age&&!c.weightKg)bits.push('Add age / weight');
-  return bits.join(' • ');
- }
- const a=window.GFDAdultAge?.get?.()?.age;
- const w=Number(c.weightKg);
- const bits=['Adult Patient'];
- if(a!=null&&a!=='')bits.push(`Age ${a}`);
- if(Number.isFinite(w)&&w>0)bits.push(`${Math.round(w*10)/10} kg`);
- if((a==null||a==='')&&!(Number.isFinite(w)&&w>0))bits.push('Add age / weight');
- return bits.join(' • ');
+function injectStyles(){if(document.getElementById(STYLE_ID))return;const s=document.createElement('style');s.id=STYLE_ID;s.textContent=`
+#gfdPatientContextLauncher{display:none;width:100%;margin-top:8px;border:2px solid #d7c79a;background:#fff;color:#173a5e;border-radius:11px;padding:10px 12px;font-weight:950;font-size:14px;text-align:left;box-shadow:0 1px 3px #0002;cursor:pointer}
+#gfdPatientContextLauncher.on{display:block}
+#gfdPatientContextLauncher .gfd-pcl-main{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#gfdPatientContextLauncher .gfd-pcl-edit{font-size:12px;color:#2f6690;white-space:nowrap}
+#gfdPatientContextLauncher .gfd-pcl-sub{display:block;margin-top:3px;font-size:11px;font-weight:750;color:#64748b}
+body.dark-mode #gfdPatientContextLauncher{background:#111827;color:#eef4fb;border-color:#d7c79a}body.dark-mode #gfdPatientContextLauncher .gfd-pcl-edit,body.dark-mode #gfdPatientContextLauncher .gfd-pcl-sub{color:#bfdbfe}
+`;(document.head||document.documentElement).appendChild(s)}
+function values(){const c=ctx();if(c.mode==='pediatric')return {mode:'Pediatric',age:c.age?`${c.age} ${c.ageUnit==='months'?'mo':'yr'}`:'',weight:c.weightKg?`${Math.round(Number(c.weightKg)*10)/10} kg`:''};const a=window.GFDAdultAge?.get?.()?.age;const w=Number(c.weightKg);return {mode:'Adult',age:a!=null&&a!==''?`Age ${a}`:'',weight:Number.isFinite(w)&&w>0?`${Math.round(w*10)/10} kg`:''}}
+function labelHtml(){const v=values();const bits=[v.age,v.weight].filter(Boolean);return `<span class="gfd-pcl-main"><span>${v.mode} Patient${bits.length?' • '+bits.join(' • '):''}</span><span class="gfd-pcl-edit">Edit</span></span><span class="gfd-pcl-sub">Age and weight optional — tap to add or change</span>`}
+function open(){const c=ctx();if(c.mode==='pediatric')window.GFDPatientContext?.open?.();else window.GFDAdultAge?.open?.()}
+function ensure(){
+ let b=document.getElementById('gfdPatientContextLauncher');if(b)return b;
+ const adult=document.getElementById('adultModeBtn'),peds=document.getElementById('pedsModeBtn');
+ const group=adult?.parentElement&&peds?.parentElement===adult.parentElement?adult.parentElement:null;
+ const host=group?.parentElement||document.querySelector('.top');if(!host)return null;
+ b=document.createElement('button');b.id='gfdPatientContextLauncher';b.type='button';b.setAttribute('aria-label','Add or edit optional patient age and weight');b.onclick=e=>{e.preventDefault();e.stopPropagation();open()};
+ if(group&&group.nextSibling)host.insertBefore(b,group.nextSibling);else host.appendChild(b);
+ return b;
 }
-function open(){
- const c=ctx();
- if(c.mode==='pediatric')window.GFDPatientContext?.open?.();
- else window.GFDAdultAge?.open?.();
-}
-function render(){
- clearTimeout(timer);timer=setTimeout(()=>{
-  const b=document.getElementById('patientContextSummary');if(!b)return;
-  if(!isHome())return;
-  b.style.display='';
-  b.classList.remove('gfd-adult-context-hidden');
-  b.textContent=label();
-  b.setAttribute('aria-label','Optional patient age and weight');
-  b.onclick=e=>{e?.preventDefault?.();e?.stopPropagation?.();open()};
- },0)
-}
-function bindMode(id){const b=document.getElementById(id);if(!b||b.dataset.gfdContextLauncher)return;b.dataset.gfdContextLauncher='1';b.addEventListener('click',()=>setTimeout(render,20))}
-function start(){
- bindMode('adultModeBtn');bindMode('pedsModeBtn');render();
- document.addEventListener('gfd:patient-context',render);
- window.addEventListener('hashchange',render);
- const top=document.querySelector('.top');if(top)new MutationObserver(()=>{bindMode('adultModeBtn');bindMode('pedsModeBtn');render()}).observe(top,{childList:true,subtree:true});
-}
+function render(){injectStyles();const b=ensure();if(!b)return;b.classList.toggle('on',isHome());if(isHome())b.innerHTML=labelHtml()}
+function bindMode(id){const b=document.getElementById(id);if(!b||b.dataset.gfdPatientLauncherBound)return;b.dataset.gfdPatientLauncherBound='1';b.addEventListener('click',()=>setTimeout(render,20))}
+function start(){bindMode('adultModeBtn');bindMode('pedsModeBtn');render();document.addEventListener('gfd:patient-context',render);window.addEventListener('hashchange',()=>setTimeout(render,20));const top=document.querySelector('.top');if(top)new MutationObserver(()=>{bindMode('adultModeBtn');bindMode('pedsModeBtn');render()}).observe(top,{childList:true,subtree:true})}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 })();
