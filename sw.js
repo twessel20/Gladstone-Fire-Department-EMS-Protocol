@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v262: Simplified the dashboard mission presentation. Removed the animated mission intro and moved the official mission statement into a quiet expandable Mission & Values strip at the bottom of the Home dashboard. The collapsed strip keeps Protecting, Preventing, Educating visible while operational shortcuts and field-reference controls remain visually dominant. Full mission wording remains unchanged and is available with one tap.';
+const UPDATE_SUMMARY='v263: Repaired Poison Control phone actions in the Poisoning protocol by removing duplicate link processing introduced by the custom poisoning layout. Matching prominent tap-to-call cards now remain at the true top and true bottom of the page, with the inline Poison Control number also directly callable. Seizure Activity now includes a direct cross-link to the GFD Seizures protocol.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
