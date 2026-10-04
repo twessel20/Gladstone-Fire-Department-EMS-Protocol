@@ -1514,7 +1514,7 @@ body.dark-mode .sgarbossa-result .tool-btn{
 </div>
 <div id="tabs" class="tabs"></div><main class="wrap"><div id="list" class="list"></div><div id="detail" class="detail"></div><div class="footer">Quick-reference tool. Department protocol source and Medical Control remain authoritative.<br><button class="change-log-link" onclick="openChangeLog()">Version History / Change Log</button></div></main><script>
 let data=[],cat='Home',quickSet=null;const cats=['All','Favorites','Medical','Trauma','Procedures','Medications','Tools','Patient Meds','Hospitals','Guidelines','Appendix'];let fav=new Set(JSON.parse(localStorage.getItem('gfdFav')||'[]'));const role='PARAMEDIC';
-let patientContext=(()=>{try{const v=JSON.parse(sessionStorage.getItem('gfdPatientContext')||'null');return v&&['adult','pediatric'].includes(v.mode)?{mode:v.mode,age:v.age==null?'':String(v.age),ageUnit:v.ageUnit==='months'?'months':'years',weightKg:Number.isFinite(Number(v.weightKg))&&Number(v.weightKg)>0?Number(v.weightKg):null}:{mode:'adult',age:'',ageUnit:'years',weightKg:null}}catch(e){return {mode:'adult',age:'',ageUnit:'years',weightKg:null}}})();
+let patientContext=(()=>{try{const v=JSON.parse(sessionStorage.getItem('gfdPatientContext')||'null');return v&&['adult','pediatric'].includes(v.mode)?{mode:v.mode,age:v.age==null?'':String(v.age),ageUnit:v.ageUnit==='months'?'months':'years',dob:typeof v.dob==='string'?v.dob:'',weightKg:Number.isFinite(Number(v.weightKg))&&Number(v.weightKg)>0?Number(v.weightKg):null}:{mode:'adult',age:'',ageUnit:'years',dob:'',weightKg:null}}catch(e){return {mode:'adult',age:'',ageUnit:'years',dob:'',weightKg:null}}})();
 function savePatientContextState(){try{sessionStorage.setItem('gfdPatientContext',JSON.stringify(patientContext))}catch(e){}}
 function patientWeightText(){const a=patientContext.age!==''?(patientContext.ageUnit==='months'?patientContext.age+' mo':'Age '+patientContext.age):'';const w=Number.isFinite(patientContext.weightKg)&&patientContext.weightKg>0?(Math.round(patientContext.weightKg*10)/10).toString()+' kg':'';return [a,w].filter(Boolean).join(' • ')||'Add age / weight'}
 function renderPatientContext(){
@@ -1532,18 +1532,22 @@ function savePatientWeight(){
  const raw=parseFloat(input?.value),u=unit?.value||'kg',age=document.getElementById('patientAgeInput'),ageUnit=document.getElementById('patientAgeUnit');patientContext.age=age?.value||'';patientContext.ageUnit=ageUnit?.value==='months'?'months':'years';patientContext.weightKg=Number.isFinite(raw)&&raw>0?(u==='lb'?raw/2.2046226218:raw):null;
  savePatientContextState();closePatientWeight();renderPatientContext();applySharedPatientContextToDOM();
 }
-function clearPatientContext(){patientContext={mode:'adult',age:'',ageUnit:'years',weightKg:null};savePatientContextState();renderPatientContext();patientWeightInputs(document).forEach(el=>{el.value=''});if(!document.querySelector('#detail')?.classList.contains('on'))render();}
+function clearPatientContext(){patientContext={mode:'adult',age:'',ageUnit:'years',dob:'',weightKg:null};savePatientContextState();renderPatientContext();patientWeightInputs(document).forEach(el=>{el.value=''});if(!document.querySelector('#detail')?.classList.contains('on'))render();}
 function isPediatricRelevant(x){
  const t=[x?.id,x?.title,(x?.aliases||[]).join(' '),(x?.lines||[]).join(' ')].join(' ').toLowerCase();
  return /\bpediatric\b|\bpediatrics\b|\bpeds\b|\bneonatal\b|\binfant\b|\bchild(?:ren)?\b/.test(t);
 }
 function patientWeightInputs(root=document){
- const sel='input[id^="dc-"][id$="-w"],input[data-patient-weight]';
- const out=[];
- if(root?.matches?.(sel))out.push(root);
- root?.querySelectorAll?.(sel).forEach(el=>out.push(el));
- return out;
+ const sel='input[id^="dc-"][id$="-w"],input[data-patient-weight],input[id*="Weight"],input[id*="weight"]';
+ const out=[];if(root?.matches?.(sel))out.push(root);root?.querySelectorAll?.(sel).forEach(el=>out.push(el));
+ return [...new Set(out)].filter(el=>!/ideal|ibw|dose|dosage|volume|fluid|result|amount|med|drug/i.test([el.id,el.name,el.placeholder,el.getAttribute('aria-label')].filter(Boolean).join(' ')));
 }
+function patientAgeInputs(root=document){
+ const sel='input[data-patient-age],input[id*="Age"],input[id*="age"],input[id^="dc-"][id$="-a"],input[id^="dc-"][id$="-age"]';
+ const out=[];if(root?.matches?.(sel))out.push(root);root?.querySelectorAll?.(sel).forEach(el=>out.push(el));
+ return [...new Set(out)].filter(el=>el.id!=='patientAgeInput'&&!/dosage|stage|percentage|voltage|result/i.test([el.id,el.name,el.placeholder,el.getAttribute('aria-label')].filter(Boolean).join(' ')));
+}
+function patientDOBInputs(root=document){const sel='input[type="date"][id*="Dob"],input[type="date"][id*="DOB"],input[data-patient-dob]';const out=[];if(root?.matches?.(sel))out.push(root);root?.querySelectorAll?.(sel).forEach(el=>out.push(el));return [...new Set(out)]}
 function unitForPatientWeightInput(input){
  if(!input)return null;
  if(input.dataset?.weightUnit)return document.getElementById(input.dataset.weightUnit);
@@ -1557,10 +1561,11 @@ function applySharedPatientContextToDOM(root=document){
  }
  if(patientContext.age!==''){
   const n=Number(patientContext.age);if(Number.isFinite(n)&&n>=0){const years=patientContext.ageUnit==='months'?n/12:n;
-   root.querySelectorAll?.('input[data-patient-age],#toolDiltAge,input[id^="dc-"][id$="-a"],input[id^="dc-"][id$="-age"]').forEach(input=>{if(input.value==='')input.value=String(Math.round(years*10)/10)});
-   root.querySelectorAll?.('select[id^="dc-"][id$="-agegroup"]').forEach(sel=>{if(sel.value)return;const id=sel.id;if(id.includes('d10Age'))sel.value=years<8?'under8':'8plus';else if(id.includes('albInfant'))sel.value=years<1?'under':'over';else if(id.includes('zof'))sel.value=years<4?'under4':'4plus';});
+   patientAgeInputs(root).forEach(input=>{const whole=String(Math.floor(years));const decimal=String(Math.round(years*10)/10);input.value=(input.step==='1'||input.inputMode==='numeric')?whole:decimal;});
+   root.querySelectorAll?.('select[id$="-agegroup"]').forEach(sel=>{if(sel.value)return;const opts=[...sel.options].map(o=>o.value);if(opts.includes('under8')&&opts.includes('8plus'))sel.value=years<8?'under8':'8plus';else if(opts.includes('under4')&&opts.includes('4plus'))sel.value=years<4?'under4':'4plus';else if(opts.includes('under')&&opts.includes('over'))sel.value=years<1?'under':'over';});
   }
  }
+ if(patientContext.dob)patientDOBInputs(root).forEach(input=>{input.value=patientContext.dob});
 }
 document.addEventListener('change',e=>{
  const input=e.target;
