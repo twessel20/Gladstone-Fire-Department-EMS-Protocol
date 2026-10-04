@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v261: Rebuilt the Poisoning quick-reference layout so overdose pathways no longer run together. TCA overdose and calcium-channel-blocker overdose are now separate clearly labeled treatment blocks. The Commonly Prescribed TCAs action opens the Tricyclic Antidepressant List appendix, and the calcium-channel-blocker branch links separately to the Calcium Channel Blockers appendix. Poison Control remains prominent at the top and bottom.';
+const UPDATE_SUMMARY='v262: Simplified the dashboard mission presentation. Removed the animated mission intro and moved the official mission statement into a quiet expandable Mission & Values strip at the bottom of the Home dashboard. The collapsed strip keeps Protecting, Preventing, Educating visible while operational shortcuts and field-reference controls remain visually dominant. Full mission wording remains unchanged and is available with one tap.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
