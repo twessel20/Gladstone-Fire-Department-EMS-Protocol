@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const KEY='gfdPatientProfileV228';
-const STYLE_ID='gfdPatientProfileV231Style';
+const STYLE_ID='gfdPatientProfileV233Style';
 const BROSELOW_ZONES=['Gray','Pink','Red','Purple','Yellow','White','Blue','Orange','Green'];
 const nativeSetMode=window.setPatientMode?.bind(window);
 const nativeSaveWeight=window.savePatientWeight?.bind(window);
@@ -100,83 +100,42 @@ function renderHeader(){
  if(reset)reset.disabled=profile.mode==='adult'&&profile.age===''&&!profile.weightKg&&!profile.broselowColor;
 }
 
+function fieldText(input){
+ const id=(input.id||'').toLowerCase(),name=(input.name||'').toLowerCase(),ph=(input.placeholder||'').toLowerCase(),aria=(input.getAttribute?.('aria-label')||'').toLowerCase();
+ let label='';try{if(input.id)label=document.querySelector('label[for="'+CSS.escape(input.id)+'"]')?.textContent||'';if(!label)label=input.closest?.('label')?.textContent||''}catch(e){}
+ return [id,name,ph,aria,label,input.dataset?.patientField||'',input.dataset?.ageUnit||'',input.dataset?.weightUnit||''].join(' ').toLowerCase()
+}
+function isEditableClinicalNumber(input){
+ if(!input||input.disabled||input.readOnly)return false;
+ const t=(input.type||'text').toLowerCase();return ['number','text','tel'].includes(t)
+}
 function applyAge(root=document){
  if(profile.age==='')return;
  const age=Number(profile.age);if(!Number.isFinite(age)||age<0)return;
- const yearValue=profile.ageUnit==='months'?age/12:age;
- const selectors=['input[data-patient-age]','#toolDiltAge','input[id$="-age"]'];
- const seen=new Set();
- selectors.forEach(sel=>root.querySelectorAll?.(sel).forEach(input=>{
-  if(seen.has(input)||input.type==='date'||input.disabled)return;seen.add(input);
-  const id=(input.id||'').toLowerCase(),name=(input.name||'').toLowerCase(),ph=(input.placeholder||'').toLowerCase();
-  const wantsMonths=id.includes('month')||name.includes('month')||ph.includes('month')||input.dataset?.ageUnit==='months';
-  const value=wantsMonths?(profile.ageUnit==='months'?age:age*12):yearValue;
+ const years=profile.ageUnit==='months'?age/12:age;
+ root.querySelectorAll?.('input').forEach(input=>{
+  if(!isEditableClinicalNumber(input)||input.type==='date'||input.closest('#gfdProfileBackdrop'))return;
+  const txt=fieldText(input),explicit=input.dataset?.patientAge!==undefined||input.dataset?.patientField==='age';
+  const ageField=explicit||/(^|[^a-z])(patient[ _-]?)?age([^a-z]|$)/.test(txt);
+  if(!ageField||/(dosage|dose|stage|percentage|voltage)/.test(txt))return;
+  const months=/month|\bmo\b/.test(txt)||input.dataset?.ageUnit==='months';
+  const value=months?(profile.ageUnit==='months'?age:age*12):years;
   if(input.value==='')input.value=String(Math.round(value*10)/10);
- }));
+ });
 }
-function applyAll(){
- try{window.applySharedPatientContextToDOM?.(document)}catch(e){}
- applyAge(document);renderHeader();
+function applyWeight(root=document){
+ if(!profile.weightKg)return;
+ const kg=Number(profile.weightKg);if(!Number.isFinite(kg)||kg<=0)return;
+ root.querySelectorAll?.('input').forEach(input=>{
+  if(!isEditableClinicalNumber(input)||input.closest('#gfdProfileBackdrop'))return;
+  const txt=fieldText(input),explicit=input.dataset?.patientWeight!==undefined||input.dataset?.patientField==='weight';
+  const weightField=explicit||/(patient[ _-]?)?(weight|wt)\b/.test(txt);
+  if(!weightField||/(ideal|ibw|dose|dosage|volume|fluid|result)/.test(txt))return;
+  const pounds=/\blb\b|lbs|pound/.test(txt)||input.dataset?.weightUnit==='lb';
+  const value=pounds?kgToLb(kg):Math.round(kg*10)/10;
+  if(input.value==='')input.value=String(value);
+ });
 }
-
-function openEditor(mode){
- if(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';if(profile.mode==='adult')profile.ageUnit='years';save();syncNative();renderHeader()}
- document.getElementById('gfdProfileBackdrop')?.remove();injectStyles();
- const temp={...profile};
- const back=document.createElement('div');back.id='gfdProfileBackdrop';
- const isPeds=temp.mode==='pediatric';
- back.innerHTML=`<div id="gfdProfileSheet" role="dialog" aria-modal="true" aria-labelledby="gfdProfileTitle">
-  <div class="gfd-prof-mode ${isPeds?'peds':''}">${isPeds?'PEDIATRIC PATIENT':'ADULT PATIENT'}</div>
-  <h2 id="gfdProfileTitle">Patient Context</h2>
-  <p>Enter patient information once. It follows this patient through the app and populates supported calculators. Age and weight are optional.</p>
-  <div class="gfd-prof-grid">
-   <div class="gfd-prof-field"><label for="gfdProfAge">Age</label><input id="gfdProfAge" type="number" inputmode="decimal" min="0" step="0.1" value="${temp.age}"></div>
-   <div class="gfd-prof-field" id="gfdProfAgeUnitWrap"><label for="gfdProfAgeUnit">Age unit</label><select id="gfdProfAgeUnit"><option value="years">Years</option><option value="months">Months</option></select></div>
-   <div class="gfd-prof-field"><label for="gfdProfWeight">Weight</label><input id="gfdProfWeight" type="number" inputmode="decimal" min="0" step="0.1" value="${temp.weightKg?Math.round(temp.weightKg*10)/10:''}"></div>
-   <div class="gfd-prof-field"><label for="gfdProfWeightUnit">Weight unit</label><select id="gfdProfWeightUnit"><option value="kg">kg</option><option value="lb">lb</option></select></div>
-   ${isPeds?`<div class="gfd-prof-field" style="grid-column:1/-1"><label for="gfdProfBroselow">Broselow color zone (optional)</label><select id="gfdProfBroselow"><option value="">Not entered</option>${BROSELOW_ZONES.map(c=>`<option value="${c}" ${temp.broselowColor===c?'selected':''}>${c}</option>`).join('')}</select><div class="gfd-prof-help">Select the zone from the physical Broselow tape. The app does not infer a zone from weight.</div></div>`:''}
-  </div>
-  <div class="gfd-prof-summary" id="gfdProfPreview"></div>
-  <div class="gfd-prof-actions"><button class="gfd-prof-cancel" id="gfdProfCancel">Cancel</button><button class="gfd-prof-save" id="gfdProfSave">Use Patient Data</button><button class="gfd-prof-clear" id="gfdProfClear">Clear age and weight</button></div>
- </div>`;
- document.body.appendChild(back);
- const age=back.querySelector('#gfdProfAge'),ageUnit=back.querySelector('#gfdProfAgeUnit'),weight=back.querySelector('#gfdProfWeight'),weightUnit=back.querySelector('#gfdProfWeightUnit'),broselow=back.querySelector('#gfdProfBroselow'),preview=back.querySelector('#gfdProfPreview'),ageUnitWrap=back.querySelector('#gfdProfAgeUnitWrap');
- ageUnit.value=temp.ageUnit||'years';if(!isPeds){ageUnit.value='years';ageUnitWrap.style.display='none'}
- const refresh=()=>{
-  const bits=[isPeds?'PEDS':'ADULT'];
-  if(age.value)bits.push(isPeds?`${age.value} ${ageUnit.value==='months'?'mo':'yr'}`:`Age ${age.value}`);else bits.push('Age not entered');
-  if(weight.value)bits.push(`${weight.value} ${weightUnit.value}`);else bits.push('Weight not entered');
-  if(isPeds&&broselow?.value)bits.push(`Broselow ${broselow.value}`);
-  preview.textContent=bits.join(' • ');
- };
- age.addEventListener('input',refresh);ageUnit.addEventListener('change',refresh);weight.addEventListener('input',refresh);weightUnit.addEventListener('change',refresh);broselow?.addEventListener('change',refresh);refresh();
- back.querySelector('#gfdProfCancel').onclick=()=>back.remove();
- back.querySelector('#gfdProfSave').onclick=()=>{
-  const rawWeight=Number(weight.value);const kg=Number.isFinite(rawWeight)&&rawWeight>0?(weightUnit.value==='lb'?poundsToKg(rawWeight):rawWeight):null;
-  profile={mode:temp.mode,age:age.value||'',ageUnit:isPeds?ageUnit.value:'years',weightKg:kg,broselowColor:isPeds?(broselow?.value||''):''};save();syncNative();applyAll();back.remove();
- };
- back.querySelector('#gfdProfClear').onclick=()=>{profile={...profile,age:'',ageUnit:profile.mode==='adult'?'years':profile.ageUnit,weightKg:null,broselowColor:''};save();try{nativeClear?.()}catch(e){};syncNative();applyAll();back.remove()};
- back.addEventListener('click',e=>{if(e.target===back)back.remove()});
+function broadcastContext(){
+ try{document.dispatchEvent(new CustomEvent('gfd:patient-context',{detail:{...profile}}))}catch(e){}
 }
-
-function setMode(mode){
- const next=mode==='pediatric'?'pediatric':'adult';
- if(profile.mode===next){renderHeader();return}
- profile.mode=next;
- if(next==='adult'){profile.ageUnit='years';profile.broselowColor=''}
- save();syncNative();applyAll();
-}
-function reset(){profile=blank();save();try{nativeClear?.()}catch(e){};syncNative();applyAll()}
-
-function start(){
- injectStyles();syncNative();applyAll();
- window.setPatientMode=setMode;
- window.openPatientWeight=()=>openEditor(profile.mode);
- window.clearPatientContext=reset;
- window.GFDPatientContext={get:()=>({...profile}),set:v=>{profile={...profile,...v};if(profile.mode==='adult'){profile.ageUnit='years';profile.broselowColor=''};save();syncNative();applyAll()},setMode,clear:reset,open:()=>openEditor(profile.mode)};
- if(nativeRender){window.render=function(...args){const r=nativeRender(...args);setTimeout(applyAll,0);return r}}
- document.addEventListener('click',()=>setTimeout(applyAll,0),{passive:true});
- window.addEventListener('hashchange',()=>setTimeout(applyAll,0));
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-})();
