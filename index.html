@@ -1554,9 +1554,9 @@ function patientWeightInputs(root=document){
  return [...new Set(out)].filter(el=>!/ideal|ibw|dose|dosage|volume|fluid|result|amount|med|drug/i.test([el.id,el.name,el.placeholder,el.getAttribute('aria-label')].filter(Boolean).join(' ')));
 }
 function patientAgeInputs(root=document){
- const sel='input[data-patient-age],input[id*="Age"],input[id*="age"],input[id^="dc-"][id$="-a"],input[id^="dc-"][id$="-age"]';
+ const sel='input[data-patient-age],input[id^="dc-"][id$="-a"],input[id^="dc-"][id$="-age"]';
  const out=[];if(root?.matches?.(sel))out.push(root);root?.querySelectorAll?.(sel).forEach(el=>out.push(el));
- return [...new Set(out)].filter(el=>el.id!=='patientAgeInput'&&!/dosage|stage|percentage|voltage|result/i.test([el.id,el.name,el.placeholder,el.getAttribute('aria-label')].filter(Boolean).join(' ')));
+ return [...new Set(out)].filter(el=>el.id!=='patientAgeInput'&&!el.matches('[data-patient-weight],input[id$="-w"]'));
 }
 function patientDOBInputs(root=document){const sel='input[type="date"][id*="Dob"],input[type="date"][id*="DOB"],input[data-patient-dob]';const out=[];if(root?.matches?.(sel))out.push(root);root?.querySelectorAll?.(sel).forEach(el=>out.push(el));return [...new Set(out)]}
 function sharedAgeYears(){const n=Number(patientContext.age);return Number.isFinite(n)&&n>=0?(patientContext.ageUnit==='months'?n/12:n):null}
