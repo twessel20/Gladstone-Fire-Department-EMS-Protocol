@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v248: Shared Adult/Peds patient age and weight now propagate globally across calculator and dose-helper patient inputs, including dynamically rendered tools. The global matcher recognizes patient age, DOB, and weight fields while excluding unrelated numeric fields such as dose, IBW, volume, fluid, and result fields. Existing calculator-specific clinical rules remain unchanged.';
+const UPDATE_SUMMARY='v249: Age inputs across calculators now accept decimals instead of forcing whole years. Shared patient ages retain their explicit years/months unit and are normalized only for clinical threshold comparisons. Diltiazem no longer rejects decimal ages, and global age propagation no longer rounds step-1 fields down.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
