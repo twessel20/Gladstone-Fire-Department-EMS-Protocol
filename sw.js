@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v251: Repaired the Morphine medication display. The source PDF uses a table whose extracted text placed Contraindications, Precautions, Side Effects, Dose, Pediatric Dose, and Route values under the wrong headings. Morphine now renders those source values under their intended sections without changing the protocol content.';
+const UPDATE_SUMMARY='v252: Audited all 29 medication pages for the same PDF table-extraction problem found in Morphine. Dextrose, Fentanyl, Nitroglycerin, Sodium Bicarbonate, and TXA were also affected and now render their source content under the intended Indications, Contraindications, Precautions, Side Effects, Dose, Pediatric Dose, Route, and Classification sections as applicable. Morphine remains repaired from v251.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
