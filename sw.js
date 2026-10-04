@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v269: Standardized the Poisoning protocol Call Poison Control action against the app existing call controls. The top and bottom buttons now use the same Gladstone navy, pill-shaped call-button language as Important Phone Numbers, enlarged to a 60-pixel glove-friendly target with a 230-pixel minimum width.';
+const UPDATE_SUMMARY='v270: Fixed referenced-protocol back navigation. Cross-links now use an in-app protocol navigation stack, so opening a referenced protocol, medication, or appendix and tapping Back returns to the protocol that opened it. Back from the original protocol then exits cleanly to the app list instead of leaving a referenced detail view active.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
