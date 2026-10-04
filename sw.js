@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v268: Simplified Poison Control access in the Poisoning protocol to a single Call Poison Control button at the top and bottom. Removed the phone number, icon, and secondary text from the buttons; the protocol content still displays the Poison Control number.';
+const UPDATE_SUMMARY='v269: Standardized the Poisoning protocol Call Poison Control action against the app existing call controls. The top and bottom buttons now use the same Gladstone navy, pill-shaped call-button language as Important Phone Numbers, enlarged to a 60-pixel glove-friendly target with a 230-pixel minimum width.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
