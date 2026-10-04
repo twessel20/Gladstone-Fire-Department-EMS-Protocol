@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v255: Pediatric age-group dose helpers now follow the shared patient age automatically. Dextrose selects the GFD under-8 versus 8-and-older D10 branch from the shared age, updates when shared age changes, and visibly shows the selected age group for verification. The same shared-age logic also applies to other existing age-group helpers with defined protocol thresholds.';
+const UPDATE_SUMMARY='v256: Completed the shared age/weight clinical-dependency audit. Added source-based Diltiazem under-15 contraindication blocking while retaining the over-70 reduction, and added a prominent pediatric contraindication guard to TXA in Peds mode. Existing shared age-group automation continues to drive Dextrose, Zofran, and infant/older pediatric age branches, while shared weight drives weight-based and 25-kg threshold helpers such as Glucagon. No new clinical thresholds were invented; guardrails follow the Gladstone protocol source.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
