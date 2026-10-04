@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v241: Professionalism remains fully source-faithful but the long Bledsoe passage is now broken into multiple short readable paragraphs. No source sentences are removed, summarized, or reordered. The NHTSA behaviors and closing source paragraph remain separate.';
+const UPDATE_SUMMARY='v242: Restored the truncated shared patient-context initialization. Adult and Peds buttons now directly switch the shared patient mode, and the patient editor includes age for both modes using either reported age or DOB plus shared weight. DOB calculates age automatically. The separate v240 age overlay is no longer injected; age and weight now live in one patient-context system.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,13 +15,12 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  const tags=[];
- if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=233" defer></script>');
+ if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=242" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
- if(!html.includes('age-context.js'))tags.push('<script src="age-context.js?v=240" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
