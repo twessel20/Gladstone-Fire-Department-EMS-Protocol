@@ -3847,7 +3847,21 @@ function medicationPaincheckHtml(x){
   +'<div class="inline-tool-slot" data-tool="paincheck"></div></div>';
 }
 
+function formatMorphineMedication(x){
+ const row=(label,items,cls='')=>'<div class="source-med-row'+cls+'"><div class="source-med-label">'+esc(label)+':</div><div class="source-med-value">'+items.map(v=>'<div>'+esc(v)+'</div>').join('')+'</div></div>';
+ let rows='';
+ rows+=row('Indications',['Chest pain unrelieved by NTG','Pain from orthopedic trauma or burns','Back pain & Abdominal pain (Non-Traumatic)','CHF']);
+ rows+=row('Contraindications',['Known sensitivity','Systolic BP < 100','Pregnancy'],' med-contra');
+ rows+=row('Precautions',['Respiratory depression'],' med-precaution');
+ rows+=row('Side Effects',['Nausea/vomiting','Respiratory depression','Lowered BP']);
+ rows+=row('Dose',['2 mg increments SIVP until the pain is resolved or a total dose of 10 mg is given.','2-4 mg for non-traumatic abdominal or back pain','For chest pain: 4 mg can be given initially, followed by 2 mg increments','Must contact medical control for use with burns per Med Director.']);
+ rows+=row('Pediatric Dose',['0.05 mg/kg slow IV/IN to a maximum dose of 2 mg.']);
+ rows+=row('Route',['IV','IM']);
+ return '<div class="source-med-sheet">'+rows+'</div>'+medicationPaincheckHtml(x);
+}
+
 function formatMedication(x){
+ if(x.id==='morphine-sulfate')return formatMorphineMedication(x);
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!sameTitle(l,x.title));
