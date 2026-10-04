@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v256: Completed the shared age/weight clinical-dependency audit. Added source-based Diltiazem under-15 contraindication blocking while retaining the over-70 reduction, and added a prominent pediatric contraindication guard to TXA in Peds mode. Existing shared age-group automation continues to drive Dextrose, Zofran, and infant/older pediatric age branches, while shared weight drives weight-based and 25-kg threshold helpers such as Glucagon. No new clinical thresholds were invented; guardrails follow the Gladstone protocol source.';
+const UPDATE_SUMMARY='v257: Extended shared patient context into protocol decision support without changing the official GFD source text. Added patient-specific callouts for pediatric destination criteria, termination-of-resuscitation age >21, minor refusal rules including the 16-17 branch, spinal-clearance exclusion under age 12, EZ-IO age/weight/site thresholds, and the pediatric contraindication for Push Dose Epinephrine. Callouts appear only when the entered patient context makes the rule relevant.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
