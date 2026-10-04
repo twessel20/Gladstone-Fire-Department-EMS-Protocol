@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v258: Poison Control in the Poisoning protocol now displays as a clearly formatted phone number and is directly tappable to call 1-800-222-1222. Protocol wording and clinical content are otherwise unchanged.';
+const UPDATE_SUMMARY='v259: Poison Control is now a prominent primary action in the Poisoning protocol. Large tap-to-call cards for 1-800-222-1222 appear at both the top and bottom of the protocol, while the number remains clickable within the original protocol text.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
