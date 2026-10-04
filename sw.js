@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v257: Extended shared patient context into protocol decision support without changing the official GFD source text. Added patient-specific callouts for pediatric destination criteria, termination-of-resuscitation age >21, minor refusal rules including the 16-17 branch, spinal-clearance exclusion under age 12, EZ-IO age/weight/site thresholds, and the pediatric contraindication for Push Dose Epinephrine. Callouts appear only when the entered patient context makes the rule relevant.';
+const UPDATE_SUMMARY='v258: Poison Control in the Poisoning protocol now displays as a clearly formatted phone number and is directly tappable to call 1-800-222-1222. Protocol wording and clinical content are otherwise unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
