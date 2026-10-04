@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v230: Adult and Pediatric mode buttons now switch patient mode only. Neither tab auto-opens the age/weight editor; tap the patient summary to add or edit age and weight. Age and weight continue to carry through supported calculators. No app-shell caching is used.';
+const UPDATE_SUMMARY='v231: Persistent patient context has been refined for field use. The sticky header now keeps Adult/Peds mode, age, weight, and optional pediatric Broselow zone visible throughout the app. Adult/Peds buttons only switch mode; tap the patient summary to edit patient data. Supported calculators continue to receive shared age/weight automatically. No app-shell caching is used.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,8 +15,8 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  const tags=[];
- if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=230" defer></script>');
- if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=230" defer></script>');
+ if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=231" defer></script>');
+ if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
