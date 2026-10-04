@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v252: Audited all 29 medication pages for the same PDF table-extraction problem found in Morphine. Dextrose, Fentanyl, Nitroglycerin, Sodium Bicarbonate, and TXA were also affected and now render their source content under the intended Indications, Contraindications, Precautions, Side Effects, Dose, Pediatric Dose, Route, and Classification sections as applicable. Morphine remains repaired from v251.';
+const UPDATE_SUMMARY='v253: Cleaned up calculator patient-factor layout using Dextrose as the first correction. Age and weight are now presented as separate patient inputs instead of making age appear to be part of the weight calculator. Shared patient weight is explicitly recognized in the Dextrose helper; its age-based GFD dosing logic remains unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
