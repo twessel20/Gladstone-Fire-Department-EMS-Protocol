@@ -1548,6 +1548,8 @@ function patientAgeInputs(root=document){
  return [...new Set(out)].filter(el=>el.id!=='patientAgeInput'&&!/dosage|stage|percentage|voltage|result/i.test([el.id,el.name,el.placeholder,el.getAttribute('aria-label')].filter(Boolean).join(' ')));
 }
 function patientDOBInputs(root=document){const sel='input[type="date"][id*="Dob"],input[type="date"][id*="DOB"],input[data-patient-dob]';const out=[];if(root?.matches?.(sel))out.push(root);root?.querySelectorAll?.(sel).forEach(el=>out.push(el));return [...new Set(out)]}
+function sharedAgeYears(){const n=Number(patientContext.age);return Number.isFinite(n)&&n>=0?(patientContext.ageUnit==='months'?n/12:n):null}
+function sharedAgeLabel(){const n=Number(patientContext.age);if(!Number.isFinite(n)||n<0)return '';return patientContext.ageUnit==='months'?n+' months':n+' years'}
 function unitForPatientWeightInput(input){
  if(!input)return null;
  if(input.dataset?.weightUnit)return document.getElementById(input.dataset.weightUnit);
@@ -1561,7 +1563,7 @@ function applySharedPatientContextToDOM(root=document){
  }
  if(patientContext.age!==''){
   const n=Number(patientContext.age);if(Number.isFinite(n)&&n>=0){const years=patientContext.ageUnit==='months'?n/12:n;
-   patientAgeInputs(root).forEach(input=>{const whole=String(Math.floor(years));const decimal=String(Math.round(years*10)/10);input.value=(input.step==='1'||input.inputMode==='numeric')?whole:decimal;});
+   patientAgeInputs(root).forEach(input=>{input.step='0.1';input.inputMode='decimal';input.value=String(Math.round(years*100)/100);});
    root.querySelectorAll?.('select[id$="-agegroup"]').forEach(sel=>{if(sel.value)return;const opts=[...sel.options].map(o=>o.value);if(opts.includes('under8')&&opts.includes('8plus'))sel.value=years<8?'under8':'8plus';else if(opts.includes('under4')&&opts.includes('4plus'))sel.value=years<4?'under4':'4plus';else if(opts.includes('under')&&opts.includes('over'))sel.value=years<1?'under':'over';});
   }
  }
@@ -2704,7 +2706,7 @@ function openToolCard(which){
    <div class="tool-card"><h3>Diltiazem Dose Calculator</h3>
    <div class="tool-note"><b>GFD dosing:</b> Initial 0.25 mg/kg; if no response after 10 minutes, second dose 0.35 mg/kg. Maximum 20 mg for each calculated dose. For patients <b>older than 70 years</b>, decrease each dose by 5 mg.</div>
    <div class="calc-field"><label for="toolDiltDob">Patient date of birth</label><input id="toolDiltDob" class="tool-input" type="date" max="${new Date().toISOString().slice(0,10)}"><small>Enter DOB if known, or enter the patient's age below.</small></div>
-   <div class="calc-field"><label for="toolDiltAge">Patient age (years)</label><input id="toolDiltAge" class="tool-input" data-patient-age inputmode="numeric" type="number" min="0" step="1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>
+   <div class="calc-field"><label for="toolDiltAge">Patient age (years)</label><input id="toolDiltAge" class="tool-input" data-patient-age inputmode="decimal" type="number" min="0" step="0.1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>
    <div class="calc-field"><label for="toolDiltWeight">Patient weight</label><div class="calc-pair"><input id="toolDiltWeight" class="tool-input" data-patient-weight data-weight-unit="toolDiltUnit" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Enter weight"><select id="toolDiltUnit" class="tool-input"><option value="lb">lb</option><option value="kg">kg</option></select></div></div>
    <button class="tool-btn" onclick="calcToolDiltiazem()">Calculate Initial + Second Dose</button>
    <div id="toolDiltResult" class="tool-result" style="display:none"></div>
@@ -2900,7 +2902,7 @@ function calcToolDiltiazem(){
     ageSource='DOB';
   }else if(ageValue!==''){
     const typedAge=Number(ageValue);
-    if(!Number.isFinite(typedAge)||typedAge<0||!Number.isInteger(typedAge)){out.innerHTML='<b>Enter a valid patient age in whole years.</b>';return}
+    if(!Number.isFinite(typedAge)||typedAge<0){out.innerHTML='<b>Enter a valid patient age.</b>';return}
     patientAge=typedAge;
     ageSource='typed age';
   }else{
@@ -4128,7 +4130,7 @@ if(c.special==='infantAlbuterol'){
    '<button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Show dose</button>'+
    '<div id="'+id+'-o" class="dose-out"></div></div>';
 }
-return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="8plus">8 years old or older</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-dob">Patient date of birth</label><input id="'+id+'-dob" class="tool-input" type="date" max="'+new Date().toISOString().slice(0,10)+'"><small>Enter DOB if known, or use patient age below.</small></div><div class="calc-field"><label for="'+id+'-age">Patient age (years)</label><input id="'+id+'-age" class="tool-input" data-patient-age inputmode="numeric" type="number" min="0" step="1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" data-patient-age inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
+return '<div class="dose-calc"><div class="med-subhead">'+esc(c.label)+'</div><div class="dose-note">'+esc(c.formula)+'</div>'+(maxText?'<div class="dose-max">'+esc(maxText)+'</div>':'')+rangeInput+((c.special==='d10Age')?'<div class="calc-field"><label for="'+id+'-agegroup">Patient age group</label><select id="'+id+'-agegroup" class="tool-input"><option value="">Select age group</option><option value="under8">Less than 8 years old</option><option value="8plus">8 years old or older</option></select></div>':(c.special==='diltiazem')?'<div class="calc-field"><label for="'+id+'-dob">Patient date of birth</label><input id="'+id+'-dob" class="tool-input" type="date" max="'+new Date().toISOString().slice(0,10)+'"><small>Enter DOB if known, or use patient age below.</small></div><div class="calc-field"><label for="'+id+'-age">Patient age (years)</label><input id="'+id+'-age" class="tool-input" data-patient-age inputmode="decimal" type="number" min="0" step="0.1" placeholder="Known age"><small>DOB takes priority if both are entered.</small></div>':(c.ageRequired?'<div class="calc-field"><label for="'+id+'-a">Patient age (years)</label><input id="'+id+'-a" data-patient-age inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient age" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'age\')"></div>':''))+'<div class="dose-row"><input id="'+id+'-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight" oninput="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><select id="'+id+'-u" onchange="syncDoseContext(\''+x.id+'\',\''+c.key+'\',\'weight\')"><option value="lb">lb</option><option value="kg">kg</option></select></div><button class="dose-btn" onclick="calcProtocolDose(\''+x.id+'\',\''+c.key+'\')">Calculate dose</button><div id="'+id+'-o" class="dose-out"></div></div>'}).join('')+'<div class="dose-note">Uses the medication dose printed in this GFD protocol. Verify medication, route, concentration, minimum/maximum dose, and indication before administration.</div></div>';
 }
 
 function toggleInfantAlbuterolWeight(pid,key){
@@ -4197,7 +4199,7 @@ function calcProtocolDose(pid,key){
      ageSource='DOB';
    }else if(ageValue!==''){
      const typedAge=Number(ageValue);
-     if(!Number.isFinite(typedAge)||typedAge<0||!Number.isInteger(typedAge)){out.innerHTML='<b>Enter a valid patient age in whole years.</b>';return}
+     if(!Number.isFinite(typedAge)||typedAge<0){out.innerHTML='<b>Enter a valid patient age.</b>';return}
      patientAge=typedAge;
      ageSource='typed age';
    }else{
