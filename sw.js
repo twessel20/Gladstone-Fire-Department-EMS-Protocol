@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v243: Runtime enhancements are now loaded directly by the app shell instead of depending on service-worker HTML injection. This fixes the iPhone installed-app issue where the old patient bar and raw Professionalism display continued to appear. Adult/Peds, shared age/weight, protocol readability, reference-page layout, search, and dark-mode enhancements now load deterministically.';
+const UPDATE_SUMMARY='v244: Removed the conflict between the legacy index patient controls and the unified patient context. Adult and Peds buttons now call the same shared patient profile directly, the center patient button opens the combined age/DOB plus weight editor, and Reset clears that same profile. The old weight-only handlers no longer control these header buttons.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,8 +15,8 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  const tags=[];
- if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=242" defer></script>');
- if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
+ if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
+ if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=244" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
