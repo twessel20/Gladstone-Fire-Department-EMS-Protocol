@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v242: Restored the truncated shared patient-context initialization. Adult and Peds buttons now directly switch the shared patient mode, and the patient editor includes age for both modes using either reported age or DOB plus shared weight. DOB calculates age automatically. The separate v240 age overlay is no longer injected; age and weight now live in one patient-context system.';
+const UPDATE_SUMMARY='v243: Runtime enhancements are now loaded directly by the app shell instead of depending on service-worker HTML injection. This fixes the iPhone installed-app issue where the old patient bar and raw Professionalism display continued to appear. Adult/Peds, shared age/weight, protocol readability, reference-page layout, search, and dark-mode enhancements now load deterministically.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
