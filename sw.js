@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v266: Refined Poison Control calling on the Poisoning protocol. The top and true-bottom call actions now use a compact EMS-style tappable row with a phone icon, Call Poison Control label, visible 1-800-222-1222 number, and clear CALL affordance. Removed the plain underlined-link appearance while keeping direct phone dialing.';
+const UPDATE_SUMMARY='v267: Restored Poison Control calling as a true full-width button in the Poisoning protocol. Both the top and bottom now use a prominent CALL POISON CONTROL button with the 1-800-222-1222 number visible inside the control and direct telephone dialing on tap.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
