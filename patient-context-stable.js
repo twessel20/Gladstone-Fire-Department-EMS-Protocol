@@ -9,7 +9,7 @@ const nativeClear=window.clearPatientContext?.bind(window);
 const nativeRender=window.render?.bind(window);
 let applying=false;
 
-function blank(){return {mode:'adult',age:'',ageUnit:'years',weightKg:null,broselowColor:''}}
+function blank(){return {mode:'adult',age:'',ageUnit:'years',ageSource:'reported',dob:'',weightKg:null,broselowColor:''}}
 function load(){
  try{
   const v=JSON.parse(sessionStorage.getItem(KEY)||'null');
@@ -17,7 +17,7 @@ function load(){
   return {
    mode:v.mode==='pediatric'?'pediatric':'adult',
    age:v.age==null?'':String(v.age),
-   ageUnit:v.ageUnit==='months'?'months':'years',
+   ageUnit:v.ageUnit==='months'?'months':'years',\n   ageSource:v.ageSource==='dob'?'dob':'reported',\n   dob:typeof v.dob==='string'?v.dob:'',
    weightKg:Number.isFinite(Number(v.weightKg))&&Number(v.weightKg)>0?Number(v.weightKg):null,
    broselowColor:BROSELOW_ZONES.includes(v.broselowColor)?v.broselowColor:''
   };
@@ -139,3 +139,38 @@ function applyWeight(root=document){
 function broadcastContext(){
  try{document.dispatchEvent(new CustomEvent('gfd:patient-context',{detail:{...profile}}))}catch(e){}
 }
+
+function calculateDOB(value){
+ if(!value)return null;const d=new Date(value+'T12:00:00'),now=new Date();if(Number.isNaN(d.getTime())||d>now)return null;
+ let y=now.getFullYear()-d.getFullYear(),m=now.getMonth()-d.getMonth();if(now.getDate()<d.getDate())m--;if(m<0){y--;m+=12}
+ return y<2?{age:String(y*12+m),ageUnit:'months'}:{age:String(y),ageUnit:'years'};
+}
+function applyAll(){try{window.applySharedPatientContextToDOM?.()}catch(e){};applyAge();applyWeight();broadcastContext();renderHeader()}
+function setMode(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';if(profile.mode==='adult'&&profile.ageUnit==='months'&&Number(profile.age)>=24){profile.age=String(Math.floor(Number(profile.age)/12));profile.ageUnit='years'}if(profile.mode==='adult')profile.broselowColor='';save();syncNative();applyAll()}
+function setProfile(next){profile={...profile,...next};save();syncNative();applyAll()}
+function clear(){profile=blank();save();try{nativeClear?.()}catch(e){};applyAll()}
+function closeEditor(){document.getElementById('gfdProfileBackdrop')?.remove()}
+function openEditor(){
+ closeEditor();const isPeds=profile.mode==='pediatric',back=document.createElement('div');back.id='gfdProfileBackdrop';
+ back.innerHTML=`<div id="gfdProfileSheet" role="dialog" aria-modal="true" aria-label="Patient context"><div class="gfd-prof-mode ${isPeds?'peds':''}">${isPeds?'PEDIATRIC':'ADULT'} PATIENT</div><h2>Patient Context</h2><p>Age and weight are shared throughout supported protocols, medications, and calculators.</p>
+ <div class="gfd-prof-field"><label>Age source</label><select id="gfdAgeSource"><option value="reported">Reported age</option><option value="dob">Date of birth</option></select></div>
+ <div id="gfdReportedAgeFields" class="gfd-prof-grid"><div class="gfd-prof-field"><label for="gfdProfileAge">Reported age</label><input id="gfdProfileAge" type="number" inputmode="decimal" min="0" value="${profile.age||''}"></div><div class="gfd-prof-field"><label for="gfdProfileAgeUnit">Age unit</label><select id="gfdProfileAgeUnit"><option value="years">Years</option><option value="months">Months</option></select></div></div>
+ <div id="gfdDOBFields" class="gfd-prof-field"><label for="gfdProfileDOB">Date of birth</label><input id="gfdProfileDOB" type="date" value="${profile.dob||''}"><div class="gfd-prof-help">DOB is used only to calculate the shared patient age.</div></div>
+ <div class="gfd-prof-grid"><div class="gfd-prof-field"><label for="gfdProfileWeight">Weight</label><input id="gfdProfileWeight" type="number" inputmode="decimal" min="0" step="0.1" value="${profile.weightKg?Math.round(profile.weightKg*10)/10:''}"></div><div class="gfd-prof-field"><label for="gfdProfileWeightUnit">Weight unit</label><select id="gfdProfileWeightUnit"><option value="kg">kg</option><option value="lb">lb</option></select></div></div>
+ ${isPeds?`<div class="gfd-prof-field"><label for="gfdProfileBroselow">Broselow zone (optional)</label><select id="gfdProfileBroselow"><option value="">Not entered</option>${BROSELOW_ZONES.map(z=>`<option value="${z}">${z}</option>`).join('')}</select><div class="gfd-prof-help">Select the zone from the physical Broselow tape. The app does not infer a zone from weight.</div></div>`:''}
+ <div class="gfd-prof-summary" id="gfdProfilePreview"></div><div class="gfd-prof-actions"><button class="gfd-prof-cancel" type="button">Cancel</button><button class="gfd-prof-save" type="button">Save Patient</button><button class="gfd-prof-clear" type="button">Clear age / weight</button></div></div>`;
+ document.body.appendChild(back);
+ const src=back.querySelector('#gfdAgeSource'),reported=back.querySelector('#gfdReportedAgeFields'),dob=back.querySelector('#gfdDOBFields'),unit=back.querySelector('#gfdProfileAgeUnit'),bros=back.querySelector('#gfdProfileBroselow');
+ src.value=profile.ageSource==='dob'?'dob':'reported';unit.value=profile.ageUnit==='months'?'months':'years';if(bros)bros.value=profile.broselowColor||'';
+ const toggle=()=>{reported.style.display=src.value==='reported'?'grid':'none';dob.style.display=src.value==='dob'?'block':'none'};src.onchange=toggle;toggle();
+ const preview=()=>{const a=src.value==='dob'?calculateDOB(back.querySelector('#gfdProfileDOB').value):{age:back.querySelector('#gfdProfileAge').value,ageUnit:unit.value};const w=back.querySelector('#gfdProfileWeight').value;back.querySelector('#gfdProfilePreview').textContent=`${isPeds?'PEDS':'ADULT'} • ${a?.age?(a.ageUnit==='months'?a.age+' mo':'Age '+a.age):'Age not entered'} • ${w?w+' '+back.querySelector('#gfdProfileWeightUnit').value:'Weight not entered'}`};
+ back.querySelectorAll('input,select').forEach(x=>x.addEventListener('input',preview));preview();
+ back.querySelector('.gfd-prof-cancel').onclick=closeEditor;back.addEventListener('click',e=>{if(e.target===back)closeEditor()});
+ back.querySelector('.gfd-prof-clear').onclick=()=>{profile.age='';profile.ageUnit='years';profile.ageSource='reported';profile.dob='';profile.weightKg=null;profile.broselowColor='';save();applyAll();closeEditor()};
+ back.querySelector('.gfd-prof-save').onclick=()=>{let age=back.querySelector('#gfdProfileAge').value,ageUnit=unit.value,dobValue='';if(src.value==='dob'){dobValue=back.querySelector('#gfdProfileDOB').value;const x=calculateDOB(dobValue);if(x){age=x.age;ageUnit=x.ageUnit}else{age=''}}const wn=Number(back.querySelector('#gfdProfileWeight').value),wu=back.querySelector('#gfdProfileWeightUnit').value;profile.age=age;profile.ageUnit=ageUnit;profile.ageSource=src.value;profile.dob=dobValue;profile.weightKg=Number.isFinite(wn)&&wn>0?(wu==='lb'?poundsToKg(wn):wn):null;profile.broselowColor=bros?.value||'';save();syncNative();applyAll();closeEditor()};
+}
+window.GFDPatientContext={get:()=>({...profile}),set:setProfile,setMode,clear,open:openEditor};
+window.setPatientMode=setMode;window.openPatientWeight=openEditor;window.clearPatientContext=clear;
+function start(){injectStyles();renderHeader();document.getElementById('adultModeBtn')?.addEventListener('click',e=>{e.preventDefault();setMode('adult')});document.getElementById('pedsModeBtn')?.addEventListener('click',e=>{e.preventDefault();setMode('pediatric')});document.getElementById('patientContextSummary')?.addEventListener('click',e=>{e.preventDefault();openEditor()});applyAll();new MutationObserver(()=>{renderHeader();applyAge();applyWeight()}).observe(document.body,{subtree:true,childList:true})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
