@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v240: Shared patient context now supports age entry for both Adult and Peds using either reported age or date of birth. DOB automatically calculates age, and the shared age is available across age-dependent screens alongside shared weight. Diltiazem views now surface the exact Gladstone age-specific rules: under age 15 is listed as a contraindication, and patients over age 70 have a 5 mg dose reduction. No new clinical thresholds were invented.';
+const UPDATE_SUMMARY='v241: Professionalism remains fully source-faithful but the long Bledsoe passage is now broken into multiple short readable paragraphs. No source sentences are removed, summarized, or reordered. The NHTSA behaviors and closing source paragraph remain separate.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -20,7 +20,7 @@ async function injectPatientContext(response){
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
- if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=239" defer></script>');
+ if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(!html.includes('age-context.js'))tags.push('<script src="age-context.js?v=240" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
