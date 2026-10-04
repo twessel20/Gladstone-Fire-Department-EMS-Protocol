@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v265: Reduced protocol-page clutter by making Medications in this Protocol collapsible and closed by default. The collapsed row shows the number of linked medications; one tap expands the existing medication reference links. Applied consistently across protocol pages, with particular benefit to medication-heavy protocols such as Poisoning.';
+const UPDATE_SUMMARY='v266: Refined Poison Control calling on the Poisoning protocol. The top and true-bottom call actions now use a compact EMS-style tappable row with a phone icon, Call Poison Control label, visible 1-800-222-1222 number, and clear CALL affordance. Removed the plain underlined-link appearance while keeping direct phone dialing.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
