@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v264: Simplified Poison Control access in the Poisoning protocol. Removed the large call-card treatment. The top and bottom now show a clean Call Poison Control: 1-800-222-1222 telephone link, while the number within the protocol remains callable.';
+const UPDATE_SUMMARY='v265: Reduced protocol-page clutter by making Medications in this Protocol collapsible and closed by default. The collapsed row shows the number of linked medications; one tap expands the existing medication reference links. Applied consistently across protocol pages, with particular benefit to medication-heavy protocols such as Poisoning.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
