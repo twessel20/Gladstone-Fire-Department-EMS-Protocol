@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v271: Fixed the Poison Control button styling regression at its source. Removed malformed CSS containing embedded literal newline escapes that caused the browser to discard the intended button rules. Call Poison Control now uses one valid, iOS-safe rule with the same Gladstone navy pill treatment as the app call controls and a large glove-friendly tap target.';
+const UPDATE_SUMMARY='v272: Standardized the Poison Control action inside the Poisoning Assessment section. Preserved the protocol instruction to consider contacting Poison Control or Medical Control, removed the mismatched inline phone-number link, and placed the same Call Poison Control button used at the top and bottom directly beneath the instruction.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
