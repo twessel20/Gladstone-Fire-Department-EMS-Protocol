@@ -3860,8 +3860,59 @@ function formatMorphineMedication(x){
  return '<div class="source-med-sheet">'+rows+'</div>'+medicationPaincheckHtml(x);
 }
 
+function formatTableMedication(x){
+ const row=(label,items,cls='')=>'<div class="source-med-row'+cls+'"><div class="source-med-label">'+esc(label)+':</div><div class="source-med-value">'+items.map(v=>'<div>'+esc(v)+'</div>').join('')+'</div></div>';
+ const data={
+  'dextrose':[
+   ['Indications',['Hypoglycemia (< 60 mg/dL) and Altered Mental Status (GCS < 14)']],
+   ['Contraindications',['Hyperglycemia'],' med-contra'],
+   ['Precautions',['Delirium tremens','Cranial/spinal hemorrhage','CHF'],' med-precaution'],
+   ['Side Effects',['May cause necrosis if infiltrated into tissue','Local venous irritation','Pulmonary edema','Hyperglycemia']],
+   ['Dose',['For adults, give D10 (250mL) 25g or equivalent IV.','15g oral glucose may be considered for awake, cooperative patients with a patent airway and the ability to swallow']],
+   ['Pediatric Dose',['Children greater than 8 years of age should receive 2 mL/kg of D10 IV','Children less than 8 years of age should receive 1 mL/kg of D10 IV','**Refer to the Broselow tape for weight estimation as needed.**']]
+  ],
+  'fentanyl':[
+   ['Indications',['Pain from the following:','An extremity injury','A shoulder or hip injury','Back pain and Abdominal pain (non-traumatic)','Burns without airway or respiratory compromise - (Contact Med Control)']],
+   ['Contraindications',['Known hypersensitivity'],' med-contra'],
+   ['Precautions',['Respiratory depression','Must be given slow or it can cause muscle rigidity (stone chest or rigid chest syndrome)'],' med-precaution'],
+   ['Side Effects',['Muscle rigidity','Bradycardia','Respiratory depression','Laryngospasm']],
+   ['Dose',['50-100 mcg slow IV for extremity pain','25-50 mcg slow IV for non-traumatic back or abdominal pain','Must contact medical control for use with burns.']],
+   ['Pediatric Dose',['1 to 2 mcg/kg IV, IN']],
+   ['Route',['IV','IO','IN']]
+  ],
+  'nitroglycerin':[
+   ['Indications',['Chest pain','CHF']],
+   ['Contraindications',['Systolic BP <100'],' med-contra'],
+   ['Precautions',['Pulse rate < 50 and >140','Known sensitivity','Cerebral hemorrhage','Pregnancy'],' med-precaution'],
+   ['Side Effects',['Headache','Postural hypotension','Flushing','Dizziness']],
+   ['Dose',['Chest Pain: 0.4 mg every five minutes until chest pain is relieved or systolic blood pressure becomes <100 or 3 doses are given.','*Patients taking NTG on a regular basis, may be given NTG prior to obtaining IV access.','CHF: 0.4 mg. May be repeated every five minutes until distress is relieved or systolic blood pressure <100 or 3 doses.']],
+   ['Route',['Sublingual']]
+  ],
+  'sodium-bicarbonate':[
+   ['Indications',['Near drowning with prolonged submersion','Tricyclic antidepressant overdose with wide complex tachycardia','VF/Pulseless VT']],
+   ['Contraindications',['Respiratory Alkalosis'],' med-contra'],
+   ['Precautions',['Metabolic Alkalosis','May cause alkalosis or tetany'],' med-precaution'],
+   ['Dose',['1 meq/kg','Must contact medical control prior to administering for tricyclic antidepressant overdoses that is not in cardiac arrest.']],
+   ['Route',['IV','IO']]
+  ],
+  'tranexamic-acid-txa':[
+   ['Indications',['Adult patients within 3 hours of traumatic injury with suspected hemorrhage.','Signs/Symptoms of shock (hypotension, tachycardia, pallor, etc.)']],
+   ['Contraindications',['Pediatric patients','Isolated traumatic brain injury','Known thrombotic disease (DVT, PE)','Known allergy'],' med-contra'],
+   ['Side Effects',['Dizziness','Nausea','Hypotension (If administered too fast)','Visual disturbance (blurred vision, color distortion)']],
+   ['Dose',['1 gram in 100mL of NS over 10 minutes']],
+   ['Route',['IV drip']],
+   ['Classification',['Anti-Fibrinolytic']]
+  ]
+ }[x.id];
+ if(!data)return '';
+ let rows=data.map(v=>row(v[0],v[1],v[2]||'')).join('');
+ const calc=(protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id])?'<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value"><div class="source-med-calc">'+protocolDoseTools(x)+'</div></div></div>':'';
+ return '<div class="source-med-sheet">'+rows+calc+'</div>'+medicationPaincheckHtml(x);
+}
+
 function formatMedication(x){
  if(x.id==='morphine-sulfate')return formatMorphineMedication(x);
+ if(['dextrose','fentanyl','nitroglycerin','sodium-bicarbonate','tranexamic-acid-txa'].includes(x.id))return formatTableMedication(x);
  let raw=(x.lines||[]).map(normText).filter(Boolean)
    .filter(l=>!/^GLADSTONE FIRE DEPARTMENT EMS PROTOCOLS$/i.test(l))
    .filter(l=>!sameTitle(l,x.title));
