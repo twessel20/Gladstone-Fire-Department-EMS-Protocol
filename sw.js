@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v260: Moved the primary Poison Control call action to the true top of the Poisoning protocol, immediately below the protocol title and metadata and before related medications, tools, notices, or clinical content. The matching tap-to-call action remains at the true bottom, and the inline protocol number remains clickable.';
+const UPDATE_SUMMARY='v261: Rebuilt the Poisoning quick-reference layout so overdose pathways no longer run together. TCA overdose and calcium-channel-blocker overdose are now separate clearly labeled treatment blocks. The Commonly Prescribed TCAs action opens the Tricyclic Antidepressant List appendix, and the calcium-channel-blocker branch links separately to the Calcium Channel Blockers appendix. Poison Control remains prominent at the top and bottom.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
