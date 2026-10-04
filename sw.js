@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v254: Fixed shared age propagation overwriting weight fields. Calculator IDs such as dc-dextrose-d10Age-w contained the word Age and were incorrectly classified as age inputs, causing a 3-year-old / 15-kg patient to display 3 in the weight field. Age propagation now targets only explicit patient-age fields and excludes all patient-weight and -w fields.';
+const UPDATE_SUMMARY='v255: Pediatric age-group dose helpers now follow the shared patient age automatically. Dextrose selects the GFD under-8 versus 8-and-older D10 branch from the shared age, updates when shared age changes, and visibly shows the selected age group for verification. The same shared-age logic also applies to other existing age-group helpers with defined protocol thresholds.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
