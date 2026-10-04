@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v259: Poison Control is now a prominent primary action in the Poisoning protocol. Large tap-to-call cards for 1-800-222-1222 appear at both the top and bottom of the protocol, while the number remains clickable within the original protocol text.';
+const UPDATE_SUMMARY='v260: Moved the primary Poison Control call action to the true top of the Poisoning protocol, immediately below the protocol title and metadata and before related medications, tools, notices, or clinical content. The matching tap-to-call action remains at the true bottom, and the inline protocol number remains clickable.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
