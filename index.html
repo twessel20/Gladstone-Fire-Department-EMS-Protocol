@@ -1792,7 +1792,7 @@ function tabs(){
  }).join('');
  bindHoldReorder('nav',document.querySelector('#tabs'),'.tab[data-navkey]');
 }
-function leaveDetail(){location.hash='';document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
+function leaveDetail(){protocolNavStack=[];currentProtocolId=null;history.replaceState({},'',location.pathname+location.search);document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
 function setCat(c){quickSet=null;leaveDetail();cat=c;tabs();render();scrollTo(0,0)}
 const quickGroups={
  cardiac:[
@@ -5530,18 +5530,32 @@ function patientContextProtocolGuard(x){
  if(x.id==='push-dose-epi-1-100-000'&&peds)return box('PEDIATRIC CONTRAINDICATION','GFD Push Dose Epinephrine 1:100,000 lists pediatric patients as a contraindication.','stop');
  return '';
 }
-function openP(id,returnProtocolId=null){
+let protocolNavStack=[];
+let currentProtocolId=null;
+function protocolBack(){
+ if(protocolNavStack.length){
+  const prev=protocolNavStack.pop();
+  openP(prev,null,true);
+ }else closeP();
+}
+function openP(id,returnProtocolId=null,fromBack=false){
  let x=data.find(z=>z.id===id);if(!x)return;
- location.hash=id;document.querySelector('#list').classList.add('off');
+ if(!fromBack&&currentProtocolId&&currentProtocolId!==id){
+  const parent=returnProtocolId||currentProtocolId;
+  if(parent&&parent!==id&&protocolNavStack.at(-1)!==parent)protocolNavStack.push(parent);
+ }
+ currentProtocolId=id;
+ history.replaceState({protocol:id},'',location.pathname+location.search+'#'+id);
+ document.querySelector('#list').classList.add('off');
  let body=patientContextProtocolGuard(x)+(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+(x.id==='poisoning'?formatProtocol(x):linkOperationalPhoneNumbers(formatProtocol(x),x))+(x.category==='Medications'||x.id==='dextrose'?'':protocolDoseTools(x))),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x));
- document.querySelector('#detail').innerHTML=`<button class="back sticky-back" onclick="${returnProtocolId?`openP('${returnProtocolId}')`:'closeP()'}">‹ ${returnProtocolId?'Protocol':'Back'}</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}'${returnProtocolId?`, '${returnProtocolId}'`:''})">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div>${x.id==='poisoning'?poisoningPoisonControlCallout():''}${returnProtocolId&&x.category==='Medications'?`<div class="linked-med-return">↩ Opened from ${esc(displayTitle(data.find(z=>z.id===returnProtocolId)||{title:'protocol'}))}</div>`:''}${relatedAppendixHtml(x)}${protocolMedicationLinksHtml(x)}${protocolToolLinks(x)}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div>${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p style="margin-top:18px"><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}${x.id==='poisoning'?poisoningPoisonControlCallout():''}</div>`;
+ document.querySelector('#detail').innerHTML=`<button class="back sticky-back" onclick="protocolBack()">‹ Back</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}'${returnProtocolId?`, '${returnProtocolId}'`:''})">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div>${x.id==='poisoning'?poisoningPoisonControlCallout():''}${returnProtocolId&&x.category==='Medications'?`<div class="linked-med-return">↩ Opened from ${esc(displayTitle(data.find(z=>z.id===returnProtocolId)||{title:'protocol'}))}</div>`:''}${relatedAppendixHtml(x)}${protocolMedicationLinksHtml(x)}${protocolToolLinks(x)}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div>${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p style="margin-top:18px"><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}${x.id==='poisoning'?poisoningPoisonControlCallout():''}</div>`;
  document.querySelector('#detail').classList.add('on');
  if(x.id==='burns'){renderBurnMap();requestAnimationFrame(updateBurnExtentHighlight);}
  if(x.id==='tcd-destinations')renderTcdOfficialPage();
  requestAnimationFrame(()=>applySharedPatientContextToDOM(document.querySelector('#detail')||document));
  scrollTo(0,0);
 }
-function closeP(){location.hash='';document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
+function closeP(){protocolNavStack=[];currentProtocolId=null;history.replaceState({},'',location.pathname+location.search);document.querySelector('#detail').classList.remove('on');document.querySelector('#list').classList.remove('off')}
 document.querySelector('#q').addEventListener('input',()=>{if(document.querySelector('#detail').classList.contains('on'))leaveDetail();if(document.querySelector('#q').value.trim()&&cat!=='All'){cat='All';tabs()}render()});document.querySelector('#q').addEventListener('search',()=>{if(!document.querySelector('#q').value)render()});
 async function load(){try{let r=await fetch('protocols.json',{cache:'no-store'});if(!r.ok)throw 0;data=await r.json()}catch(e){let r=await caches.match('protocols.json');if(r)data=await r.json()}roleUI();applyTheme();renderPatientContext();tabs();render();applyNumericKeypads();applySharedPatientContextToDOM();let dates=data.map(x=>x.updated).filter(Boolean).sort();document.querySelector('#ver').textContent=`${dates.length?'Current through '+dates.at(-1):'2026'} • Offline-ready`;if(location.hash)openP(location.hash.slice(1))}load();
 let appUpdateRegistration=null,appUpdateReady=false,appUpdateDismissed=false;
