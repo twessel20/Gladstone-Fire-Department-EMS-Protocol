@@ -81,6 +81,7 @@
 .source-med-row:last-child{border-bottom:0}
 .source-med-row.med-contra,.source-med-row.med-precaution{border-bottom-width:1px}
 .source-med-calc .dose-tools{margin:10px 0 0}
+.calc-patient-factors{display:grid;gap:10px;margin:10px 0}.calc-factor{display:grid;gap:5px}.calc-factor>label{font-size:13px;font-weight:850;color:#173a5e}.dark-mode .calc-factor>label{color:#dbeafe}
 .dose-tools{border-color:#bfdbfe;background:#f8fbff}
 .dose-tools h4{color:#173a5e}
 .dose-calc{border-top-color:#dbeafe}
@@ -3635,17 +3636,22 @@ function formatDextrose(){
         <div class="source-med-calc">
           <div><b>Inline Pediatric D10 Calculator</b></div>
           <div class="dose-note">Uses the GFD age-based D10 dose above and a D10 concentration of <b>25 g in 250 mL = 0.1 g/mL</b>.</div>
-          <div class="calc-field">
-            <label for="dc-dextrose-d10Age-agegroup">Patient age group</label>
-            <select id="dc-dextrose-d10Age-agegroup" class="tool-input">
-              <option value="">Select age group</option>
-              <option value="under8">Less than 8 years old</option>
-              <option value="8plus">8 years old or older</option>
-            </select>
-          </div>
-          <div class="dose-row">
-            <input id="dc-dextrose-d10Age-w" inputmode="decimal" type="number" min="0" step="0.1" placeholder="Patient weight">
-            <select id="dc-dextrose-d10Age-u"><option value="lb">lb</option><option value="kg">kg</option></select>
+          <div class="calc-patient-factors">
+            <div class="calc-factor">
+              <label for="dc-dextrose-d10Age-agegroup">Patient age</label>
+              <select id="dc-dextrose-d10Age-agegroup" class="tool-input">
+                <option value="">Select age group</option>
+                <option value="under8">Less than 8 years old</option>
+                <option value="8plus">8 years old or older</option>
+              </select>
+            </div>
+            <div class="calc-factor">
+              <label for="dc-dextrose-d10Age-w">Patient weight</label>
+              <div class="dose-row">
+                <input id="dc-dextrose-d10Age-w" data-patient-weight inputmode="decimal" type="number" min="0" step="0.1" placeholder="Weight">
+                <select id="dc-dextrose-d10Age-u"><option value="lb">lb</option><option value="kg">kg</option></select>
+              </div>
+            </div>
           </div>
           <button class="dose-btn" onclick="calcProtocolDose('dextrose','d10Age')">Calculate D10 dose</button>
           <div id="dc-dextrose-d10Age-o" class="dose-out"></div>
