@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v244: Removed the conflict between the legacy index patient controls and the unified patient context. Adult and Peds buttons now call the same shared patient profile directly, the center patient button opens the combined age/DOB plus weight editor, and Reset clears that same profile. The old weight-only handlers no longer control these header buttons.';
+const UPDATE_SUMMARY='v245: Restored Adult, Peds, Patient Context, and Reset as native app-shell controls so they no longer depend on a deferred enhancement script. The native patient context now stores both age and weight, and the editor accepts age in years or months plus kg or lb. Header display shows age and weight when entered.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
