@@ -67,6 +67,16 @@
 .source-med-label{color:#173a5e;font-size:14px;line-height:1.35}
 .source-med-value{font-size:15.5px;line-height:1.48}
 .source-med-value>div+div{margin-top:5px}
+.dilt-interaction-card{display:grid;gap:9px;padding:10px 11px;border:1px solid #dbeafe;border-radius:10px;background:#f8fbff}
+.dilt-interaction-drugs{display:flex;flex-wrap:wrap;gap:7px}
+.dilt-interaction-drugs span{display:inline-flex;align-items:center;min-height:30px;padding:5px 9px;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#173a5e;font-size:13px;font-weight:850}
+.dilt-interaction-effect{display:grid;gap:3px;line-height:1.42}
+.dilt-interaction-effect b{font-size:12px;text-transform:uppercase;letter-spacing:.035em;color:#475569}
+.dilt-interaction-effect span{font-size:15px;color:#1f2937}
+.dark-mode .dilt-interaction-card{background:#111c2c;border-color:#29415f}
+.dark-mode .dilt-interaction-drugs span{background:#17263b;border-color:#355275;color:#dbeafe}
+.dark-mode .dilt-interaction-effect b{color:#a9b8ca}
+.dark-mode .dilt-interaction-effect span{color:#e5edf7}
 .source-med-row{border-bottom:1px solid #eef2f7}
 .source-med-row:last-child{border-bottom:0}
 .source-med-row.med-contra,.source-med-row.med-precaution{border-bottom-width:1px}
@@ -3924,6 +3934,9 @@ function formatMedication(x){
  sections.forEach((s,i)=>{
    if(!s.items.length)return;
    let vals=s.items.map(v=>v&&v.html?'<div>'+v.html+'</div>':'<div>'+esc(v&&v.text!==undefined?v.text:v)+'</div>').join('');
+   if(x.id==='diltiazem-hcl-cardizem'&&/^Drug Interaction/i.test(s.label)){
+     vals='<div class="dilt-interaction-card"><div class="dilt-interaction-drugs"><span>Beta-blockers</span><span>Digitalis</span></div><div class="dilt-interaction-effect"><b>Interaction effect</b><span>Additive effects in prolonging AV conduction when used concomitantly with Diltiazem HCl.</span></div></div>';
+   }
    const isPed=/pediatric|neonatal/i.test(s.label);
    if(isPed&&pedInfo?.calc){
      vals+='<div class="source-med-calc">'+protocolDoseTools(x)+'</div>';
