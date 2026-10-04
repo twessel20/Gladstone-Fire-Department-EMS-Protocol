@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v249: Age inputs across calculators now accept decimals instead of forcing whole years. Shared patient ages retain their explicit years/months unit and are normalized only for clinical threshold comparisons. Diltiazem no longer rejects decimal ages, and global age propagation no longer rounds step-1 fields down.';
+const UPDATE_SUMMARY='v250: Cleaned up the Diltiazem drug-interaction display. Beta-blockers and Digitalis are now shown as distinct interacting medication classes with the AV-conduction effect grouped into one readable mobile card instead of split PDF line-wrap fragments. Clinical meaning is unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
