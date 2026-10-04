@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v235: Protocol display readability pass. Reference protocol text remains the clinical source of truth while PDF hard-wraps are recombined into readable sentences and displayed protocol content is organized into clearer headings, paragraphs, and list-style steps. Clinical doses, thresholds, contraindications, sequence, and meaning are not intentionally changed. Dark-mode contrast, shared patient context, and Universal Search remain active.';
+const UPDATE_SUMMARY='v236: Clinical protocol displays retain a flowchart-first feel while benefiting from the v235 readability cleanup. Existing purpose-built flowcharts are preserved. Treatment-oriented source protocols use clearer sequential step cards and arrows, while administrative/reference material remains paragraph/list based. Clinical source meaning is unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -17,7 +17,7 @@ async function injectPatientContext(response){
  const tags=[];
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=233" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
- if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');\n if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');\n if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=235" defer></script>');
+ if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');\n if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');\n if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
