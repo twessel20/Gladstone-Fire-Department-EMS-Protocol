@@ -81,7 +81,7 @@
 .source-med-row:last-child{border-bottom:0}
 .source-med-row.med-contra,.source-med-row.med-precaution{border-bottom-width:1px}
 .source-med-calc .dose-tools{margin:10px 0 0}
-.patient-rule{margin:10px 0 16px;padding:13px 14px;border:2px solid #2563eb;border-radius:12px;background:#eff6ff;color:#173a5e;line-height:1.45}.patient-rule-kicker{font-size:10px;font-weight:950;letter-spacing:.08em;margin-bottom:4px}.patient-rule strong{display:block;font-size:16px;margin-bottom:4px}.patient-rule.caution{background:#fffbeb;border-color:#d97706;color:#78350f}.patient-rule.stop{background:#fff1f2;border-color:#b91c1c;color:#7f1d1d}.dark-mode .patient-rule{background:#10243e;border-color:#60a5fa;color:#dbeafe}.dark-mode .patient-rule.caution{background:#38290b;border-color:#f59e0b;color:#fde68a}.dark-mode .patient-rule.stop{background:#351417;border-color:#ef4444;color:#fecaca}\n.dose-alert-stop{margin:10px 0 14px;padding:12px 13px;border:2px solid #b91c1c;border-radius:11px;background:#fff1f2;color:#7f1d1d;line-height:1.4}.dose-alert-stop strong{display:block;font-size:15px;margin-bottom:4px}.dark-mode .dose-alert-stop{background:#351417;border-color:#ef4444;color:#fecaca}\n.calc-patient-factors{display:grid;gap:10px;margin:10px 0}.calc-factor{display:grid;gap:5px}.calc-factor>label{font-size:13px;font-weight:850;color:#173a5e}.dark-mode .calc-factor>label{color:#dbeafe}
+.protocol-phone{display:inline-block;font-weight:900;text-decoration:none;color:#075985;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:8px;padding:2px 7px;white-space:nowrap}.protocol-phone:active{transform:scale(.98)}.dark-mode .protocol-phone{color:#e0f2fe;background:#0c4a6e;border-color:#38bdf8}\n.patient-rule{margin:10px 0 16px;padding:13px 14px;border:2px solid #2563eb;border-radius:12px;background:#eff6ff;color:#173a5e;line-height:1.45}.patient-rule-kicker{font-size:10px;font-weight:950;letter-spacing:.08em;margin-bottom:4px}.patient-rule strong{display:block;font-size:16px;margin-bottom:4px}.patient-rule.caution{background:#fffbeb;border-color:#d97706;color:#78350f}.patient-rule.stop{background:#fff1f2;border-color:#b91c1c;color:#7f1d1d}.dark-mode .patient-rule{background:#10243e;border-color:#60a5fa;color:#dbeafe}.dark-mode .patient-rule.caution{background:#38290b;border-color:#f59e0b;color:#fde68a}.dark-mode .patient-rule.stop{background:#351417;border-color:#ef4444;color:#fecaca}\n.dose-alert-stop{margin:10px 0 14px;padding:12px 13px;border:2px solid #b91c1c;border-radius:11px;background:#fff1f2;color:#7f1d1d;line-height:1.4}.dose-alert-stop strong{display:block;font-size:15px;margin-bottom:4px}.dark-mode .dose-alert-stop{background:#351417;border-color:#ef4444;color:#fecaca}\n.calc-patient-factors{display:grid;gap:10px;margin:10px 0}.calc-factor{display:grid;gap:5px}.calc-factor>label{font-size:13px;font-weight:850;color:#173a5e}.dark-mode .calc-factor>label{color:#dbeafe}
 .dose-tools{border-color:#bfdbfe;background:#f8fbff}
 .dose-tools h4{color:#173a5e}
 .dose-calc{border-top-color:#dbeafe}
@@ -4989,6 +4989,13 @@ function formatWorkflowProtocol(x){
  return out+'</div>';
 }
 
+function linkOperationalPhoneNumbers(html,x){
+ if(!html||!x)return html;
+ if(x.id==='poisoning'){
+  html=html.replace(/1-800-222-1222/g,'<a class="protocol-phone" href="tel:18002221222" aria-label="Call Poison Control at 1 800 222 1222">1-800-222-1222</a>');
+ }
+ return html;
+}
 function formatProtocol(x){
  if(x.id==='chest-pain-pressure')return formatChestPain();
  if(x.id==='code-stemi')return formatCodeStemi();
@@ -5512,7 +5519,7 @@ function patientContextProtocolGuard(x){
 function openP(id,returnProtocolId=null){
  let x=data.find(z=>z.id===id);if(!x)return;
  location.hash=id;document.querySelector('#list').classList.add('off');
- let body=patientContextProtocolGuard(x)+(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+formatProtocol(x)+(x.category==='Medications'||x.id==='dextrose'?'':protocolDoseTools(x))),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x));
+ let body=patientContextProtocolGuard(x)+(x.id==='controlled-substance-verification'?controlledSubstancePage21():(x.id==='burns'?burnProtocolTools():'')+linkOperationalPhoneNumbers(formatProtocol(x),x)+(x.category==='Medications'||x.id==='dextrose'?'':protocolDoseTools(x))),src=(x.id==='controlled-substance-verification'?'protocol-viewer.html?src='+encodeURIComponent('updates/current-protocol-book.pdf')+'&start=21&end=21&title='+encodeURIComponent('Controlled Substance Verification'):sourceHref(x));
  document.querySelector('#detail').innerHTML=`<button class="back sticky-back" onclick="${returnProtocolId?`openP('${returnProtocolId}')`:'closeP()'}">‹ ${returnProtocolId?'Protocol':'Back'}</button><div class="card"><button class="fav" onclick="toggleFav('${x.id}');openP('${x.id}'${returnProtocolId?`, '${returnProtocolId}'`:''})">${fav.has(x.id)?'★':'☆'}</button><h2>${esc(displayTitle(x))}</h2><div class="meta">${esc(x.category)} • ${x.updated?`Updated ${esc(x.updated)}`:'2026 GFD EMS Protocols'}</div>${returnProtocolId&&x.category==='Medications'?`<div class="linked-med-return">↩ Opened from ${esc(displayTitle(data.find(z=>z.id===returnProtocolId)||{title:'protocol'}))}</div>`:''}${relatedAppendixHtml(x)}${protocolMedicationLinksHtml(x)}${protocolToolLinks(x)}${x.category==='Appendix'?'':'<div class="notice">'+('Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.')+'</div>'}<div style="display:none">${'Quick-reference display of the GFD source protocol. Use the official source when exact wording, layout, tables, or context are needed.'}</div><div class="protocol-body">${body}</div>${protocolToolLinks(x)}${src&&x.category!=='Appendix'?`<p style="margin-top:18px"><a class="source" href="${esc(src)}">View Source Protocol PDF ↗</a></p>`:''}</div>`;
  document.querySelector('#detail').classList.add('on');
  if(x.id==='burns'){renderBurnMap();requestAnimationFrame(updateBurnExtentHighlight);}
