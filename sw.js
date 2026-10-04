@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v238: Fixed the service-worker injection chain so the v237 Professionalism and Protocol Authorization layouts actually load. Reference pages use structured readable sections while clinical protocols retain the v236 flowchart-first presentation.';
+const UPDATE_SUMMARY='v239: Professionalism and Protocol Authorization now render directly from the official protocols.json source rather than reconstructing text from the displayed page. Professionalism retains the complete source introduction, full Bledsoe passage, all 11 NHTSA professional behaviors, and the complete closing paragraph, with formatting changes only. Clinical flowchart views remain unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -20,7 +20,7 @@ async function injectPatientContext(response){
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
- if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=238" defer></script>');
+ if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=239" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
