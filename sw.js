@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v232: Universal Search now searches across the app from the existing search field, including protocols, medications, tools/calculators, hospitals, important phone/contact items, and toxicology/street-drug references. Search supports common EMS abbreviations, alternate terms, and forgiving near-matches. Persistent Adult/Peds patient context from v231 remains active. No app-shell caching is used.';
+const UPDATE_SUMMARY='v233: Shared patient age and weight now propagate more broadly across appropriate clinical screens, including dynamically opened age/weight-dependent tools and calculators. Universal Search from v232 and persistent Adult/Peds context remain active. No app-shell caching is used.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,7 +15,7 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  const tags=[];
- if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=231" defer></script>');
+ if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=233" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
