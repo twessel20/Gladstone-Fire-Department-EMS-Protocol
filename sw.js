@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v272: Standardized the Poison Control action inside the Poisoning Assessment section. Preserved the protocol instruction to consider contacting Poison Control or Medical Control, removed the mismatched inline phone-number link, and placed the same Call Poison Control button used at the top and bottom directly beneath the instruction.';
+const UPDATE_SUMMARY='v273: Corrected the visual treatment of all Call Poison Control controls in the Poisoning protocol. The working call actions are now forced to render as large, full-width solid Gladstone-blue buttons with bold white text and a 64-pixel glove-friendly tap target at the top, Assessment section, and bottom.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
