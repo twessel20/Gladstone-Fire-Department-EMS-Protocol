@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v270: Fixed referenced-protocol back navigation. Cross-links now use an in-app protocol navigation stack, so opening a referenced protocol, medication, or appendix and tapping Back returns to the protocol that opened it. Back from the original protocol then exits cleanly to the app list instead of leaving a referenced detail view active.';
+const UPDATE_SUMMARY='v271: Fixed the Poison Control button styling regression at its source. Removed malformed CSS containing embedded literal newline escapes that caused the browser to discard the intended button rules. Call Poison Control now uses one valid, iOS-safe rule with the same Gladstone navy pill treatment as the app call controls and a large glove-friendly tap target.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
