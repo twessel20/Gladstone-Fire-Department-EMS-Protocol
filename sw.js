@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v246: Repaired the Peds mode button event binding. Adult and Peds now use explicit button event handlers that call the native patient-mode switch, while shared age and weight remain unchanged.';
+const UPDATE_SUMMARY='v247: Shared patient age now propagates into Diltiazem and other age-aware medication dose helpers just like shared weight. Diltiazem standalone and inline calculators receive the saved patient age automatically; pediatric age-group helpers can also preselect the appropriate age group from shared age. Calculator-specific clinical rules remain unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
