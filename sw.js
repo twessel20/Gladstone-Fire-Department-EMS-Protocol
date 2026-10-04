@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v233: Shared patient age and weight now propagate more broadly across appropriate clinical screens, including dynamically opened age/weight-dependent tools and calculators. Universal Search from v232 and persistent Adult/Peds context remain active. No app-shell caching is used.';
+const UPDATE_SUMMARY='v234: Global dark-mode contrast pass. Clinical cards, protocols, medications, calculators, warnings/cautions, forms, tables, search content, muted text, and decision aids now use consistent high-contrast dark surfaces while preserving red/amber/green/blue/purple clinical meaning. Shared patient context and Universal Search remain active.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -17,7 +17,7 @@ async function injectPatientContext(response){
  const tags=[];
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=233" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
- if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
+ if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');\n if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
