@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v239: Professionalism and Protocol Authorization now render directly from the official protocols.json source rather than reconstructing text from the displayed page. Professionalism retains the complete source introduction, full Bledsoe passage, all 11 NHTSA professional behaviors, and the complete closing paragraph, with formatting changes only. Clinical flowchart views remain unchanged.';
+const UPDATE_SUMMARY='v240: Shared patient context now supports age entry for both Adult and Peds using either reported age or date of birth. DOB automatically calculates age, and the shared age is available across age-dependent screens alongside shared weight. Diltiazem views now surface the exact Gladstone age-specific rules: under age 15 is listed as a contraindication, and patients over age 70 have a 5 mg dose reduction. No new clinical thresholds were invented.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -21,6 +21,7 @@ async function injectPatientContext(response){
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=239" defer></script>');
+ if(!html.includes('age-context.js'))tags.push('<script src="age-context.js?v=240" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
