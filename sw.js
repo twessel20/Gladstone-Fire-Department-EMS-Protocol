@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v245: Restored Adult, Peds, Patient Context, and Reset as native app-shell controls so they no longer depend on a deferred enhancement script. The native patient context now stores both age and weight, and the editor accepts age in years or months plus kg or lb. Header display shows age and weight when entered.';
+const UPDATE_SUMMARY='v246: Repaired the Peds mode button event binding. Adult and Peds now use explicit button event handlers that call the native patient-mode switch, while shared age and weight remain unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -16,7 +16,7 @@ async function injectPatientContext(response){
  let html=await response.text();
  const tags=[];
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
- if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=244" defer></script>');
+ if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
