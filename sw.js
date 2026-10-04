@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v250: Cleaned up the Diltiazem drug-interaction display. Beta-blockers and Digitalis are now shown as distinct interacting medication classes with the AV-conduction effect grouped into one readable mobile card instead of split PDF line-wrap fragments. Clinical meaning is unchanged.';
+const UPDATE_SUMMARY='v251: Repaired the Morphine medication display. The source PDF uses a table whose extracted text placed Contraindications, Precautions, Side Effects, Dose, Pediatric Dose, and Route values under the wrong headings. Morphine now renders those source values under their intended sections without changing the protocol content.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
