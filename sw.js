@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v263: Repaired Poison Control phone actions in the Poisoning protocol by removing duplicate link processing introduced by the custom poisoning layout. Matching prominent tap-to-call cards now remain at the true top and true bottom of the page, with the inline Poison Control number also directly callable. Seizure Activity now includes a direct cross-link to the GFD Seizures protocol.';
+const UPDATE_SUMMARY='v264: Simplified Poison Control access in the Poisoning protocol. Removed the large call-card treatment. The top and bottom now show a clean Call Poison Control: 1-800-222-1222 telephone link, while the number within the protocol remains callable.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
