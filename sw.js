@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v247: Shared patient age now propagates into Diltiazem and other age-aware medication dose helpers just like shared weight. Diltiazem standalone and inline calculators receive the saved patient age automatically; pediatric age-group helpers can also preselect the appropriate age group from shared age. Calculator-specific clinical rules remain unchanged.';
+const UPDATE_SUMMARY='v248: Shared Adult/Peds patient age and weight now propagate globally across calculator and dose-helper patient inputs, including dynamically rendered tools. The global matcher recognizes patient age, DOB, and weight fields while excluding unrelated numeric fields such as dose, IBW, volume, fluid, and result fields. Existing calculator-specific clinical rules remain unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
