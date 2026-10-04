@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v253: Cleaned up calculator patient-factor layout using Dextrose as the first correction. Age and weight are now presented as separate patient inputs instead of making age appear to be part of the weight calculator. Shared patient weight is explicitly recognized in the Dextrose helper; its age-based GFD dosing logic remains unchanged.';
+const UPDATE_SUMMARY='v254: Fixed shared age propagation overwriting weight fields. Calculator IDs such as dc-dextrose-d10Age-w contained the word Age and were incorrectly classified as age inputs, causing a 3-year-old / 15-kg patient to display 3 in the weight field. Age propagation now targets only explicit patient-age fields and excludes all patient-weight and -w fields.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
