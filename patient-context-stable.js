@@ -1,14 +1,15 @@
 (()=>{
 'use strict';
 const KEY='gfdPatientProfileV228';
-const STYLE_ID='gfdPatientProfileV228Style';
+const STYLE_ID='gfdPatientProfileV231Style';
+const BROSELOW_ZONES=['Gray','Pink','Red','Purple','Yellow','White','Blue','Orange','Green'];
 const nativeSetMode=window.setPatientMode?.bind(window);
 const nativeSaveWeight=window.savePatientWeight?.bind(window);
 const nativeClear=window.clearPatientContext?.bind(window);
 const nativeRender=window.render?.bind(window);
 let applying=false;
 
-function blank(){return {mode:'adult',age:'',ageUnit:'years',weightKg:null}}
+function blank(){return {mode:'adult',age:'',ageUnit:'years',weightKg:null,broselowColor:''}}
 function load(){
  try{
   const v=JSON.parse(sessionStorage.getItem(KEY)||'null');
@@ -17,7 +18,8 @@ function load(){
    mode:v.mode==='pediatric'?'pediatric':'adult',
    age:v.age==null?'':String(v.age),
    ageUnit:v.ageUnit==='months'?'months':'years',
-   weightKg:Number.isFinite(Number(v.weightKg))&&Number(v.weightKg)>0?Number(v.weightKg):null
+   weightKg:Number.isFinite(Number(v.weightKg))&&Number(v.weightKg)>0?Number(v.weightKg):null,
+   broselowColor:BROSELOW_ZONES.includes(v.broselowColor)?v.broselowColor:''
   };
  }catch(e){return blank()}
 }
@@ -28,23 +30,41 @@ function fmtWeight(){return profile.weightKg?`${Math.round(profile.weightKg*10)/
 function fmtAge(){
  if(profile.age==='')return '';
  const n=Number(profile.age);if(!Number.isFinite(n)||n<0)return '';
- if(profile.mode==='pediatric'&&profile.ageUnit==='months')return `${n} mo`;
+ if(profile.mode==='pediatric')return `${n} ${profile.ageUnit==='months'?'mo':'yr'}`;
  return `Age ${n}`;
 }
+function fmtBroselow(){return profile.mode==='pediatric'&&profile.broselowColor?`Broselow ${profile.broselowColor}`:''}
 function poundsToKg(lb){const n=Number(lb);return Number.isFinite(n)&&n>0?n/2.2046226218:null}
 function kgToLb(kg){const n=Number(kg);return Number.isFinite(n)&&n>0?Math.round(n*2.2046226218*10)/10:''}
 
 function injectStyles(){
  if(document.getElementById(STYLE_ID))return;
  const s=document.createElement('style');s.id=STYLE_ID;s.textContent=`
+/* v231 persistent field patient context */
+.patient-context{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:stretch!important;gap:7px!important;margin-top:8px!important;min-height:40px}
+.patient-mode-toggle{display:flex!important;gap:3px!important;padding:3px!important;background:#ffffff18!important;border:1px solid #ffffff33!important;border-radius:10px!important;flex:0 0 auto}
+.patient-mode-btn{border:0!important;border-radius:7px!important;padding:7px 9px!important;background:transparent!important;color:#fff!important;font-weight:950!important;font-size:11px!important;letter-spacing:.035em;line-height:1!important;min-height:32px!important}
+.patient-mode-btn.on{background:#fff!important;color:#173a5e!important;box-shadow:0 1px 3px #0002!important}
+.patient-context-summary{min-width:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;border:1px solid #ffffff55!important;background:#ffffff18!important;color:#fff!important;border-radius:10px!important;padding:7px 10px!important;font-weight:900!important;text-align:left!important;min-height:40px!important;white-space:normal!important;overflow:hidden!important}
+.patient-context-summary.peds{background:#dbeafe!important;color:#173a5e!important;border-color:#bfdbfe!important}
+.gfd-context-main{min-width:0;display:flex;align-items:center;gap:6px;overflow:hidden}
+.gfd-context-mode{flex:0 0 auto;font-size:11px;font-weight:950;letter-spacing:.04em}
+.gfd-context-data{min-width:0;font-size:12px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gfd-context-edit{flex:0 0 auto;font-size:10px;font-weight:900;opacity:.82;text-transform:uppercase;letter-spacing:.04em}
+.patient-context-reset{border:1px solid #ffffff55!important;background:#ffffff18!important;color:#fff!important;border-radius:10px!important;padding:7px 9px!important;font-weight:900!important;font-size:11px!important;min-height:40px!important}
+.patient-context-reset:disabled{opacity:.38!important}
+body.dark-mode .patient-context-summary.peds{background:#173a5e!important;color:#fff!important;border-color:#5b8db4!important}
 #gfdProfileBackdrop{position:fixed;inset:0;z-index:10050;background:#0f172acc;display:flex;align-items:flex-end;justify-content:center}
 #gfdProfileSheet{width:min(720px,100%);max-height:92vh;overflow:auto;background:#f8fafc;border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -14px 40px #0005;color:#0f172a}
 #gfdProfileSheet h2{margin:0;color:#173a5e;font-size:21px}#gfdProfileSheet p{margin:6px 0 12px;color:#475569;line-height:1.4;font-size:13px}
+.gfd-prof-mode{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;margin-bottom:8px;background:#e2e8f0;color:#334155;font-size:11px;font-weight:950;letter-spacing:.05em}.gfd-prof-mode.peds{background:#dbeafe;color:#173a5e}
 .gfd-prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gfd-prof-field{margin-top:8px}.gfd-prof-field label{display:block;font-size:12px;font-weight:900;color:#334155;margin-bottom:5px}.gfd-prof-field input,.gfd-prof-field select{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px;font-size:16px;background:#fff;color:#111827}
 .gfd-prof-summary{margin-top:12px;border:1px solid #bfdbfe;background:#eff6ff;color:#173a5e;border-radius:10px;padding:10px 11px;font-weight:850;font-size:13px;line-height:1.4}
-.gfd-prof-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.gfd-prof-actions button{border:0;border-radius:10px;padding:12px;font-weight:900;font-size:14px}.gfd-prof-save{background:#173a5e;color:#fff}.gfd-prof-cancel{background:#e2e8f0;color:#0f172a}.gfd-prof-clear{grid-column:1/-1;background:#fff1f2!important;color:#9f1239!important;border:1px solid #fecdd3!important}
-body.dark-mode #gfdProfileSheet{background:#111827;color:#f8fafc}body.dark-mode #gfdProfileSheet h2{color:#dbeafe}body.dark-mode #gfdProfileSheet p,body.dark-mode #gfdProfileSheet label{color:#cbd5e1}body.dark-mode #gfdProfileSheet input,body.dark-mode #gfdProfileSheet select{background:#0f172a;color:#f8fafc;border-color:#475569}body.dark-mode .gfd-prof-summary{background:#13263b;color:#dbeafe;border-color:#4f83b6}
-@media(min-width:700px){#gfdProfileBackdrop{align-items:center;padding:20px}#gfdProfileSheet{border-radius:18px}}@media(max-width:520px){.gfd-prof-grid{grid-template-columns:1fr}}
+.gfd-prof-help{margin-top:6px;color:#64748b;font-size:11px;line-height:1.35}
+.gfd-prof-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.gfd-prof-actions button{border:0;border-radius:10px;padding:12px;font-weight:900;font-size:14px;min-height:46px}.gfd-prof-save{background:#173a5e;color:#fff}.gfd-prof-cancel{background:#e2e8f0;color:#0f172a}.gfd-prof-clear{grid-column:1/-1;background:#fff1f2!important;color:#9f1239!important;border:1px solid #fecdd3!important}
+body.dark-mode #gfdProfileSheet{background:#111827;color:#f8fafc}body.dark-mode #gfdProfileSheet h2{color:#dbeafe}body.dark-mode #gfdProfileSheet p,body.dark-mode #gfdProfileSheet label{color:#cbd5e1}body.dark-mode #gfdProfileSheet input,body.dark-mode #gfdProfileSheet select{background:#0f172a;color:#f8fafc;border-color:#475569}body.dark-mode .gfd-prof-summary{background:#13263b;color:#dbeafe;border-color:#4f83b6}body.dark-mode .gfd-prof-help{color:#94a3b8}body.dark-mode .gfd-prof-mode{background:#1f2937;color:#e5e7eb}body.dark-mode .gfd-prof-mode.peds{background:#173a5e;color:#dbeafe}
+@media(min-width:700px){#gfdProfileBackdrop{align-items:center;padding:20px}#gfdProfileSheet{border-radius:18px}}
+@media(max-width:520px){.patient-context{grid-template-columns:auto minmax(0,1fr) auto!important;gap:5px!important}.patient-mode-btn{padding:7px 7px!important;font-size:10px!important}.patient-context-summary{padding:7px 8px!important}.gfd-context-mode{font-size:10px}.gfd-context-data{font-size:11px}.gfd-context-edit{display:none}.patient-context-reset{padding:7px 8px!important;font-size:10px!important}.gfd-prof-grid{grid-template-columns:1fr}}
 `;
  document.head.appendChild(s);
 }
@@ -66,14 +86,18 @@ function syncNative(){
 
 function renderHeader(){
  const adult=document.getElementById('adultModeBtn'),peds=document.getElementById('pedsModeBtn'),summary=document.getElementById('patientContextSummary'),reset=document.getElementById('patientContextReset');
- adult?.classList.toggle('on',profile.mode==='adult');
- peds?.classList.toggle('on',profile.mode==='pediatric');
+ const isPeds=profile.mode==='pediatric';
+ adult?.classList.toggle('on',!isPeds);peds?.classList.toggle('on',isPeds);
+ adult?.setAttribute('aria-pressed',String(!isPeds));peds?.setAttribute('aria-pressed',String(isPeds));
  if(summary){
-  const bits=[profile.mode==='pediatric'?'PEDS':'ADULT'];
-  const a=fmtAge(),w=fmtWeight();if(a)bits.push(a);if(w)bits.push(w);if(!a&&!w)bits.push('Add age / weight');
-  summary.textContent=bits.join(' • ');summary.setAttribute('aria-label','Add or edit patient age and weight');summary.classList.toggle('peds',profile.mode==='pediatric');
+  const details=[];const a=fmtAge(),w=fmtWeight(),b=fmtBroselow();
+  if(a)details.push(a);if(w)details.push(w);if(b)details.push(b);
+  const emptyText='Add age / weight';
+  summary.innerHTML=`<span class="gfd-context-main"><span class="gfd-context-mode">${isPeds?'PEDS':'ADULT'}</span><span aria-hidden="true">•</span><span class="gfd-context-data">${details.length?details.join(' • '):emptyText}</span></span><span class="gfd-context-edit">Edit</span>`;
+  summary.setAttribute('aria-label',`${isPeds?'Pediatric':'Adult'} patient context. ${details.length?details.join(', '):'Age and weight not entered'}. Tap to edit.`);
+  summary.classList.toggle('peds',isPeds);
  }
- if(reset)reset.disabled=profile.mode==='adult'&&profile.age===''&&!profile.weightKg;
+ if(reset)reset.disabled=profile.mode==='adult'&&profile.age===''&&!profile.weightKg&&!profile.broselowColor;
 }
 
 function applyAge(root=document){
@@ -96,37 +120,52 @@ function applyAll(){
 }
 
 function openEditor(mode){
- if(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';save();syncNative();renderHeader()}
+ if(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';if(profile.mode==='adult')profile.ageUnit='years';save();syncNative();renderHeader()}
  document.getElementById('gfdProfileBackdrop')?.remove();injectStyles();
  const temp={...profile};
  const back=document.createElement('div');back.id='gfdProfileBackdrop';
+ const isPeds=temp.mode==='pediatric';
  back.innerHTML=`<div id="gfdProfileSheet" role="dialog" aria-modal="true" aria-labelledby="gfdProfileTitle">
-  <h2 id="gfdProfileTitle">${temp.mode==='pediatric'?'Pediatric':'Adult'} Patient</h2>
-  <p>Age and weight are optional. Enter either one, both, or neither. Saved values follow this patient through the app and populate supported calculators.</p>
+  <div class="gfd-prof-mode ${isPeds?'peds':''}">${isPeds?'PEDIATRIC PATIENT':'ADULT PATIENT'}</div>
+  <h2 id="gfdProfileTitle">Patient Context</h2>
+  <p>Enter patient information once. It follows this patient through the app and populates supported calculators. Age and weight are optional.</p>
   <div class="gfd-prof-grid">
-   <div class="gfd-prof-field"><label>Age</label><input id="gfdProfAge" type="number" inputmode="decimal" min="0" step="0.1" value="${temp.age}"></div>
-   <div class="gfd-prof-field" id="gfdProfAgeUnitWrap"><label>Age unit</label><select id="gfdProfAgeUnit"><option value="years">Years</option><option value="months">Months</option></select></div>
-   <div class="gfd-prof-field"><label>Weight</label><input id="gfdProfWeight" type="number" inputmode="decimal" min="0" step="0.1" value="${temp.weightKg?Math.round(temp.weightKg*10)/10:''}"></div>
-   <div class="gfd-prof-field"><label>Weight unit</label><select id="gfdProfWeightUnit"><option value="kg">kg</option><option value="lb">lb</option></select></div>
+   <div class="gfd-prof-field"><label for="gfdProfAge">Age</label><input id="gfdProfAge" type="number" inputmode="decimal" min="0" step="0.1" value="${temp.age}"></div>
+   <div class="gfd-prof-field" id="gfdProfAgeUnitWrap"><label for="gfdProfAgeUnit">Age unit</label><select id="gfdProfAgeUnit"><option value="years">Years</option><option value="months">Months</option></select></div>
+   <div class="gfd-prof-field"><label for="gfdProfWeight">Weight</label><input id="gfdProfWeight" type="number" inputmode="decimal" min="0" step="0.1" value="${temp.weightKg?Math.round(temp.weightKg*10)/10:''}"></div>
+   <div class="gfd-prof-field"><label for="gfdProfWeightUnit">Weight unit</label><select id="gfdProfWeightUnit"><option value="kg">kg</option><option value="lb">lb</option></select></div>
+   ${isPeds?`<div class="gfd-prof-field" style="grid-column:1/-1"><label for="gfdProfBroselow">Broselow color zone (optional)</label><select id="gfdProfBroselow"><option value="">Not entered</option>${BROSELOW_ZONES.map(c=>`<option value="${c}" ${temp.broselowColor===c?'selected':''}>${c}</option>`).join('')}</select><div class="gfd-prof-help">Select the zone from the physical Broselow tape. The app does not infer a zone from weight.</div></div>`:''}
   </div>
   <div class="gfd-prof-summary" id="gfdProfPreview"></div>
   <div class="gfd-prof-actions"><button class="gfd-prof-cancel" id="gfdProfCancel">Cancel</button><button class="gfd-prof-save" id="gfdProfSave">Use Patient Data</button><button class="gfd-prof-clear" id="gfdProfClear">Clear age and weight</button></div>
  </div>`;
  document.body.appendChild(back);
- const age=back.querySelector('#gfdProfAge'),ageUnit=back.querySelector('#gfdProfAgeUnit'),weight=back.querySelector('#gfdProfWeight'),weightUnit=back.querySelector('#gfdProfWeightUnit'),preview=back.querySelector('#gfdProfPreview'),ageUnitWrap=back.querySelector('#gfdProfAgeUnitWrap');
- ageUnit.value=temp.ageUnit||'years';if(temp.mode==='adult'){ageUnit.value='years';ageUnitWrap.style.display='none'}
- const refresh=()=>{const av=age.value?`${age.value} ${ageUnit.value==='months'?'mo':'yr'}`:'Age not entered';const wv=weight.value?`${weight.value} ${weightUnit.value}`:'Weight not entered';preview.textContent=`${temp.mode==='pediatric'?'PEDS':'ADULT'} • ${av} • ${wv}`};
- age.addEventListener('input',refresh);ageUnit.addEventListener('change',refresh);weight.addEventListener('input',refresh);weightUnit.addEventListener('change',refresh);refresh();
+ const age=back.querySelector('#gfdProfAge'),ageUnit=back.querySelector('#gfdProfAgeUnit'),weight=back.querySelector('#gfdProfWeight'),weightUnit=back.querySelector('#gfdProfWeightUnit'),broselow=back.querySelector('#gfdProfBroselow'),preview=back.querySelector('#gfdProfPreview'),ageUnitWrap=back.querySelector('#gfdProfAgeUnitWrap');
+ ageUnit.value=temp.ageUnit||'years';if(!isPeds){ageUnit.value='years';ageUnitWrap.style.display='none'}
+ const refresh=()=>{
+  const bits=[isPeds?'PEDS':'ADULT'];
+  if(age.value)bits.push(isPeds?`${age.value} ${ageUnit.value==='months'?'mo':'yr'}`:`Age ${age.value}`);else bits.push('Age not entered');
+  if(weight.value)bits.push(`${weight.value} ${weightUnit.value}`);else bits.push('Weight not entered');
+  if(isPeds&&broselow?.value)bits.push(`Broselow ${broselow.value}`);
+  preview.textContent=bits.join(' • ');
+ };
+ age.addEventListener('input',refresh);ageUnit.addEventListener('change',refresh);weight.addEventListener('input',refresh);weightUnit.addEventListener('change',refresh);broselow?.addEventListener('change',refresh);refresh();
  back.querySelector('#gfdProfCancel').onclick=()=>back.remove();
  back.querySelector('#gfdProfSave').onclick=()=>{
   const rawWeight=Number(weight.value);const kg=Number.isFinite(rawWeight)&&rawWeight>0?(weightUnit.value==='lb'?poundsToKg(rawWeight):rawWeight):null;
-  profile={mode:temp.mode,age:age.value||'',ageUnit:temp.mode==='adult'?'years':ageUnit.value,weightKg:kg};save();syncNative();applyAll();back.remove();
+  profile={mode:temp.mode,age:age.value||'',ageUnit:isPeds?ageUnit.value:'years',weightKg:kg,broselowColor:isPeds?(broselow?.value||''):''};save();syncNative();applyAll();back.remove();
  };
- back.querySelector('#gfdProfClear').onclick=()=>{profile={...profile,age:'',ageUnit:profile.mode==='adult'?'years':profile.ageUnit,weightKg:null};save();try{nativeClear?.()}catch(e){};syncNative();applyAll();back.remove()};
+ back.querySelector('#gfdProfClear').onclick=()=>{profile={...profile,age:'',ageUnit:profile.mode==='adult'?'years':profile.ageUnit,weightKg:null,broselowColor:''};save();try{nativeClear?.()}catch(e){};syncNative();applyAll();back.remove()};
  back.addEventListener('click',e=>{if(e.target===back)back.remove()});
 }
 
-function setMode(mode){profile.mode=mode==='pediatric'?'pediatric':'adult';profile.ageUnit=profile.mode==='adult'?'years':profile.ageUnit;save();syncNative();applyAll();if(profile.mode==='adult')openEditor(profile.mode)}
+function setMode(mode){
+ const next=mode==='pediatric'?'pediatric':'adult';
+ if(profile.mode===next){renderHeader();return}
+ profile.mode=next;
+ if(next==='adult'){profile.ageUnit='years';profile.broselowColor=''}
+ save();syncNative();applyAll();
+}
 function reset(){profile=blank();save();try{nativeClear?.()}catch(e){};syncNative();applyAll()}
 
 function start(){
@@ -134,7 +173,7 @@ function start(){
  window.setPatientMode=setMode;
  window.openPatientWeight=()=>openEditor(profile.mode);
  window.clearPatientContext=reset;
- window.GFDPatientContext={get:()=>({...profile}),set:v=>{profile={...profile,...v};save();syncNative();applyAll()},clear:reset,open:()=>openEditor(profile.mode)};
+ window.GFDPatientContext={get:()=>({...profile}),set:v=>{profile={...profile,...v};if(profile.mode==='adult'){profile.ageUnit='years';profile.broselowColor=''};save();syncNative();applyAll()},setMode,clear:reset,open:()=>openEditor(profile.mode)};
  if(nativeRender){window.render=function(...args){const r=nativeRender(...args);setTimeout(applyAll,0);return r}}
  document.addEventListener('click',()=>setTimeout(applyAll,0),{passive:true});
  window.addEventListener('hashchange',()=>setTimeout(applyAll,0));
