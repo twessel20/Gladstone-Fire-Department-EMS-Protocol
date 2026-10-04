@@ -1575,7 +1575,7 @@ function applySharedPatientContextToDOM(root=document){
  if(patientContext.age!==''){
   const n=Number(patientContext.age);if(Number.isFinite(n)&&n>=0){const years=patientContext.ageUnit==='months'?n/12:n;
    patientAgeInputs(root).forEach(input=>{input.step='0.1';input.inputMode='decimal';input.value=String(Math.round(years*100)/100);});
-   root.querySelectorAll?.('select[id$="-agegroup"]').forEach(sel=>{if(sel.value)return;const opts=[...sel.options].map(o=>o.value);if(opts.includes('under8')&&opts.includes('8plus'))sel.value=years<8?'under8':'8plus';else if(opts.includes('under4')&&opts.includes('4plus'))sel.value=years<4?'under4':'4plus';else if(opts.includes('under')&&opts.includes('over'))sel.value=years<1?'under':'over';});
+   root.querySelectorAll?.('select[id$="-agegroup"]').forEach(sel=>{const opts=[...sel.options].map(o=>o.value);let derived='';if(opts.includes('under8')&&opts.includes('8plus'))derived=years<8?'under8':'8plus';else if(opts.includes('under4')&&opts.includes('4plus'))derived=years<4?'under4':'4plus';else if(opts.includes('under')&&opts.includes('over'))derived=years<1?'under':'over';if(derived){sel.value=derived;sel.dataset.sharedAge='true';sel.title='Selected automatically from shared patient age: '+sharedAgeLabel();}});
   }
  }
  if(patientContext.dob)patientDOBInputs(root).forEach(input=>{input.value=patientContext.dob});
@@ -3639,11 +3639,12 @@ function formatDextrose(){
           <div class="calc-patient-factors">
             <div class="calc-factor">
               <label for="dc-dextrose-d10Age-agegroup">Patient age</label>
-              <select id="dc-dextrose-d10Age-agegroup" class="tool-input">
+              <select id="dc-dextrose-d10Age-agegroup" class="tool-input" aria-describedby="dc-dextrose-d10Age-age-note">
                 <option value="">Select age group</option>
                 <option value="under8">Less than 8 years old</option>
                 <option value="8plus">8 years old or older</option>
               </select>
+              <small id="dc-dextrose-d10Age-age-note">Uses the shared patient age automatically when available.</small>
             </div>
             <div class="calc-factor">
               <label for="dc-dextrose-d10Age-w">Patient weight</label>
