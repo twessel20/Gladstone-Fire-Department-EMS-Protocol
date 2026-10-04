@@ -81,7 +81,7 @@
 .source-med-row:last-child{border-bottom:0}
 .source-med-row.med-contra,.source-med-row.med-precaution{border-bottom-width:1px}
 .source-med-calc .dose-tools{margin:10px 0 0}
-.calc-patient-factors{display:grid;gap:10px;margin:10px 0}.calc-factor{display:grid;gap:5px}.calc-factor>label{font-size:13px;font-weight:850;color:#173a5e}.dark-mode .calc-factor>label{color:#dbeafe}
+.dose-alert-stop{margin:10px 0 14px;padding:12px 13px;border:2px solid #b91c1c;border-radius:11px;background:#fff1f2;color:#7f1d1d;line-height:1.4}.dose-alert-stop strong{display:block;font-size:15px;margin-bottom:4px}.dark-mode .dose-alert-stop{background:#351417;border-color:#ef4444;color:#fecaca}\n.calc-patient-factors{display:grid;gap:10px;margin:10px 0}.calc-factor{display:grid;gap:5px}.calc-factor>label{font-size:13px;font-weight:850;color:#173a5e}.dark-mode .calc-factor>label{color:#dbeafe}
 .dose-tools{border-color:#bfdbfe;background:#f8fbff}
 .dose-tools h4{color:#173a5e}
 .dose-calc{border-top-color:#dbeafe}
@@ -3864,7 +3864,7 @@ function formatMorphineMedication(x){
  rows+=row('Dose',['2 mg increments SIVP until the pain is resolved or a total dose of 10 mg is given.','2-4 mg for non-traumatic abdominal or back pain','For chest pain: 4 mg can be given initially, followed by 2 mg increments','Must contact medical control for use with burns per Med Director.']);
  rows+=row('Pediatric Dose',['0.05 mg/kg slow IV/IN to a maximum dose of 2 mg.']);
  rows+=row('Route',['IV','IM']);
- return '<div class="source-med-sheet">'+rows+'</div>'+medicationPaincheckHtml(x);
+ return patientContextMedicationGuard(x)+'<div class="source-med-sheet">'+rows+'</div>'+medicationPaincheckHtml(x);
 }
 
 function formatTableMedication(x){
@@ -3914,9 +3914,15 @@ function formatTableMedication(x){
  if(!data)return '';
  let rows=data.map(v=>row(v[0],v[1],v[2]||'')).join('');
  const calc=(protocolDoseCalcs[x.id]||medicationDoseCalcs[x.id])?'<div class="source-med-row"><div class="source-med-label">Dose Calculator:</div><div class="source-med-value"><div class="source-med-calc">'+protocolDoseTools(x)+'</div></div></div>':'';
- return '<div class="source-med-sheet">'+rows+calc+'</div>'+medicationPaincheckHtml(x);
+ return patientContextMedicationGuard(x)+'<div class="source-med-sheet">'+rows+calc+'</div>'+medicationPaincheckHtml(x);
 }
 
+function patientContextMedicationGuard(x){
+ const years=sharedAgeYears(),peds=patientContext.mode==='pediatric';
+ if(x.id==='tranexamic-acid-txa'&&peds)return '<div class="dose-alert-stop"><strong>PEDIATRIC CONTRAINDICATION</strong><div>Gladstone TXA protocol lists pediatric patients as a contraindication.</div></div>';
+ if(x.id==='diltiazem-hcl-cardizem'&&years!==null&&years<15)return '<div class="dose-alert-stop"><strong>CONTRAINDICATED — PATIENT UNDER AGE 15</strong><div>Gladstone Diltiazem protocol lists children under age 15 as a contraindication.</div></div>';
+ return '';
+}
 function formatMedication(x){
  if(x.id==='morphine-sulfate')return formatMorphineMedication(x);
  if(['dextrose','fentanyl','nitroglycerin','sodium-bicarbonate','tranexamic-acid-txa'].includes(x.id))return formatTableMedication(x);
@@ -4028,7 +4034,7 @@ function formatMedication(x){
    pedRendered=true;
  }
  const icon=/dextrose|glucose/i.test(x.title)?'drop':(/epi|fentanyl|morphine|ketamine|versed|midazolam|diltiazem|amiodarone|adenosine|atropine|lidocaine|dopamine|calcium|magnesium|narcan|naloxone|terbutaline|methylprednisolone/i.test(x.title)?'syringe':'pill');
- return '<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+medicationCrossProtocolHtml(x)+medicationPaincheckHtml(x)+'</div>';
+ return patientContextMedicationGuard(x)+'<div class="source-med-sheet">'+medicationHeader(x.title,icon)+rows+medicationCrossProtocolHtml(x)+medicationPaincheckHtml(x)+'</div>';
 }
 const protocolDoseCalcs={
 'amiodarone':[
@@ -4290,6 +4296,7 @@ function calcProtocolDose(pid,key){
    }else{
      out.innerHTML='<b>Enter either the patient date of birth or the known patient age.</b>';return
    }
+   if(patientAge<15){out.innerHTML='<div class="dose-alert-stop"><strong>CONTRAINDICATED — PATIENT UNDER AGE 15</strong><div>Gladstone Diltiazem protocol lists children under age 15 as a contraindication. Do not use this dose calculator for this patient.</div></div>';return}
    const older=patientAge>c.ageThreshold;
    const adjust=older?c.ageAdjustment:0;
    const initialBase=Math.min(kg*c.perKg,c.max),secondBase=Math.min(kg*c.secondPerKg,c.secondMax);
