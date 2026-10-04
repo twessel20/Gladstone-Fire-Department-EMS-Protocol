@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v237: Professionalism and Protocol Authorization reference pages now use structured document layouts instead of long text walls. Source wording is retained while content is separated into readable callouts, professional-behavior items, approval information, dates, and signature/authorization blocks. Clinical protocol flowchart behavior from v236 remains unchanged.';
+const UPDATE_SUMMARY='v238: Fixed the service-worker injection chain so the v237 Professionalism and Protocol Authorization layouts actually load. Reference pages use structured readable sections while clinical protocols retain the v236 flowchart-first presentation.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -17,7 +17,10 @@ async function injectPatientContext(response){
  const tags=[];
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=233" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=231" defer></script>');
- if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');\n if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');\n if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');\n if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=237" defer></script>');
+ if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
+ if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
+ if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
+ if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=238" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
