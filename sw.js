@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v293: Improved dark-mode contrast for the Patient Home-Medication Lookup. The explanatory guidance, search field, warning/reference panel, medication cards, labels, result copy, and lookup links now use clearer dark surfaces and stronger text hierarchy without making reference content look like a clinical warning.';
+const UPDATE_SUMMARY='v294: Fixed the Transcutaneous Pacing ZOLL visual so the How-to-Pace view now renders the exact page 10 image from the department-provided ZOLL X Series Quick Reference Guide, replacing the prior composite. Added concise Pause Pacer and Turn Pacer Off references beneath the page.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,7 +34,7 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=292" defer></script>');
+ if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=294" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
