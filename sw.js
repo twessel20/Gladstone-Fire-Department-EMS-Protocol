@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v282: Diltiazem now uses the GFD Clinical Registry as its source of truth. Confirmed formulary preparation is 100 mg in 100 mL (1 mg/mL). Standalone and embedded Diltiazem calculators now show mg dose, mL volume, mL/min over the 2-minute administration time, and selectable gravity rates for 10 or 60 gtt/mL tubing. Narrow Complex and medication reference displays now reflect the same registry-backed formulary data.';
+const UPDATE_SUMMARY='v283: Diltiazem calculator UI refinements. Calculated dose now displays volume in mL first by default and each initial/second dose card can be tapped to toggle between mL and mg while keeping mL/min and selected 10 or 60 gtt/mL gravity rate visible. Mobile date-of-birth inputs are constrained to the calculator card to prevent right-side overflow.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -27,7 +27,7 @@ async function injectPatientContext(response){
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
  if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
- if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=282" defer></script>');
+ if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=283" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
