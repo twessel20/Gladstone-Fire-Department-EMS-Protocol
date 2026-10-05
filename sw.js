@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v289: Fixed Transcutaneous Pacing procedure integration. The TCP procedure now registers against the app\'s actual clinical data binding, appears under Procedures, and the Bradycardia protocol cross-reference now resolves against the active protocol state correctly.';
+const UPDATE_SUMMARY='v290: Redesigned the Transcutaneous Pacing procedure for mobile field use. TCP now separates the GFD Decision Path from the ZOLL X Series How-to-Pace workflow with two large tabs, stacked decision/action cards, a compact pacing sequence strip, simplified ZOLL controls, clearer mechanical-capture confirmation, troubleshooting, and improved mobile spacing while preserving the Bradycardia cross-reference.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -31,7 +31,7 @@ async function injectPatientContext(response){
  if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
  if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=283" defer></script>');
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
- if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=288" defer></script>');
+ if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
