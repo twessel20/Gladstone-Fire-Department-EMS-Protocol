@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v285: Audited the standalone and embedded Diltiazem calculators in dark mode. Diltiazem-specific result cards, dose toggles, formulary panel, labels, inputs, selectors, focus states, secondary text, and native date controls now use consistent dark surfaces and readable contrast.';
+const UPDATE_SUMMARY='v286: Improved dark-mode contrast for the standalone Diltiazem tool guidance. The GFD dosing note and the standalone-tool logic note now use darker inset panels, stronger borders, and clearer text hierarchy without overpowering the calculated dose results.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -29,7 +29,7 @@ async function injectPatientContext(response){
  if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
  if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
  if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=283" defer></script>');
- if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=285" defer></script>');
+ if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
