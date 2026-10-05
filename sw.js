@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v290: Redesigned the Transcutaneous Pacing procedure for mobile field use. TCP now separates the GFD Decision Path from the ZOLL X Series How-to-Pace workflow with two large tabs, stacked decision/action cards, a compact pacing sequence strip, simplified ZOLL controls, clearer mechanical-capture confirmation, troubleshooting, and improved mobile spacing while preserving the Bradycardia cross-reference.';
+const UPDATE_SUMMARY='v291: Replaced the generated ZOLL pacing mock in the Transcutaneous Pacing procedure with actual X Series pacing screen reference images for Pacer Settings and active PACING, while retaining the mobile-first GFD pacing workflow and written fallback guidance.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -33,6 +33,7 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
+ if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=291" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
