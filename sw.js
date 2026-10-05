@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v276: Global consistency audit across the EMS app. Standardized capitalization, section labels, spacing, bullet/list rhythm, heading hierarchy, and flowchart presentation while preserving purpose-built clinical workflows and existing protocol content.';
+const UPDATE_SUMMARY='v277: Added the Gladstone Fire/EMS Vision Statement beneath the Mission Statement while preserving the existing “The Gladstone Way” tagline and current mission wording.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -20,7 +20,7 @@ async function injectPatientContext(response){
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=274" defer></script>');
- if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=275" defer></script>');
+ if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=277" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
