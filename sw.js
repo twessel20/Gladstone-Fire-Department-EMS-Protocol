@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v273: Corrected the visual treatment of all Call Poison Control controls in the Poisoning protocol. The working call actions are now forced to render as large, full-width solid Gladstone-blue buttons with bold white text and a 64-pixel glove-friendly tap target at the top, Assessment section, and bottom.';
+const UPDATE_SUMMARY='v274: Completed a global desktop dark-mode contrast and viewability audit. Removed remaining light-mode islands, improved Cincinnati/stroke controls, burn maps and Parkland labels, destination tags, hospital entrance fallbacks, appendix headers, secondary text, and desktop hover states while preserving authored clinical images and documents.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -18,7 +18,8 @@ async function injectPatientContext(response){
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
- if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=234" defer></script>');
+ if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
+ if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=274" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
