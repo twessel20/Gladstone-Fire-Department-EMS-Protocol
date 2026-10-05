@@ -1,11 +1,11 @@
 (()=>{'use strict';
-const ID='gfd-diltiazem-dark-v285';
+const ID='gfd-diltiazem-dark-v286';
 function install(){
  if(document.getElementById(ID))return;
  const s=document.createElement('style');
  s.id=ID;
  s.textContent=`
-/* v285 — Diltiazem standalone + embedded calculator dark-mode audit */
+/* v286 — Diltiazem standalone + embedded calculator dark-mode audit */
 body.dark-mode #toolDiltResult,
 body.dark-mode .dose-out .dilt-reg-summary{
  background:#111827!important;
@@ -101,11 +101,23 @@ body.dark-mode .dose-calc:has([id$='-dilt-o']) input[type='date']::-webkit-calen
  filter:invert(1) brightness(1.5);
  opacity:.9;
 }
+/* Standalone Diltiazem guidance: stronger hierarchy than the global muted tool-note style. */
 body.dark-mode .tool-card:has(#toolDiltWeight)>.tool-note{
- color:#b8c5d4!important;
+ color:#d7e0ea!important;
+ background:#0f172a!important;
+ border:1px solid #3f4f63!important;
+ border-radius:10px!important;
+ padding:10px 11px!important;
+ line-height:1.5!important;
 }
 body.dark-mode .tool-card:has(#toolDiltWeight)>.tool-note b{
- color:#e5edf7!important;
+ color:#f8fafc!important;
+}
+body.dark-mode .tool-card:has(#toolDiltWeight)>.tool-note:last-child{
+ margin-top:12px!important;
+ background:#101827!important;
+ border-color:#334155!important;
+ color:#cfd8e3!important;
 }
 body.dark-mode .tool-card:has(#toolDiltWeight)>h3{
  color:#f8fafc!important;
