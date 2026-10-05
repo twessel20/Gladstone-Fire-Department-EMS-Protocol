@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v291: Replaced the generated ZOLL pacing mock in the Transcutaneous Pacing procedure with actual X Series pacing screen reference images for Pacer Settings and active PACING, while retaining the mobile-first GFD pacing workflow and written fallback guidance.';
+const UPDATE_SUMMARY='v292: Replaced the external/generated ZOLL pacing visuals with actual X Series waveform and Pacer Settings artwork extracted from the department-provided ZOLL X Series Quick Reference Guide. The TCP How-to-Pace view now also mirrors the Quick Reference sequence for opening the PACER menu, starting pacing, adjusting output to capture, and reducing to the lowest output that maintains capture.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -33,7 +33,7 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=291" defer></script>');
+ if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=292" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
