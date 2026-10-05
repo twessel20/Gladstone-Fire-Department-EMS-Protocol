@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v308: Fixed Version History at the data source. Post-v200 releases are now inserted into the app\'s actual gfdChangeLog array, so Current version, latest date, version range, release count, and release cards all calculate from the same authoritative history instead of being repainted after render.';
+const UPDATE_SUMMARY='v309: Added ZOLL X Series page 10 back as an optional expandable reference under TCP Step 2. The written pacing workflow remains primary, the image loads only on demand, and a failed image no longer creates blank space or interrupts the procedure.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,9 +34,9 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=307" defer></script>');
+ if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=309" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=308" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=309" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
