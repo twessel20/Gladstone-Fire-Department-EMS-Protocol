@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v283: Diltiazem calculator UI refinements. Calculated dose now displays volume in mL first by default and each initial/second dose card can be tapped to toggle between mL and mg while keeping mL/min and selected 10 or 60 gtt/mL gravity rate visible. Mobile date-of-birth inputs are constrained to the calculator card to prevent right-side overflow.';
+const UPDATE_SUMMARY='v284: Weight-based calculators now share a global lb/kg unit-toggle behavior. Switching a patient weight field between pounds and kilograms converts the entered number in place while preserving the same underlying patient weight, covering Diltiazem, Lidocaine, Dopamine, Parkland/burn, D10, and compatible embedded protocol dose calculators.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -17,6 +17,7 @@ async function injectPatientContext(response){
  const tags=[];
  if(!html.includes('clinical-registry.js'))tags.push('<script src="clinical-registry.js?v=282" defer></script>');
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
+ if(!html.includes('weight-unit-toggle.js'))tags.push('<script src="weight-unit-toggle.js?v=284" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
