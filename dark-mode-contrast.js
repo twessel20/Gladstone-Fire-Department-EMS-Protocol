@@ -51,5 +51,14 @@ body.dark-mode hr{border-color:#475569!important}
 body.dark-mode button:focus-visible,body.dark-mode a:focus-visible,body.dark-mode input:focus-visible,body.dark-mode select:focus-visible,body.dark-mode textarea:focus-visible{outline:3px solid #93c5fd!important;outline-offset:2px!important}
 `;document.head.appendChild(s)
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+function loadGlobalAudit(){
+ if(document.querySelector('script[data-gfd-dark-global-audit]'))return;
+ const x=document.createElement('script');
+ x.src='dark-mode-global-audit.js?v=274';
+ x.defer=true;
+ x.dataset.gfdDarkGlobalAudit='1';
+ document.head.appendChild(x);
+}
+function boot(){install();loadGlobalAudit()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
