@@ -1,0 +1,12 @@
+(()=>{'use strict';
+const ID='gfd-zoll-page10-force-v301';
+let imgSrc='';
+function style(){if(document.getElementById(ID))return;const s=document.createElement('style');s.id=ID;s.textContent=`
+.tcp-zoll-force{margin:12px 0}.tcp-zoll-force-card{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:8px;overflow:hidden}.tcp-zoll-force-title{font-size:11px;font-weight:950;letter-spacing:.06em;color:#475569;margin:0 0 6px}.tcp-zoll-force img{display:block;width:100%;height:auto;border-radius:8px;background:#fff}.tcp-zoll-force-note{font-size:11px;line-height:1.4;color:#64748b;margin-top:7px}body.dark-mode .tcp-zoll-force-card{background:#111827!important;border-color:#475569!important}body.dark-mode .tcp-zoll-force-title{color:#e5edf7!important}body.dark-mode .tcp-zoll-force-note{color:#aebbd0!important}
+`;document.head.appendChild(s)}
+async function loadImage(){if(imgSrc)return imgSrc;try{const r=await fetch('tcp-zoll-real-art.js?v=299',{cache:'no-store'});const t=await r.text();const m=t.match(/const IMG='(data:image\/jpeg;base64,[^']+)'/);if(m)imgSrc=m[1]}catch(e){}return imgSrc}
+function target(root){const cards=root.querySelectorAll('.tcp-step-card');return cards[1]||cards[0]||root.firstElementChild||root}
+async function apply(){const root=document.querySelector('[data-tcp-procedure]');if(!root)return;style();const src=await loadImage();if(!src)return;let box=root.querySelector('[data-zoll-page10-force]');if(!box){box=document.createElement('div');box.className='tcp-zoll-force';box.dataset.zollPage10Force='1';box.innerHTML='<div class="tcp-zoll-force-card"><div class="tcp-zoll-force-title">ZOLL X SERIES QUICK REFERENCE GUIDE — PAGE 10</div><img alt="Exact page 10 of the ZOLL X Series Quick Reference Guide"><div class="tcp-zoll-force-note">Exact page 10 from the department-provided guide. No recreated monitor artwork.</div></div>';const a=target(root);a.insertAdjacentElement('afterend',box)}const im=box.querySelector('img');if(im&&im.src!==src)im.src=src;root.querySelectorAll('iframe.tcp-zoll-page10-frame,.tcp-real-zoll,.tcp-zoll').forEach(el=>{if(!el.closest('[data-zoll-page10-force]'))el.remove()})}
+function boot(){apply();let timer=0;new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(apply,60)}).observe(document.body,{childList:true,subtree:true})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
