@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v304: Replaced the corrupted ZOLL page-10 wrapper with a real binary JPEG at assets/zoll-page10.jpg. The TCP How-to-Pace view now points directly to that image and includes a direct image link/error indicator. Version History live sync is cache-busted to v304.';
+const UPDATE_SUMMARY='v305: Finalized the ZOLL pacing fix with a verified binary JPEG at assets/zoll-page10.jpg and corrected Version History so Current/build range update to v305 instead of remaining on an older hard-coded version.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,9 +34,9 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-zoll-page10-force.js'))tags.push('<script src="tcp-zoll-page10-force.js?v=304" defer></script>');
+ if(!html.includes('tcp-zoll-page10-force.js'))tags.push('<script src="tcp-zoll-page10-force.js?v=305" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=304" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=305" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
