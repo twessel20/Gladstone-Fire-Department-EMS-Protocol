@@ -1,5 +1,6 @@
 (()=>{'use strict';
 const RELEASES=[
+ {date:'2026-10-05',version:'v309',title:'Expandable ZOLL Page 10 Reference',copy:'Returned the department-provided ZOLL page 10 as an optional collapsed reference under TCP Step 2. The written pacing workflow remains primary, the image loads only when requested, and a failed image does not leave blank space or interrupt the procedure.',tags:['TCP','Pacing','ZOLL','Reference','Workflow']},
  {date:'2026-10-05',version:'v308',title:'Version History Data Sync',copy:'Changed Version History from a post-render text patch to real changelog data. Current version, latest release, version range, release count, and release cards now derive from the same gfdChangeLog array used by the app.',tags:['Version History','Release Data','App UI','Fix']},
  {date:'2026-10-05',version:'v307',title:'TCP Visual Area Fully Removed',copy:'Collapsed and removed all remaining legacy ZOLL visual-aid containers so the pacing procedure no longer reserves blank image space.',tags:['TCP','Pacing','ZOLL','Workflow','Fix']},
  {date:'2026-10-05',version:'v306',title:'TCP Step-by-Step Only',copy:'Removed the ZOLL pacing visual aid and kept the Transcutaneous Pacing procedure as a compact written step-by-step workflow.',tags:['TCP','Pacing','ZOLL','Workflow']},
@@ -27,10 +28,10 @@ function ensureHistory(){
  }catch(e){return false}
 }
 function wrapOpenChangeLog(){
- if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory308)return false;
+ if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory309)return false;
  const original=window.openChangeLog;
  function wrapped(){ensureHistory();return original.apply(this,arguments)}
- wrapped.__gfdHistory308=true;
+ wrapped.__gfdHistory309=true;
  wrapped.__original=original;
  window.openChangeLog=wrapped;
  return true;
@@ -40,7 +41,7 @@ function boot(){
  const run=()=>{
   const dataReady=ensureHistory();
   const openReady=wrapOpenChangeLog();
-  if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory308)))&&tries++<30)setTimeout(run,100);
+  if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory309)))&&tries++<30)setTimeout(run,100);
  };
  run();
 }
