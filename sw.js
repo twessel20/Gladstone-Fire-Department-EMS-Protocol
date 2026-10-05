@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v281: Added the clinical-registry foundation for a single agency clinical source of truth. Diltiazem is the first mapped medication with its existing GFD dose rules, age adjustment, administration timing, and provenance stored centrally. The formulary concentration remains intentionally unset pending hard-number confirmation, and current calculator/protocol behavior is unchanged.';
+const UPDATE_SUMMARY='v282: Diltiazem now uses the GFD Clinical Registry as its source of truth. Confirmed formulary preparation is 100 mg in 100 mL (1 mg/mL). Standalone and embedded Diltiazem calculators now show mg dose, mL volume, mL/min over the 2-minute administration time, and selectable gravity rates for 10 or 60 gtt/mL tubing. Narrow Complex and medication reference displays now reflect the same registry-backed formulary data.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,7 +15,7 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  const tags=[];
- if(!html.includes('clinical-registry.js'))tags.push('<script src="clinical-registry.js?v=281" defer></script>');
+ if(!html.includes('clinical-registry.js'))tags.push('<script src="clinical-registry.js?v=282" defer></script>');
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
@@ -27,6 +27,7 @@ async function injectPatientContext(response){
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
  if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
+ if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=282" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
