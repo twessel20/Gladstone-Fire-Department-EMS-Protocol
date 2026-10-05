@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const BUILD='v306';
+const BUILD='v307';
 const BUILD_DATE='2026-10-05';
 function patchText(root){
  if(!root)return;
