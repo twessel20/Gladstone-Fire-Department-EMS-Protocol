@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v274: Completed a global desktop dark-mode contrast and viewability audit. Removed remaining light-mode islands, improved Cincinnati/stroke controls, burn maps and Parkland labels, destination tags, hospital entrance fallbacks, appendix headers, secondary text, and desktop hover states while preserving authored clinical images and documents.';
+const UPDATE_SUMMARY='v275: Restored the complete Gladstone Fire/EMS mission statement with grammar and punctuation corrections only. The existing “The Gladstone Way” tagline remains unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -20,6 +20,7 @@ async function injectPatientContext(response){
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=274" defer></script>');
+ if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=275" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
