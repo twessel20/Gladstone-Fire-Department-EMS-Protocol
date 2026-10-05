@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v302: Synced the Version History screen with the live app build. The Current badge, latest release date, and displayed version range now update to the actual build instead of remaining hard-coded at v200.';
+const UPDATE_SUMMARY='v303: Replaced the fragile ZOLL page-10 data-URI extraction path with a real static local asset at assets/zoll-page10.svg. The TCP How-to-Pace step now loads page 10 directly from that asset and removes broken legacy ZOLL image/iframe remnants. Version-history live sync is also cache-busted to this build.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,10 +34,9 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=299" defer></script>');
- if(!html.includes('tcp-zoll-page10-force.js'))tags.push('<script src="tcp-zoll-page10-force.js?v=301" defer></script>');
+ if(!html.includes('tcp-zoll-page10-force.js'))tags.push('<script src="tcp-zoll-page10-force.js?v=303" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=302" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=303" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
