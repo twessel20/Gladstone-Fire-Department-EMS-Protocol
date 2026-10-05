@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v306: Removed the ZOLL pacing visual aid entirely. The Transcutaneous Pacing How-to-Pace view now relies on the compact written step-by-step workflow only, with all image/mock/iframe pacing visuals stripped from the rendered procedure.';
+const UPDATE_SUMMARY='v307: Fully removed the remaining ZOLL visual-aid area from Transcutaneous Pacing. The app now collapses all legacy image/mock/page-10 wrappers so Step 2 flows directly into the written PACER and Demand-mode instructions with no reserved image space.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,9 +34,9 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=306" defer></script>');
+ if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=307" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=306" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=307" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
