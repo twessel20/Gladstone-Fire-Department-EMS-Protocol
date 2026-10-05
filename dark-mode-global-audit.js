@@ -1,11 +1,11 @@
 (()=>{'use strict';
-const ID='gfd-dark-global-audit-v274';
+const ID='gfd-dark-global-audit-v279';
 function install(){
  if(document.getElementById(ID))return;
  const s=document.createElement('style');
  s.id=ID;
  s.textContent=`
-/* v274 global dark-mode contrast + desktop viewability audit */
+/* v279 global dark-mode contrast + desktop viewability audit */
 body.dark-mode{
  --gfd-dm-bg:#0b1220;
  --gfd-dm-card:#111827;
@@ -143,6 +143,33 @@ body.dark-mode .entrance-view-fallback a{color:#fff!important}
 body.dark-mode .appendix-head b{color:#f8fafc!important}
 body.dark-mode .appendix-head span{color:#cbd5e1!important}
 body.dark-mode .appendix-head a{color:#93c5fd!important}
+
+/* Street Drug and shared tool search controls. */
+body.dark-mode .streetdrug-search-row .tool-input,
+body.dark-mode input.tool-input[type='search']{
+ background:#0f172a!important;
+ color:#f8fafc!important;
+ border:1px solid #64748b!important;
+ caret-color:#f8fafc!important;
+ color-scheme:dark;
+ box-shadow:inset 0 1px 2px #0005!important;
+}
+body.dark-mode .streetdrug-search-row .tool-input::placeholder,
+body.dark-mode input.tool-input[type='search']::placeholder{
+ color:#aebbd0!important;
+ opacity:1!important;
+}
+body.dark-mode .streetdrug-search-row .tool-input:focus,
+body.dark-mode input.tool-input[type='search']:focus{
+ border-color:#93c5fd!important;
+ outline:2px solid #60a5fa!important;
+ outline-offset:1px!important;
+ box-shadow:0 0 0 3px #2563eb33!important;
+}
+body.dark-mode input[type='search']::-webkit-search-cancel-button{
+ filter:invert(1) brightness(1.8);
+ opacity:.85;
+}
 
 /* Tool-state and secondary UI cleanup. */
 body.dark-mode .tool-launch-icon{
