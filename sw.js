@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v301: Restored the known-good embedded page 10 image from the department-provided ZOLL X Series Quick Reference Guide and added a separate force-render module. The TCP How-to-Pace view now inserts that exact page independently of the legacy ZOLL container, while removing old iframe/generated-art remnants.';
+const UPDATE_SUMMARY='v302: Synced the Version History screen with the live app build. The Current badge, latest release date, and displayed version range now update to the actual build instead of remaining hard-coded at v200.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -37,6 +37,7 @@ async function injectPatientContext(response){
  if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=299" defer></script>');
  if(!html.includes('tcp-zoll-page10-force.js'))tags.push('<script src="tcp-zoll-page10-force.js?v=301" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=302" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
