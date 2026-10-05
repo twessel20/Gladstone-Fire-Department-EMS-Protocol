@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v284: Weight-based calculators now share a global lb/kg unit-toggle behavior. Switching a patient weight field between pounds and kilograms converts the entered number in place while preserving the same underlying patient weight, covering Diltiazem, Lidocaine, Dopamine, Parkland/burn, D10, and compatible embedded protocol dose calculators.';
+const UPDATE_SUMMARY='v285: Audited the standalone and embedded Diltiazem calculators in dark mode. Diltiazem-specific result cards, dose toggles, formulary panel, labels, inputs, selectors, focus states, secondary text, and native date controls now use consistent dark surfaces and readable contrast.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -29,6 +29,7 @@ async function injectPatientContext(response){
  if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
  if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
  if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=283" defer></script>');
+ if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=285" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
