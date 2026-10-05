@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v296: Removed recreated/generated ZOLL pacing artwork. The TCP How-to-Pace view now embeds the actual page 10 of the ZOLL X Series Quick Reference Guide as the visual reference, with a full-screen page link plus concise Pause Pacer and Turn Pacer Off references.';
+const UPDATE_SUMMARY='v298: Refined the Atropine medication card into a compact field sequence. The card now shows the 0.5 mg IV dose and 3–5 minute repeat interval first, then calculates the 0.04 mg/kg reference, applies a 3 mg cap for the displayed total maximum, and shows how many full 0.5 mg doses fit within that maximum. Dark-mode contrast is included.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -35,6 +35,7 @@ async function injectPatientContext(response){
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
  if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=296" defer></script>');
+ if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
