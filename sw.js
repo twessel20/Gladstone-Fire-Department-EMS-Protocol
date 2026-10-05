@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v300: Fixed the ZOLL pacing guide rendering path. The TCP How-to-Pace view now force-inserts the exact page 10 image from the department-provided ZOLL X Series Quick Reference Guide even when the old ZOLL container is missing, and removes any legacy PDF iframe. No recreated monitor artwork is used.';
+const UPDATE_SUMMARY='v301: Restored the known-good embedded page 10 image from the department-provided ZOLL X Series Quick Reference Guide and added a separate force-render module. The TCP How-to-Pace view now inserts that exact page independently of the legacy ZOLL container, while removing old iframe/generated-art remnants.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,7 +34,8 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=300" defer></script>');
+ if(!html.includes('tcp-zoll-real-art.js'))tags.push('<script src="tcp-zoll-real-art.js?v=299" defer></script>');
+ if(!html.includes('tcp-zoll-page10-force.js'))tags.push('<script src="tcp-zoll-page10-force.js?v=301" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
