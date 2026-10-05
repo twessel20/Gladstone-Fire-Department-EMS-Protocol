@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v277: Added the Gladstone Fire/EMS Vision Statement beneath the Mission Statement while preserving the existing “The Gladstone Way” tagline and current mission wording.';
+const UPDATE_SUMMARY='v278: Audited and normalized flowchart alignment across mobile and desktop views. Respiratory Distress was used as the reference problem case. Decision boxes now align to the same content track as treatment nodes, 2- and 3-way branches use equal responsive columns on larger screens and stack cleanly on mobile, arrows stay centered, and long clinical text no longer distorts chart width.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -24,6 +24,7 @@ async function injectPatientContext(response){
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
  if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
+ if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
