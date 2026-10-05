@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v292: Replaced the external/generated ZOLL pacing visuals with actual X Series waveform and Pacer Settings artwork extracted from the department-provided ZOLL X Series Quick Reference Guide. The TCP How-to-Pace view now also mirrors the Quick Reference sequence for opening the PACER menu, starting pacing, adjusting output to capture, and reducing to the lowest output that maintains capture.';
+const UPDATE_SUMMARY='v293: Improved dark-mode contrast for the Patient Home-Medication Lookup. The explanatory guidance, search field, warning/reference panel, medication cards, labels, result copy, and lookup links now use clearer dark surfaces and stronger text hierarchy without making reference content look like a clinical warning.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -24,6 +24,7 @@ async function injectPatientContext(response){
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
  if(!html.includes('dark-mode-secondary-hierarchy.js'))tags.push('<script src="dark-mode-secondary-hierarchy.js?v=287" defer></script>');
  if(!html.includes('streetdrug-dark-tuning.js'))tags.push('<script src="streetdrug-dark-tuning.js?v=280" defer></script>');
+ if(!html.includes('patient-med-dark-tuning.js'))tags.push('<script src="patient-med-dark-tuning.js?v=293" defer></script>');
  if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=277" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
