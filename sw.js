@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v280: Refined Street Drug / Substance Reference dark-mode text hierarchy. The “Fast EMS reference” guidance and the Field Principle disclaimer now use softer secondary text contrast while their lead labels remain slightly brighter for quick scanning.';
+const UPDATE_SUMMARY='v281: Added the clinical-registry foundation for a single agency clinical source of truth. Diltiazem is the first mapped medication with its existing GFD dose rules, age adjustment, administration timing, and provenance stored centrally. The formulary concentration remains intentionally unset pending hard-number confirmation, and current calculator/protocol behavior is unchanged.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -15,6 +15,7 @@ async function injectPatientContext(response){
  if(!type.includes('text/html'))return response;
  let html=await response.text();
  const tags=[];
+ if(!html.includes('clinical-registry.js'))tags.push('<script src="clinical-registry.js?v=281" defer></script>');
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
