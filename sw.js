@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v286: Improved dark-mode contrast for the standalone Diltiazem tool guidance. The GFD dosing note and the standalone-tool logic note now use darker inset panels, stronger borders, and clearer text hierarchy without overpowering the calculated dose results.';
+const UPDATE_SUMMARY='v287: Completed a global dark-mode secondary-text hierarchy audit. Helper text, notes, calculator guidance, metadata, hospital notes, small instructional copy, and placeholders now use a clearer muted gray-blue tier while bold lead-ins remain brighter, reducing washed-out white text across the app without changing semantic warning/action colors.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -22,6 +22,7 @@ async function injectPatientContext(response){
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
+ if(!html.includes('dark-mode-secondary-hierarchy.js'))tags.push('<script src="dark-mode-secondary-hierarchy.js?v=287" defer></script>');
  if(!html.includes('streetdrug-dark-tuning.js'))tags.push('<script src="streetdrug-dark-tuning.js?v=280" defer></script>');
  if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=277" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
