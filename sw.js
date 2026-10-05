@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v279: Corrected dark-mode contrast for the Street Drug / Substance Reference search bar. The search field now uses a dark surface, bright input text, readable placeholder text, a clear blue focus state, and a visible native search cancel control. Matching tool search inputs receive the same treatment for consistency.';
+const UPDATE_SUMMARY='v280: Refined Street Drug / Substance Reference dark-mode text hierarchy. The “Fast EMS reference” guidance and the Field Principle disclaimer now use softer secondary text contrast while their lead labels remain slightly brighter for quick scanning.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -20,6 +20,7 @@ async function injectPatientContext(response){
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
+ if(!html.includes('streetdrug-dark-tuning.js'))tags.push('<script src="streetdrug-dark-tuning.js?v=280" defer></script>');
  if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=277" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
