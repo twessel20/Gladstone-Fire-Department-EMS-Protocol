@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v287: Completed a global dark-mode secondary-text hierarchy audit. Helper text, notes, calculator guidance, metadata, hospital notes, small instructional copy, and placeholders now use a clearer muted gray-blue tier while bold lead-ins remain brighter, reducing washed-out white text across the app without changing semantic warning/action colors.';
+const UPDATE_SUMMARY='v288: Added a new Transcutaneous Pacing (TCP) procedure tailored to the Gladstone Bradycardia Protocol and ZOLL X Series workflow. The procedure includes a mobile-first pacing decision flow, step-by-step device workflow, mechanical-capture confirmation, troubleshooting, dark-mode support, and a direct cross-reference from the Bradycardia protocol.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -31,6 +31,7 @@ async function injectPatientContext(response){
  if(!html.includes('flowchart-layout-audit.js'))tags.push('<script src="flowchart-layout-audit.js?v=278" defer></script>');
  if(!html.includes('diltiazem-clinical-bridge.js'))tags.push('<script src="diltiazem-clinical-bridge.js?v=283" defer></script>');
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
+ if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=288" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
