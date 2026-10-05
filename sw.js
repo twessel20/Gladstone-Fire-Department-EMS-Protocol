@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v278: Audited and normalized flowchart alignment across mobile and desktop views. Respiratory Distress was used as the reference problem case. Decision boxes now align to the same content track as treatment nodes, 2- and 3-way branches use equal responsive columns on larger screens and stack cleanly on mobile, arrows stay centered, and long clinical text no longer distorts chart width.';
+const UPDATE_SUMMARY='v279: Corrected dark-mode contrast for the Street Drug / Substance Reference search bar. The search field now uses a dark surface, bright input text, readable placeholder text, a clear blue focus state, and a visible native search cancel control. Matching tool search inputs receive the same treatment for consistency.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -19,7 +19,7 @@ async function injectPatientContext(response){
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
- if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=274" defer></script>');
+ if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
  if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=277" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
