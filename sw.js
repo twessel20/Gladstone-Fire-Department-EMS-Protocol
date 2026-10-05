@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v275: Restored the complete Gladstone Fire/EMS mission statement with grammar and punctuation corrections only. The existing “The Gladstone Way” tagline remains unchanged.';
+const UPDATE_SUMMARY='v276: Global consistency audit across the EMS app. Standardized capitalization, section labels, spacing, bullet/list rhythm, heading hierarchy, and flowchart presentation while preserving purpose-built clinical workflows and existing protocol content.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -23,6 +23,7 @@ async function injectPatientContext(response){
  if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=275" defer></script>');
  if(!html.includes('protocol-readability.js'))tags.push('<script src="protocol-readability.js?v=236" defer></script>');
  if(!html.includes('reference-page-layout.js'))tags.push('<script src="reference-page-layout.js?v=241" defer></script>');
+ if(!html.includes('global-consistency-audit.js'))tags.push('<script src="global-consistency-audit.js?v=276" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
