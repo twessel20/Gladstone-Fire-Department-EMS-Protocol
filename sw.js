@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v326: Overhauled Global Search to index the actual GFD protocol, medication, and procedure data instead of only currently rendered screen elements. Added destination-aware field terminology, brand names, abbreviations, device names, direct procedure routing, fuzzy matching, and keyboard navigation.';
+const UPDATE_SUMMARY='v327: Fixed Global Search result activation so data-backed results open through window.openP, including custom procedures such as Transcutaneous Pacing. Added iPhone pointer/touch activation so tapping a search result reliably navigates to the selected destination.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -20,6 +20,7 @@ async function injectPatientContext(response){
  if(!html.includes('weight-unit-toggle.js'))tags.push('<script src="weight-unit-toggle.js?v=284" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
  if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=326" defer></script>');
+ if(!html.includes('universal-search-nav-fix.js'))tags.push('<script src="universal-search-nav-fix.js?v=327" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
  if(!html.includes('dark-mode-secondary-hierarchy.js'))tags.push('<script src="dark-mode-secondary-hierarchy.js?v=287" defer></script>');
@@ -48,6 +49,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v324.js'))tags.push('<script src="version-history-v324.js?v=324" defer></script>');
  if(!html.includes('version-history-v325.js'))tags.push('<script src="version-history-v325.js?v=325" defer></script>');
  if(!html.includes('version-history-v326.js'))tags.push('<script src="version-history-v326.js?v=326" defer></script>');
+ if(!html.includes('version-history-v327.js'))tags.push('<script src="version-history-v327.js?v=327" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
