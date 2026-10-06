@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v312: Added a dedicated BiPAP/CPAP procedure page with separate BiPAP and CPAP workflows, GFD BiLevel settings, safety criteria, and automatic one-tap cross-links from protocols that reference CPAP or BiPAP.';
+const UPDATE_SUMMARY='v313: Fixed the BiPAP/CPAP procedure freeze by removing the self-triggering DOM observer render loop. The procedure now renders once when opened, while cross-links are added only when other protocols are opened.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -35,9 +35,9 @@ async function injectPatientContext(response){
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
  if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=311" defer></script>');
- if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=312" defer></script>');
+ if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=312" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=313" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
