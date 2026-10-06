@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v310: Removed the expandable ZOLL page 10 reference from the TCP pacing procedure. The How to Pace view is back to a clean written step-by-step workflow while JPEG screenshots are prepared for a future visual reference.';
+const UPDATE_SUMMARY='v311: Added the exact ZOLL X Series Quick Reference Guide page 10 as a standard JPEG under TCP Step 2. The written GFD pacing workflow remains primary, and the image is used only as a device-operation reference.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -34,9 +34,9 @@ async function injectPatientContext(response){
  if(!html.includes('diltiazem-dark-tuning.js'))tags.push('<script src="diltiazem-dark-tuning.js?v=286" defer></script>');
  if(!html.includes('transcutaneous-pacing-procedure.js'))tags.push('<script src="transcutaneous-pacing-procedure.js?v=290" defer></script>');
  if(!html.includes('tcp-integration-fix.js'))tags.push('<script src="tcp-integration-fix.js?v=289" defer></script>');
- if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=310" defer></script>');
+ if(!html.includes('tcp-no-visual.js'))tags.push('<script src="tcp-no-visual.js?v=311" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=310" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=311" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
