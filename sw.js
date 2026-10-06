@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v327: Fixed Global Search result activation so data-backed results open through window.openP, including custom procedures such as Transcutaneous Pacing. Added iPhone pointer/touch activation so tapping a search result reliably navigates to the selected destination.';
+const UPDATE_SUMMARY='v328: Added a field-use Quick Procedures hub at the top of the Procedures section with direct access to TCP, BiPAP/CPAP, Z Vent, Sedation, Difficult Airway, Cricothyrotomy, Pleural Decompression, and EZ-IO while preserving the full GFD procedure list below.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -39,6 +39,7 @@ async function injectPatientContext(response){
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=325" defer></script>');
+ if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=328" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
  if(!html.includes('version-history-v319.js'))tags.push('<script src="version-history-v319.js?v=319" defer></script>');
@@ -50,6 +51,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v325.js'))tags.push('<script src="version-history-v325.js?v=325" defer></script>');
  if(!html.includes('version-history-v326.js'))tags.push('<script src="version-history-v326.js?v=326" defer></script>');
  if(!html.includes('version-history-v327.js'))tags.push('<script src="version-history-v327.js?v=327" defer></script>');
+ if(!html.includes('version-history-v328.js'))tags.push('<script src="version-history-v328.js?v=328" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
