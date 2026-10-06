@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v318: Version History now displays releases in decimal form, such as v3.18 instead of v318, while internal build identifiers remain unchanged for code and cache management.';
+const UPDATE_SUMMARY='v319: Z Vent Guide PDF now opens directly in the device native full-page PDF viewer for automatic fit-to-screen, zooming, and page scrolling on mobile.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -37,9 +37,10 @@ async function injectPatientContext(response){
  if(!html.includes('tcp-how-to-fix.js'))tags.push('<script src="tcp-how-to-fix.js?v=317" defer></script>');
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
- if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=317" defer></script>');
+ if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=319" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
+ if(!html.includes('version-history-v319.js'))tags.push('<script src="version-history-v319.js?v=319" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
