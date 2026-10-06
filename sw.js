@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v325: Removed the unreliable embedded Z Vent preview and made View Z Vent Guide PDF open the complete five-page ZOLL Ventilator Quick Reference Guide directly, matching the Original link that works reliably on iPhone.';
+const UPDATE_SUMMARY='v326: Overhauled Global Search to index the actual GFD protocol, medication, and procedure data instead of only currently rendered screen elements. Added destination-aware field terminology, brand names, abbreviations, device names, direct procedure routing, fuzzy matching, and keyboard navigation.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -19,7 +19,7 @@ async function injectPatientContext(response){
  if(!html.includes('patient-context-stable.js'))tags.push('<script src="patient-context-stable.js?v=244" defer></script>');
  if(!html.includes('weight-unit-toggle.js'))tags.push('<script src="weight-unit-toggle.js?v=284" defer></script>');
  if(!html.includes('patient-mode-tabs.js'))tags.push('<script src="patient-mode-tabs.js?v=246" defer></script>');
- if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=232" defer></script>');
+ if(!html.includes('universal-search.js'))tags.push('<script src="universal-search.js?v=326" defer></script>');
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
  if(!html.includes('dark-mode-secondary-hierarchy.js'))tags.push('<script src="dark-mode-secondary-hierarchy.js?v=287" defer></script>');
@@ -47,6 +47,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v323.js'))tags.push('<script src="version-history-v323.js?v=323" defer></script>');
  if(!html.includes('version-history-v324.js'))tags.push('<script src="version-history-v324.js?v=324" defer></script>');
  if(!html.includes('version-history-v325.js'))tags.push('<script src="version-history-v325.js?v=325" defer></script>');
+ if(!html.includes('version-history-v326.js'))tags.push('<script src="version-history-v326.js?v=326" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
