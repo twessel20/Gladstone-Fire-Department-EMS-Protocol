@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v323: Replaced the Z Vent mobile PDF iframe with the five verified pages of the ZOLL Ventilator Quick Reference Guide as one local full-width scrolling source image so all five pages are always visible on iPhone.';
+const UPDATE_SUMMARY='v324: Removed the broken Z Vent guide image asset and replaced it with a dedicated multi-page document viewer for all five pages of the ZOLL Ventilator Quick Reference Guide, separate from the GFD EMS protocol source book.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -37,7 +37,7 @@ async function injectPatientContext(response){
  if(!html.includes('tcp-how-to-fix.js'))tags.push('<script src="tcp-how-to-fix.js?v=317" defer></script>');
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
- if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=323" defer></script>');
+ if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=324" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
  if(!html.includes('version-history-v319.js'))tags.push('<script src="version-history-v319.js?v=319" defer></script>');
@@ -45,6 +45,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v321.js'))tags.push('<script src="version-history-v321.js?v=321" defer></script>');
  if(!html.includes('version-history-v322.js'))tags.push('<script src="version-history-v322.js?v=322" defer></script>');
  if(!html.includes('version-history-v323.js'))tags.push('<script src="version-history-v323.js?v=323" defer></script>');
+ if(!html.includes('version-history-v324.js'))tags.push('<script src="version-history-v324.js?v=324" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
