@@ -1,5 +1,6 @@
 (()=>{'use strict';
 const RELEASES=[
+ {date:'2026-10-05',version:'v318',title:'Decimal Version History',copy:'Changed the Version History display to standard decimal-style release numbers while preserving the existing internal build numbers for code and cache management. Example: build v318 displays as v3.18.',tags:['Version History','UI','Release Data']},
  {date:'2026-10-05',version:'v317',title:'Z Vent Source PDF Viewer',copy:'Made the ZOLL Ventilator Quick Reference Guide the source reference for the Z Vent procedure and added a dedicated View Z Vent Guide PDF viewer that is separate from the GFD EMS protocol source-book view.',tags:['Z Vent','ZOLL','PDF','Source','Procedures']},
  {date:'2026-10-05',version:'v316',title:'TCP Versed Sedation Link',copy:'Added a one-tap Versed (Midazolam) sedation button to the Transcutaneous Pacing How to Pace workflow, linking directly to the GFD medication reference.',tags:['TCP','Pacing','Versed','Midazolam','Sedation']},
  {date:'2026-10-05',version:'v315',title:'TCP How to Pace Repair',copy:'Fixed the Transcutaneous Pacing How to Pace view by removing the legacy image-cleanup module from the live build and adding direct, stable tab handling for the written step-by-step pacing workflow.',tags:['TCP','Pacing','Fix','Procedures','Navigation']},
@@ -25,9 +26,24 @@ const RELEASES=[
  {date:'2026-10-05',version:'v287',title:'Dark-Mode Secondary Text Hierarchy',copy:'Improved global dark-mode secondary-text hierarchy and supporting text contrast while preserving semantic warning colors.',tags:['Dark Mode','Accessibility','Contrast']},
  {date:'2026-10-05',version:'v286',title:'Diltiazem Dark-Mode Note Contrast',copy:'Improved dark-mode readability for Diltiazem supporting notes and calculator guidance.',tags:['Diltiazem','Dark Mode','Contrast']}
 ];
-function versionNumber(v){const m=String(v||'').match(/\d+/);return m?Number(m[0]):0}
-function ensureHistory(){try{if(typeof gfdChangeLog==='undefined'||!Array.isArray(gfdChangeLog))return false;const seen=new Set(gfdChangeLog.map(x=>x&&x.version).filter(Boolean));for(const release of RELEASES){if(!seen.has(release.version)){gfdChangeLog.push({...release});seen.add(release.version)}}gfdChangeLog.sort((a,b)=>versionNumber(b.version)-versionNumber(a.version));return true}catch(e){return false}}
-function wrapOpenChangeLog(){if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory317)return false;const original=window.openChangeLog;function wrapped(){ensureHistory();return original.apply(this,arguments)}wrapped.__gfdHistory317=true;wrapped.__original=original;window.openChangeLog=wrapped;return true}
-function boot(){let tries=0;const run=()=>{const dataReady=ensureHistory();const openReady=wrapOpenChangeLog();if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory317)))&&tries++<30)setTimeout(run,100)};run()}
+function canonicalVersion(v){
+ const raw=String(v||'').trim().replace(/^v/i,'');
+ if(!raw)return 0;
+ if(raw.includes('.')){const parts=raw.split('.');const major=Number(parts[0])||0;const minor=Number(parts[1])||0;return major*100+minor;}
+ const n=Number(raw.replace(/[^0-9]/g,''));return Number.isFinite(n)?n:0;
+}
+function displayVersion(v){const n=canonicalVersion(v);if(!n)return String(v||'');const major=Math.floor(n/100);const minor=String(n%100).padStart(2,'0');return `v${major}.${minor}`}
+function ensureHistory(){
+ try{
+  if(typeof gfdChangeLog==='undefined'||!Array.isArray(gfdChangeLog))return false;
+  for(const item of gfdChangeLog){if(item&&item.version)item.version=displayVersion(item.version)}
+  const seen=new Set(gfdChangeLog.map(x=>canonicalVersion(x&&x.version)).filter(Boolean));
+  for(const release of RELEASES){const key=canonicalVersion(release.version);if(!seen.has(key)){gfdChangeLog.push({...release,version:displayVersion(release.version)});seen.add(key)}}
+  gfdChangeLog.sort((a,b)=>canonicalVersion(b.version)-canonicalVersion(a.version));
+  return true;
+ }catch(e){return false}
+}
+function wrapOpenChangeLog(){if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory318)return false;const original=window.openChangeLog;function wrapped(){ensureHistory();return original.apply(this,arguments)}wrapped.__gfdHistory318=true;wrapped.__original=original;window.openChangeLog=wrapped;return true}
+function boot(){let tries=0;const run=()=>{const dataReady=ensureHistory();const openReady=wrapOpenChangeLog();if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory318)))&&tries++<30)setTimeout(run,100)};run()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
