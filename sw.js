@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v320: Restored the dedicated Z Vent Guide PDF source screen inside the app and forced the mobile PDF pane to fit the phone width instead of handing off to the EMS protocol reference or an external native viewer.';
+const UPDATE_SUMMARY='v321: Fixed Z Vent source routing so the generic GFD protocol-book source link and notice are removed on the Z Vent procedure. Z Vent now exposes only the dedicated ZOLL Ventilator Quick Reference Guide source, with defensive click routing to prevent the EMS protocol PDF from opening.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -37,11 +37,12 @@ async function injectPatientContext(response){
  if(!html.includes('tcp-how-to-fix.js'))tags.push('<script src="tcp-how-to-fix.js?v=317" defer></script>');
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
- if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=320" defer></script>');
+ if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=321" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
  if(!html.includes('version-history-v319.js'))tags.push('<script src="version-history-v319.js?v=319" defer></script>');
  if(!html.includes('version-history-v320.js'))tags.push('<script src="version-history-v320.js?v=320" defer></script>');
+ if(!html.includes('version-history-v321.js'))tags.push('<script src="version-history-v321.js?v=321" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
