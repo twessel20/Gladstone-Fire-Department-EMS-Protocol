@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v330: Fixed Quick Procedures mobile activation so cards use the same direct window.openP navigation path as Global Search. Added pointer/touch activation with click and keyboard fallback, including the Z Vent quick card.';
+const UPDATE_SUMMARY='v331: Added a GFD spinal-clearance Yes / No workflow tool. Any Yes stops clearance and indicates full spinal precautions; all No answers reach criteria to withhold full spinal precautions. Added access from the Spinal Clearance protocol and Field Tools.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -41,6 +41,7 @@ async function injectPatientContext(response){
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=325" defer></script>');
  if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=330" defer></script>');
+ if(!html.includes('spinal-clearance-tool.js'))tags.push('<script src="spinal-clearance-tool.js?v=331" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
  if(!html.includes('version-history-v319.js'))tags.push('<script src="version-history-v319.js?v=319" defer></script>');
@@ -55,6 +56,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v328.js'))tags.push('<script src="version-history-v328.js?v=328" defer></script>');
  if(!html.includes('version-history-v329.js'))tags.push('<script src="version-history-v329.js?v=329" defer></script>');
  if(!html.includes('version-history-v330.js'))tags.push('<script src="version-history-v330.js?v=330" defer></script>');
+ if(!html.includes('version-history-v331.js'))tags.push('<script src="version-history-v331.js?v=331" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
