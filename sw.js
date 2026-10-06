@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v329: Activated and expanded the global dark-mode UI primitives layer for consistent field readability across search inputs, Global Search results, Quick Procedures, procedure tabs, helper text, warnings, and touch targets.';
+const UPDATE_SUMMARY='v330: Fixed Quick Procedures mobile activation so cards use the same direct window.openP navigation path as Global Search. Added pointer/touch activation with click and keyboard fallback, including the Z Vent quick card.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -40,7 +40,7 @@ async function injectPatientContext(response){
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=325" defer></script>');
- if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=328" defer></script>');
+ if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=330" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
  if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
  if(!html.includes('version-history-v319.js'))tags.push('<script src="version-history-v319.js?v=319" defer></script>');
@@ -54,6 +54,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v327.js'))tags.push('<script src="version-history-v327.js?v=327" defer></script>');
  if(!html.includes('version-history-v328.js'))tags.push('<script src="version-history-v328.js?v=328" defer></script>');
  if(!html.includes('version-history-v329.js'))tags.push('<script src="version-history-v329.js?v=329" defer></script>');
+ if(!html.includes('version-history-v330.js'))tags.push('<script src="version-history-v330.js?v=330" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
