@@ -1,5 +1,7 @@
 (()=>{'use strict';
 const RELEASES=[
+ {date:'2026-10-05',version:'v317',title:'Z Vent Source PDF Viewer',copy:'Made the ZOLL Ventilator Quick Reference Guide the source reference for the Z Vent procedure and added a dedicated View Z Vent Guide PDF viewer that is separate from the GFD EMS protocol source-book view.',tags:['Z Vent','ZOLL','PDF','Source','Procedures']},
+ {date:'2026-10-05',version:'v316',title:'TCP Versed Sedation Link',copy:'Added a one-tap Versed (Midazolam) sedation button to the Transcutaneous Pacing How to Pace workflow, linking directly to the GFD medication reference.',tags:['TCP','Pacing','Versed','Midazolam','Sedation']},
  {date:'2026-10-05',version:'v315',title:'TCP How to Pace Repair',copy:'Fixed the Transcutaneous Pacing How to Pace view by removing the legacy image-cleanup module from the live build and adding direct, stable tab handling for the written step-by-step pacing workflow.',tags:['TCP','Pacing','Fix','Procedures','Navigation']},
  {date:'2026-10-05',version:'v314',title:'Dedicated ZOLL Ventilator Procedure',copy:'Added a field-focused ZOLL Ventilator (Z Vent) procedure with Quick Start setup, parameter-setting workflow, alarm-status guidance, low-flow oxygen setup, MRI and unattended-patient warnings, and touch cross-links to the BiPAP/CPAP procedure.',tags:['Z Vent','ZOLL','Ventilator','Procedures','Respiratory']},
  {date:'2026-10-05',version:'v313',title:'BiPAP / CPAP Freeze Fix',copy:'Removed the self-triggering DOM observer render loop that could continuously rebuild the BiPAP/CPAP procedure and make the app stick. The procedure now renders once when opened, while cross-links are added only when other protocols are opened.',tags:['BiPAP','CPAP','Fix','Performance','Procedures']},
@@ -25,7 +27,7 @@ const RELEASES=[
 ];
 function versionNumber(v){const m=String(v||'').match(/\d+/);return m?Number(m[0]):0}
 function ensureHistory(){try{if(typeof gfdChangeLog==='undefined'||!Array.isArray(gfdChangeLog))return false;const seen=new Set(gfdChangeLog.map(x=>x&&x.version).filter(Boolean));for(const release of RELEASES){if(!seen.has(release.version)){gfdChangeLog.push({...release});seen.add(release.version)}}gfdChangeLog.sort((a,b)=>versionNumber(b.version)-versionNumber(a.version));return true}catch(e){return false}}
-function wrapOpenChangeLog(){if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory315)return false;const original=window.openChangeLog;function wrapped(){ensureHistory();return original.apply(this,arguments)}wrapped.__gfdHistory315=true;wrapped.__original=original;window.openChangeLog=wrapped;return true}
-function boot(){let tries=0;const run=()=>{const dataReady=ensureHistory();const openReady=wrapOpenChangeLog();if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory315)))&&tries++<30)setTimeout(run,100)};run()}
+function wrapOpenChangeLog(){if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory317)return false;const original=window.openChangeLog;function wrapped(){ensureHistory();return original.apply(this,arguments)}wrapped.__gfdHistory317=true;wrapped.__original=original;window.openChangeLog=wrapped;return true}
+function boot(){let tries=0;const run=()=>{const dataReady=ensureHistory();const openReady=wrapOpenChangeLog();if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory317)))&&tries++<30)setTimeout(run,100)};run()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
