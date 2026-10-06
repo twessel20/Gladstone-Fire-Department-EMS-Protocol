@@ -1,5 +1,6 @@
 (()=>{'use strict';
 const RELEASES=[
+ {date:'2026-10-05',version:'v313',title:'BiPAP / CPAP Freeze Fix',copy:'Removed the self-triggering DOM observer render loop that could continuously rebuild the BiPAP/CPAP procedure and make the app stick. The procedure now renders once when opened, while cross-links are added only when other protocols are opened.',tags:['BiPAP','CPAP','Fix','Performance','Procedures']},
  {date:'2026-10-05',version:'v312',title:'Dedicated BiPAP / CPAP Procedure',copy:'Added a field-focused BiPAP/CPAP procedure with separate tabs, patient-selection criteria, contraindications, precautions, GFD BiLevel settings, application steps, nausea/aspiration warnings, and one-tap cross-links from any protocol that references CPAP or BiPAP.',tags:['BiPAP','CPAP','Respiratory','Procedures','Cross Links']},
  {date:'2026-10-05',version:'v311',title:'Exact ZOLL Pacing Page 10 JPEG',copy:'Rendered the department-provided X Series Quick Reference Guide page 10 to a standard JPEG and added that exact image directly under TCP Step 2. The written GFD pacing workflow remains primary, and the visual is used only as a device-operation reference.',tags:['TCP','Pacing','ZOLL','JPEG','Reference']},
  {date:'2026-10-05',version:'v310',title:'Removed ZOLL Page 10 Reference',copy:'Removed the expandable ZOLL page 10 reference from the TCP pacing procedure. The How to Pace view is step-by-step only while JPEG screenshots are prepared for a future visual reference.',tags:['TCP','Pacing','ZOLL','Workflow','Fix']},
@@ -21,32 +22,8 @@ const RELEASES=[
  {date:'2026-10-05',version:'v286',title:'Diltiazem Dark-Mode Note Contrast',copy:'Improved dark-mode readability for Diltiazem supporting notes and calculator guidance.',tags:['Diltiazem','Dark Mode','Contrast']}
 ];
 function versionNumber(v){const m=String(v||'').match(/\d+/);return m?Number(m[0]):0}
-function ensureHistory(){
- try{
-  if(typeof gfdChangeLog==='undefined'||!Array.isArray(gfdChangeLog))return false;
-  const seen=new Set(gfdChangeLog.map(x=>x&&x.version).filter(Boolean));
-  for(const release of RELEASES){if(!seen.has(release.version)){gfdChangeLog.push({...release});seen.add(release.version)}}
-  gfdChangeLog.sort((a,b)=>versionNumber(b.version)-versionNumber(a.version));
-  return true;
- }catch(e){return false}
-}
-function wrapOpenChangeLog(){
- if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory312)return false;
- const original=window.openChangeLog;
- function wrapped(){ensureHistory();return original.apply(this,arguments)}
- wrapped.__gfdHistory312=true;
- wrapped.__original=original;
- window.openChangeLog=wrapped;
- return true;
-}
-function boot(){
- let tries=0;
- const run=()=>{
-  const dataReady=ensureHistory();
-  const openReady=wrapOpenChangeLog();
-  if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory312)))&&tries++<30)setTimeout(run,100);
- };
- run();
-}
+function ensureHistory(){try{if(typeof gfdChangeLog==='undefined'||!Array.isArray(gfdChangeLog))return false;const seen=new Set(gfdChangeLog.map(x=>x&&x.version).filter(Boolean));for(const release of RELEASES){if(!seen.has(release.version)){gfdChangeLog.push({...release});seen.add(release.version)}}gfdChangeLog.sort((a,b)=>versionNumber(b.version)-versionNumber(a.version));return true}catch(e){return false}}
+function wrapOpenChangeLog(){if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory313)return false;const original=window.openChangeLog;function wrapped(){ensureHistory();return original.apply(this,arguments)}wrapped.__gfdHistory313=true;wrapped.__original=original;window.openChangeLog=wrapped;return true}
+function boot(){let tries=0;const run=()=>{const dataReady=ensureHistory();const openReady=wrapOpenChangeLog();if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory313)))&&tries++<30)setTimeout(run,100)};run()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
