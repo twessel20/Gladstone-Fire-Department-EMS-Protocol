@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v328: Added a field-use Quick Procedures hub at the top of the Procedures section with direct access to TCP, BiPAP/CPAP, Z Vent, Sedation, Difficult Airway, Cricothyrotomy, Pleural Decompression, and EZ-IO while preserving the full GFD procedure list below.';
+const UPDATE_SUMMARY='v329: Activated and expanded the global dark-mode UI primitives layer for consistent field readability across search inputs, Global Search results, Quick Procedures, procedure tabs, helper text, warnings, and touch targets.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -24,6 +24,7 @@ async function injectPatientContext(response){
  if(!html.includes('dark-mode-contrast.js'))tags.push('<script src="dark-mode-contrast.js?v=274" defer></script>');
  if(!html.includes('dark-mode-global-audit.js'))tags.push('<script src="dark-mode-global-audit.js?v=279" defer></script>');
  if(!html.includes('dark-mode-secondary-hierarchy.js'))tags.push('<script src="dark-mode-secondary-hierarchy.js?v=287" defer></script>');
+ if(!html.includes('dark-mode-ui-primitives.js'))tags.push('<script src="dark-mode-ui-primitives.js?v=329" defer></script>');
  if(!html.includes('streetdrug-dark-tuning.js'))tags.push('<script src="streetdrug-dark-tuning.js?v=280" defer></script>');
  if(!html.includes('patient-med-dark-tuning.js'))tags.push('<script src="patient-med-dark-tuning.js?v=293" defer></script>');
  if(!html.includes('mission-statement.js'))tags.push('<script src="mission-statement.js?v=277" defer></script>');
@@ -52,6 +53,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v326.js'))tags.push('<script src="version-history-v326.js?v=326" defer></script>');
  if(!html.includes('version-history-v327.js'))tags.push('<script src="version-history-v327.js?v=327" defer></script>');
  if(!html.includes('version-history-v328.js'))tags.push('<script src="version-history-v328.js?v=328" defer></script>');
+ if(!html.includes('version-history-v329.js'))tags.push('<script src="version-history-v329.js?v=329" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
