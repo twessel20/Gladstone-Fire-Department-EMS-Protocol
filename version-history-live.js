@@ -1,5 +1,6 @@
 (()=>{'use strict';
 const RELEASES=[
+ {date:'2026-10-05',version:'v312',title:'Dedicated BiPAP / CPAP Procedure',copy:'Added a field-focused BiPAP/CPAP procedure with separate tabs, patient-selection criteria, contraindications, precautions, GFD BiLevel settings, application steps, nausea/aspiration warnings, and one-tap cross-links from any protocol that references CPAP or BiPAP.',tags:['BiPAP','CPAP','Respiratory','Procedures','Cross Links']},
  {date:'2026-10-05',version:'v311',title:'Exact ZOLL Pacing Page 10 JPEG',copy:'Rendered the department-provided X Series Quick Reference Guide page 10 to a standard JPEG and added that exact image directly under TCP Step 2. The written GFD pacing workflow remains primary, and the visual is used only as a device-operation reference.',tags:['TCP','Pacing','ZOLL','JPEG','Reference']},
  {date:'2026-10-05',version:'v310',title:'Removed ZOLL Page 10 Reference',copy:'Removed the expandable ZOLL page 10 reference from the TCP pacing procedure. The How to Pace view is step-by-step only while JPEG screenshots are prepared for a future visual reference.',tags:['TCP','Pacing','ZOLL','Workflow','Fix']},
  {date:'2026-10-05',version:'v309',title:'Expandable ZOLL Page 10 Reference',copy:'Returned the department-provided ZOLL page 10 as an optional collapsed reference under TCP Step 2. The written pacing workflow remains primary, the image loads only when requested, and a failed image does not leave blank space or interrupt the procedure.',tags:['TCP','Pacing','ZOLL','Reference','Workflow']},
@@ -30,10 +31,10 @@ function ensureHistory(){
  }catch(e){return false}
 }
 function wrapOpenChangeLog(){
- if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory311)return false;
+ if(typeof window.openChangeLog!=='function'||window.openChangeLog.__gfdHistory312)return false;
  const original=window.openChangeLog;
  function wrapped(){ensureHistory();return original.apply(this,arguments)}
- wrapped.__gfdHistory311=true;
+ wrapped.__gfdHistory312=true;
  wrapped.__original=original;
  window.openChangeLog=wrapped;
  return true;
@@ -43,7 +44,7 @@ function boot(){
  const run=()=>{
   const dataReady=ensureHistory();
   const openReady=wrapOpenChangeLog();
-  if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory311)))&&tries++<30)setTimeout(run,100);
+  if((!dataReady||(!openReady&&!(window.openChangeLog&&window.openChangeLog.__gfdHistory312)))&&tries++<30)setTimeout(run,100);
  };
  run();
 }
