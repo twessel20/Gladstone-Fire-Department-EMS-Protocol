@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v317: Added a Versed sedation touch link to the Transcutaneous Pacing procedure and a dedicated Z Vent Guide PDF source viewer that is separate from the GFD EMS protocol source-book view.';
+const UPDATE_SUMMARY='v318: Version History now displays releases in decimal form, such as v3.18 instead of v318, while internal build identifiers remain unchanged for code and cache management.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -39,7 +39,7 @@ async function injectPatientContext(response){
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=317" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
- if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=317" defer></script>');
+ if(!html.includes('version-history-live.js'))tags.push('<script src="version-history-live.js?v=318" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
