@@ -1,0 +1,18 @@
+(()=>{'use strict';
+const STYLE='gfd-eti-tool-placement-v335';
+function inTools(){try{return typeof cat!=='undefined'&&cat==='Tools'}catch(e){return false}}
+function styles(){if(document.getElementById(STYLE))return;const s=document.createElement('style');s.id=STYLE;s.textContent=`
+.eti-fixed-card{width:100%;border:1px solid #dbe4ee;border-left:5px solid #2f6690;background:#fff;border-radius:12px;padding:12px 13px;margin:8px 0;text-align:left;display:flex;align-items:center;gap:10px;color:#173a5e;font:inherit}.eti-fixed-card b{display:block;font-size:14px}.eti-fixed-card small{display:block;color:#64748b;margin-top:3px;font-size:11px;line-height:1.3}.eti-fixed-card .ico{font-size:22px}.eti-fixed-card .go{margin-left:auto;font-size:22px}.eti-inline-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0}.eti-inline-choice button{min-height:48px;border-radius:10px;border:0;font:inherit;font-weight:900;padding:10px}.eti-inline-choice .check{background:#166534;color:#fff}.eti-inline-choice .proc{background:#2f6690;color:#fff}.dark-mode .eti-fixed-card{background:#172033!important;border-color:#475569!important;border-left-color:#38bdf8!important;color:#f1f5f9!important}.dark-mode .eti-fixed-card small{color:#aebbd0!important}@media(max-width:520px){.eti-inline-choice{grid-template-columns:1fr}}
+`;document.head.appendChild(s)}
+function makeCard(){const b=document.createElement('button');b.type='button';b.className='eti-fixed-card';b.dataset.etiFixedCard='1';b.innerHTML='<span class="ico">☑️</span><span><b>Intubation Decision Checklist</b><small>Checkbox tool • ET and nasotracheal indications, cautions, contraindications and hard stops</small></span><span class="go">›</span>';b.addEventListener('click',()=>window.openIntubationTool?.('oral'));return b}
+function placeTool(){if(!inTools())return;const menu=document.querySelector('.tool-menu');if(!menu||menu.querySelector('[data-eti-fixed-card]'))return;
+ const sections=[...menu.querySelectorAll('.tool-section')];
+ let target=sections.find(sec=>/assessment|scoring/i.test(sec.querySelector('.tool-section-heading b')?.textContent||''));
+ if(!target)target=sections[0]||null;
+ if(target){const body=target.querySelector('.tool-section-body');if(body){body.insertBefore(makeCard(),body.firstChild);target.classList.add('open');target.querySelector('.tool-section-toggle')?.setAttribute('aria-expanded','true');return}}
+ menu.insertBefore(makeCard(),menu.firstChild)
+}
+function enhanceIntubationLinks(){document.querySelectorAll('[data-eti-global-link],.eti-launch,.eti-xlink').forEach(link=>{if(link.dataset.etiChoiceAdded)return;link.dataset.etiChoiceAdded='1';const wrap=document.createElement('div');wrap.className='eti-inline-choice';wrap.innerHTML='<button type="button" class="check">☑ Open Checkbox Checklist</button><button type="button" class="proc">Open Full Procedure</button>';wrap.querySelector('.check').onclick=e=>{e.preventDefault();e.stopPropagation();window.openIntubationTool?.('oral')};wrap.querySelector('.proc').onclick=e=>{e.preventDefault();e.stopPropagation();let id=null;try{id=typeof currentProtocolId!=='undefined'?currentProtocolId:null}catch(err){}window.openIntubationProcedure?.(id||null,'oral')};link.insertAdjacentElement('afterend',wrap)})}
+function boot(){styles();let tries=0;const run=()=>{placeTool();enhanceIntubationLinks();if(tries++<80)setTimeout(run,100)};run();new MutationObserver(()=>requestAnimationFrame(()=>{placeTool();enhanceIntubationLinks()})).observe(document.body,{childList:true,subtree:true})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
