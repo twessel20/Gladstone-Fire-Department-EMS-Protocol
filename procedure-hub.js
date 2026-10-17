@@ -1,6 +1,7 @@
 (()=>{'use strict';
-const HUB='gfd-procedure-hub-v330';
+const HUB='gfd-procedure-hub-v334';
 const QUICK=[
+ {id:'intubation-procedure',icon:'🫁',title:'Intubation',sub:'ET / nasotracheal • indications • contraindications'},
  {id:'transcutaneous-pacing-procedure',icon:'⚡',title:'Transcutaneous Pacing',sub:'TCP • symptomatic bradycardia'},
  {id:'bipap-cpap',icon:'🫁',title:'BiPAP / CPAP',sub:'Noninvasive ventilation'},
  {id:'zoll-ventilator-procedure',icon:'🌬️',title:'Z Vent',sub:'Setup • settings • alarms'},
