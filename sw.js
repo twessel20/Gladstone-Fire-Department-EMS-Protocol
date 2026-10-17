@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v337: Quick Procedures is now collapsible and closed by default so the Procedures page stays compact and easier to scroll.';
+const UPDATE_SUMMARY='v338: Completed the field-integration audit with related-procedure cross-links, safety banners, pediatric dashboard, special-situation reporting guides, search shortcuts, destination support, and visible app version.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -44,6 +44,7 @@ async function injectPatientContext(response){
  if(!html.includes('intubation-airway.js'))tags.push('<script src="intubation-airway.js?v=334" defer></script>');
  if(!html.includes('intubation-tool-placement-fix.js'))tags.push('<script src="intubation-tool-placement-fix.js?v=335" defer></script>');
  if(!html.includes('abuse-reporting.js'))tags.push('<script src="abuse-reporting.js?v=336" defer></script>');
+ if(!html.includes('field-integration-v338.js'))tags.push('<script src="field-integration-v338.js?v=338" defer></script>');
  if(!html.includes('spinal-clearance-tool.js'))tags.push('<script src="spinal-clearance-tool.js?v=333" defer></script>');
  if(!html.includes('spinal-clearance-placement.js'))tags.push('<script src="spinal-clearance-placement.js?v=332" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
@@ -65,6 +66,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v333.js'))tags.push('<script src="version-history-v333.js?v=333" defer></script>');
  if(!html.includes('version-history-v334.js'))tags.push('<script src="version-history-v334.js?v=334" defer></script>');
  if(!html.includes('version-history-v336.js'))tags.push('<script src="version-history-v336.js?v=336" defer></script>');
+ if(!html.includes('version-history-v338.js'))tags.push('<script src="version-history-v338.js?v=338" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
