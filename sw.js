@@ -45,6 +45,7 @@ async function injectPatientContext(response){
  if(!html.includes('intubation-tool-placement-fix.js'))tags.push('<script src="intubation-tool-placement-fix.js?v=335" defer></script>');
  if(!html.includes('abuse-reporting.js'))tags.push('<script src="abuse-reporting.js?v=336" defer></script>');
  if(!html.includes('field-integration-v338.js'))tags.push('<script src="field-integration-v338.js?v=338" defer></script>');
+ if(!html.includes('destination-shortcut-v338.js'))tags.push('<script src="destination-shortcut-v338.js?v=338" defer></script>');
  if(!html.includes('spinal-clearance-tool.js'))tags.push('<script src="spinal-clearance-tool.js?v=333" defer></script>');
  if(!html.includes('spinal-clearance-placement.js'))tags.push('<script src="spinal-clearance-placement.js?v=332" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
