@@ -1,0 +1,8 @@
+(()=>{'use strict';
+const RELEASE={date:'2026-10-17',version:'v3.38',title:'Field Integration & Special Situations',copy:'Completed a field-utility audit across the app: added global related-procedure cross-links, high-risk procedure safety banners, a pediatric field dashboard using the existing shared patient context, sexual-assault/domestic-violence/human-trafficking/Safe-Place-for-Newborns guides with direct resource actions, universal-search shortcuts, and a persistent visible app-version badge. Also preserves the v3.37 collapsible Quick Procedures layout and the updated abuse-reporting workflow without 911 contact buttons.',tags:['Field Use','Cross-Linking','Pediatrics','Reporting','Destinations','Search','Safety','Version']};
+function key(v){const s=String(v||'').replace(/^v/i,'');if(s.includes('.')){const [a,b='0']=s.split('.');return (Number(a)||0)*100+(Number(b)||0)}return Number(s.replace(/\D/g,''))||0}
+function ensure(){try{if(typeof gfdChangeLog==='undefined'||!Array.isArray(gfdChangeLog))return false;if(!gfdChangeLog.some(x=>key(x&&x.version)===338))gfdChangeLog.push({...RELEASE});gfdChangeLog.sort((a,b)=>key(b.version)-key(a.version));return true}catch(e){return false}}
+function wrap(){if(typeof window.openChangeLog!=='function')return false;if(window.openChangeLog.__gfdHistory338)return true;const original=window.openChangeLog;function wrapped(){ensure();return original.apply(this,arguments)}wrapped.__gfdHistory338=true;wrapped.__original=original;window.openChangeLog=wrapped;return true}
+function boot(){let tries=0;const run=()=>{const a=ensure(),b=wrap();if((!a||!b)&&tries++<30)setTimeout(run,100)};run()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
