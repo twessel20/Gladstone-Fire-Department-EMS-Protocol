@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v336: Added Missouri child and adult abuse/neglect reporting guidelines, reporting checklists, tap-to-call hotlines, direct online reporting portals, and automatic protocol cross-links.';
+const UPDATE_SUMMARY='v337: Quick Procedures is now collapsible and closed by default so the Procedures page stays compact and easier to scroll.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -40,7 +40,7 @@ async function injectPatientContext(response){
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=325" defer></script>');
- if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=334" defer></script>');
+ if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=337" defer></script>');
  if(!html.includes('intubation-airway.js'))tags.push('<script src="intubation-airway.js?v=334" defer></script>');
  if(!html.includes('intubation-tool-placement-fix.js'))tags.push('<script src="intubation-tool-placement-fix.js?v=335" defer></script>');
  if(!html.includes('abuse-reporting.js'))tags.push('<script src="abuse-reporting.js?v=336" defer></script>');
