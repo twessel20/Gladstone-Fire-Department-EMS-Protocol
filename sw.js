@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v338: Completed the field-integration audit with related-procedure cross-links, safety banners, pediatric dashboard, special-situation reporting guides, search shortcuts, destination support, and visible app version.';
+const UPDATE_SUMMARY='v339: Added a Missouri Safe Haven / Safe Place newborn workflow with parent-anonymity protections, GFD chain-of-command notifications, hospital transport, abuse-reporting branch, and documentation checklist.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -46,6 +46,8 @@ async function injectPatientContext(response){
  if(!html.includes('abuse-reporting.js'))tags.push('<script src="abuse-reporting.js?v=336" defer></script>');
  if(!html.includes('field-integration-v338.js'))tags.push('<script src="field-integration-v338.js?v=338" defer></script>');
  if(!html.includes('destination-shortcut-v338.js'))tags.push('<script src="destination-shortcut-v338.js?v=338" defer></script>');
+ if(!html.includes('safe-haven-workflow-v339.js'))tags.push('<script src="safe-haven-workflow-v339.js?v=339" defer></script>');
+ if(!html.includes('safe-haven-card-cleanup-v339.js'))tags.push('<script src="safe-haven-card-cleanup-v339.js?v=339" defer></script>');
  if(!html.includes('spinal-clearance-tool.js'))tags.push('<script src="spinal-clearance-tool.js?v=333" defer></script>');
  if(!html.includes('spinal-clearance-placement.js'))tags.push('<script src="spinal-clearance-placement.js?v=332" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
@@ -68,6 +70,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v334.js'))tags.push('<script src="version-history-v334.js?v=334" defer></script>');
  if(!html.includes('version-history-v336.js'))tags.push('<script src="version-history-v336.js?v=336" defer></script>');
  if(!html.includes('version-history-v338.js'))tags.push('<script src="version-history-v338.js?v=338" defer></script>');
+ if(!html.includes('version-history-v339.js'))tags.push('<script src="version-history-v339.js?v=339" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
