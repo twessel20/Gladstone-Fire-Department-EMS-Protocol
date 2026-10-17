@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v333: Streamlined the GFD spinal-clearance Yes / No tool from 11 questions to 8 by removing duplicate intoxication and distracting-injury questions and combining GCS/altered-mental-status screening while preserving all protocol criteria.';
+const UPDATE_SUMMARY='v334: Added a field intubation decision checklist and full ET / nasotracheal intubation procedure, with global cross-references anywhere intubation is mentioned in protocols or procedures.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -40,7 +40,8 @@ async function injectPatientContext(response){
  if(!html.includes('bipap-cpap-procedure.js'))tags.push('<script src="bipap-cpap-procedure.js?v=313" defer></script>');
  if(!html.includes('z-vent-procedure.js'))tags.push('<script src="z-vent-procedure.js?v=314" defer></script>');
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=325" defer></script>');
- if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=330" defer></script>');
+ if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=334" defer></script>');
+ if(!html.includes('intubation-airway.js'))tags.push('<script src="intubation-airway.js?v=334" defer></script>');
  if(!html.includes('spinal-clearance-tool.js'))tags.push('<script src="spinal-clearance-tool.js?v=333" defer></script>');
  if(!html.includes('spinal-clearance-placement.js'))tags.push('<script src="spinal-clearance-placement.js?v=332" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
@@ -60,6 +61,7 @@ async function injectPatientContext(response){
  if(!html.includes('version-history-v331.js'))tags.push('<script src="version-history-v331.js?v=331" defer></script>');
  if(!html.includes('version-history-v332.js'))tags.push('<script src="version-history-v332.js?v=332" defer></script>');
  if(!html.includes('version-history-v333.js'))tags.push('<script src="version-history-v333.js?v=333" defer></script>');
+ if(!html.includes('version-history-v334.js'))tags.push('<script src="version-history-v334.js?v=334" defer></script>');
  if(tags.length){const tag=tags.join('');html=html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag;}
  const headers=new Headers(response.headers);headers.delete('content-length');
  return new Response(html,{status:response.status,statusText:response.statusText,headers});
