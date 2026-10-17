@@ -1,4 +1,4 @@
-const UPDATE_SUMMARY='v334: Added a field intubation decision checklist and full ET / nasotracheal intubation procedure, with global cross-references anywhere intubation is mentioned in protocols or procedures.';
+const UPDATE_SUMMARY='v335: Fixed the Intubation Decision Checklist so the checkbox tool is clearly visible in Tools and added direct Checkbox Checklist / Full Procedure choices to intubation cross-references.';
 
 self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 
@@ -42,6 +42,7 @@ async function injectPatientContext(response){
  if(!html.includes('z-vent-source-viewer.js'))tags.push('<script src="z-vent-source-viewer.js?v=325" defer></script>');
  if(!html.includes('procedure-hub.js'))tags.push('<script src="procedure-hub.js?v=334" defer></script>');
  if(!html.includes('intubation-airway.js'))tags.push('<script src="intubation-airway.js?v=334" defer></script>');
+ if(!html.includes('intubation-tool-placement-fix.js'))tags.push('<script src="intubation-tool-placement-fix.js?v=335" defer></script>');
  if(!html.includes('spinal-clearance-tool.js'))tags.push('<script src="spinal-clearance-tool.js?v=333" defer></script>');
  if(!html.includes('spinal-clearance-placement.js'))tags.push('<script src="spinal-clearance-placement.js?v=332" defer></script>');
  if(!html.includes('atropine-sequence-card.js'))tags.push('<script src="atropine-sequence-card.js?v=298" defer></script>');
